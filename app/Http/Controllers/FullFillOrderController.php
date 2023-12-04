@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FullFillOrder;
+use App\Models\ManifestPDF;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,7 @@ class FullFillOrderController extends Controller
      */
     public function store(Request $request)
     {
+        $pdfTypes = ['Generator','Transporter', 'Processor', 'Disposal', 'Original Generator'];
         $this->validate($request,[
             'processor_reg_no' => ['required'],
             'storage_reg_no' => ['required'],
@@ -65,25 +67,49 @@ class FullFillOrderController extends Controller
          ]);
          $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
          $fullFillOrder['order'] = $order;
-// dd($fullFillOrder);
-         $pdf = \App::make('dompdf.wrapper');
+         
+         $manifestPDF = new ManifestPDF();
+         $manifestPDF->order_id = $request->order_id;
+        $pdfArray = array();
+        for ($i = 0; $i < count($pdfTypes); $i++) {
+            $fullFillOrder['pdfType']=$pdfTypes[$i];
+            $pdf = \App::make('dompdf.wrapper');
 
-         $customPaper = array(0,0,900,1300);
-         $pdf->setPaper($customPaper);
+            $customPaper = array(0,0,900,1300);
+            $pdf->setPaper($customPaper);
+            $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
 
-         $pdf->loadView('manifest.index', ['data' =>$fullFillOrder]);
-
-        //  $output = $pdf->output();
-        return $pdf->stream();
-         $pdfPath = public_path().'/manifest/pdfs/'.time().'.pdf';
-         file_put_contents($pdfPath, $output);
+            $fullFillOrder['pdfType'] = $pdfTypes[$i];
+            $output = $pdf->output();
+            // return $pdf->stream();
+            $pdfPath = public_path().'/manifest/pdfs/'.time().'.pdf';
+            file_put_contents($pdfPath, $output);
+           switch ($pdfTypes[$i]) {
+            case 'Generator':
+                $manifestPDF->generator = $pdfPath;
+                break;
+            case 'Transporter':
+                $manifestPDF->transporter = $pdfPath;
+                break;
+            case 'Processor':
+                $manifestPDF->processor = $pdfPath;
+                break;
+            case 'Disposal':
+                $manifestPDF->disposal = $pdfPath;
+                break;
+            case 'Original Generator':
+                $manifestPDF->original_generator = $pdfPath;
+                break;
+            
+            default:
+                break;
+           }
         //  return view('manifest.index');
-
-         return back();
-
-        
+    }
+    $manifestPDF->save();
 
 
+         return redirect('/');
     }
 
     /**

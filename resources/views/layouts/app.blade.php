@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="sidebar-inner slimscrollleft">
-
+                @if(Auth::user())
                     <div class="user-details">
                         {{-- <div class="text-center">
                             <img src="{{asset('dashboard/assets/images/users/avatar-1.jpg')}}" alt="" class="rounded-circle">
@@ -62,10 +62,13 @@
                                 <span class="text-muted user-status"><i class="fa fa-dot-circle-o text-success"></i> Driver</span>
                             @elseif(Auth::user()->type == '0')
                                 <span class="text-muted user-status"><i class="fa fa-dot-circle-o text-success"></i> Admin</span>
+                            @elseif(Auth::user()->type == '3')
+                            <span class="text-muted user-status"><i class="fa fa-dot-circle-o text-success"></i> Customer</span>
                             @endif
                         </div>
                     </div>
-
+                @endif
+                @if(Auth::user())
                     <div id="sidebar-menu">
                         <ul>
                             <li>
@@ -116,6 +119,10 @@
                                     <a href="{{route('notes.index')}}" class="waves-effect"><i class="mdi mdi-calendar-check"></i><span> Notes </span></a>
                                 </li>
 
+                                <li>
+                                    <a href="{{route('books.customer')}}" class="waves-effect"><i class="mdi mdi-calendar-check"></i><span> Books </span></a>
+                                </li>
+
                             @endif                                          
                                       
                             @if(Auth::user()->type == 2)
@@ -125,6 +132,7 @@
                             @endif
                         </ul>
                     </div>
+                @endif
                     <div class="clearfix"></div>
                 </div> <!-- end sidebarinner -->
             </div>

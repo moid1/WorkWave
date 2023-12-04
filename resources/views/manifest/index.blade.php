@@ -124,13 +124,8 @@
                       <tr>
                         <td>
                           <div style="display: inline-block" >
-                            <input type="text" name="" value="" class="inputField" />
-                            <label class="inputLabel" style="white-space: nowrap">Area Code</label>
-                          </div>
-
-                          <div style="display: inline-flex;margin-top:10px">
                             <input type="text" name="" value="{{$data->order->customer->phone_no}}" class="inputField" />
-                            <label class="inputLabel">Telephone Number</label>
+                            <label class="inputLabel" style="white-space: nowrap">Area Code Telephone Number</label>
                           </div>
                         </td>
                       </tr>
@@ -143,6 +138,22 @@
                           >
                         </div>
                       </tr>
+
+                      <tr >
+                        <td style="justify-content:left">
+                          <div style="display: inline-flex;width:200px;" >
+                            <span style="display: inline-block;height:20px" class="inputField">Majid Ali</span>
+                            <label class="inputLabel" style="white-space: nowrap">Contact Name</label>
+                          </div>
+  
+                          <div style="display: inline-flex;width:200px;" >
+                            <span style="display: inline-block;height:20px" class="inputField">13123123</span>
+                            <label class="inputLabel" style="white-space: nowrap">Contact No</label>
+                          </div>
+                         
+                        </td>
+                      </tr>
+
                       <!-- Street Address -->
                     
                     <tr>
@@ -159,7 +170,7 @@
                           <label class="inputLabel" style="white-space: nowrap">City</label>
                         </div>
 
-                        <div style="display: inline-flex;margin-left:-20px">
+                        <div style="display: inline-flex;margin-left:-100px">
                           <span style="display: inline-block" class="inputField">TX</span>
                           <label class="inputLabel">State</label>
                         </div>
@@ -194,6 +205,32 @@
                         <span style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{$total_passenger_pricing}}</span>
                       </div>
                   </tr>
+
+                  <tr>
+                    <div >
+                      <label 
+                        class="inputLabel"
+                        style="margin-top: 10px;width:140px "
+                        >No. ATV/Motor</label>
+                        <span style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{$data->no_of_passenger}}</span>
+                     
+
+                      <label class="inputLabel inputLabelExtraSmall" style="width: 25px;"
+                      >@ $</label>
+                      <span style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{$data->order->customer->passenger_pricing}}</span>
+
+                      <label class="inputLabel inputLabelSmall"
+                      >Total $</label>
+                      @php
+                      $total_passenger_pricing = 0;
+                      if($data->no_of_passenger){
+                        $total_passenger_pricing = floatval($data->no_of_passenger) * floatval($data->order->customer->passenger_pricing) ;
+                      }
+                      @endphp
+                      <span style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{$total_passenger_pricing}}</span>
+                    </div>
+                </tr>
+
                   <tr>
                     <div class="mt-2">
                       <label 
@@ -298,6 +335,36 @@
                   />
                 </div>
               </tr>
+
+              <tr >
+                <div class="mt-2 " >
+                  <label class="inputLabel inputLabelSmall">Charge Type</label>
+                  <input
+                  type="text"
+                  name=""
+                  value="Cheque"
+                  style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;"
+                  />
+                </div>
+              </tr>
+
+              <tr>
+                <div class="mt-2">
+                  <label 
+                    class="inputLabel"
+                    style="margin-top: 10px;width:90px; "
+                    >Start Weight</label
+                  >
+
+                  <span style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">12</span>
+
+                  <label class="inputLabel inputLabelExtraSmall"
+                  >End Weight</label>
+                  <span style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">34</span>
+
+                  
+                </div>
+            </tr>
                           </tbody>
                       </table>
                   </div> 
@@ -345,7 +412,7 @@
                               <tr class="">
                                                     <!-- registration number - driver's license number -->
                                                    
-                                                      <div style="margin-top:15px;display: inline-flex;min-width:350px;" >
+                                                      <div style="margin-top:15px;display: inline-flex;width:250px;" >
                                                         <input
                                       type="text"
                                       name=""
@@ -392,19 +459,19 @@
 
                               <tr>
                                 <div class="d-flex flex-column">
-                                  <input type="text" name="" value="" class="inputField" />
+                                  <input type="text" name="" value="RELIABLE TIRE DISPOSAL" class="inputField" />
                                   <label class="inputLabel">Company Name</label>
                                 </div>
                               </tr>
 
-                              <tr class="" style="background: red">
+                              <tr class="">
                                                     <!-- registration number - driver's license number -->
                                                    
-                                                      <div style="display: inline-flex;min-width:350px;" >
+                                                      <div style="margin-top:15px;display: inline-flex;width:250px;" >
                                                         <input
                                       type="text"
                                       name=""
-                                      value=""
+                                      value="6200792 "
                                       class="inputField"
                                     />
                                     <label class="inputLabel">registration number</label>
@@ -415,14 +482,13 @@
                                     <input
                                       type="text"
                                       name=""
-                                      value=""
+                                      value="{{Auth::user()->driver_license ?? 'N/A'}}"
                                       class="inputField"
                                     />
                                     <label class="inputLabel">Driver's License Number</label>
                                   </div>
 
                               </tr>
-
                               <tr>
                                 <div class="">
                                   <input type="text" name="" value="" class="inputField" />
@@ -552,7 +618,7 @@
                 <tr>
                   <div class="row">
                     <h6 class="fw-bold text-uppercase mt-3" style="white-space: nowrap">
-                      3. processor/recycler information and certification:
+                      4. processor/recycler information and certification:
                     </h6>
                   </div>
                 </tr>
@@ -618,21 +684,18 @@
       />
       <label class="inputLabel" style="text-align: center">weight of tires</label>
     </div>
-    <span  style="display: inline-flex;">Lbs</span>
+    <span  style="position: absolute;margin-top:10px">Lbs</span>
 </tr>
 </tr>
 
       <tr>
         <td>
           <div style="display: inline-block" >
-            <input type="text" name="" value="" class="inputField" />
-            <label class="inputLabel" style="white-space: nowrap">Area Code</label>
+            <input type="text" name="" value="{{$data->order->customer->phone_no}}" class="inputField" />
+            <label class="inputLabel" style="white-space: nowrap">Area Code Telephone Number</label>
           </div>
 
-          <div style="display: inline-flex;max-width:85%">
-            <input type="text" name="" value="" class="inputField" />
-            <label class="inputLabel">Telephone Number</label>
-          </div>
+
         </td>
       </tr>
 
@@ -661,7 +724,7 @@
             <label class="inputLabel" style="white-space: nowrap">City</label>
           </div>
 
-          <div style="display: inline-flex">
+          <div style="display: inline-flex;margin-left:-100px">
             <input type="text" name="" value="" class="inputField" />
             <label class="inputLabel">State</label>
           </div>
@@ -685,8 +748,8 @@
             <td >
               <tr>
                 <div class="row">
-                  <h6 class="fw-bold text-uppercase mt-3" style="white-space: nowrap;margin-top: 60px!important;">
-                    4. storage/disposal site information and certification:
+                  <h6 class="fw-bold text-uppercase mt-3" style="white-space: nowrap;margin-top: 10px!important;">
+                    5. storage/disposal site information and certification:
                   </h6>
                 </div>
               </tr>
@@ -753,24 +816,19 @@
     />
     <label class="inputLabel" style="text-align: center">weight of tires</label>
   </div>
-  <span  style="display: inline-flex;">Lbs</span>
+  <span  style="position: absolute;margin-top:10px;">Lbs</span>
 </tr>
 </tr>
 
-    <tr >
-      <td>
-        <div style="display: inline-block" >
-          <input type="text" name="" value="" class="inputField" />
-          <label class="inputLabel" style="white-space: nowrap">Area Code</label>
-        </div>
+<tr>
+  <td>
+    <div style="display: inline-block" >
+      <input type="text" name="" value="{{$data->order->customer->phone_no}}" class="inputField" />
+      <label class="inputLabel" style="white-space: nowrap">Area Code Telephone Number</label>
+    </div>
+  </td>
+</tr>
 
-        <div style="display: inline-flex;max-width:85%">
-          <input type="text" name="" value="" class="inputField" />
-          <label class="inputLabel">Telephone Number</label>
-        </div>
-      </td>
-    </tr>
-    
 
     <tr>
       <div class="d-flex flex-column">
@@ -797,7 +855,7 @@
           <label class="inputLabel" style="white-space: nowrap">City</label>
         </div>
 
-        <div style="display: inline-flex">
+        <div style="display: inline-flex;margin-left:-100px">
           <input type="text" name="" value="" class="inputField" />
           <label class="inputLabel">State</label>
         </div>
@@ -901,7 +959,7 @@
   </span>
 </div>
 <div class="w-100 text-center" style="width: 100%;">
-  <span class="fw-bold"  style="text-align: center;color:red;">Generator</span>
+  <span class="fw-bold"  style="text-align: center;color:red;">{{$data->pdfType}}</span>
 </div>
 
       

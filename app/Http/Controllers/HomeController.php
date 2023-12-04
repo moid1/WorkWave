@@ -7,6 +7,7 @@ use App\Models\Notes;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
@@ -28,13 +29,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $customers = Customer::latest()->take(5)->get();
-        $dataArray = array();
-        $dataArray['customersCount'] = Customer::all()->count();
-        $dataArray['ordersCount'] = Order::all()->count();
-        $dataArray['notesCount'] = Notes::all()->count();
-
-        return view('home', compact('customers', 'dataArray'));
+        $userType = Auth::user()->type;
+        if ($userType == 0 || $userType == 1) {
+            $customers = Customer::latest()->take(5)->get();
+            $dataArray = array();
+            $dataArray['customersCount'] = Customer::all()->count();
+            $dataArray['ordersCount'] = Order::all()->count();
+            $dataArray['notesCount'] = Notes::all()->count();
+            return view('home', compact('customers', 'dataArray'));
+        } else if ($userType == 2) {
+            $orders = Order::where('driver_id', Auth::user()->id)->get();
+            return view('driver.home', compact('orders'));
+        }else if($userType == 3){
+            $orders = Order::where('customer_id', Auth::user()->id)->get();
+            dd($orders);
+            return view('customers.home', compact('orders'));
+        }
     }
 
     public function changePassword()

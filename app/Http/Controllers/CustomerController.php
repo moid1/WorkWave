@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
@@ -38,8 +40,17 @@ class CustomerController extends Controller
             'phone_no' => ['required', 'string', 'min:8'],
             'poc_name' => ['required', 'string', 'max:255'],
          ]);
-    
+        $user =  User::create([
+            'name' => $request->business_name,
+            'email' => $request->email,
+            'password' => Hash::make('12345678'),
+            'type' =>3
+         ]);
+         $request->merge([
+            'user_id' => $user->id
+         ]);
          Customer::create($request->all());
+        
          return redirect('/register-customer')->with('success','Customer Created Successfully');   
     }
 
@@ -118,6 +129,11 @@ $this->validate($request,[
         }
 
         return redirect()->back()->with('success', 'CX Status Changed Successfully');
+    }
+
+    public function getCustomers(){
+        $customers = Customer::where('status', 1)->get();
+        return view('books.index', compact('customers'));
     }
 }
 
