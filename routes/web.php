@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FullFillOrderController;
+use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
 use App\Models\ManifestPDF;
 
@@ -68,6 +69,7 @@ Route::get('/notes',  [NotesController::class, 'index'])->name('notes.index');
 Route::get('/specifc-notes/{id}',  [NotesController::class, 'getUserNotes'])->name('notes.user');
 
 Route::get('/books',[CustomerController::class,'getCustomers'])->name('books.customer');
+Route::get('/books-list/{id}',[ManifestPDFController::class,'index'])->name('books.list');
 
 
 Route::get('/change-password', [HomeController::class, 'changePassword'])->name('change-password');
