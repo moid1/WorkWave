@@ -126,7 +126,7 @@
                                     <tr>
                                         <td>{{$driver->name}}</td>
                                         <td>{{$driver->email}}</td>
-                                        <td><a href="" class="mdi mdi-delete"></a></td>
+                                        <td><a href="{{route('driver.delete', $driver->id)}}" class="mdi mdi-delete"></a></td>
                                         
         
                                     </tr>

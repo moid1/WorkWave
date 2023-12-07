@@ -33,7 +33,7 @@
                             <h5 class="card-title">{{$customer->business_name}}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{$customer->address}}</h6>
                             <p class="card-text">Click on the links below to find the manifest for this CX</p>
-                            <a href="#" class="card-link">Manifests</a>
+                            <a href="{{route('books.list', $customer->id)}}" class="card-link">Manifests</a>
                             </div>
                         </div>
                     </div>

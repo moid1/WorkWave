@@ -70,6 +70,8 @@ class FullFillOrderController extends Controller
          
          $manifestPDF = new ManifestPDF();
          $manifestPDF->order_id = $request->order_id;
+         $manifestPDF->customer_id = $order->customer_id;
+
         $pdfArray = array();
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType']=$pdfTypes[$i];
@@ -83,22 +85,23 @@ class FullFillOrderController extends Controller
             $output = $pdf->output();
             // return $pdf->stream();
             $pdfPath = public_path().'/manifest/pdfs/'.time().'.pdf';
+            $abPDFPath  ='manifest/pdfs/'.time().'.pdf';
             file_put_contents($pdfPath, $output);
            switch ($pdfTypes[$i]) {
             case 'Generator':
-                $manifestPDF->generator = $pdfPath;
+                $manifestPDF->generator = $abPDFPath;
                 break;
             case 'Transporter':
-                $manifestPDF->transporter = $pdfPath;
+                $manifestPDF->transporter = $abPDFPath;
                 break;
             case 'Processor':
-                $manifestPDF->processor = $pdfPath;
+                $manifestPDF->processor = $abPDFPath;
                 break;
             case 'Disposal':
-                $manifestPDF->disposal = $pdfPath;
+                $manifestPDF->disposal = $abPDFPath;
                 break;
             case 'Original Generator':
-                $manifestPDF->original_generator = $pdfPath;
+                $manifestPDF->original_generator = $abPDFPath;
                 break;
             
             default:

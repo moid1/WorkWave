@@ -102,16 +102,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Tire Type</label>
-                                               <select name="" id="">
-                                                <option value="">Industial</option>
-                                                <option value="">Other Type</option>
-
-                                               </select>
-                                            </div>
-                                        </div>
+               
                                    
                                         {{-- <div class="col-md-6">
                                             <label class="" for="">Drivers Signature:</label>

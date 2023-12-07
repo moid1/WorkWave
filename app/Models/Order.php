@@ -19,4 +19,8 @@ class Order extends Model
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function manifest(){
+        return $this->belongsTo(ManifestPDF::class,'id', 'order_id');
+    }
 }

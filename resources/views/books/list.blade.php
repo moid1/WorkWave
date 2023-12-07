@@ -23,10 +23,13 @@
                             <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                     
-                                        <th>Business Name</th>
-                                        <th>Email</th>
-                                       
+                                     <th>Order No</th>
+                                        <th>Generator Manifest</th>
+                                        <th>Transporter Manifest</th>
+                                        <th>Processor Manifest</th>
+                                        <th>Disposal Manifest</th>
+                                        <th>Original Manifest</th>
+
 
 
                                     </tr>
@@ -34,10 +37,14 @@
     
     
                                 <tbody>
-                                    @foreach ($customers as $customer)
+                                    @foreach ($pdfManifest as $pdf)
                                     <tr>
-                                        <td class="cx-business-name">{{$customer->business_name}}</td>
-                                        <td></td>
+                                      <td>000{{$pdf->order_id}}</td>
+                                        <td><a href="{{url($pdf->generator)}}"> Manifest</a></td>
+                                        <td><a href="{{url($pdf->transporter)}}"> Manifest</a></td>
+                                        <td><a href="{{url($pdf->processor)}}"> Manifest</a></td>
+                                        <td><a href="{{url($pdf->disposal)}}"> Manifest</a></td>
+                                        <td><a href="{{url($pdf->original_generator)}}"> Manifest</a></td>
                                     </tr>
                                     @endforeach
                                 

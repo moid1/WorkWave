@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use App\Models\User;
 use Illuminate\Http\Request;
+use PDO;
 
 class DriverController extends Controller
 {
@@ -75,5 +76,10 @@ class DriverController extends Controller
     public function destroy(Driver $driver)
     {
         //
+    }
+
+    public function deleteDriver($id){
+        User::where('id', $id)->delete();
+        return back()->with('success', 'Driver Deleted Successfully');
     }
 }

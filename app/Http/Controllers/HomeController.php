@@ -41,8 +41,8 @@ class HomeController extends Controller
             $orders = Order::where('driver_id', Auth::user()->id)->get();
             return view('driver.home', compact('orders'));
         }else if($userType == 3){
-            $orders = Order::where('customer_id', Auth::user()->id)->get();
-            dd($orders);
+            $customerId = Customer::where('user_id', Auth::id())->first()->only('id');
+            $orders = Order::where('customer_id', $customerId['id'])->with(['manifest'])->get();
             return view('customers.home', compact('orders'));
         }
     }

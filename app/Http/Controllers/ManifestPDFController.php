@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 
 class ManifestPDFController extends Controller
 {
-    /**
+/**
      * Display a listing of the resource.
      */
     public function index($id)
     {
-        // ManifestPDF::with('')
+        $pdfManifest = ManifestPDF::where('customer_id', $id)->get();
+        return view('books.list', compact('pdfManifest'));
     }
 
     /**
