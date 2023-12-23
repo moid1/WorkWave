@@ -1,5 +1,7 @@
 @extends('layouts.app')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.4.1/css/rowReorder.dataTables.min.css">
+
 @section('content')
 
     <div class="page-content-wrapper mt-5">
@@ -15,9 +17,9 @@
                     <div class="card m-b-20">
                         <div class="card-body">
     
-                            <h4 class="mt-0 header-title">All Orders</h4>
+                            <h4 class="mt-0 header-title">All Orders assigned to {{$driver->name}}</h4>
     
-                            <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <table id="example" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                      
@@ -26,10 +28,8 @@
                                         <th>Created By</th>
                                         <th>POC Name</th>
                                         <th>Email</th>
-                                        <th>Driver</th>
                                         <th>Qty</th>
                                         <th>Order Date</th>
-                                        <th>Update Driver</th>
 
 
                                     </tr>
@@ -44,10 +44,8 @@
                                         <td>{{$order->user->name}}</td>
                                         <td>{{$order->customer->poc_name}}</td>
                                         <td>{{$order->customer->email}}</td>
-                                        <td>{{$order->driver ?$order->driver->name : 'N/A'}}</td>
                                         <td>{{$order->load_value}}</td>
                                         <td>{{$order->created_at->format('M d Y')}}</td>
-                                        <td><i class="mdi mdi-account update_driver" data-order_id="{{$order->id}}" title="Update Driver"></i></td>
 
                                     </tr>
                                     @endforeach
@@ -61,31 +59,22 @@
             </div> <!-- end row -->
         </div><!-- container-fluid -->
     </div>
-@include('orders.includes.change_driver')
 @endsection
-<script>
-    jQuery(document).ready(function() {
-        $('.update_driver').on('click', function(){
-            $('.orderID').val($(this).data('order_id'))
-            $('#driversList').modal('show');
-        });
+@section('pageSpecificJs')
+<script src="https://code.jquery.com/jquery-3.7.0.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
 
-    $('#selectDriver').on('change', function() {
-        let driverID = this.value;
-         $.ajax({
-                url:'{{ route("order.updateDriver") }}',
-                type:'POST',
-                headers:{
-                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-                },
-                data:{
-                    order_id:  $('.orderID').val() ,
-                    driver_id:driverID
-                },
-                success:function (data) {
-                  alert(data.message);
-                }
-            })
-    });
+<script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.5.1/js/dataTables.dateTime.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"></script>
+
+<script>
+const table = new DataTable('#example', {
+    rowReorder: true,
 });
 </script>
+@stop
+

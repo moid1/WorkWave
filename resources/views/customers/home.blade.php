@@ -15,6 +15,11 @@
                                 <tr>
                                     <th>Order Id</th>
                                     <th>Order Date</th>
+                                    <th>Generator Manifest</th>
+                                    <th>Transporter Manifest</th>
+                                    <th>Processor Manifest</th>
+                                    <th>Disposal Manifest</th>
+                                    <th>Original Manifest</th>
                                 </tr>
 
                                 </thead>
@@ -23,6 +28,11 @@
                                     <tr>
                                         <td>000{{$order->id}}</td>
                                         <td>000{{$order->created_at}}</td>
+                                        <td><a href="{{url($order->manifest->generator)}}"> Manifest</a></td>
+                                        <td><a href="{{url($order->manifest->transporter)}}"> Manifest</a></td>
+                                        <td><a href="{{url($order->manifest->processor)}}"> Manifest</a></td>
+                                        <td><a href="{{url($order->manifest->disposal)}}"> Manifest</a></td>
+                                        <td><a href="{{url($order->manifest->original_generator)}}"> Manifest</a></td>
                                     </tr>
                                     @endforeach
 

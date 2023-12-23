@@ -4,15 +4,28 @@
 
     <div class="page-content-wrapper mt-5">
         <div class="container-fluid">
+            <div class="row justify-content-between">
+                @if (count($notes)>0)
+                    <h4 class="font-bold">All Notes ({{$notes[0]->customer->business_name}})</h4>
+                @endif
+                <div onclick="hurra({{$customer->id}})" class="btn btn-primary">Create Notes</div>
+            </div>
+            @if (count($notes)>0)
             <div class="row">
-                <div class="col-12">
-                    @if(Session::has('success'))
-                    <div class="alert alert-success alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        {{Session::get('success')}}
+                @foreach ($notes as $note)
+                    <div class="col-lg-4 mt-3">
+                        <div class="card" style="min-height: 400px">
+                            <div class="card-body">
+                            <h5 class="card-title">{{$note->title}}</h5>
+                            <p class="card-text">{{$note->note}}</p>
+                            </div>
+                        </div>
                     </div>
-                    @endif
-                    <div class="card m-b-20">
+                @endforeach
+
+                {{-- <div class="col-12"> --}}
+                    
+                    {{-- <div class="card m-b-20">
                         <div class="card-body">
     
                             <h4 class="mt-0 header-title">All Notes</h4>
@@ -50,10 +63,21 @@
                             </table>
     
                         </div>
-                    </div>
-                </div> <!-- end col -->
+                    </div> --}}
+                {{-- </div> <!-- end col --> --}}
             </div> <!-- end row -->
+            @endif
         </div><!-- container-fluid -->
     </div>
 
 @endsection
+
+@include('notes.includes.create')
+
+<script>
+    function hurra(id){
+  $('input[name=customer_id]').val(id);
+ $("#exampleModal").modal()
+
+}
+</script>

@@ -10,6 +10,7 @@
         <meta content="Admin Dashboard" name="description" />
         <meta content="ThemeDesign" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <link rel="shortcut icon" href="{{asset('logo.jpeg')}}">
         <link href="{{asset('dashboard/assets/plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -92,9 +93,6 @@
                                 <li>
                                     <a href="{{ route('register.driver') }}" class="waves-effect"><i class="mdi mdi-buffer"></i> <span> Driver Creation </span></a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('manifest') }}" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>Manifest </span></a>
-                                </li>
                             @endif       
                             
                             @if(Auth::user()->type == 0 || Auth::user()->type == 1)
@@ -115,12 +113,17 @@
                                     </ul>
                                 </li>
 
-                                <li>
+                                {{-- <li>
                                     <a href="{{route('notes.index')}}" class="waves-effect"><i class="mdi mdi-calendar-check"></i><span> Notes </span></a>
-                                </li>
+                                </li> --}}
+                                
 
                                 <li>
                                     <a href="{{route('books.customer')}}" class="waves-effect"><i class="mdi mdi-calendar-check"></i><span> Books </span></a>
+                                </li>
+                                
+                                <li>
+                                    <a href="{{route('company.registration')}}" class="waves-effect"><i class="mdi mdi-calendar-check"></i><span> Reg No </span></a>
                                 </li>
 
                             @endif                                          
@@ -284,5 +287,7 @@
 
         <!-- App js -->
         <script src="{{asset('dashboard/')}}assets/js/app.js"></script>
+        @yield('pageSpecificJs')
+
     </body>
     </html>

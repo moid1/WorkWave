@@ -69,18 +69,78 @@
                                                     @enderror
                                                 </div>
                                             </div>             
-                                            
+
+
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label>2nd POC Name</label>
-                                                    <input id="second_poc" type="text" class="form-control @error('second_poc') is-invalid @enderror" name="second_poc" value="{{ old('second_poc') }}" required autofocus>
-                                                    @error('second_poc')
+                                                    <label>POC Email</label>
+                                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email">
+                                                    @error('email')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                     @enderror
                                                 </div>
-                                            </div>             
+                                            </div>  
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>A/P Phone No</label>
+                                                    <input id="mail_phone" type="text" class="form-control @error('mail_phone') is-invalid @enderror" name="mail_phone" value="{{ old('mail_phone') }}" >
+                                                    @error('mail_phone')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>  
+
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Mailing address</label>
+                                                    <input id="mail_address" type="text" class="form-control @error('mail_address') is-invalid @enderror" name="mail_address" value="{{ old('mail_address') }}" >
+                                                    @error('mail_address')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div> 
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>A/P Email</label>
+                                                    <input id="second_mail" type="text" class="form-control @error('second_mail') is-invalid @enderror" name="second_mail" value="{{ old('second_mail') }}"  autocomplete="email">
+                                                    @error('second_mail')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>  
+
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Charge Type</label>
+                                                    <select name="charge_type" class="form-control" id="">
+                                                        <option value="" disabled>Please select Charge Type</option>
+                                                        <option value="cc on file">CC On File</option>
+                                                        <option value="cc call in">CC Call in</option>
+                                                        <option value="cheque">Cheque</option>
+                                                        <option value="charge">Charge</option>
+                                                        <option value="cash">Cash</option>
+
+                                                    </select>
+                                                    @error('second_mail')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>  
+
                                             
                                             <div class="col-lg-6">
                                                 <div class="form-group">
@@ -131,8 +191,6 @@
                                                 </div>
                                             </div>     
 
-        
-
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Tax</label>
@@ -143,78 +201,13 @@
                                                         </span>
                                                     @enderror
                                                 </div>
-                                            </div>      
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Email</label>
-                                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email">
-                                                    @error('email')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>  
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>2nd phone #</label>
-                                                    <input id="mail_phone" type="text" class="form-control @error('mail_phone') is-invalid @enderror" name="mail_phone" value="{{ old('mail_phone') }}" >
-                                                    @error('mail_phone')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>  
-
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Mailing address</label>
-                                                    <input id="mail_address" type="text" class="form-control @error('mail_address') is-invalid @enderror" name="mail_address" value="{{ old('mail_address') }}" >
-                                                    @error('mail_address')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
                                             </div> 
 
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>2nd Email</label>
-                                                    <input id="second_mail" type="text" class="form-control @error('second_mail') is-invalid @enderror" name="second_mail" value="{{ old('second_mail') }}"  autocomplete="email">
-                                                    @error('second_mail')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>  
+        
 
+     
 
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Charge Type</label>
-                                                    <select name="charge_type" class="form-control" id="">
-                                                        <option value="" disabled>Please select Charge Type</option>
-                                                        <option value="cc on file">CC On File</option>
-                                                        <option value="cc call in">CC Call in</option>
-                                                        <option value="cheque">Cheque</option>
-                                                        <option value="charge">Charge</option>
-                                                        <option value="cash">Cash</option>
-
-                                                    </select>
-                                                    @error('second_mail')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>  
-
+                                          
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Convenience Fee

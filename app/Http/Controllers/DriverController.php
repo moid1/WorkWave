@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use PDO;
@@ -81,5 +82,12 @@ class DriverController extends Controller
     public function deleteDriver($id){
         User::where('id', $id)->delete();
         return back()->with('success', 'Driver Deleted Successfully');
+    }
+
+    public function getOrders($id){
+        $orders = Order::where('driver_id', $id)->orderBy('created_at', 'DESC')->get();
+        $driver = User::find($id);
+        return view('driver.orders', compact('orders', 'driver'));
+
     }
 }

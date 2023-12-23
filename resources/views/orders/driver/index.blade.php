@@ -44,7 +44,7 @@
                                         <td>{{$order->load_type == 0 ? 'BOX' : 'SWAP'}}</td>
                                         <td>{{$order->load_value}}</td>
                                         <td>{{$order->created_at}}</td>
-                                        <td><a href="{{route('fulfillorder.create', $order->id)}}">FullFill Order </a> </td>
+                                        <td><a href="{{route('fulfillorder.create', $order->id)}}">Generator </a> </td>
                                     </tr>
                                     @endforeach
                                 

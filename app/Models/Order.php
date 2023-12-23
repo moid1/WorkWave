@@ -23,4 +23,9 @@ class Order extends Model
     public function manifest(){
         return $this->belongsTo(ManifestPDF::class,'id', 'order_id');
     }
+
+    public function driver(){
+        return $this->belongsTo(User::class, 'driver_id');
+
+    }
 }

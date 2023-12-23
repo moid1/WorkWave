@@ -18,8 +18,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['customer', 'user'])->get();
-        return view('orders.index', compact('orders'));
+        $drivers = User::where('type', 2)->get();   
+        $orders = Order::with(['customer', 'user', 'driver'])->get();
+        return view('orders.index', compact('orders','drivers'));
     }
 
     /**
@@ -36,93 +37,23 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'driver_id' => ['required']
-         ]);
-    
-        $date = null;
 
-        if($request->date){
-            $date =   str_replace("-", "", $request->date);
-        }
-       $loads =  null;
-       if( $request->load_type === 'swap'){
-        $loads = array(
-            'swap' =>100
-        );
-       }else{
-        $loads = array(
-            'box' => ((int)$request['box_amount'])*100
-        );
-       }
-
-        $timeWindows =  array('startSec' => 28800, 'endSec' => 18000);
-        $eligibility = $request->date ? array(
-            "type" => "on",
-            "onDates" =>  [$date]
-        ):null;
-
-        $payload = [
-            "strict" => false,
-            "acceptBadGeocodes" => true,
-            'orders' => [
-                array(
-                    'name' => $request['business_name'],
-                    'eligibility' =>$eligibility,
-                    'pickup' => array(
-                        'location' => array(
-                            'address' => $request['address'],
-                        ),
-                        'notes' => $request['notes'] ?? '',
-                        'email' => $request['email'],
-                        'phone' => $request['phone_no'],
-                        'serviceTimeSec' => $request->serviceTime ?? 1800,
-                        'customFields' => array(
-                            'poc' => $request->poc_name,
-                            'cx_phone' => $request['phone_no']
-                        ),
-                    ),
-                    'loads' => $loads,
-                    'requiredTruck' => 'none',
-                )
-            ]
-        ];
-
-        if ($request->load_type === 'swap') {
-            $payload['orders'][0]['delivery'] = array(
-                'location' => array(
-                    'address' => '3345 E State Highway 29 Burnet, TX 78611',
-                ),
-                'phone' => $request['phone_no'],
-                'email' => $request['email'],
-                'serviceTimeSec' => (int)$request->serviceTime ?? 1800,
-                'notes' => $request['notes'] ?? '',
-                'customFields' => array(
-                    'poc' => $request->poc_name,
-                    'cx_phone' => $request['phone_no']
-                ),
-            );
-        }
-
-        $order = Order::create([
+       Order::create([
             'customer_id'=>$request['customer_id'],
             'user_id'=> Auth::id(),
             'notes' => $request['notes'] ?? 'N/A',
             'load_type' => (int)$request['load_type'],
             'load_value' => $request->load_type === 'swap'? $request['swap_amount'] :  $request['box_amount'],
-            'driver_id' => $request['driver_id']
+            'driver_id' => $request['driver_id'] ?? null
 
         ]);
 
-        $notes = Notes::create([
+        Notes::create([
             'customer_id'=>$request['customer_id'],
             'user_id'=> Auth::id(),
             'note' => $request['notes'] ?? 'N/A',
             'title' => 'Order Note'
         ]);
-    //   $response =   $this->callWorkWave($payload);
-    //   $order->api_response = json_encode($response);
-    //   $order->update();
       return redirect('/orders')->with('success','Order Created Successfully');   
 
     }
@@ -172,5 +103,31 @@ class OrderController extends Controller
     public function driverOrders(){
        $orders = Order::where('driver_id', Auth::id())->with(['customer', 'user'])->latest()->get();
        return view('orders.driver.index', compact('orders'));
+    }
+
+    public function updateDriver(Request $request){
+        $orderID = $request->order_id;
+        $driverID = $request->driver_id;
+        $order = Order::find($orderID);
+        if($order &&    $order->driver_id == $driverID)
+        {
+            return response()->json([
+                'success'=>false,
+                'message'=>'Order is already assigned to this driver'
+            ]); 
+        }
+        if($order){
+            $order->driver_id = $driverID;
+            $order->update();
+            return response()->json([
+                'success'=>true,
+                'message'=>'Order is successfully assigned to driver'
+            ]);
+        }
+
+        return response()->json([
+            'success'=>false,
+            'message'=>'Sorry, Order not found'
+        ]);
     }
 }

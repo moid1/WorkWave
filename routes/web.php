@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use App\Http\Controllers\CompanyRegController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
@@ -42,6 +43,7 @@ Route::post('/create-manager',  [UserController::class, 'createManager'])->name(
 Route::get('/register-driver',  [DriverController::class, 'index'])->name('register.driver');
 Route::post('/create-driver',  [DriverController::class, 'store'])->name('create.driver');
 Route::get('/driver-delete/{id}',  [DriverController::class, 'deleteDriver'])->name('driver.delete');
+Route::get('/get-driver-orders/{id}', [DriverController::class,'getOrders'])->name('driver.orders');
 
 
 //Customers
@@ -60,6 +62,7 @@ Route::get('/toggle-customer-status/{id}',[CustomerController::class,'toggleCust
 Route::get('/orders',  [OrderController::class, 'index'])->name('order.index');
 Route::get('/create-orders',  [OrderController::class, 'create'])->name('order.create');
 Route::post('/orders',  [OrderController::class, 'store'])->name('order.store');
+Route::post('/assign-driver', [OrderController::class,'updateDriver'])->name('order.updateDriver');
 
 //Driver ORders
 Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('order.driver.index');
@@ -73,6 +76,9 @@ Route::get('/specifc-notes/{id}',  [NotesController::class, 'getUserNotes'])->na
 Route::get('/books',[CustomerController::class,'getCustomers'])->name('books.customer');
 Route::get('/books-list/{id}',[ManifestPDFController::class,'index'])->name('books.list');
 
+Route::get('/company-registration',[CompanyRegController::class,'index'])->name('company.registration');
+Route::post('/company-registration',[CompanyRegController::class,'store'])->name('company.registration.store');
+Route::get('/company-registration/{id}',[CompanyRegController::class,'delete'])->name('company.registration.delete');
 
 Route::get('/change-password', [HomeController::class, 'changePassword'])->name('change-password');
 Route::post('/change-password', [HomeController::class, 'updatePassword'])->name('update-password');

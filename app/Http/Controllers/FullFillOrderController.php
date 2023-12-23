@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyReg;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
 use App\Models\Order;
@@ -23,8 +24,8 @@ class FullFillOrderController extends Controller
     public function create($id)
     {
         $order = Order::where('id', $id)->with(['customer', 'user'])->first();
-
-        return view('orders.fulfill.create', compact('order'));
+        $registrationNos = CompanyReg::all();
+        return view('orders.fulfill.create', compact('order', 'registrationNos'));
     }
 
     /**
@@ -33,11 +34,6 @@ class FullFillOrderController extends Controller
     public function store(Request $request)
     {
         $pdfTypes = ['Generator','Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        $this->validate($request,[
-            'processor_reg_no' => ['required'],
-            'storage_reg_no' => ['required'],
-         ]);
-
          $folderPath ='signatures/';
 
          $image_parts = explode(";base64,", $request->signed);
@@ -60,11 +56,14 @@ class FullFillOrderController extends Controller
             'no_of_truck_tyre' => $request->truck_tire,
             'no_of_other'=> $request->other_tire,
             'order_id' => $request->order_id,
-            'processor_reg_no' => $request->processor_reg_no,
-            'storage_reg_no' => $request->storage_reg_no,
-            'customer_signature' => $file
+            'processor_reg_no' => $request->company_reg,
+            'customer_signature' => $file,
+            'start_weight'=>$request->start_weight,
+            'end_weight'=>$request->end_weight,
+            'cheque_no'=>$request->cheque_no
 
          ]);
+         
          $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
          $fullFillOrder['order'] = $order;
          
@@ -112,7 +111,7 @@ class FullFillOrderController extends Controller
     $manifestPDF->save();
 
 
-         return redirect('/');
+         return redirect('/')->with('success', 'Manifest has been created successfully');
     }
 
     /**

@@ -761,7 +761,7 @@
                     <input
   type="text"
   name=""
-  value="{{$data->storage_reg_no ?? 'N/A'}}"
+  value="{{$data->processor_reg_no ?? 'N/A'}}"
   class="inputField"
 />
 <label class="inputLabel">registration number</label>

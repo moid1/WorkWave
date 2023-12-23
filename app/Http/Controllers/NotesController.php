@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Notes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +80,8 @@ class NotesController extends Controller
     }
 
     public function getUserNotes($id){
-        $notes = Notes::where([['customer_id', $id]])->get();
-        return view('notes.user-notes', compact('notes'));
+        $notes = Notes::where([['customer_id', $id]])->orderBy('created_at', 'DESC')->get();
+        $customer = Customer::find($id);
+        return view('notes.user-notes', compact('notes', 'customer'));
     }
 }

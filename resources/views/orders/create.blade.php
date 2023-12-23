@@ -161,23 +161,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>ServiceTime (Seconds)</label>
-                                                <input  type="number"
-                                                    class="form-control "
-                                                    name="serviceTime" value=""  autofocus>
-                                            </div>
-                                        </div>
-
                                         
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Driver</label>
                                                 <select id="driver" name="driver_id" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                                    <option value=""  selected>Please select Driver</option>
                                                     @foreach ($drivers as $driver)
-                                                        
-                                                   
                                                     <option value="{{$driver->id}}">{{ucfirst($driver->name)}}</option>
                                                     @endforeach
                                                 </select>

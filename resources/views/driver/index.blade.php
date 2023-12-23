@@ -126,9 +126,9 @@
                                     <tr>
                                         <td>{{$driver->name}}</td>
                                         <td>{{$driver->email}}</td>
-                                        <td><a href="{{route('driver.delete', $driver->id)}}" class="mdi mdi-delete"></a></td>
-                                        
-        
+                                        <td><a href="{{route('driver.delete', $driver->id)}}" class="mdi mdi-delete"></a> /
+                                            <a href="{{route('driver.orders', $driver->id)}}" class="mdi mdi-buffer"></a></td>
+
                                     </tr>
                                     @endforeach
                                 
