@@ -31,10 +31,24 @@
                                                             </span>
                                                         @enderror
                                                     </div>
-                                                </div>                                            
+                                                </div>              
+                                                
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label>Address</label>
+                                                        <label>Mailing Address</label>
+                                                        <input id="mail_address" type="text" class="form-control @error('mail_address') is-invalid @enderror" name="mail_address" value="{{ old('mail_address') }}" >
+                                                        @error('mail_address')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div> 
+
+
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>No to Physical Address</label>
                                                         <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" required >
 
                                                         @error('address')
@@ -96,17 +110,7 @@
                                             </div>  
 
 
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Mailing address</label>
-                                                    <input id="mail_address" type="text" class="form-control @error('mail_address') is-invalid @enderror" name="mail_address" value="{{ old('mail_address') }}" >
-                                                    @error('mail_address')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div> 
+
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">

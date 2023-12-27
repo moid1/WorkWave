@@ -56,6 +56,8 @@ Route::get('/show-customer/{id}',  [CustomerController::class, 'show'])->name('c
 Route::post('customer-update/{id}',[CustomerController::class,'update'])->name('customer.update');
 
 Route::get('/customers/search',[CustomerController::class,'searchCustomers'])->name('customer.search');
+Route::get('/customers/search-books',[CustomerController::class,'searchCustomersBooks'])->name('customer.search.books');
+
 Route::get('/toggle-customer-status/{id}',[CustomerController::class,'toggleCustomerStatus']);
 
 //Orders

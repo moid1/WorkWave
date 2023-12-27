@@ -120,6 +120,20 @@ $this->validate($request,[
         // return view('autosearch');  
     }
 
+    public function searchCustomersBooks(Request $request){
+        if ($request->ajax()) {
+            $data = Customer::where([
+                ['business_name','LIKE',$request->name.'%'],
+                ['status', 1]
+            ])->with('notes')->get();
+return response()->json([
+    'success' => true,
+    'data' => $data
+]);
+        }
+        // return view('autosearch');  
+    }
+
     public function toggleCustomerStatus($id)
     {
         $customer = Customer::find($id);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Manager;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -43,7 +44,13 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
          ]);
 
-         User::create($request->all());
+         $user = User::create($request->all());
+
+         Manager::create([
+            'user_id' => $user->id,
+            'manager_type' => $request->manager_type
+         ]);
+         
          return redirect('/register-manager')->with('success','Manager Created Successfully');   
         
     }

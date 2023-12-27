@@ -47,6 +47,18 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="" class="col-4">{{ __('Manager Type') }}</label>
+                                <div class="col-md-6">
+                                    <select name="manager_type" id="" class="form-control">
+                                        <option value="route_manager">Route Manager</option>
+                                        <option value="sales_manager">Sales Manager</option>
+                                        <option value="accounting_manager">Accounting Manager</option>
+                                    </select>
+                                </div>
+                        </div>
+
+
+                        <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
