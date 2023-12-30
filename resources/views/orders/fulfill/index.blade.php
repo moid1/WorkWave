@@ -16,7 +16,7 @@
                 <div class="card m-b-20">
                     <div class="card-body">
 
-                        <h4 class="mt-0 header-title">All Orders</h4>
+                        <h4 class="mt-0 header-title">FullFilled Orders</h4>
 
                         <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0"
                             width="100%">
@@ -31,7 +31,8 @@
                                     <th>Driver</th>
                                     <th>Qty</th>
                                     <th>Order Date</th>
-                                    <th>Update Driver</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
 
 
                                 </tr>
@@ -49,8 +50,9 @@
                                     <td>{{$order->driver ?$order->driver->name : 'N/A'}}</td>
                                     <td>{{$order->load_value}}</td>
                                     <td>{{$order->created_at->format('M d Y')}}</td>
-                                    <td><i class="mdi mdi-account update_driver" data-order_id="{{$order->id}}"
-                                            title="Update Driver"></i></td>
+                                    <td>{{$order->status}}</td>
+                                    <td> <a href="{{route('compare.order', $order->id)}}"> <i class="mdi mdi-compare update_driver" data-order_id="{{$order->id}}"
+                                            title="Validate tires"></i></a></td>
 
                                 </tr>
                                 @endforeach
@@ -64,31 +66,4 @@
         </div> <!-- end row -->
     </div><!-- container-fluid -->
 </div>
-@include('orders.includes.change_driver')
 @endsection
-<script>
-    jQuery(document).ready(function() {
-        $('.update_driver').on('click', function(){
-            $('.orderID').val($(this).data('order_id'))
-            $('#driversList').modal('show');
-        });
-
-    $('#selectDriver').on('change', function() {
-        let driverID = this.value;
-         $.ajax({
-                url:'{{ route("order.updateDriver") }}',
-                type:'POST',
-                headers:{
-                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-                },
-                data:{
-                    order_id:  $('.orderID').val() ,
-                    driver_id:driverID
-                },
-                success:function (data) {
-                  alert(data.message);
-                }
-            })
-    });
-});
-</script>

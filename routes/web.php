@@ -12,6 +12,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FullFillOrderController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
+use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
 
 /*
@@ -71,6 +72,8 @@ Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('o
 Route::get('fulfill-order/{id}', [FullFillOrderController::class,'create'])->name('fulfillorder.create');
 Route::post('fulfill-order', [FullFillOrderController::class,'store'])->name('fulfillorder.store');
 
+Route::get('fulfilled-orders', [FullFillOrderController::class,'getFullFilledOrders'])->name('orders.fullfilled');
+
 Route::post('/notes', [NotesController::class, 'store'])->name('notes.store');
 Route::get('/notes',  [NotesController::class, 'index'])->name('notes.index');
 Route::get('/specifc-notes/{id}',  [NotesController::class, 'getUserNotes'])->name('notes.user');
@@ -84,6 +87,7 @@ Route::get('/company-registration/{id}',[CompanyRegController::class,'delete'])-
 
 Route::get('/change-password', [HomeController::class, 'changePassword'])->name('change-password');
 Route::post('/change-password', [HomeController::class, 'updatePassword'])->name('update-password');
+
 
 Route::get('clear_cache', function () {
 
@@ -102,3 +106,5 @@ Route::get('migrate', function () {
 
 });
 
+Route::get('/compare-order/{id}', [FullFillOrderController::class,'compareOrder'])->name('compare.order');
+Route::post('/compare-order', [FullFillOrderController::class,'compareOrderPost'])->name('compare.order.post');
