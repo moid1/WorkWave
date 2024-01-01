@@ -29,7 +29,6 @@
                                     <th>POC Name</th>
                                     <th>Email</th>
                                     <th>Driver</th>
-                                    <th>Qty</th>
                                     <th>Order Date</th>
                                     <th>Update Driver</th>
 
@@ -47,7 +46,6 @@
                                     <td>{{$order->customer->poc_name}}</td>
                                     <td>{{$order->customer->email}}</td>
                                     <td>{{$order->driver ?$order->driver->name : 'N/A'}}</td>
-                                    <td>{{$order->load_value}}</td>
                                     <td>{{$order->created_at->format('M d Y')}}</td>
                                     <td><i class="mdi mdi-account update_driver" data-order_id="{{$order->id}}"
                                             title="Update Driver"></i></td>
