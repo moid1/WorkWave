@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +25,8 @@ Route::post('/login', [AuthController::class,'loginUser']);
 Route::post('/register-manager', [AuthController::class,'registerManager'])->middleware('auth:sanctum');
 Route::post('/register-driver', [AuthController::class, 'registerDriver'])->middleware('auth:sanctum');
 Route::post('/register-customer', [AuthController::class, 'registerCustomer'])->middleware('auth:sanctum');
+Route::get('/get-dashboard-stats',[HomeController::class,'getDashboardStats'])->middleware('auth:sanctum');
+Route::get('/get-customers',[CustomerController::class,'apiGetCustomers'])->middleware('auth:sanctum');
+Route::get('/get-customer-manifest',[CustomerController::class,'apiGetCustomersManifest'])->middleware('auth:sanctum');
 
-// Route::apiResource('posts', UserController::class)->middleware('auth:sanctum');
+

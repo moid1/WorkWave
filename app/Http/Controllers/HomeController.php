@@ -40,7 +40,7 @@ class HomeController extends Controller
         } else if ($userType == 2) {
             $orders = Order::where('driver_id', Auth::user()->id)->get();
             return view('driver.home', compact('orders'));
-        }else if($userType == 3){
+        } else if ($userType == 3) {
             $customerId = Customer::where('user_id', Auth::id())->first()->only('id');
             $orders = Order::where('customer_id', $customerId['id'])->with(['manifest'])->get();
             return view('customers.home', compact('orders'));
@@ -75,15 +75,43 @@ class HomeController extends Controller
         return back()->with("status", "Password changed successfully!");
     }
 
-    public function getManifest(){
+    public function getManifest()
+    {
         $pdf = \App::make('dompdf.wrapper');
 
-        $customPaper = array(0,0,900,1200);
+        $customPaper = array(0, 0, 900, 1200);
         $pdf->setPaper($customPaper);
         $pdf->loadView('manifest.index');
-       return $pdf->stream();
+        return $pdf->stream();
         // $pdfPath = public_path().'/manifest/pdfs/'.time().'.pdf';
         // file_put_contents($pdfPath, $output);
         return view('manifest.index');
+    }
+
+    public function getDashboardStats()
+    {
+        try {
+            $userType = Auth::user()->type;
+            if ($userType == 0 || $userType == 1) {
+                $customers = Customer::latest()->take(5)->get();
+                $dataArray = array();
+                $dataArray['customersCount'] = Customer::all()->count();
+                $dataArray['ordersCount'] = Order::all()->count();
+                $dataArray['notesCount'] = Notes::all()->count();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data retrived successfully',
+                    'data' => [
+                        'customers' => $customers,
+                        'stats' => $dataArray
+                    ],
+                ], 200);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }

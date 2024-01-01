@@ -4,8 +4,6 @@
     rel="stylesheet">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-
-
 @section('content')
 <div class="page-content-wrapper ">
     <div class="container-fluid">
@@ -20,10 +18,13 @@
                             {{ Session::get('success') }}
                         </div>
                         @elseif (Session::has('error'))
+                        @foreach (Session::get('error') as $error)
                         <div class="alert alert-danger" role="alert">
-                            {{ Session::get('error') }}
+                            {{$error}}
                         </div>
+                        @endforeach
                         @endif
+
                         <div class="p-20">
 
                             <form action="{{route('compare.order.post')}}" method="POST">

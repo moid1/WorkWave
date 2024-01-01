@@ -102,7 +102,7 @@ class FullFillOrderController extends Controller
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $output = $pdf->output();
-            return $pdf->stream();
+            // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
@@ -221,34 +221,50 @@ class FullFillOrderController extends Controller
         $fullFill = FullFillOrder::where('order_id', $order->id)->latest()->first();
         $tyreFulFil = FulfilTyre::where('full_fill_orders_id', $fullFill->id)->first();
         $isEveryThingOK = true;
+        $errorsArray = [];
         if ($order && $fullFill) {
             if ($request->passenger_tire != $fullFill->no_of_passenger) {
                 $isEveryThingOK = false;
+                $errorsArray[]='Passanger Tire Counting is different';
             }
             if ($request->lawnmowers_atvmotorcycle != $tyreFulFil->lawnmowers_atvmotorcycle) {
                 $isEveryThingOK = false;
+                $errorsArray[]='No of Lawnmowers/ATVMotorcycle Counting is different';
+
             }
             if ($request->lawnmowers_atvmotorcyclewithrim != $tyreFulFil->lawnmowers_atvmotorcyclewithrim) {
                 $isEveryThingOK = false;
+                $errorsArray[]='Lawnmowers/ATVMotorcycle With Rim Counting is different';
+
             }
             if ($request->passanger_lighttruck != $tyreFulFil->passanger_lighttruck) {
                 $isEveryThingOK = false;
+                $errorsArray[]='Passanger/Light truck Counting is different';
             }
             if ($request->passanger_lighttruckwithrim != $tyreFulFil->passanger_lighttruckwithrim) {
                 $isEveryThingOK = false;
+                $errorsArray[]='Passanger/Light truck with Rim Counting is different';
             }
             if ($request->truck_tire != $fullFill->no_of_truck_tyre) {
                 $isEveryThingOK = false;
+                $errorsArray[]='Truck Tires Counting is different';
+
             }
 
             if ($request->semi_truck != $tyreFulFil->semi_truck) {
                 $isEveryThingOK = false;
+                $errorsArray[]='No of Semi Truck Counting is different';
+
             }
             if ($request->semi_super_singles != $tyreFulFil->semi_super_singles) {
                 $isEveryThingOK = false;
+                $errorsArray[]='Semi Super Singles Counting is different';
+
             }
             if ($request->semi_truck_with_rim != $tyreFulFil->semi_truck_with_rim) {
                 $isEveryThingOK = false;
+                $errorsArray[]='Semi Truck With Rim Counting is different';
+
             }
         }
 
@@ -259,7 +275,7 @@ class FullFillOrderController extends Controller
         }else{
             $order->status = 'error-compared';
             $order->update();
-            return back()->with('error','Tire Counting is not same');
+            return back()->with('error', $errorsArray);
         }
     }
 }
