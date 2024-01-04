@@ -48,7 +48,8 @@ class FullFillOrderController extends Controller
      */
     public function store(Request $request)
     {
-        $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        $pdfTypes = ['Generator'];
         $folderPath = 'signatures/';
 
         $image_parts = explode(";base64,", $request->signed);

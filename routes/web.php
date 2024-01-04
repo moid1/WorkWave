@@ -14,6 +14,7 @@ use App\Http\Controllers\ManagerCompareOrderController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\TruckController;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
 use App\Models\Order;
@@ -119,3 +120,10 @@ Route::get('/compared-orders', [OrderController::class, 'getComparedOrders'])->n
 Route::view('count-sheet', 'countsheet.index');
 
 Route::get('/generate-count-sheet/{id}', [ManagerCompareOrderController::class, 'generateCountSheet'])->name('generate.countsheet');
+
+
+//Truck
+Route::get('/truck', [TruckController::class,'index'])->name('truck.index');
+Route::post('/truck', [TruckController::class,'store'])->name('truck.store');
+Route::get('/truck-status/{id}', [TruckController::class,'changeTruckStatus'])->name('change.truck.status');
+Route::post('/assign-truck', [TruckController::class,'assignTruckToDriver'])->name('assign.truck.driver');

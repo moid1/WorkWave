@@ -158,6 +158,11 @@
                                     class="mdi mdi-calendar-check"></i><span> Compared Orders </span></a>
                         </li>
 
+                        <li>
+                            <a href="{{route('truck.index')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Trucks </span></a>
+                        </li>
+
                         @endif
 
                         @if(Auth::user()->type == 2)
