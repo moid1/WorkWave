@@ -12,4 +12,5 @@ class ManifestPDF extends Model
     protected $guarded=[];
 
 
+
 }

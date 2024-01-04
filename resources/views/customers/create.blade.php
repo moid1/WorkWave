@@ -82,7 +82,7 @@
                                                         </span>
                                                     @enderror
                                                 </div>
-                                            </div>             
+                                            </div>                    
 
 
                                             <div class="col-lg-6">
@@ -90,6 +90,21 @@
                                                     <label>POC Email</label>
                                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email">
                                                     @error('email')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>  
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>RTD Location</label>
+                                                    <select name="rtd_location" class="form-control" id="">
+                                                        <option value="rtd_central">RTD Central </option>
+                                                        <option value="rtd_south">RTD South</option>
+                                                    </select>
+                                                    @error('rtd_location')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>

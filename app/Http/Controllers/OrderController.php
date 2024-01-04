@@ -43,8 +43,7 @@ class OrderController extends Controller
             'customer_id' => $request['customer_id'],
             'user_id' => Auth::id(),
             'notes' => $request['notes'] ?? 'N/A',
-            'load_type' => (int)$request['load_type'],
-            'load_value' => $request->load_type === 'swap' ? $request['swap_amount'] :  $request['box_amount'],
+            'load_type' => $request['load_type'],
             'driver_id' => $request['driver_id'] ?? null
 
         ]);
@@ -102,7 +101,7 @@ class OrderController extends Controller
 
     public function driverOrders()
     {
-        $orders = Order::where('driver_id', Auth::id())->with(['customer', 'user'])->latest()->get();
+        $orders = Order::where('driver_id', Auth::id())->with(['customer', 'user', 'manifest'])->latest()->get();
         return view('orders.driver.index', compact('orders'));
     }
 

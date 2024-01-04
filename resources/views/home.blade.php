@@ -1,86 +1,518 @@
 @extends('layouts.app')
+<style>
+    .heading {
+        text-align: center !important;
+        margin-bottom: 30px;
+    }
 
+    .box {
+        text-align: center !important;
+        width: 100%;
+    }
+
+    .main-head{
+        margin-top: 10px;
+        background: white;
+        padding-bottom: 10px;
+        padding-top: 10px;
+
+    }
+</style>
 @section('content')
-<div class="page-content-wrapper ">
+    <div class="page-content-wrapper ">
 
-    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="main-head">
+                <h4 class="heading">Box Truck</h4>
+                <div class="row justify-content-center">
+                    <div class=" col-lg-2 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5> Total Orders Today </h5>
+                                </div>
+                                <div class="box">
+                                    <span>BOX Truck With Assigned Routes</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                        <span>10</span> &nbsp;
+                                        <span>11</span>&nbsp;
+                                        <span>12</span>&nbsp;
+                                        <span>13</span>&nbsp;
+                                    </div>
+                                </div>
 
-        <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-4">
-                <div class="mini-stat clearfix bg-primary">
-                    <span class="mini-stat-icon"><i class="mdi mdi-account"></i></span>
-                    <div class="mini-stat-info text-right text-white">
-                        <span class="counter">{{$dataArray['customersCount']}}</span>
-                        Total Customers
+                                <hr>
+                                <div class="box">
+                                    <span>BOX Truck Without Assigned Routes</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                        <span>10</span> &nbsp;
+                                        <span>11</span>&nbsp;
+                                        <span>12</span>&nbsp;
+                                        <span>13</span>&nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Orders Completed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Orders Missed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-4">
-                <div class="mini-stat clearfix bg-primary">
-                    <span class="mini-stat-icon"><i class="mdi mdi-currency-usd"></i></span>
-                    <div class="mini-stat-info text-right text-white">
-                        <span class="counter">{{$dataArray['ordersCount']}}</span>
-                       Total Orders
+
+                    <div class=" col-lg-2 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Tires</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Number of Tires Collected Today</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Number of Tires Resale</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Weight Collected</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tires Collected To Date</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Weights To Date</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-4">
-                <div class="mini-stat clearfix bg-primary">
-                    <span class="mini-stat-icon"><i class="mdi mdi-cube-outline"></i></span>
-                    <div class="mini-stat-info text-right text-white">
-                        <span class="counter">{{$dataArray['notesCount']}}</span>
-                      Total Notes
+
+                    <div class=" col-lg-2 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Customers</h5>
+                                </div>
+                                <div class="box">
+                                    <span>What CX were Missed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Total Weights To Date</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card m-b-20">
-                    <div class="card-body">
-                        <h4 class="mt-0 m-b-15 header-title">Recent Customers</h4>
-                        <div class="table-responsive">
-                            <table class="table table-hover m-b-0">
-                                <thead>
-                                <tr>
-                                    <th>Business Name</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Phone#</th>
-                                    <th>Status</th>
-                                </tr>
+                    <div class=" col-lg-2 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Total Active CX</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Total New CX this Month</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Total New CX YTD</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                </thead>
-                                <tbody>
-                                    @foreach ($customers as $customer)
-                                    <tr>
-                                        <td>{{$customer['business_name']}}</td>
-                                        <td>{{$customer['email']}}</td>
-                                        <td>{{$customer['address']}}</td>
-                                        <td>{{$customer['phone_no']}}</td>
-                                        @if($customer['status'] === 1)
-                                            <td><span class="badge badge-success">Active</span></td>
-                                        @else
-                                        <td><span class="badge badge-secondary" style="color: white">In Active</span></td>
-                                        @endif
-
-
-                                    </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
+                    <div class=" col-lg-2 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Total Completed Jobs</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Monthly</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Yearly</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="main-head">
+                <h4 class="heading">Semi Routes</h4>
+                <div class="row justify-content-center">
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5> Total Orders Today </h5>
+                                </div>
+                                <div class="box">
+                                    <span>Semi With Assigned Route</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                        <span>10</span> &nbsp;
+                                        <span>11</span>&nbsp;
+                                        <span>12</span>&nbsp;
+                                        <span>13</span>&nbsp;
+                                    </div>
+                                </div>
 
-        </div>
-        <!-- end row -->
+                                <hr>
+                                <div class="box">
+                                    <span>Semi Without Routes</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                        <span>10</span> &nbsp;
+                                        <span>11</span>&nbsp;
+                                        <span>12</span>&nbsp;
+                                        <span>13</span>&nbsp;
+                                    </div>
+                                </div>
 
-    </div><!-- container-fluid -->
+                                <hr>
+                                <div class="box">
+                                    <span>Total Orders Completed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Orders Missed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Tires</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Number of Tires Collected Today</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Number of Tires Resale</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Weight Collected</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tires Collected To Date</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Weights To Date</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Customers</h5>
+                                </div>
+                                <div class="box">
+                                    <span>What CX were Missed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Total Weights To Date</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>State Route</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Total Orders Today</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Total Orders Completed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div><hr>
+                                <div class="box">
+                                    <span>How Many Orders Missed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div><hr>
+                                <div class="box">
+                                    <span>Total Weight Collected</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-head">
+                <h4 class="heading">Material Shipped</h4>
+                <div class="row justify-content-center">
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5> TDF </h5>
+                                </div>
+                                <div class="box">
+                                    <span>Total Loads Today</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> 
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tons Delivered</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tons Needed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Completion %</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Steel</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Total Loads Today</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tons Delivered</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tons Needed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="box">
+                                    <span>Completion %</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Monthly</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Total Tons Delivered</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tons Needed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Completion %</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" col-lg-3 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h5>Yearly To Date</h5>
+                                </div>
+                                <div class="box">
+                                    <span>Total Loads</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="box">
+                                    <span>Total Tons Delivered</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div><hr>
+                                <div class="box">
+                                    <span>Total Tons Needed</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div><hr>
+                                <div class="box">
+                                    <span>Completed %</span>
+                                    <div class="d-flex justify-content-center">
+                                        <span>9</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- container-fluid -->
 
 
-</div>
+    </div>
 @endsection

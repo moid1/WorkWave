@@ -65,7 +65,7 @@
                             class="rounded-circle">
                     </div> --}}
                     <div class="user-info">
-                        <h4 class="font-16">{{Auth::user()->name}}</h4>
+                        <h4 class="font-16">Hello {{Auth::user()->name}}</h4>
                         @if(Auth::user()->type == '1')
                         <span class="text-muted user-status"><i class="fa fa-dot-circle-o text-success"></i>
                             Manager</span>

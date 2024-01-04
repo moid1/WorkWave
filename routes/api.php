@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\NotesController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,5 +33,7 @@ Route::get('/get-customers',[CustomerController::class,'apiGetCustomers'])->midd
 Route::get('/get-customer-manifest',[CustomerController::class,'apiGetCustomersManifest'])->middleware('auth:sanctum');
 Route::get('/get-orders', [OrderController::class, 'apiGetOrders'])->middleware('auth:sanctum');
 Route::post('/assign-driver', [OrderController::class,'apiUpdateDriver'])->middleware('auth:sanctum');
-
-
+Route::get('/get-all-managers', [ManagerController::class, 'apiGetAllManagers'])->middleware('auth:sanctum');
+Route::get('/get-all-drivers', [ManagerController::class, 'apiGetAllDrivers'])->middleware('auth:sanctum');
+Route::get('/get-all-customer-notes', [NotesController::class, 'apiGetAllCustomersNotes'])->middleware('auth:sanctum');
+Route::post('/change-password', [AuthController::class, 'apiChangePassword'])->middleware('auth:sanctum');

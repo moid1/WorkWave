@@ -56,7 +56,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Date</label>
-                                                <input name="date" class="form-control" type = "date" id = "datepicker-13"/>
+                                                <input name="date" class="form-control" type = "date"  value="<?php echo date('Y-m-d'); ?>"/>
                                             </div>
                                         </div>
 
@@ -136,33 +136,19 @@
                                             <div class="form-group">
                                                 <label>Load Type</label>
                                                 <select id="loadType" name="load_type" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                                                    <option value="box">Box</option>
-                                                    <option value="swap">Swap</option>
+                                                    <option value="box_truck_route">Box Truck Route</option>
+                                                    <option value="trailer_swap">Trailer Swap</option>
+                                                    <option value="state">State</option>
+                                                    <option value="tdf">TDF</option>
+                                                    <option value="steel">Steel</option>
+
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-6 box">
-                                            <div class="form-group ">
-                                                <label>Box Value</label>
-                                                <input  id="boxAmount" type="number"
-                                                    class="form-control " value="1"
-                                                    name="box_amount" max="500"  autofocus>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6 d-none swap">
-                                            <div class="form-group ">
-                                                <label>Swap</label>
-                                                <input  id="swap" type="number"
-                                                readonly
-                                                    class="form-control "
-                                                    name="swap_amount" min="1" max="1" value="1"  autofocus>
-                                            </div>
-                                        </div>
-
+                                 
                                         
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Driver</label>
                                                 <select id="driver" name="driver_id" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
@@ -181,81 +167,6 @@
                                             </div>
                                         </div>
 
-
-
-                                        {{-- <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Passenger Pricing</label>
-                                                <input id="passenger_pricing" type="text"
-                                                    class="form-control @error('passenger_pricing') is-invalid @enderror"
-                                                    name="passenger_pricing" value="{{ old('passenger_pricing') }}" required
-                                                    autofocus>
-                                                @error('passenger_pricing')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Truck Pricing</label>
-                                                <input id="truck_pricing" type="text"
-                                                    class="form-control @error('truck_pricing') is-invalid @enderror"
-                                                    name="truck_pricing" value="{{ old('truck_pricing') }}" autofocus>
-                                                @error('truck_pricing')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Agri Pricing</label>
-                                                <input id="agri_pricing" type="text"
-                                                    class="form-control @error('agri_pricing') is-invalid @enderror"
-                                                    name="agri_pricing" value="{{ old('agri_pricing') }}" autofocus>
-                                                @error('agri_pricing')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Other Pricing</label>
-                                                <input id="other" type="text"
-                                                    class="form-control @error('other') is-invalid @enderror" name="other"
-                                                    value="{{ old('other') }}" autofocus>
-                                                @error('other')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Tax</label>
-                                                <input id="tax" type="text"
-                                                    class="form-control @error('tax') is-invalid @enderror" name="tax"
-                                                    value="{{ old('tax') }}" autofocus>
-                                                @error('tax')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div> --}}
 
                                      
                                         <div class="col-lg-12 justify-content-center text-center mt-5">
@@ -315,18 +226,5 @@
         });
     });
 
-    $(document).ready(function(){
-        $('#loadType').on('change', function() {
-       if(this.value === 'swap'){
-        $('.swap').removeClass('d-none');
-        $('.box').addClass('d-none');
-
-       }else{
-        $('.box').removeClass('d-none');
-        $('.swap').addClass('d-none');
-
-       }
-    });
-});
 
 </script>   

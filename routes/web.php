@@ -71,6 +71,8 @@ Route::post('/assign-driver', [OrderController::class,'updateDriver'])->name('or
 Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('order.driver.index');
 Route::get('fulfill-order/{id}', [FullFillOrderController::class,'create'])->name('fulfillorder.create');
 Route::post('fulfill-order', [FullFillOrderController::class,'store'])->name('fulfillorder.store');
+Route::get('/load-weight', [FullFillOrderController::class,'loadByWeight'])->name('fullfill.load.weight');
+Route::get('/load-tire/{id}', [FullFillOrderController::class,'loadByTire'])->name('fullfill.load.tire');
 
 Route::get('fulfilled-orders', [FullFillOrderController::class,'getFullFilledOrders'])->name('orders.fullfilled');
 

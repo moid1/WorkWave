@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manager;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ManagerController extends Controller
@@ -61,5 +62,40 @@ class ManagerController extends Controller
     public function destroy(Manager $manager)
     {
         //
+    }
+
+    public function apiGetAllManagers()
+    {
+        try {
+            $allManagers = Manager::with('user')->get();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'All Managers List',
+                'data' => $allManagers,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function apiGetAllDrivers()
+    {
+        try {
+            $allManagers = User::where('type', 2)->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'All Drivers List',
+                'data' => $allManagers,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }

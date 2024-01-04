@@ -16,8 +16,6 @@ class NotesController extends Controller
     {
         $notes = Notes::with(['customer', 'user'])->get();
         return view('notes.index', compact('notes'));
-
-
     }
 
     /**
@@ -34,17 +32,16 @@ class NotesController extends Controller
     public function store(Request $request)
     {
 
-     
+
         Notes::create([
-            'customer_id'=>$request['customer_id'],
-            'user_id'=> Auth::id(),
+            'customer_id' => $request['customer_id'],
+            'user_id' => Auth::id(),
             'note' => $request['note'] ?? 'N/A',
             'title' => $request['notes_title'] ?? 'N/A',
 
         ]);
 
         return redirect()->back()->with('success', 'Note created successfully');
-
     }
 
     /**
@@ -79,9 +76,34 @@ class NotesController extends Controller
         //
     }
 
-    public function getUserNotes($id){
+    public function getUserNotes($id)
+    {
         $notes = Notes::where([['customer_id', $id]])->orderBy('created_at', 'DESC')->get();
         $customer = Customer::find($id);
         return view('notes.user-notes', compact('notes', 'customer'));
+    }
+
+    public function apiGetAllCustomersNotes(Request $request)
+    {
+        try {
+            if (!$request->customer_id) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Customer Id is required',
+                ], 400);
+            }
+            $notes = Notes::where([['customer_id', $request->customer_id]])->orderBy('created_at', 'DESC')->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Customer Notes',
+                'data' => $notes,
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }

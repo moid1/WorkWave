@@ -41,7 +41,7 @@
                                         <th>Email</th>
                                         <th>Address</th>
                                         <th>Phone#</th>
-                                        <th>POC Name</th>
+                                        <th>RTD Location</th>
                                         <th>Passenger Pricing</th>
                                         <th>Truck Pricing</th>
                                         {{-- <th>Agri Pricing</th> --}}
@@ -71,7 +71,7 @@
                                         <td>{{$customer->email}}</td>
                                         <td>{{$customer->address}}</td>
                                         <td>{{$customer->phone_no}}</td>
-                                        <td>{{$customer->poc_name}}</td>
+                                        <td>{{$customer->rtd_location ?? 'N/A'}}</td>
                                         <td>{{$customer->passenger_pricing ?? '0'}}</td>
                                         <td>{{$customer->truck_pricing ?? '0'}}</td>
                                         {{-- <td>{{$customer->agri_pricing ?? '0'}}</td> --}}
