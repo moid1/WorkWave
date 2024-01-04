@@ -206,4 +206,9 @@ class OrderController extends Controller
             ], 500);
         }
     }
+
+    public function getComparedOrders(){
+        $orders = Order::where('status', 'compared')->latest()->get();
+        return view('orders.compared.index', compact('orders'));
+    }
 }

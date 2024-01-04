@@ -153,6 +153,11 @@
                                     class="mdi mdi-calendar-check"></i><span> Fullfilled Orders </span></a>
                         </li>
 
+                        <li>
+                            <a href="{{route('orders.compared')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Compared Orders </span></a>
+                        </li>
+
                         @endif
 
                         @if(Auth::user()->type == 2)

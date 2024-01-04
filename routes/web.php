@@ -10,10 +10,13 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FullFillOrderController;
+use App\Http\Controllers\ManagerCompareOrderController;
+use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,4 +112,10 @@ Route::get('migrate', function () {
 });
 
 Route::get('/compare-order/{id}', [FullFillOrderController::class,'compareOrder'])->name('compare.order');
-Route::post('/compare-order', [FullFillOrderController::class,'compareOrderPost'])->name('compare.order.post');
+Route::post('/compare-order', [ManagerCompareOrderController::class,'store'])->name('manager.compare.order.post');
+
+Route::get('/compared-orders', [OrderController::class, 'getComparedOrders'])->name('orders.compared');
+
+Route::view('count-sheet', 'countsheet.index');
+
+Route::get('/generate-count-sheet/{id}', [ManagerCompareOrderController::class, 'generateCountSheet'])->name('generate.countsheet');

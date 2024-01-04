@@ -26,6 +26,13 @@ class Order extends Model
 
     public function driver(){
         return $this->belongsTo(User::class, 'driver_id');
+    }
 
+    public function fulfilled(){
+        return $this->belongsTo(FullFillOrder::class,'id', 'order_id');
+    }
+
+    public function compared(){
+        return $this->belongsTo(ManagerCompareOrder::class,'id', 'order_id');
     }
 }

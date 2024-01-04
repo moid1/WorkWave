@@ -16,7 +16,7 @@
                 <div class="card m-b-20">
                     <div class="card-body">
 
-                        <h4 class="mt-0 header-title">FullFilled Orders</h4>
+                        <h4 class="mt-0 header-title">All Compared Orders</h4>
 
                         <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0"
                             width="100%">
@@ -29,11 +29,8 @@
                                     <th>POC Name</th>
                                     <th>Email</th>
                                     <th>Driver</th>
-
                                     <th>Order Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-
+                                 <th>Action</th>
 
                                 </tr>
                             </thead>
@@ -48,11 +45,8 @@
                                     <td>{{$order->customer->poc_name}}</td>
                                     <td>{{$order->customer->email}}</td>
                                     <td>{{$order->driver ?$order->driver->name : 'N/A'}}</td>
-             
                                     <td>{{$order->created_at->format('M d Y')}}</td>
-                                    <td>{{$order->status}}</td>
-                                    <td> <a href="{{route('compare.order', $order->id)}}"> <i class="mdi mdi-compare update_driver" data-order_id="{{$order->id}}"
-                                            title="Validate tires"></i></a></td>
+                                  <td><a href="{{route('generate.countsheet', $order->id)}}">Generate Count Sheet </a> </td>
 
                                 </tr>
                                 @endforeach
