@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerPricing;
 use App\Models\ManagerCompareOrder;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -135,9 +136,11 @@ class ManagerCompareOrderController extends Controller
     }
 
     public function generateCountSheet($id){
-        $order = Order::where('id',$id)->with(['compared','fulfilled'])->latest()->first();
+        $order = Order::where('id',$id)->with(['compared','fulfilled', 'customer'])->latest()->first();
+        $customerPricing = CustomerPricing::whereCustomerId($order->customer_id)->first();
         if($order){
             $pdf = \App::make('dompdf.wrapper');
+            $order['customerPricing'] = $customerPricing;
 
             $customPaper = array(0,0,1000,2000);
                         $pdf->setPaper($customPaper);

@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerPricingController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FullFillOrderController;
 use App\Http\Controllers\ManagerCompareOrderController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\TruckController;
+use App\Models\CustomerPricing;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
 use App\Models\Order;
@@ -127,3 +129,11 @@ Route::get('/truck', [TruckController::class,'index'])->name('truck.index');
 Route::post('/truck', [TruckController::class,'store'])->name('truck.store');
 Route::get('/truck-status/{id}', [TruckController::class,'changeTruckStatus'])->name('change.truck.status');
 Route::post('/assign-truck', [TruckController::class,'assignTruckToDriver'])->name('assign.truck.driver');
+
+//Customer Pricing
+
+Route::get('/customer-pricing', [CustomerPricingController::class, 'index'])->name('customer.pricing.index');
+Route::get('/customer-pricing/{id}', [CustomerPricingController::class, 'create'])->name('customer.pricing.create');
+Route::post('/customer-pricing', [CustomerPricingController::class, 'store'])->name('customer.pricing.store');
+
+Route::post('/tdf-order', [FullFillOrderController::class, 'tdfOrderCreate'])->name('order.store.tdf');

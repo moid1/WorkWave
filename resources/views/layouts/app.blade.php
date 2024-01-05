@@ -117,6 +117,7 @@
                                     Creation </span></a>
                             <ul class="list-unstyled">
                                 <li><a href="{{ route('register.customer')}}">Create CX</a></li>
+                                <li><a href="{{route('customer.pricing.index')}}">Customer Pricing</a></li>
                                 <li><a href="{{ route('customers.index')}}">All CX</a></li>
                             </ul>
                         </li>

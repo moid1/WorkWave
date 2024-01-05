@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Notes;
 use App\Models\Order;
+use App\Models\Truck;
+use App\Models\TruckDriver;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,12 +34,44 @@ class HomeController extends Controller
     {
         $userType = Auth::user()->type;
         if ($userType == 0 || $userType == 1) {
-            $customers = Customer::latest()->take(5)->get();
+            $currentMonth = Carbon::now()->month;
+            $currentYear = Carbon::now()->year;
+
+            $newCustomersCount = Customer::whereMonth('created_at', $currentMonth)
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $customersCountYTD = Customer::whereYear('created_at', $currentYear)
+                ->whereDate('created_at', '<=', now())
+                ->count();
+            $boxTruckOrders = Order::where('load_type', 'box_truck_route')
+                ->whereDate('created_at', now()->toDateString())
+                ->get();
+            $boxTruckOrdersWithDriver = $boxTruckOrders->whereNotNull('driver_id');
+            $boxTruckOrdersWithoutDriver = $boxTruckOrders->whereNull('driver_id');
+            $assignedTrucksNameArr = [];
+            $assignedTrucksArr = [];
+            $notAssignedTrucksArr = [];
+            foreach ($boxTruckOrdersWithDriver as $order) {
+                $assignedTruck = TruckDriver::where('user_id', $order->driver_id)->with('truck')->first();
+                if ($assignedTruck) {
+                    $assignedTrucksNameArr[] = $assignedTruck->truck->name;
+                    $assignedTrucksArr[] = $assignedTruck->truck->id;
+                }
+            }
+            $notAssignedTrucks = Truck::whereNotIn('id', $assignedTrucksArr)->get(['id', 'name']);
+            $totalBoxOrderCompleted = $boxTruckOrders->where('status', 'compared')->count();
+            $totalBoxOrderNotCompleted = $boxTruckOrders->where('status', 'created')->count();
             $dataArray = array();
-            $dataArray['customersCount'] = Customer::all()->count();
+            $dataArray['newCustomersCount'] = $newCustomersCount;
+            $dataArray['customersCountYTD'] = $customersCountYTD;
             $dataArray['ordersCount'] = Order::all()->count();
             $dataArray['notesCount'] = Notes::all()->count();
-            return view('home', compact('customers', 'dataArray'));
+            $dataArray['boxTruckassignedTrucks'] = $assignedTrucksNameArr;
+            $dataArray['boxNotAssignedTrucks'] = $notAssignedTrucks;
+            $dataArray['totalBoxOrderCompleted'] = $totalBoxOrderCompleted;
+            $dataArray['totalBoxOrderNotCompleted'] = $totalBoxOrderNotCompleted;
+
+            return view('home', compact('dataArray'));
         } else if ($userType == 2) {
             $orders = Order::where('driver_id', Auth::user()->id)->get();
             return view('driver.home', compact('orders'));

@@ -10,7 +10,7 @@
         width: 100%;
     }
 
-    .main-head{
+    .main-head {
         margin-top: 10px;
         background: white;
         padding-bottom: 10px;
@@ -34,11 +34,11 @@
                                 <div class="box">
                                     <span>BOX Truck With Assigned Routes</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
-                                        <span>10</span> &nbsp;
-                                        <span>11</span>&nbsp;
-                                        <span>12</span>&nbsp;
-                                        <span>13</span>&nbsp;
+                                        @foreach ($dataArray['boxTruckassignedTrucks'] as $assignedTruck)
+                                            <span>{{ $assignedTruck }}</span> &nbsp;
+                                        @endforeach
+
+
                                     </div>
                                 </div>
 
@@ -46,11 +46,11 @@
                                 <div class="box">
                                     <span>BOX Truck Without Assigned Routes</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
-                                        <span>10</span> &nbsp;
-                                        <span>11</span>&nbsp;
-                                        <span>12</span>&nbsp;
-                                        <span>13</span>&nbsp;
+                                        @foreach ($dataArray['boxNotAssignedTrucks'] as $truck)
+                                            <span>{{ $truck->name }}</span> &nbsp;
+                                        @endforeach
+
+
                                     </div>
                                 </div>
 
@@ -58,7 +58,7 @@
                                 <div class="box">
                                     <span>Total Orders Completed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{$dataArray['totalBoxOrderCompleted']}}</span> &nbsp;
                                     </div>
                                 </div>
 
@@ -66,7 +66,7 @@
                                 <div class="box">
                                     <span>Orders Missed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{$dataArray['totalBoxOrderNotCompleted']}}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -157,14 +157,14 @@
                                 <div class="box">
                                     <span>Total New CX this Month</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{$dataArray['newCustomersCount']}}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Total New CX YTD</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{$dataArray['customersCountYTD']}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -339,13 +339,15 @@
                                     <div class="d-flex justify-content-center">
                                         <span>9</span>
                                     </div>
-                                </div><hr>
+                                </div>
+                                <hr>
                                 <div class="box">
                                     <span>How Many Orders Missed</span>
                                     <div class="d-flex justify-content-center">
                                         <span>9</span>
                                     </div>
-                                </div><hr>
+                                </div>
+                                <hr>
                                 <div class="box">
                                     <span>Total Weight Collected</span>
                                     <div class="d-flex justify-content-center">
@@ -369,7 +371,7 @@
                                 <div class="box">
                                     <span>Total Loads Today</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> 
+                                        <span>9</span>
                                     </div>
                                 </div>
 
@@ -439,7 +441,7 @@
                                     </div>
                                 </div>
 
-                                
+
                             </div>
                         </div>
                     </div>
@@ -493,13 +495,15 @@
                                     <div class="d-flex justify-content-center">
                                         <span>9</span>
                                     </div>
-                                </div><hr>
+                                </div>
+                                <hr>
                                 <div class="box">
                                     <span>Total Tons Needed</span>
                                     <div class="d-flex justify-content-center">
                                         <span>9</span>
                                     </div>
-                                </div><hr>
+                                </div>
+                                <hr>
                                 <div class="box">
                                     <span>Completed %</span>
                                     <div class="d-flex justify-content-center">

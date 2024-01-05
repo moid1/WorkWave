@@ -354,43 +354,50 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td>Tubes</td>
                             <td class=""></td>
                             <td>1.00$</td>
                             <td>$ 0.00</td>
-                        </tr>
+                        </tr> --}}
                         <tr class="{{ $lawnmowers_atvmotorcycle == $dockLawnmowers_atvmotorcycle ? '' : 'red' }} ">
                             <td>Lawnmowers/ATV/Motorcycle</td>
                             <td class="">{{ $lawnmowers_atvmotorcycle }}</td>
-                            <td class=""></td>
-                            <td>$ 0.00</td>
+                            <td class="">$ {{ $data['customerPricing']->lawnmowers_atvmotorcycle ?? 0 }}</td>
+                            <td>${{ number_format($lawnmowers_atvmotorcycle * ($data['customerPricing']->lawnmowers_atvmotorcycle ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr
                             class="{{ $lawnmowers_atvmotorcyclewithrim == $dockLawnmowers_atvmotorcyclewithrim ? '' : 'red' }} ">
                             <td>Lawnmowers/ATV/Motorcycle with RIM</td>
                             <td class="">{{ $lawnmowers_atvmotorcyclewithrim }}</td>
-                            <td>$25.00</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->lawnmowers_atvmotorcyclewithrim ?? 0 }}</td>
+                            <td>${{ number_format($lawnmowers_atvmotorcyclewithrim * ($data['customerPricing']->lawnmowers_atvmotorcyclewithrim ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr class="{{ $passanger_lighttruck == $dockPassanger_lighttruck ? '' : 'red' }} ">
                             <td>Passenger/Light</td>
                             <td class="">{{ $passanger_lighttruck }}</td>
-                            <td class=""></td>
-                            <td>$ 0.00</td>
+                            <td class="">$ {{ $data['customerPricing']->passanger_lighttruck ?? 0 }}</td>
+                            <td>${{ number_format($passanger_lighttruck * ($data['customerPricing']->passanger_lighttruck ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr
                             class="{{ $passanger_lighttruckwithrim == $dockPassanger_lighttruckwithrim ? '' : 'red' }} ">
                             <td>Passenger/Light truck with Rim</td>
                             <td class="">{{ $passanger_lighttruckwithrim }}</td>
-                            <td>$25.00</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->passanger_lighttruckwithrim ?? 0 }}</td>
+                            <td>${{ number_format($passanger_lighttruckwithrim * ($data['customerPricing']->passanger_lighttruckwithrim ?? 0), 2) }}
+                            </td>
                         </tr>
+                        @php
+                            $passangerSum = $lawnmowers_atvmotorcycle * ($data['customerPricing']->lawnmowers_atvmotorcycle ?? 0) + $lawnmowers_atvmotorcyclewithrim * ($data['customerPricing']->lawnmowers_atvmotorcyclewithrim ?? 0) + $passanger_lighttruck * ($data['customerPricing']->passanger_lighttruck ?? 0) + $passanger_lighttruckwithrim * ($data['customerPricing']->passanger_lighttruckwithrim ?? 0);
+                        @endphp
                         <tr>
                             <td></td>
                             <td class=""></td>
                             <td>Passenger Total</td>
-                            <td>$ 0.00</td>
+                            <td>${{ $passangerSum }}</td>
                         </tr>
                         <!-- new head -->
                         <thead>
@@ -407,27 +414,33 @@
                         <tr class="{{ $semi_truck == $dock_semi_truck ? '' : 'red' }} ">
                             <td>Semi Truck</td>
                             <td class="">{{ $semi_truck }}</td>
-                            <td class=""></td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->semi_truck ?? 0 }}</td>
+                            <td>${{ number_format($semi_truck * ($data['customerPricing']->semi_truck ?? 0), 2) }}
                         </tr>
                         <tr class="{{ $semi_super_singles == $dock_semi_super_singles ? '' : 'red' }} ">
                             <td>Semi super single</td>
                             <td class="">{{ $semi_super_singles }}</td>
-                            <td>$ 18.00</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->semi_super_singles ?? 0 }}</td>
+                            <td>${{ number_format($semi_super_singles * ($data['customerPricing']->semi_super_singles ?? 0), 2) }}
                         </tr>
 
                         <tr class="{{ $semi_truck_with_rim == $dock_semi_truck_with_rim ? '' : 'red' }} ">
                             <td>Semi Truck with RIM</td>
                             <td class="">{{ $semi_truck_with_rim }}</td>
-                            <td>$75.00</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->semi_truck_with_rim ?? 0 }}</td>
+                            <td>${{ number_format($semi_truck_with_rim * ($data['customerPricing']->semi_truck_with_rim ?? 0), 2) }}
                         </tr>
                         <tr>
+                            @php
+                                $truckSum = 0;
+                                $truckSum += $semi_truck * ($data['customerPricing']->semi_truck ?? 0) + $semi_super_singles * ($data['customerPricing']->semi_super_singles ?? 0) + $semi_truck_with_rim * ($data['customerPricing']->semi_truck_with_rim ?? 0);
+                            @endphp
+
+
                             <td></td>
                             <td class=""></td>
                             <td>Passenger Total</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ number_format($truckSum, 2) }}</td>
                         </tr>
                         <!-- Add more rows as needed -->
                         <!-- new head -->
@@ -446,30 +459,36 @@
                             class="{{ $ag_med_truck_19_5_skid_steer == $dock_ag_med_truck_19_5_skid_steer ? '' : 'red' }} ">
                             <td>AG Med Truck 19.5/ Skid Steer</td>
                             <td class="">{{ $ag_med_truck_19_5_skid_steer }}</td>
-                            <td class="green"></td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->ag_med_truck_19_5_skid_steer ?? 0 }}</td>
+                            <td>${{ number_format($ag_med_truck_19_5_skid_steer * ($data['customerPricing']->ag_med_truck_19_5_skid_steer ?? 0), 2) }}
                         </tr>
                         <tr
                             class="{{ $ag_med_truck_19_5_with_rim == $dock_ag_med_truck_19_5_with_rim ? '' : 'red' }} ">
                             <td>AG Med Truck 19.5/ with Rim</td>
                             <td class="">
                                 {{ $ag_med_truck_19_5_with_rim }}</td>
-                            <td>$ 48.00</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->ag_med_truck_19_5_with_rim ?? 0 }}</td>
+                            <td>${{ number_format($ag_med_truck_19_5_with_rim * ($data['customerPricing']->ag_med_truck_19_5_with_rim ?? 0), 2) }}
                         </tr>
 
                         <tr
                             class="{{ $farm_tractor_last_two_digits == $dock_farm_tractor_last_two_digits ? '' : 'red' }} ">
                             <td>Farm Tractor $1.25 per, Last two digits</td>
                             <td class="">{{ $farm_tractor_last_two_digits }}</td>
-                            <td>$1.25</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ $data['customerPricing']->farm_tractor_last_two_digits ?? 0 }}</td>
+                            <td>${{ number_format($farm_tractor_last_two_digits * ($data['customerPricing']->farm_tractor_last_two_digits ?? 0), 2) }}
                         </tr>
+
+                        @php
+                            $agriSum = 0;
+                            $agriSum += ($ag_med_truck_19_5_skid_steer ?? 0) * ($data['customerPricing']->ag_med_truck_19_5_skid_steer ?? 0) + ($ag_med_truck_19_5_with_rim ?? 0) * ($data['customerPricing']->ag_med_truck_19_5_with_rim ?? 0) + ($farm_tractor_last_two_digits ?? 0) * ($data['customerPricing']->farm_tractor_last_two_digits ?? 0);
+                        @endphp
+
                         <tr>
                             <td></td>
                             <td class=""></td>
                             <td>Agri Total</td>
-                            <td>$ 0.00</td>
+                            <td>$ {{ number_format($agriSum, 2) }}</td>
                         </tr>
                     </tbody>
                     <!-- Add more rows as needed -->
@@ -486,146 +505,171 @@
                     <tbody>
                         <tr class="{{ $driver_15_5_24 == $dock_15_5_24 ? '' : 'red' }} ">
                             <td>15.5-25</td>
-                            <td class="blue">{{ $driver_15_5_24 }}</td>
-                            <td>$65.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_15_5_24 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'15_5_24'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_15_5_24 * ($data['customerPricing']->{'15_5_24'} ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr class="{{ $driver_17_5_25 == $dock_17_5_25 ? '' : 'red' }} ">
                             <td>17,5-25 (Radial)</td>
-                            <td class="blue">{{ $driver_17_5_25 }}</td>
-                            <td>$95.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_17_5_25 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'17_5_25'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_17_5_25 * ($data['customerPricing']->{'17_5_25'} ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr class="{{ $driver_20_5_25 == $dock_20_5_25 ? '' : 'red' }} ">
                             <td>20.5-25 (Radial)</td>
-                            <td class="blue">{{ $driver_20_5_25 }}</td>
-                            <td>$125.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_20_5_25 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'20_5_25'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_20_5_25 * ($data['customerPricing']->{'20_5_25'} ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr class="{{ $driver_23_5_25 == $dock_23_5_25 ? '' : 'red' }} ">
                             <td>23.5-25 (Radial)</td>
-                            <td class="blue">{{ $driver_23_5_25 }}</td>
-                            <td>$145.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_23_5_25 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'23_5_25'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_23_5_25 * ($data['customerPricing']->{'23_5_25'} ?? 0), 2) }}
+                            </td>
                         </tr>
-                        <tr class="{{ $driver_26_5_25 == $dock_26_5_25 ? '' : 'red' }} ">
+                        {{-- <tr class="{{ $driver_26_5_25 == $dock_26_5_25 ? '' : 'red' }} ">
                             <td>26.5-25 (Radial)</td>
-                            <td class="blue">{{ $driver_26_5_25 }}</td>
-                            <td>$165.00</td>
-                            <td>$ 0.00</td>
-                        </tr>
+                            <td class="">{{ $driver_26_5_25 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'26_5_25'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_26_5_25 * ($data['customerPricing']->{'26_5_25'} ?? 0), 2) }}
+                            </tr> --}}
                         <tr class="{{ $driver_29_5_25 == $dock_29_5_25 ? '' : 'red' }} ">
                             <td>29.5-25 (Radial)</td>
-                            <td class="blue">{{ $driver_29_5_25 }}</td>
-                            <td>$185.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_29_5_25 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'29_5_25'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_29_5_25 * ($data['customerPricing']->{'29_5_25'} ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr class="{{ $driver_24_00R35 == $dock_24_00R35 ? '' : 'red' }} ">
                             <td>24.00 R35</td>
-                            <td class="blue">{{ $driver_24_00R35 }}</td>
-                            <td>$200.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_24_00R35 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'24_00R35'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_24_00R35 * ($data['customerPricing']->{'24_00R35'} ?? 0), 2) }}
+                            </td>
                         </tr>
                         <tr class="{{ $driver_13_00_24 == $dock_13_00_24 ? '' : 'red' }} ">
                             <td>13.00 -24</td>
-                            <td class="blue">{{ $driver_13_00_24 }}</td>
-                            <td>$30.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_13_00_24 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'13_00_24'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_13_00_24 * ($data['customerPricing']->{'13_00_24'} ?? 0), 2) }}
+                            </td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td>14.5-25 (Radial)</td>
-                            <td class="blue"></td>
+                            <td class=""></td>
                             <td>$30.00</td>
                             <td>$ 0.00</td>
-                        </tr>
+                        </tr> --}}
                         <tr class="{{ $driver_14_00_24 == $dock_14_00_24 ? '' : 'red' }} ">
                             <td>14.00-24 (Radial)</td>
-                            <td class="blue">{{ $driver_14_00_24 }}</td>
-                            <td>$30.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_14_00_24 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'14_00_24'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_14_00_24 * ($data['customerPricing']->{'14_00_24'} ?? 0), 2) }}
                         </tr>
                         <tr class="{{ $driver_19_5L_24 == $dock_19_5L_24 ? '' : 'red' }} ">
                             <td>19.5L -24</td>
-                            <td class="blue">{{ $driver_19_5L_24 }}</td>
-                            <td>$30.00</td>
-                            <td>$ 0.00</td>
+                            <td class="">{{ $driver_19_5L_24 }}</td>
+                            <td>$ {{ $data['customerPricing']->{'19_5L_24'} ?? 0 }}</td>
+                            <td>${{ number_format($driver_19_5L_24 * ($data['customerPricing']->{'19_5L_24'} ?? 0), 2) }}
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td>18.5L -24</td>
-                            <td class="blue"></td>
+                            <td class=""></td>
                             <td>$30.00</td>
                             <td>$ 0.00</td>
                         </tr>
                         <tr>
                             <td>18.4 -38</td>
-                            <td class="blue"></td>
+                            <td class=""></td>
                             <td>$48.00</td>
                             <td>$ 0.00</td>
                         </tr>
                         <tr>
                             <td>520/80R46</td>
-                            <td class="blue"></td>
+                            <td class=""></td>
                             <td>$58.00</td>
                             <td>$ 0.00</td>
                         </tr>
                         <tr>
                             <td>480/80R50</td>
-                            <td class="blue"></td>
+                            <td class=""></td>
                             <td>$63.00</td>
                             <td>$ 0.00</td>
                         </tr>
                         <tr>
                             <td>710/70R43</td>
-                            <td class="blue"></td>
+                            <td class=""></td>
                             <td>$63.00</td>
                             <td>$ 0.00</td>
                         </tr>
                         <tr>
                             <td>Odd Tire</td>
-                            <td class="blue"></td>
-                            <td class="blue"></td>
+                            <td class=""></td>
+                            <td class=""></td>
                             <td>$ 0.00</td>
-                        </tr>
+                        </tr> --}}
+
+                        @php
+                            $otrSum = 0;
+                            $otrSum = ($driver_15_5_24 ?? 0) * ($data['customerPricing']->{'15_5_24'} ?? 0) + ($driver_17_5_25 ?? 0) * ($data['customerPricing']->{'17_5_25'} ?? 0) + ($driver_20_5_25 ?? 0) * ($data['customerPricing']->{'20_5_25'} ?? 0) + ($driver_23_5_25 ?? 0) * ($data['customerPricing']->{'23_5_25'} ?? 0) + ($driver_29_5_25 ?? 0) * ($data['customerPricing']->{'29_5_25'} ?? 0) + ($driver_24_00R35 ?? 0) * ($data['customerPricing']->{'24_00R35'} ?? 0) + ($driver_13_00_24 ?? 0) * ($data['customerPricing']->{'13_00_24'} ?? 0) + ($driver_14_00_24 ?? 0) * ($data['customerPricing']->{'14_00_24'} ?? 0);
+                        @endphp
+
+
 
                         <tr>
                             <td colspan="1"></td>
                             <td colspan="2" style="text-align: right">Other Total</td>
-                            <td colspan="1">$ 0.00</td>
+                            <td colspan="1">$ {{ number_format($otrSum, 2) }}</td>
                         </tr>
                         <tr>
                             <td colspan="1">PU #:</td>
                             <td colspan="2" class="gray">Passenger Total $</td>
-                            <td colspan="1" class="blue">$0.00</td>
+                            <td colspan="1" class="blue">$ {{ number_format($passangerSum, 2) }}</td>
                         </tr>
                         <tr>
                             <td colspan="1">Drop #:</td>
                             <td colspan="2" class="gray">Truck Total $</td>
-                            <td colspan="1" class="blue">$0.00</td>
+                            <td colspan="1" class="blue">$ {{ number_format($truckSum, 2) }}</td>
                         </tr>
                         <tr>
                             <td colspan="1">PO #:</td>
                             <td colspan="2" class="gray">Agri Total $</td>
-                            <td colspan="1" class="blue">$0.00</td>
+                            <td colspan="1" class="blue">$ {{ number_format($agriSum, 2) }}</td>
                         </tr>
                         <tr>
                             <td colspan="1">Start Weight #:</td>
                             <td colspan="2" class="gray">Other Total $</td>
-                            <td colspan="1" class="blue">$0.00</td>
+                            <td colspan="1" class="blue">$ {{ number_format($otrSum, 2) }}</td>
                         </tr>
                         <tr>
                             <td colspan="1">End Weight #:</td>
                             <td colspan="2" class="gray">Sub Total $</td>
-                            <td colspan="1" class="">$0.00</td>
+                            <td colspan="1" class="">$
+                                {{ number_format($otrSum + $agriSum + $truckSum + $passangerSum, 2) }}</td>
                         </tr>
                         <tr>
                             <td colspan="1">Check #:</td>
                             <td colspan="2" class="gray">Tax %</td>
-                            <td colspan="1" class="green"></td>
+                            <td colspan="1" class="green">{{ number_format($data->customer->tax ?? 0, 2) }}</td>
                         </tr>
+                        @php
+                            $totalIncludedTaxSum = $otrSum + $agriSum + $truckSum + $passangerSum;
+                            $taxRate = $data->customer->tax ?? 0;
+                            $taxAmount = $totalIncludedTaxSum * ($taxRate / 100);
+                            $totalWithTax = $totalIncludedTaxSum + $taxAmount;
+                        @endphp
+
+
                         <tr>
                             <td colspan="1">Charge Around:</td>
                             <td colspan="2" class="gray">After Tax Total</td>
-                            <td colspan="1" class="">$0.00</td>
+                            <td colspan="1" class="">$
+                                {{ number_format($totalWithTax, 2) }}
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="1">Credit Card:</td>
@@ -653,11 +697,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td>Tubes</td>
                             <td class="purple"></td>
                             <td class="darkpurple"></td>
-                        </tr>
+                        </tr> --}}
                         <tr class="{{ $lawnmowers_atvmotorcycle == $dockLawnmowers_atvmotorcycle ? '' : 'red' }} ">
                             <td>Lawnmowers/ATV/Motorcycle</td>
                             <td class="purple">{{ $dockLawnmowers_atvmotorcycle }}</td>
@@ -780,11 +824,11 @@
                             <td class="purple">{{ $dock_23_5_25 }}</td>
                             <td class="darkpurple"></td>
                         </tr>
-                        <tr class="{{ $driver_26_5_25 == $dock_26_5_25 ? '' : 'red' }} ">
+                        {{-- <tr class="{{ $driver_26_5_25 == $dock_26_5_25 ? '' : 'red' }} ">
                             <td>26.5-25 (Radial)</td>
                             <td class="purple">{{ $dock_26_5_25 }}</td>
                             <td class="darkpurple"></td>
-                        </tr>
+                        </tr> --}}
                         <tr class="{{ $driver_29_5_25 == $dock_29_5_25 ? '' : 'red' }} ">
                             <td>29.5-25 (Radial)</td>
                             <td class="purple">{{ $dock_29_5_25 }}</td>
@@ -800,7 +844,7 @@
                             <td class="purple">{{ $dock_13_00_24 }}</td>
                             <td class="darkpurple"></td>
                         </tr>
-                        <tr >
+                        <tr>
                             <td>14.5-25 (Radial)</td>
                             <td class="purple"></td>
                             <td class="darkpurple"></td>
@@ -815,7 +859,7 @@
                             <td class="purple">{{ $dock_19_5L_24 }}</td>
                             <td class="darkpurple"></td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td>18.5L -24</td>
                             <td class="purple"></td>
                             <td class="darkpurple"></td>
@@ -844,7 +888,7 @@
                             <td>Odd Tire</td>
                             <td class="purple"></td>
                             <td class="darkpurple"></td>
-                        </tr>
+                        </tr> --}}
 
                         <tr>
                             <td></td>

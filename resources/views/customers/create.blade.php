@@ -163,55 +163,6 @@
                                             
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label>Passenger Pricing</label>
-                                                    <input id="passenger_pricing" type="text" class="form-control @error('passenger_pricing') is-invalid @enderror" name="passenger_pricing" value="{{ old('passenger_pricing') }}" required autofocus>
-                                                    @error('passenger_pricing')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>          
-                                            
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Truck Pricing</label>
-                                                    <input id="truck_pricing" type="text" class="form-control @error('truck_pricing') is-invalid @enderror" name="truck_pricing" value="{{ old('truck_pricing') }}"  autofocus>
-                                                    @error('truck_pricing')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>      
-                                            
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Agri Pricing</label>
-                                                    <input id="agri_pricing" type="text" class="form-control @error('agri_pricing') is-invalid @enderror" name="agri_pricing" value="{{ old('agri_pricing') }}"  autofocus>
-                                                    @error('agri_pricing')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>      
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Other Pricing</label>
-                                                    <input id="other" type="text" class="form-control @error('other') is-invalid @enderror" name="other" value="{{ old('other') }}"  autofocus>
-                                                    @error('other')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>     
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
                                                     <label>Tax</label>
                                                     <input id="tax" type="text" class="form-control @error('tax') is-invalid @enderror" name="tax" value="{{ old('tax') }}"  autofocus>
                                                     @error('tax')
