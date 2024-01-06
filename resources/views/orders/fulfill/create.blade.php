@@ -380,7 +380,7 @@
                                             <textarea id="signature64" name="signed" style="display: none"></textarea>
                                         </div>
 
-                                        <div class="col md-6">
+                                        <div class="col-md-6">
                                             <div class="acknowledment">
                                                 <p>(Driver Signature) I acknowledge that my counts are correct, and if not,
                                                     the misssing

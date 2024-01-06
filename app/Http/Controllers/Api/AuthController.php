@@ -224,8 +224,8 @@ class AuthController extends Controller
             $request->merge([
                 'user_id' => $user->id
             ]);
-
-            Customer::create($request->all());
+           
+            Customer::create( $request->except(['password', 'password_confirmation']));
             return response()->json([
                 'status' => true,
                 'message' => 'Customer Registered Successfully',

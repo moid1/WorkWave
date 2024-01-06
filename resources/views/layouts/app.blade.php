@@ -117,6 +117,7 @@
                                     Creation </span></a>
                             <ul class="list-unstyled">
                                 <li><a href="{{ route('register.customer')}}">Create CX</a></li>
+                                <li><a href="{{route('customer.pricing.index')}}">Customer Pricing</a></li>
                                 <li><a href="{{ route('customers.index')}}">All CX</a></li>
                             </ul>
                         </li>
@@ -151,6 +152,21 @@
                         <li>
                             <a href="{{route('orders.fullfilled')}}" class="waves-effect"><i
                                     class="mdi mdi-calendar-check"></i><span> Fullfilled Orders </span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('orders.compared')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Compared Orders </span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('truck.index')}}" class="waves-effect"><i
+                                    class="mdi mdi-truck"></i><span> Trucks </span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('generate.daily.count.sheet')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
                         </li>
 
                         @endif

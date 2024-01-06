@@ -29,7 +29,7 @@
                                     <th>POC Name</th>
                                     <th>Email</th>
                                     <th>Driver</th>
-                                    <th>Qty</th>
+
                                     <th>Order Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -48,7 +48,7 @@
                                     <td>{{$order->customer->poc_name}}</td>
                                     <td>{{$order->customer->email}}</td>
                                     <td>{{$order->driver ?$order->driver->name : 'N/A'}}</td>
-                                    <td>{{$order->load_value}}</td>
+             
                                     <td>{{$order->created_at->format('M d Y')}}</td>
                                     <td>{{$order->status}}</td>
                                     <td> <a href="{{route('compare.order', $order->id)}}"> <i class="mdi mdi-compare update_driver" data-order_id="{{$order->id}}"

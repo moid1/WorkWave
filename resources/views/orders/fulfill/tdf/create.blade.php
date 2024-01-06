@@ -30,39 +30,39 @@
                             <h4 class="mt-0 header-title">TDF</h4>
 
                             <div class="p-20">
-                                
-                                <form action="{{ route('order.store') }}" method="POST">
+
+                                <form action="{{ route('order.store.tdf') }}" method="POST">
                                     @csrf
 
                                     <input type="hidden" value="0" name="customer_id" id="#customerID">
                                     <div class="row">
 
-
+                                        <input type="hidden" name="order_id" value="{{ $order->id }}">
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Start Weight</label>
-                                                <input type="text" class="form-control  "name="address"
-                                                    value="{{ old('trailer_picked_up') }}" required>
+                                                <input type="number" class="form-control  "name="start_weight"
+                                                    value="{{ old('start_weight') }}" required>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>End Weight</label>
-                                                <input type="text" class="form-control  "name="address"
-                                                    value="{{ old('trailer_dropped') }}" required>
+                                                <input type="number" class="form-control  "name="end_weight"
+                                                    value="{{ old('end_weight') }}" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Total Weight in LBS</label>
-                                                <input type="text" class="form-control  "name="address"
-                                                    value="{{ old('trailer_dropped') }}" required>
+                                                <input type="number" class="form-control  "name="total_weight_lbs"
+                                                    value="{{ old('total_weight_lbs') }}" required>
                                             </div>
                                         </div>
 
-                                      
+
 
                                         <div class="col-md-12">
                                             <label class="" for="">Customer Signature:</label>
@@ -111,4 +111,3 @@
         });
     </script>
 @endsection
-

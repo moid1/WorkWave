@@ -487,7 +487,7 @@
                                         <label class="inputLabel">Print Name</label>
                                     </div>
                                 </tr>
-     
+
                                 <tr>
                                     <div class="">
                                         <input type="text" name="" value="" class="inputField" />
@@ -495,9 +495,9 @@
                                     </div>
                                 </tr>
                                 @if ($data->driver_signature)
-                                <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
-                                    src="{{ $data->driver_signature }}" class="" alt="">
-                            @endif
+                                    <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
+                                        src="{{ $data->driver_signature }}" class="" alt="">
+                                @endif
 
                             </tbody>
                         </table>

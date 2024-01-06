@@ -26,6 +26,27 @@ class Order extends Model
 
     public function driver(){
         return $this->belongsTo(User::class, 'driver_id');
+    }
+
+    public function fulfilled(){
+        return $this->belongsTo(FullFillOrder::class,'id', 'order_id');
+    }
+
+    public function compared(){
+        return $this->belongsTo(ManagerCompareOrder::class,'id', 'order_id');
+    }
+
+    public function tdfOrder(){
+        return $this->belongsTo(TdfOrder::class ,'id', 'order_id');
+    }
+    public function trailerSwapOrder(){
+        return $this->belongsTo(TrailerSwapOrder::class ,'id', 'order_id');
+    }
+    public function stateWeight(){
+        return $this->belongsTo(StateWeight::class ,'id', 'order_id');
+    }
+    public function steel(){
+        return $this->belongsTo(SteelOrder::class ,'id', 'order_id');
 
     }
 }
