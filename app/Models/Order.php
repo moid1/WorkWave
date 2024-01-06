@@ -42,4 +42,11 @@ class Order extends Model
     public function trailerSwapOrder(){
         return $this->belongsTo(TrailerSwapOrder::class ,'id', 'order_id');
     }
+    public function stateWeight(){
+        return $this->belongsTo(StateWeight::class ,'id', 'order_id');
+    }
+    public function steel(){
+        return $this->belongsTo(SteelOrder::class ,'id', 'order_id');
+
+    }
 }

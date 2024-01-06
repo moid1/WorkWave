@@ -122,7 +122,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Trailer Swap</th>
+                    <th>TDF</th>
                     <th>Date ({{ $data->created_at->format('M d Y') }})</th>
                     <th>Time ({{ $data->created_at->format('H:i:s') }})</th>
                     <th>DRIVER ({{ $data->driver->name }})</th>
@@ -137,62 +137,31 @@
 
                 </tr>
                 <tr>
-                    <td>Trailer# Dropped</td>
-                    <td class="">{{ $data->trailerSwapOrder->trailer_drop_off }}</td>
-                    <td>Trailer# Picked Up</td>
-                    <td>{{ $data->trailerSwapOrder->trailer_pick_up }}</td>
-                </tr>
-                <tr>
-                    <td>Payment Type</td>
-                    <td class="">{{ $data->payment_type }}</td>
-                    <td style="text-align: right;">Swap Total</td>
-                    <td>$ {{ number_format($data->customerPricing->swap_total ?? 0, 2) }}</td>
+                    <td>Start Weight</td>
+                    <td class="">{{ $data->steel->start_weight }}</td>
+                    <td style="text-align: right;">End Weight</td>
+                    <td>{{ $data->steel->end_weight }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td class=""></td>
-                    <td style="text-align: right;">Tax %</td>
+                    <td style="text-align: right;">Total Weight Metric Tons</td>
+                    <td>{{ number_format(($data->steel->start_weight - $data->steel->end_weight) / 2240, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>Bol #</td>
+                    <td class="">{{ $data->steel->bol }}</td>
+                    <td style="text-align: right;">Total</td>
                     <td>
-                        {{ number_format($data->customer->tax ?? 0, 2) }}
                     </td>
                 </tr>
-                @php
-                    $trailerPickUp = $data->trailerSwapOrder->trailer_pick_up;
-                    $swapTotal = $data->customerPricing->swap_total ?? 0;
-                    $taxPercentage = $data->customer->tax;
-
-                    // Calculate tax amount
-                    $taxAmount = ($swapTotal * $taxPercentage) / 100;
-
-                    // Calculate total with tax
-                    $totalWithTax = $swapTotal + $taxAmount;
-
-                    // Format total with tax
-                    $formattedTotalWithTax = number_format($totalWithTax, 2);
-                    $conviencePercent = $data->payment_type == 'CreditCard' ? 4 : 0;
-                    // Now $formattedTotalWithTax should have your calculated total including tax.
-                    $convenienceFee = ($totalWithTax * $conviencePercent) / 100;
-                @endphp
                 <tr>
+                    <td>P.O. Number</td>
+                    <td>{{ $data->customer->po ?? 'N/A' }}</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right;">After Tax Value</td>
-                    <td>$ {{ $formattedTotalWithTax }}</td>
                 </tr>
-                @if ($data->payment_type == 'CreditCard')
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td style="text-align: right;">Convenience Fee 4%</td>
-                        <td>{{ number_format($convenienceFee, 2) }}</td>
-                    </tr>
-                @endif
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align: right;">Total Due</td>
-                    <td>{{ number_format($totalWithTax + $convenienceFee, 2) }}</td>
-                </tr>
+
 
             </tbody>
         </table>

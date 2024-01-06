@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers;
 use App\Http\Controllers\CompanyRegController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
@@ -12,14 +10,10 @@ use App\Http\Controllers\CustomerPricingController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FullFillOrderController;
 use App\Http\Controllers\ManagerCompareOrderController;
-use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\TruckController;
-use App\Models\CustomerPricing;
-use App\Models\FullFillOrder;
-use App\Models\ManifestPDF;
-use App\Models\Order;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -77,7 +71,7 @@ Route::post('/assign-driver', [OrderController::class, 'updateDriver'])->name('o
 Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('order.driver.index');
 Route::get('fulfill-order/{id}', [FullFillOrderController::class, 'create'])->name('fulfillorder.create');
 Route::post('fulfill-order', [FullFillOrderController::class, 'store'])->name('fulfillorder.store');
-Route::get('/load-weight', [FullFillOrderController::class, 'loadByWeight'])->name('fullfill.load.weight');
+Route::get('/load-weight/{id}', [FullFillOrderController::class, 'loadByWeight'])->name('fullfill.load.weight');
 Route::get('/load-tire/{id}', [FullFillOrderController::class, 'loadByTire'])->name('fullfill.load.tire');
 
 Route::get('fulfilled-orders', [FullFillOrderController::class, 'getFullFilledOrders'])->name('orders.fullfilled');
@@ -120,6 +114,7 @@ Route::get('/compared-orders', [OrderController::class, 'getComparedOrders'])->n
 Route::view('count-sheet', 'countsheet.index');
 
 Route::get('/generate-count-sheet/{id}', [ManagerCompareOrderController::class, 'generateCountSheet'])->name('generate.countsheet');
+Route::get('/generate-weight-sheet/{id}', [ManagerCompareOrderController::class, 'generateWeightSheet'])->name('generate.weightsheet');
 
 
 //Truck
@@ -136,3 +131,7 @@ Route::post('/customer-pricing', [CustomerPricingController::class, 'store'])->n
 
 Route::post('/tdf-order', [FullFillOrderController::class, 'tdfOrderCreate'])->name('order.store.tdf');
 Route::post('/trailer-swap-order', [FullFillOrderController::class, 'trailerSwapCreate'])->name('order.store.trailer.swap');
+Route::post('/state-weight', [FullFillOrderController::class, 'stateByWeight'])->name('order.store.state.weight');
+Route::post('/steel', [FullFillOrderController::class, 'steelOrderCreate'])->name('order.store.steel');
+
+Route::get('generate-daily-count-sheet', [HomeController::class, 'generateDailyCountSheet'])->name('generate.daily.count.sheet');

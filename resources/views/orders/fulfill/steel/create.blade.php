@@ -31,10 +31,10 @@
 
                             <div class="p-20">
                                 
-                                <form action="{{ route('order.store') }}" method="POST">
+                                <form action="{{ route('order.store.steel') }}" method="POST">
                                     @csrf
 
-                                    <input type="hidden" value="0" name="customer_id" id="#customerID">
+                                    <input type="hidden" value="{{$order->id}}" name="order_id" >
                                     <div class="row">
 
 
@@ -42,8 +42,8 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Start Weight</label>
-                                                <input type="text" class="form-control  "name="address"
-                                                    value="{{ old('trailer_picked_up') }}" required>
+                                                <input type="text" class="form-control  "name="start_weight"
+                                                    value="{{ old('start_weight') }}" required>
                                             </div>
                                         </div>
 
@@ -58,15 +58,15 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>End Weight</label>
-                                                <input type="text" class="form-control  "name="address"
-                                                    value="{{ old('trailer_dropped') }}" required>
+                                                <input type="text" class="form-control  "name="end_weight"
+                                                    value="{{ old('end_weight') }}" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Total Weight in LBS</label>
-                                                <input type="text" class="form-control  "name="address"
-                                                    value="{{ old('trailer_dropped') }}" required>
+                                                <input type="text" class="form-control  "name="total_weight_lbs"
+                                                    value="{{ old('total_weight_lbs') }}" required>
                                             </div>
                                         </div>
 

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\CustomerPricing;
 use App\Models\ManagerCompareOrder;
 use App\Models\Order;
+use App\Models\StateWeight;
+use App\Models\SteelOrder;
 use Illuminate\Http\Request;
+use PDO;
 
 class ManagerCompareOrderController extends Controller
 {
@@ -135,7 +138,7 @@ class ManagerCompareOrderController extends Controller
 
     public function generateCountSheet($id)
     {
-        $order = Order::where('id', $id)->with(['compared', 'fulfilled', 'customer', 'driver', 'tdfOrder', 'trailerSwapOrder'])->latest()->first();
+        $order = Order::where('id', $id)->with(['compared', 'fulfilled', 'customer', 'driver', 'tdfOrder', 'trailerSwapOrder', 'stateWeight', 'steel'])->latest()->first();
         $customerPricing = CustomerPricing::whereCustomerId($order->customer_id)->first();
 
         $pdf = \App::make('dompdf.wrapper');
@@ -159,6 +162,35 @@ class ManagerCompareOrderController extends Controller
             $pdf->setPaper('landscape');
 
             $pdf->loadView('countsheet.trailerswap', ['data' => $order]);
+            // $output = $pdf->output();
+            return $pdf->stream();
+        } else if ($order && $order->load_type == 'state') {
+            $isStateWeight = StateWeight::where('order_id', $order->id)->exists();
+            if ($isStateWeight) {
+                $pdf->setPaper('landscape');
+                $pdf->loadView('countsheet.state_weight', ['data' => $order]);
+                // $output = $pdf->output();
+                return $pdf->stream();
+            }
+        } else if ($order && $order->load_type == 'steel') {
+            $pdf->setPaper('landscape');
+            $pdf->loadView('countsheet.steel', ['data' => $order]);
+            // $output = $pdf->output();
+            return $pdf->stream();
+        }
+    }
+
+    public function generateWeightSheet($id)
+    {
+        $order = Order::where('id', $id)->with(['fulfilled', 'customer', 'driver'])->latest()->first();
+
+        $pdf = \App::make('dompdf.wrapper');
+
+        if ($order && $order->load_type == 'box_truck_route') {
+            $customPaper = array(0, 0, 600, 1400);
+            $pdf->setPaper($customPaper);
+
+            $pdf->loadView('weightsheet.create', ['data' => $order]);
             // $output = $pdf->output();
             return $pdf->stream();
         }

@@ -15,7 +15,7 @@
                             <div class="p-20 text-center">
                                 <h3>What Type of Load?</h3>
                                 <div class="mt-5">
-                                    <a href="{{route('fullfill.load.weight')}}">
+                                    <a href="{{route('fullfill.load.weight', $order->id)}}">
                                         <h4>Load By Weight</h4>
                                     </a>
                                     <a href="{{route('fullfill.load.tire', $order->id)}}">

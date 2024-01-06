@@ -161,7 +161,12 @@
 
                         <li>
                             <a href="{{route('truck.index')}}" class="waves-effect"><i
-                                    class="mdi mdi-calendar-check"></i><span> Trucks </span></a>
+                                    class="mdi mdi-truck"></i><span> Trucks </span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('generate.daily.count.sheet')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
                         </li>
 
                         @endif

@@ -122,7 +122,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Trailer Swap</th>
+                    <th>State</th>
                     <th>Date ({{ $data->created_at->format('M d Y') }})</th>
                     <th>Time ({{ $data->created_at->format('H:i:s') }})</th>
                     <th>DRIVER ({{ $data->driver->name }})</th>
@@ -137,61 +137,43 @@
 
                 </tr>
                 <tr>
-                    <td>Trailer# Dropped</td>
-                    <td class="">{{ $data->trailerSwapOrder->trailer_drop_off }}</td>
-                    <td>Trailer# Picked Up</td>
-                    <td>{{ $data->trailerSwapOrder->trailer_pick_up }}</td>
+                    <td>Start Weight</td>
+                    <td class="">{{ $data->stateWeight->start_weight }}</td>
+                    <td >End Weight</td>
+                    <td>{{ $data->stateWeight->end_weight }}</td>
                 </tr>
                 <tr>
-                    <td>Payment Type</td>
-                    <td class="">{{ $data->payment_type }}</td>
-                    <td style="text-align: right;">Swap Total</td>
-                    <td>$ {{ number_format($data->customerPricing->swap_total ?? 0, 2) }}</td>
+                   
+                    <td ></td>
+                    <td></td>
+                    <td>Total Weight LBS</td>
+                    <td class="">{{ $data->stateWeight->total_weight_lbs }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td class=""></td>
-                    <td style="text-align: right;">Tax %</td>
-                    <td>
-                        {{ number_format($data->customer->tax ?? 0, 2) }}
+                    <td style="text-align: right;">Price Per Lb</td>
+                    <td>$ {{ number_format( $data->customerPricing->price_per_lb ?? 0 , 2)}}</td>
+                </tr>
+                <tr>
+                    <td>Bol #</td>
+                    <td class=""></td>
+                    <td style="text-align: right;">Total</td>
+                    <td>$ {{ number_format((($data->stateWeight->start_weight)) *
+                        $data->customerPricing->price_per_lb, 2) }}
                     </td>
                 </tr>
-                @php
-                    $trailerPickUp = $data->trailerSwapOrder->trailer_pick_up;
-                    $swapTotal = $data->customerPricing->swap_total ?? 0;
-                    $taxPercentage = $data->customer->tax;
-
-                    // Calculate tax amount
-                    $taxAmount = ($swapTotal * $taxPercentage) / 100;
-
-                    // Calculate total with tax
-                    $totalWithTax = $swapTotal + $taxAmount;
-
-                    // Format total with tax
-                    $formattedTotalWithTax = number_format($totalWithTax, 2);
-                    $conviencePercent = $data->payment_type == 'CreditCard' ? 4 : 0;
-                    // Now $formattedTotalWithTax should have your calculated total including tax.
-                    $convenienceFee = ($totalWithTax * $conviencePercent) / 100;
-                @endphp
                 <tr>
+                    <td>P.O. Number</td>
+                    <td>{{$data->customer->po ?? 'N/A'}}</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right;">After Tax Value</td>
-                    <td>$ {{ $formattedTotalWithTax }}</td>
                 </tr>
-                @if ($data->payment_type == 'CreditCard')
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td style="text-align: right;">Convenience Fee 4%</td>
-                        <td>{{ number_format($convenienceFee, 2) }}</td>
-                    </tr>
-                @endif
                 <tr>
+                    <td>Manifest #</td>
                     <td></td>
                     <td></td>
-                    <td style="text-align: right;">Total Due</td>
-                    <td>{{ number_format($totalWithTax + $convenienceFee, 2) }}</td>
+                    <td></td>
                 </tr>
 
             </tbody>

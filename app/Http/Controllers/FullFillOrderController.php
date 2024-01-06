@@ -7,6 +7,8 @@ use App\Models\FulfilTyre;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
 use App\Models\Order;
+use App\Models\StateWeight;
+use App\Models\SteelOrder;
 use App\Models\TdfOrder;
 use App\Models\TrailerSwapOrder;
 use Illuminate\Http\Request;
@@ -357,9 +359,10 @@ class FullFillOrderController extends Controller
         }
     }
 
-    public function loadByWeight()
+    public function loadByWeight($id)
     {
-        return view('orders.fulfill.state.loadweight');
+        $order = Order::find($id);
+        return view('orders.fulfill.state.loadweight', compact('order'));
     }
 
     public function loadByTire($id)
@@ -487,7 +490,7 @@ class FullFillOrderController extends Controller
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
 
-        $order->status = 'fulfilled';
+        $order->status = 'compared';
         $order->payment_type = $request->payment_type ?? null;
 
         $order->update();
@@ -538,5 +541,126 @@ class FullFillOrderController extends Controller
 
 
         return redirect('/driver-orders')->with('success', 'Manifest has been created successfully');
+    }
+
+    public function stateByWeight(Request $request)
+    {
+        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        $pdfTypes = ['Generator'];
+        $folderPath = 'signatures/';
+
+        $image_parts = explode(";base64,", $request->signed);
+
+        $image_type_aux = explode("image/", $image_parts[0]);
+
+        if (!$image_type_aux[0] != '') {
+            return back()->with('error', 'Signature Required');
+        }
+
+
+        $image_type = $image_type_aux[1];
+
+
+        $image_base64 = base64_decode($image_parts[1]);
+
+        $file = $folderPath . uniqid() . '.' . $image_type;
+        file_put_contents($file, $image_base64);
+
+        $request->merge([
+            'cx_signature' => $file
+        ]);
+
+        $fullFillOrder = StateWeight::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed', 'address']));
+
+
+        $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+
+        $order->status = 'compared';
+
+        $order->update();
+        $fullFillOrder['order'] = $order;
+
+        $manifestPDF = new ManifestPDF();
+        $manifestPDF->order_id = $request->order_id;
+        $manifestPDF->customer_id = $order->customer_id;
+
+        $pdfArray = array();
+        for ($i = 0; $i < count($pdfTypes); $i++) {
+            $fullFillOrder['pdfType'] = $pdfTypes[$i];
+            $pdf = \App::make('dompdf.wrapper');
+
+            $customPaper = array(0, 0, 900, 1300);
+            $pdf->setPaper($customPaper);
+            $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
+
+            $fullFillOrder['pdfType'] = $pdfTypes[$i];
+            $output = $pdf->output();
+            // return $pdf->stream();
+            $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
+            $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+            file_put_contents($pdfPath, $output);
+            switch ($pdfTypes[$i]) {
+                case 'Generator':
+                    $manifestPDF->generator = $abPDFPath;
+                    break;
+                case 'Transporter':
+                    $manifestPDF->transporter = $abPDFPath;
+                    break;
+                case 'Processor':
+                    $manifestPDF->processor = $abPDFPath;
+                    break;
+                case 'Disposal':
+                    $manifestPDF->disposal = $abPDFPath;
+                    break;
+                case 'Original Generator':
+                    $manifestPDF->original_generator = $abPDFPath;
+                    break;
+
+                default:
+                    break;
+            }
+            //  return view('manifest.index');
+        }
+        $manifestPDF->save();
+
+
+        return redirect('/driver-orders')->with('success', 'Manifest has been created successfully');
+    }
+
+    public function steelOrderCreate(Request $request)
+    {
+
+        $folderPath = 'signatures/';
+        $image_parts = explode(";base64,", $request->signed);
+
+        $image_type_aux = explode("image/", $image_parts[0]);
+
+        if (!$image_type_aux[0] != '') {
+            return back()->with('error', 'Signature Required');
+        }
+
+
+        $image_type = $image_type_aux[1];
+
+
+        $image_base64 = base64_decode($image_parts[1]);
+
+        $file = $folderPath . uniqid() . '.' . $image_type;
+        file_put_contents($file, $image_base64);
+
+        $request->merge([
+            'cx_signature' => $file
+        ]);
+
+        $fullFillOrder = SteelOrder::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed', 'address']));
+
+
+        $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+
+        $order->status = 'compared';
+
+        $order->update();
+
+        return redirect('/driver-orders')->with('success', 'Order FulFilled Successfully');
     }
 }

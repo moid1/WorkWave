@@ -688,7 +688,7 @@
             <!-- Right Column with 3 Columns -->
             <td class="right-column">
                 <table>
-                    <h3>2nd Count/Rowdy</h3>
+                    <h3>2nd Count</h3>
                     <thead>
                         <tr>
                             <th>Passenger</th>

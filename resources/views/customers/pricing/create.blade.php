@@ -241,6 +241,14 @@
 
                                         <div id="" class="col-lg-6 ">
                                             <div class="form-group">
+                                                <label>Price Per Lb</label>
+                                                <input id="price_per_lb" type="number" class="form-control" name="price_per_lb"
+                                                    value="{{ old('price_per_lb', optional(optional($customerPricing))->price_per_lb) }}" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div id="" class="col-lg-6 ">
+                                            <div class="form-group">
                                                 <label>Swap Total</label>
                                                 <input id="" type="number" class="form-control" name="swap_total"
                                                     value="{{ old('swap_total', optional(optional($customerPricing))->swap_total) }}" autofocus>

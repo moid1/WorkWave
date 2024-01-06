@@ -83,14 +83,14 @@
                                 <div class="box">
                                     <span>Number of Tires Collected Today</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{$dataArray['totalTiresCollectedToday']}}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Number of Tires Resale</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>N/A</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                 <div class="box">
                                     <span>Total Tires Collected To Date</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{$dataArray['totalTiresCollectedYTD']}}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -133,17 +133,14 @@
                                 <div class="box">
                                     <span>What CX were Missed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        @if(!empty($dataArray['boxTruckMissedCX']))
+                                            @foreach ($dataArray['boxTruckMissedCX'] as $order)
+                                                <span>{{ $order->customer->business_name}}</span>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
-                                <hr>
-                                <div class="box">
-                                    <span>Total Weights To Date</span>
-                                    <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
 
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -180,14 +177,14 @@
                                 <div class="box">
                                     <span>Monthly</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{$dataArray['boxTruckCompletedJobs'][0]}}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Yearly</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{$dataArray['boxTruckCompletedJobs'][1]}}</span>
                                     </div>
                                 </div>
                             </div>
