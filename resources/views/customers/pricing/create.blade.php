@@ -239,6 +239,14 @@
                                             </div>
                                         </div>
 
+                                        <div id="" class="col-lg-6 ">
+                                            <div class="form-group">
+                                                <label>Swap Total</label>
+                                                <input id="" type="number" class="form-control" name="swap_total"
+                                                    value="{{ old('swap_total', optional(optional($customerPricing))->swap_total) }}" autofocus>
+                                            </div>
+                                        </div>
+
 
                                         <div class="col-lg-12 justify-content-center text-center mt-5">
                                             <div class="form-group">

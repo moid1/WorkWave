@@ -26,7 +26,7 @@
                                     <th>ID</th>
                                     <th>Business Name</th>
                                     <th>Created By</th>
-                                    <th>POC Name</th>
+                                    <th>Load Type</th>
                                     <th>Email</th>
                                     <th>Driver</th>
                                     <th>Order Date</th>
@@ -42,7 +42,7 @@
                                     <td>{{$order->id}}</td>
                                     <td>{{$order->customer->business_name}}</td>
                                     <td>{{$order->user->name}}</td>
-                                    <td>{{$order->customer->poc_name}}</td>
+                                    <td>{{$order->load_type}}</td>
                                     <td>{{$order->customer->email}}</td>
                                     <td>{{$order->driver ?$order->driver->name : 'N/A'}}</td>
                                     <td>{{$order->created_at->format('M d Y')}}</td>

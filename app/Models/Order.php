@@ -35,4 +35,11 @@ class Order extends Model
     public function compared(){
         return $this->belongsTo(ManagerCompareOrder::class,'id', 'order_id');
     }
+
+    public function tdfOrder(){
+        return $this->belongsTo(TdfOrder::class ,'id', 'order_id');
+    }
+    public function trailerSwapOrder(){
+        return $this->belongsTo(TrailerSwapOrder::class ,'id', 'order_id');
+    }
 }

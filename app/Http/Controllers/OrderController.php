@@ -208,7 +208,7 @@ class OrderController extends Controller
     }
 
     public function getComparedOrders(){
-        $orders = Order::where('status', 'compared')->latest()->get();
+        $orders = Order::where('status', 'compared')->orWhereIn('load_type',['tdf', 'trailer_swap'])->latest()->get();
         return view('orders.compared.index', compact('orders'));
     }
 }
