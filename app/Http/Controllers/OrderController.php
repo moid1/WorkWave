@@ -101,7 +101,7 @@ class OrderController extends Controller
 
     public function driverOrders()
     {
-        $orders = Order::where('driver_id', Auth::id())->with(['customer', 'user', 'manifest'])->latest()->get();
+        $orders = Order::where([['driver_id', Auth::id()], ['status', 'created']])->with(['customer', 'user', 'manifest'])->latest()->get();
         return view('orders.driver.index', compact('orders'));
     }
 

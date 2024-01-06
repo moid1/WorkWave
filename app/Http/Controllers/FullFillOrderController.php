@@ -52,8 +52,8 @@ class FullFillOrderController extends Controller
      */
     public function store(Request $request)
     {
-        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        $pdfTypes = ['Generator'];
+        $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        // $pdfTypes = ['Generator'];
         $folderPath = 'signatures/';
 
         $image_parts = explode(";base64,", $request->signed);
@@ -375,8 +375,8 @@ class FullFillOrderController extends Controller
     public function tdfOrderCreate(Request $request)
     {
 
-        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        $pdfTypes = ['Generator'];
+        $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        // $pdfTypes = ['Generator'];
         $folderPath = 'signatures/';
 
         $image_parts = explode(";base64,", $request->signed);
@@ -460,8 +460,8 @@ class FullFillOrderController extends Controller
 
     public function trailerSwapCreate(Request $request)
     {
-        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        $pdfTypes = ['Generator'];
+        $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        // $pdfTypes = ['Generator'];
         $folderPath = 'signatures/';
 
         $image_parts = explode(";base64,", $request->signed);
@@ -545,8 +545,8 @@ class FullFillOrderController extends Controller
 
     public function stateByWeight(Request $request)
     {
-        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        $pdfTypes = ['Generator'];
+        $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        // $pdfTypes = ['Generator'];
         $folderPath = 'signatures/';
 
         $image_parts = explode(";base64,", $request->signed);

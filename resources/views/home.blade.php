@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="box">
                                     <span>BOX Truck With Assigned Routes</span>
-                                    <div class="d-flex justify-content-center">
+                                    <div class=" justify-content-center">
                                         @foreach ($dataArray['boxTruckassignedTrucks'] as $assignedTruck)
                                             <span>{{ $assignedTruck }}</span> &nbsp;
                                         @endforeach
@@ -45,7 +45,7 @@
                                 <hr>
                                 <div class="box">
                                     <span>BOX Truck Without Assigned Routes</span>
-                                    <div class="d-flex justify-content-center">
+                                    <div class=" justify-content-center">
                                         @foreach ($dataArray['boxNotAssignedTrucks'] as $truck)
                                             <span>{{ $truck->name }}</span> &nbsp;
                                         @endforeach
@@ -57,7 +57,7 @@
                                 <hr>
                                 <div class="box">
                                     <span>Total Orders Completed</span>
-                                    <div class="d-flex justify-content-center">
+                                    <div class=" justify-content-center">
                                         <span>{{$dataArray['totalBoxOrderCompleted']}}</span> &nbsp;
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@
                                 <hr>
                                 <div class="box">
                                     <span>Orders Missed</span>
-                                    <div class="d-flex justify-content-center">
+                                    <div class=" justify-content-center">
                                         <span>{{$dataArray['totalBoxOrderNotCompleted']}}</span> &nbsp;
 
                                     </div>
@@ -459,7 +459,7 @@
                                 <div class="box">
                                     <span>Total Tons Needed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span id="totalTonsNeededMonthy">9</span> &nbsp;
                                     </div>
                                 </div>
                                 <hr>
@@ -497,7 +497,7 @@
                                 <div class="box">
                                     <span>Total Tons Needed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <input t type="text" name="" id="totalTonsYtd">
                                     </div>
                                 </div>
                                 <hr>
@@ -516,4 +516,14 @@
 
 
     </div>
+@endsection
+
+@section('pageSpecificJs')
+<script>
+    $('#totalTonsYtd').change(function(){
+        let totalTonsNeededYTD = $(this).val();
+        $('#totalTonsNeededMonthy').text(totalTonsNeededYTD/12)
+    })
+</script>
+
 @endsection

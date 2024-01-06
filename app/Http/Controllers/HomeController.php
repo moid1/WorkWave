@@ -67,6 +67,8 @@ class HomeController extends Controller
             $dataArray['customersCountYTD'] = $customersCountYTD;
             $dataArray['ordersCount'] = Order::all()->count();
             $dataArray['notesCount'] = Notes::all()->count();
+            $assignedTrucksNameArr = array_unique($assignedTrucksNameArr);
+
             $dataArray['boxTruckassignedTrucks'] = $assignedTrucksNameArr;
             $dataArray['boxNotAssignedTrucks'] = $notAssignedTrucks;
             $dataArray['totalBoxOrderCompleted'] = $totalBoxOrderCompleted;

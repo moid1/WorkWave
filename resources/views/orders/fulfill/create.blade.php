@@ -47,15 +47,9 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Company Registration</label>
-                                                <select id="company_reg" name="company_reg"
-                                                    class="form-control form-select form-select-lg mb-3"
-                                                    aria-label=".form-select-lg example">
-                                                    <option value="" disabled>Please select Registration No</option>
-                                                    @foreach ($registrationNos as $registrationNo)
-                                                        <option value="{{ $registrationNo->registrationNo }}">
-                                                            {{ $registrationNo->reg_no }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input id="company_reg" type="text" class="form-control"
+                                                name="company_reg" readonly
+                                                value="{{$order->customer->company_registration}}" autofocus>
                                             </div>
                                         </div>
 
@@ -344,7 +338,7 @@
                                                     class="form-control form-select form-select-lg mb-3"
                                                     aria-label=".form-select-lg example">
                                                     <option value="" disabled>Please select payment type</option>
-                                                    <option value="CreditCard">Credit Card</option>
+                                                    <option value="CreditCard"  >Credit Card</option>
                                                     <option value="Cheque">Cheque</option>
                                                     <option value="Credit Card on File">Credit Card on File</option>
                                                     <option value="Cash">Cash</option>
