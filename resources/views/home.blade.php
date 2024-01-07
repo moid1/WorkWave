@@ -58,7 +58,7 @@
                                 <div class="box">
                                     <span>Total Orders Completed</span>
                                     <div class=" justify-content-center">
-                                        <span>{{$dataArray['totalBoxOrderCompleted']}}</span> &nbsp;
+                                        <span>{{ $dataArray['totalBoxOrderCompleted'] }}</span> &nbsp;
                                     </div>
                                 </div>
 
@@ -66,7 +66,7 @@
                                 <div class="box">
                                     <span>Orders Missed</span>
                                     <div class=" justify-content-center">
-                                        <span>{{$dataArray['totalBoxOrderNotCompleted']}}</span> &nbsp;
+                                        <span>{{ $dataArray['totalBoxOrderNotCompleted'] }}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                                 <div class="box">
                                     <span>Number of Tires Collected Today</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{$dataArray['totalTiresCollectedToday']}}</span>
+                                        <span>{{ $dataArray['totalTiresCollectedToday'] }}</span>
                                     </div>
                                 </div>
                                 <hr>
@@ -107,7 +107,7 @@
                                 <div class="box">
                                     <span>Total Tires Collected To Date</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{$dataArray['totalTiresCollectedYTD']}}</span> &nbsp;
+                                        <span>{{ $dataArray['totalTiresCollectedYTD'] }}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -133,9 +133,9 @@
                                 <div class="box">
                                     <span>What CX were Missed</span>
                                     <div class="d-flex justify-content-center">
-                                        @if(!empty($dataArray['boxTruckMissedCX']))
+                                        @if (!empty($dataArray['boxTruckMissedCX']))
                                             @foreach ($dataArray['boxTruckMissedCX'] as $order)
-                                                <span>{{ $order->customer->business_name}}</span>
+                                                <span>{{ $order->customer->business_name }}</span>
                                             @endforeach
                                         @endif
                                     </div>
@@ -154,14 +154,14 @@
                                 <div class="box">
                                     <span>Total New CX this Month</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{$dataArray['newCustomersCount']}}</span>
+                                        <span>{{ $dataArray['newCustomersCount'] }}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Total New CX YTD</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{$dataArray['customersCountYTD']}}</span>
+                                        <span>{{ $dataArray['customersCountYTD'] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -177,14 +177,14 @@
                                 <div class="box">
                                     <span>Monthly</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{$dataArray['boxTruckCompletedJobs'][0]}}</span>
+                                        <span>{{ $dataArray['boxTruckCompletedJobs'][0] }}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Yearly</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{$dataArray['boxTruckCompletedJobs'][1]}}</span>
+                                        <span>{{ $dataArray['boxTruckCompletedJobs'][1] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -368,7 +368,7 @@
                                 <div class="box">
                                     <span>Total Loads Today</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{ $tdfData['totalLoadsToday'] }}</span>
                                     </div>
                                 </div>
 
@@ -376,7 +376,7 @@
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{ $tdfData['totalTonsDelivered'] }}</span> &nbsp;
                                     </div>
                                 </div>
 
@@ -384,7 +384,7 @@
                                 <div class="box">
                                     <span>Total Tons Needed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{ $tdfData['totalTonNeeded'] }}</span> &nbsp;
                                     </div>
                                 </div>
 
@@ -392,7 +392,7 @@
                                 <div class="box">
                                     <span>Completion %</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{ $tdfData['todaysCompletion'] }}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -409,14 +409,14 @@
                                 <div class="box">
                                     <span>Total Loads Today</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{ $steelData['totalLoadsToday'] }}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{ $steelData['totalTonsDelivered'] }}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -425,7 +425,7 @@
                                 <div class="box">
                                     <span>Total Tons Needed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{ $steelData['totalTonNeeded'] }}</span> &nbsp;
                                     </div>
                                 </div>
 
@@ -433,7 +433,7 @@
                                 <div class="box">
                                     <span>Completion %</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{ $steelData['todaysCompletion'] }}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -452,21 +452,23 @@
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{ $materialShippedData['totalTonsDelivered'] }}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Total Tons Needed</span>
                                     <div class="d-flex justify-content-center">
-                                        <span id="totalTonsNeededMonthy">9</span> &nbsp;
+                                        <span>{{ optional($adminSettings)->total_tons_need / 12 }}</span>
+                                        &nbsp;
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Completion %</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span> &nbsp;
+                                        <span>{{ number_format((optional($adminSettings)->total_tons_need / 12) / $materialShippedData['totalTonsDelivered'], 2) }}</span>
+                                        &nbsp;
 
                                     </div>
                                 </div>
@@ -483,28 +485,28 @@
                                 <div class="box">
                                     <span>Total Loads</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{ $materialShippedYearly['totalLoads'] }}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{ $materialShippedYearly['totalTonsDelivered'] }}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Total Tons Needed</span>
                                     <div class="d-flex justify-content-center">
-                                        <input t type="text" name="" id="totalTonsYtd">
+                                        <span>{{ optional($adminSettings)->total_tons_need ?? 'N/A' }}</span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="box">
                                     <span>Completed %</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>9</span>
+                                        <span>{{ ($materialShippedYearly['totalTonsDelivered'] / optional($adminSettings)->total_tons_need)*100 }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -516,14 +518,4 @@
 
 
     </div>
-@endsection
-
-@section('pageSpecificJs')
-<script>
-    $('#totalTonsYtd').change(function(){
-        let totalTonsNeededYTD = $(this).val();
-        $('#totalTonsNeededMonthy').text(totalTonsNeededYTD/12)
-    })
-</script>
-
 @endsection

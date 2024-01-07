@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminSettingsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyRegController;
 use App\Http\Controllers\HomeController;
@@ -69,6 +70,8 @@ Route::post('/assign-driver', [OrderController::class, 'updateDriver'])->name('o
 
 //Driver ORders
 Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('order.driver.index');
+Route::get('/driver-orders-manifest',  [OrderController::class, 'getTodaysManifestForDriver'])->name('order.driver.manifest');
+
 Route::get('fulfill-order/{id}', [FullFillOrderController::class, 'create'])->name('fulfillorder.create');
 Route::post('fulfill-order', [FullFillOrderController::class, 'store'])->name('fulfillorder.store');
 Route::get('/load-weight/{id}', [FullFillOrderController::class, 'loadByWeight'])->name('fullfill.load.weight');
@@ -121,6 +124,8 @@ Route::get('/generate-weight-sheet/{id}', [ManagerCompareOrderController::class,
 Route::get('/truck', [TruckController::class, 'index'])->name('truck.index');
 Route::post('/truck', [TruckController::class, 'store'])->name('truck.store');
 Route::get('/truck-status/{id}', [TruckController::class, 'changeTruckStatus'])->name('change.truck.status');
+Route::get('/update-truck/{id}', [TruckController::class, 'updateTruck'])->name('truck.update');
+Route::post('/update-truck/{id}', [TruckController::class, 'updateTruckStore'])->name('truck.update');
 Route::post('/assign-truck', [TruckController::class, 'assignTruckToDriver'])->name('assign.truck.driver');
 
 //Customer Pricing
@@ -135,3 +140,8 @@ Route::post('/state-weight', [FullFillOrderController::class, 'stateByWeight'])-
 Route::post('/steel', [FullFillOrderController::class, 'steelOrderCreate'])->name('order.store.steel');
 
 Route::get('generate-daily-count-sheet', [HomeController::class, 'generateDailyCountSheet'])->name('generate.daily.count.sheet');
+
+//ADMIN SETTINGS
+
+Route::get('admin-settings', [AdminSettingsController::class, 'index'])->name('admin.settings.index');
+Route::post('admin-settings', [AdminSettingsController::class, 'store'])->name('admin.settings.store');

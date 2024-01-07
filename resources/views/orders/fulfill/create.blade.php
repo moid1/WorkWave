@@ -39,7 +39,7 @@
                             @endif
                             <div class="p-20">
 
-                                <form action="{{ route('fulfillorder.store') }}" method="POST">
+                                <form action="{{ route('fulfillorder.store') }}" method="POST" id="fulFilledForm">
                                     @csrf
 
                                     <div class="row">
@@ -48,8 +48,8 @@
                                             <div class="form-group">
                                                 <label>Company Registration</label>
                                                 <input id="company_reg" type="text" class="form-control"
-                                                name="company_reg" readonly
-                                                value="{{$order->customer->company_registration}}" autofocus>
+                                                    name="company_reg" readonly
+                                                    value="{{ $order->customer->company_registration }}" autofocus>
                                             </div>
                                         </div>
 
@@ -76,7 +76,7 @@
 
                                         <div id="collawnmowersatvmotorcycle" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of Lawnmowers/ATVMotorcycle</label>
+                                                <label> Lawnmowers/ATVMotorcycle</label>
                                                 <input id="lawnmowers_atvmotorcycle" type="text" class="form-control"
                                                     name="lawnmowers_atvmotorcycle"
                                                     value="{{ old('lawnmowers_atvmotorcycle') }}" autofocus>
@@ -133,7 +133,7 @@
 
                                         <div id="colsemitruck" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of Semi Truck</label>
+                                                <label> Semi Truck</label>
                                                 <input id="semi_truck" type="text" class="form-control" name="semi_truck"
                                                     value="{{ old('semi_truck') }}" autofocus>
                                             </div>
@@ -181,7 +181,7 @@
 
                                         <div id="colag_med_truck_19_5_skid_steer" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of AG Med Truck 19.5/ Skid Steer</label>
+                                                <label> AG Med Truck 19.5/ Skid Steer</label>
                                                 <input id="ag_med_truck_19_5_skid_steer" type="text"
                                                     class="form-control" name="ag_med_truck_19_5_skid_steer"
                                                     value="{{ old('ag_med_truck_19_5_skid_steer') }}" autofocus>
@@ -190,7 +190,7 @@
 
                                         <div id="colag_med_truck_19_5_with_rim" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of AG Med Truck 19.5/ with Rim</label>
+                                                <label> AG Med Truck 19.5/ with Rim</label>
                                                 <input id="ag_med_truck_19_5_with_rim" type="text"
                                                     class="form-control" name="ag_med_truck_19_5_with_rim"
                                                     value="{{ old('ag_med_truck_19_5_with_rim') }}" autofocus>
@@ -199,7 +199,7 @@
 
                                         <div id="colfarm_tractor_last_two_digits" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of Farm Tractor $1.25 per, Last two digits</label>
+                                                <label> Farm Tractor $1.25 per, Last two digits</label>
                                                 <input id="farm_tractor_last_two_digits" type="text"
                                                     class="form-control" name="farm_tractor_last_two_digits"
                                                     value="{{ old('farm_tractor_last_two_digits') }}" autofocus>
@@ -242,7 +242,7 @@
 
                                         <div id="col15_5_24" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 15_5_24</label>
+                                                <label> 15_5_24</label>
                                                 <input id="15_5_24" type="text" class="form-control" name="15_5_24"
                                                     value="{{ old('15_5_24') }}" autofocus>
                                             </div>
@@ -250,7 +250,7 @@
 
                                         <div id="col17_5_25" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 17.5-25 (Radial)</label>
+                                                <label> 17.5-25 (Radial)</label>
                                                 <input id="17_5_25" type="text" class="form-control" name="17_5_25"
                                                     value="{{ old('17_5_25') }}" autofocus>
                                             </div>
@@ -258,7 +258,7 @@
 
                                         <div id="col20_5_25" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 20.5-25 (Radial)</label>
+                                                <label> 20.5-25 (Radial)</label>
                                                 <input id="20_5_25" type="text" class="form-control" name="20_5_25"
                                                     value="{{ old('20_5_25') }}" autofocus>
                                             </div>
@@ -266,7 +266,7 @@
 
                                         <div id="col23_5_25" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 23.5-25 (Radial)</label>
+                                                <label> 23.5-25 (Radial)</label>
                                                 <input id="23_5_25" type="text" class="form-control" name="23_5_25"
                                                     value="{{ old('23_5_25') }}" autofocus>
                                             </div>
@@ -274,7 +274,7 @@
 
                                         <div id="col29_5_25" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 29_5-25 (Radial)</label>
+                                                <label> 29_5-25 (Radial)</label>
                                                 <input id="29_5_25" type="text" class="form-control" name="29_5_25"
                                                     value="{{ old('29_5_25') }}" autofocus>
                                             </div>
@@ -282,7 +282,7 @@
 
                                         <div id="col24_00R35" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 24.00R35</label>
+                                                <label> 24.00R35</label>
                                                 <input id="24_00R35" type="text" class="form-control"
                                                     name="24_00R35" value="{{ old('24_00R35') }}" autofocus>
                                             </div>
@@ -290,7 +290,7 @@
 
                                         <div id="col13_00_24" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 13.00-24</label>
+                                                <label> 13.00-24</label>
                                                 <input id="13_00_24" type="text" class="form-control"
                                                     name="13_00_24" value="{{ old('13_00_24') }}" autofocus>
                                             </div>
@@ -298,7 +298,7 @@
 
                                         <div id="col14_00_24" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 14.00-24 (Radial)</label>
+                                                <label> 14.00-24 (Radial)</label>
                                                 <input id="14_00_24" type="text" class="form-control"
                                                     name="14_00_24" value="{{ old('14_00_24') }}" autofocus>
                                             </div>
@@ -306,7 +306,7 @@
 
                                         <div id="col19_5L_24" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 19.5L-24</label>
+                                                <label> 19.5L-24</label>
                                                 <input id="19_5L_24" type="text" class="form-control"
                                                     name="19_5L_24" value="{{ old('19_5L_24') }}" autofocus>
                                             </div>
@@ -314,7 +314,7 @@
 
                                         <div id="col18_4_30" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 18.4-30</label>
+                                                <label> 18.4-30</label>
                                                 <input id="18_4_30" type="text" class="form-control" name="18_4_30"
                                                     value="{{ old('18_4_30') }}" autofocus>
                                             </div>
@@ -322,7 +322,7 @@
 
                                         <div id="col18_4_38" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>No of 18.4-38</label>
+                                                <label> 18.4-38</label>
                                                 <input id="18_4_38" type="text" class="form-control" name="18_4_38"
                                                     value="{{ old('18_4_38') }}" autofocus>
                                             </div>
@@ -330,23 +330,31 @@
 
                                         {{-- End quanittys of typres of otr tires --}}
 
+                                        <div id="" class="col-lg-6 ">
+                                            <div class="form-group">
+                                                <label> Payment Type</label>
+                                                <input readonly id="" type="text" class="form-control"
+                                                    name="payment_type" value="{{ $order->customer->charge_type }}"
+                                                    autofocus>
+                                            </div>
+                                        </div>
 
-                                        <div class="col-lg-6">
+                                        {{-- <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Payment Type</label>
                                                 <select id="payment_type" name="payment_type"
                                                     class="form-control form-select form-select-lg mb-3"
                                                     aria-label=".form-select-lg example">
                                                     <option value="" disabled>Please select payment type</option>
-                                                    <option value="CreditCard"  >Credit Card</option>
-                                                    <option value="Cheque">Cheque</option>
+                                                    <option value="CreditCard">Credit Card</option>
+                                                    <option value="Cheque">Check</option>
                                                     <option value="Credit Card on File">Credit Card on File</option>
                                                     <option value="Cash">Cash</option>
                                                     <option value="Charge">Charge</option>
 
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="col-lg-6 d-none" id="chequeCol">
                                             <div class="form-group">
@@ -365,7 +373,7 @@
                                         </div>
 
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <label class="" for="">Customer Signature:</label>
                                             <br />
                                             <div id="sig"></div>
@@ -374,8 +382,8 @@
                                             <textarea id="signature64" name="signed" style="display: none"></textarea>
                                         </div>
 
-                                        <div class="col-md-6">
-                                            <div class="acknowledment">
+                                        <div class="col-md-12 mt-3 " id="driverSignatureCol">
+                                            <div class="acknowledment invisible">
                                                 <p>(Driver Signature) I acknowledge that my counts are correct, and if not,
                                                     the misssing
                                                     charges will be deducted from my next check.</p>
@@ -435,6 +443,7 @@
 @section('pageSpecificJs')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        let firstTimeSubmitted = false;
         $('#payment_type').on('change', function() {
             const selectedPaymentType = $(this).val();
             if (selectedPaymentType == 'Cheque') {
@@ -644,6 +653,16 @@
                     break;
 
 
+            }
+        });
+
+        $('#fulFilledForm').submit(function(e) {
+            if (firstTimeSubmitted) {
+                this.submit();
+            } else {
+                e.preventDefault();
+                firstTimeSubmitted = true;
+                $('.acknowledment').removeClass('invisible');
             }
         });
     </script>

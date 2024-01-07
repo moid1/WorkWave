@@ -182,7 +182,6 @@ class OrderController extends Controller
                     'message' => 'This driver is already assigned to this order',
                     'data' => null
                 ], 200);
-              
             }
             if ($order) {
                 $order->driver_id = $driverID;
@@ -198,7 +197,6 @@ class OrderController extends Controller
                 'success' => false,
                 'message' => 'Sorry, Order not found'
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -207,8 +205,17 @@ class OrderController extends Controller
         }
     }
 
-    public function getComparedOrders(){
-        $orders = Order::where('status', 'compared')->orWhereIn('load_type',['tdf', 'trailer_swap'])->latest()->get();
+    public function getComparedOrders()
+    {
+        $orders = Order::where('status', 'compared')->orWhereIn('load_type', ['tdf', 'trailer_swap'])->latest()->get();
         return view('orders.compared.index', compact('orders'));
+    }
+
+    public function getTodaysManifestForDriver()
+    {
+        $orders = Order::whereDate('created_at', now()->toDateString())
+            ->where([['driver_id', Auth::id()], ['status', 'fulfilled']])->get();
+        
+            return view('orders.driver.manifest', compact('orders'));
     }
 }

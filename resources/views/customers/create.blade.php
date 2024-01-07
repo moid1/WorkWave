@@ -160,9 +160,10 @@
                                                     <label>Charge Type</label>
                                                     <select name="charge_type" class="form-control" id="">
                                                         <option value="" disabled>Please select Charge Type</option>
+                                                        <option value="creditcard">Credit Card</option>
                                                         <option value="cc on file">CC On File</option>
                                                         <option value="cc call in">CC Call in</option>
-                                                        <option value="cheque">Cheque</option>
+                                                        <option value="cheque">Check</option>
                                                         <option value="charge">Charge</option>
                                                         <option value="cash">Cash</option>
 
@@ -179,7 +180,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Tax</label>
-                                                    <input id="tax" type="text" class="form-control @error('tax') is-invalid @enderror" name="tax" value="{{ old('tax') }}"  autofocus>
+                                                    <input id="tax" type="number" step="0.1" class="form-control @error('tax') is-invalid @enderror" name="tax" value="{{ old('tax') }}"  autofocus>
                                                     @error('tax')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -197,7 +198,7 @@
                                                 <div class="form-group">
                                                     <label>Convenience Fee
                                                     </label>
-                                                    <input id="convenienceFee" type="text" class="form-control @error('convenienceFee') is-invalid @enderror" name="convenienceFee" value="{{ old('convenienceFee') }}"  autocomplete="email">
+                                                    <input id="convenienceFee" step="0.1" type="number" class="form-control @error('convenienceFee') is-invalid @enderror" name="convenienceFee" value="{{ old('convenienceFee') }}"  autocomplete="email">
                                                     @error('convenienceFee')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>

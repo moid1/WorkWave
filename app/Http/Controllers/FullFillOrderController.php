@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CompanyReg;
+use App\Models\CustomerPricing;
 use App\Models\FulfilTyre;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
@@ -89,8 +90,13 @@ class FullFillOrderController extends Controller
 
         if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
             foreach ($passangerTireTypes as $key => $value) {
+                $input =  $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
+
                 $availablePassangerTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }
@@ -103,8 +109,12 @@ class FullFillOrderController extends Controller
 
         if (!empty($truckTireTypes) && count($truckTireTypes)) {
             foreach ($truckTireTypes as $key => $value) {
+                $input =  $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
                 $availableTruckTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }
@@ -116,8 +126,12 @@ class FullFillOrderController extends Controller
 
         if (!empty($agriTireTypes) && count($agriTireTypes)) {
             foreach ($agriTireTypes as $key => $value) {
+                $input =  $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
                 $availableAgriTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }
@@ -128,8 +142,12 @@ class FullFillOrderController extends Controller
 
         if (!empty($otrTireTypes) && count($otrTireTypes)) {
             foreach ($otrTireTypes as $key => $value) {
+                $input =  $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
                 $availableOtrTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }
@@ -149,46 +167,32 @@ class FullFillOrderController extends Controller
             'cheque_no' => $request->cheque_no ?? null
         ]);
 
-        // $totalWeightsObject = $this->getTotalWeight($request);
-
-
-        // $fulfilTyres = FulfilTyre::create([
-        //     'full_fill_orders_id' => $fullFillOrder->id,
-        //     'lawnmowers_atvmotorcycle' => $request->lawnmowers_atvmotorcycle ?? null,
-        //     'lawnmowers_atvmotorcyclewithrim' => $request->lawnmowers_atvmotorcyclewithrim ?? null,
-        //     'passanger_lighttruck' => $request->passanger_lighttruck ?? null,
-        //     'passanger_lighttruckwithrim' => $request->passanger_lighttruckwithrim ?? null,
-        //     'semi_truck' => $request->semi_truck ?? null,
-        //     'semi_super_singles' => $request->semi_super_singles ?? null,
-        //     'semi_truck_with_rim' => $request->semi_truck_with_rim ?? null,
-        //     'totalPassangerTiresWeight' => $totalWeightsObject['totalPassangerTiresWeight'] ?? null,
-        //     'totalTruckTiresWeight' => $totalWeightsObject['totalTruckTiresWeight'] ?? null,
-        // ]);
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+        $customerPricing = CustomerPricing::where('customer_id', $order->customer->id)->first();
+
         $order->status = 'fulfilled';
         $order->payment_type = $request->payment_type ?? null;
 
         $order->update();
         $fullFillOrder['order'] = $order;
-        // $fullFillOrder['fulfilTyres'] = $fulfilTyres;
+        $fullFillOrder['customerPricing'] = $customerPricing;
 
         $manifestPDF = new ManifestPDF();
         $manifestPDF->order_id = $request->order_id;
         $manifestPDF->customer_id = $order->customer_id;
 
-        $pdfArray = array();
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $pdf = \App::make('dompdf.wrapper');
 
-            $customPaper = array(0, 0, 900, 1300);
+            $customPaper = array(0, 0, 900, 1500);
             $pdf->setPaper($customPaper);
             $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            $output = $pdf->output();
-            // return $pdf->stream();
+            // $output = $pdf->output();
+            return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
@@ -489,18 +493,19 @@ class FullFillOrderController extends Controller
 
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+        $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
 
         $order->status = 'compared';
         $order->payment_type = $request->payment_type ?? null;
 
         $order->update();
         $fullFillOrder['order'] = $order;
+        $fullFillOrder['customerPricing'] = $customerPricing;
 
         $manifestPDF = new ManifestPDF();
         $manifestPDF->order_id = $request->order_id;
         $manifestPDF->customer_id = $order->customer_id;
 
-        $pdfArray = array();
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $pdf = \App::make('dompdf.wrapper');
@@ -510,8 +515,8 @@ class FullFillOrderController extends Controller
             $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            $output = $pdf->output();
-            // return $pdf->stream();
+            // $output = $pdf->output();
+            return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
@@ -574,17 +579,19 @@ class FullFillOrderController extends Controller
 
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+        $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
 
         $order->status = 'compared';
 
         $order->update();
         $fullFillOrder['order'] = $order;
-
+        $fullFillOrder['orderType'] = 'stateWeight';
+        $fullFillOrder['stateOrder'] = $fullFillOrder;
+        $fullFillOrder['customerPricing'] = $customerPricing;
         $manifestPDF = new ManifestPDF();
         $manifestPDF->order_id = $request->order_id;
         $manifestPDF->customer_id = $order->customer_id;
 
-        $pdfArray = array();
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $pdf = \App::make('dompdf.wrapper');
@@ -594,8 +601,8 @@ class FullFillOrderController extends Controller
             $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            $output = $pdf->output();
-            // return $pdf->stream();
+            // $output = $pdf->output();
+            return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);

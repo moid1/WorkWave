@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminSettings;
 use App\Models\Customer;
 use App\Models\FullFillOrder;
 use App\Models\Notes;
@@ -33,6 +34,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $userType = Auth::user()->type;
         if ($userType == 0 || $userType == 1) {
             $currentMonth = Carbon::now()->month;
@@ -77,7 +79,12 @@ class HomeController extends Controller
             $dataArray['totalTiresCollectedYTD'] = $this->getTotalTiresCollectionYTD();
             $dataArray['boxTruckMissedCX'] = $this->getCXMissedBoxTruck();
             $dataArray['boxTruckCompletedJobs'] = $this->getBoxTruckTotalCompletedJobs();
-            return view('home', compact('dataArray'));
+            $adminSettings = AdminSettings::first();
+            $tdfData = $this->tdfData();
+            $steelData = $this->steelData();
+            $materialShippedData = $this->getMaterialShippedDataMonthly();
+            $materialShippedYearly = $this->getMaterialShippedDataYearly();
+            return view('home', compact('dataArray', 'adminSettings', 'tdfData', 'steelData', 'materialShippedData', 'materialShippedYearly'));
         } else if ($userType == 2) {
             $orders = Order::where('driver_id', Auth::user()->id)->get();
             return view('driver.home', compact('orders'));
@@ -287,5 +294,135 @@ class HomeController extends Controller
             ->toArray();
         // dd($todaysOrders);
         return view('countsheet.daily', compact('todaysOrders'));
+    }
+
+    public function tdfData()
+    {
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        $todaysOrders = Order::whereDate('created_at', now()->toDateString())->where([['load_type', 'tdf']])->with('tdfOrder')->get();
+        $ordersOfCurrentMonth =  Order::whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)->where([['load_type', 'tdf']])->with('tdfOrder')->get();
+        $totalLoadsToday = 0;
+        $totalTonsDelivered = 0;
+        $totalTonNeeded = 0;
+        foreach ($todaysOrders as $key => $order) {
+            if ($order->tdfOrder) {
+                $totalLoadsToday++;
+                $totalTonsDelivered += ($order->tdfOrder->end_weight - $order->tdfOrder->start_weight) / 2000;
+            }
+        }
+
+        foreach ($ordersOfCurrentMonth as $key => $order) {
+            if ($order->tdfOrder) {
+                $totalTonNeeded += ($order->tdfOrder->end_weight - $order->tdfOrder->start_weight) / 2000;
+            }
+        }
+        $adminSettings = AdminSettings::first();
+        if ($adminSettings) {
+            $totalTonNeeded = number_format((($totalTonNeeded / (($adminSettings->total_tons_need) / 12))), 2);
+        }
+
+
+        // Get the current date
+        $currentDate = Carbon::now();
+        $firstDayOfMonth = $currentDate->copy()->startOfMonth();
+        $lastDayOfMonth = $currentDate->copy()->endOfMonth();
+        $daysCount = 0;
+        // Loop from the first day of the month until the current date
+        while ($firstDayOfMonth->lte($lastDayOfMonth)) {
+            // Check if the current day is from Monday to Saturday
+            if ($firstDayOfMonth->dayOfWeek >= Carbon::MONDAY && $firstDayOfMonth->dayOfWeek <= Carbon::SATURDAY) {
+                $daysCount++;
+            }
+            // Move to the next day
+            $firstDayOfMonth->addDay();
+        }
+        $todaysCompletion = number_format(($adminSettings->total_tons_need / 12) / $daysCount, 2);
+        return array('totalLoadsToday' => $totalLoadsToday, 'totalTonsDelivered' => $totalTonsDelivered, 'totalTonNeeded' => $totalTonNeeded, 'todaysCompletion' => $todaysCompletion);
+    }
+
+    public function steelData()
+    {
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        $todaysOrders = Order::whereDate('created_at', now()->toDateString())->where([['load_type', 'steel']])->with('steel')->get();
+        $ordersOfCurrentMonth =  Order::whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)->where([['load_type', 'steel']])->with('steel')->get();
+        $totalLoadsToday = 0;
+        $totalTonsDelivered = 0;
+        $totalTonNeeded = 0;
+        foreach ($todaysOrders as $key => $order) {
+            if ($order->steel) {
+                $totalLoadsToday++;
+                $totalTonsDelivered += ($order->steel->end_weight - $order->steel->start_weight) / 2240;
+            }
+        }
+
+        foreach ($ordersOfCurrentMonth as $key => $order) {
+            if ($order->steel) {
+                $totalTonNeeded += ($order->steel->end_weight - $order->steel->start_weight) / 2240;
+            }
+        }
+        $adminSettings = AdminSettings::first();
+        if ($adminSettings) {
+            $totalTonNeeded = number_format((($totalTonNeeded / (($adminSettings->total_tons_need) / 12))), 2);
+        }
+
+
+        // Get the current date
+        $currentDate = Carbon::now();
+        $firstDayOfMonth = $currentDate->copy()->startOfMonth();
+        $lastDayOfMonth = $currentDate->copy()->endOfMonth();
+        $daysCount = 0;
+        // Loop from the first day of the month until the current date
+        while ($firstDayOfMonth->lte($lastDayOfMonth)) {
+            // Check if the current day is from Monday to Saturday
+            if ($firstDayOfMonth->dayOfWeek >= Carbon::MONDAY && $firstDayOfMonth->dayOfWeek <= Carbon::SATURDAY) {
+                $daysCount++;
+            }
+            // Move to the next day
+            $firstDayOfMonth->addDay();
+        }
+        $todaysCompletion = number_format(($adminSettings->total_tons_need / 12) / $daysCount, 2);
+        return array('totalLoadsToday' => $totalLoadsToday, 'totalTonsDelivered' => $totalTonsDelivered, 'totalTonNeeded' => $totalTonNeeded, 'todaysCompletion' => $todaysCompletion);
+    }
+
+    public function getMaterialShippedDataMonthly()
+    {
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+        $materialOrders = ['tdf', 'steel'];
+        $ordersOfCurrentMonth =  Order::whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)->whereIn('load_type', $materialOrders)->with(['steel', 'tdfOrder'])->get();
+
+        $totalTonsDeliverdMonthly = 0;
+        foreach ($ordersOfCurrentMonth as $key => $order) {
+            if ($order->tdfOrder) {
+                $totalTonsDeliverdMonthly += ($order->tdfOrder->end_weight - $order->tdfOrder->start_weight) / 2000;
+            } else if ($order->steel) {
+                $totalTonsDeliverdMonthly += ($order->steel->end_weight - $order->steel->start_weight) / 2240;
+            }
+        }
+        return array('totalTonsDelivered' => $totalTonsDeliverdMonthly);
+    }
+
+    public function getMaterialShippedDataYearly()
+    {
+        $currentYear = Carbon::now()->year;
+        $materialOrders = ['tdf', 'steel'];
+        $ordersOfCurrentYear =  Order::whereYear('created_at', $currentYear)->whereIn('load_type', $materialOrders)->with(['steel', 'tdfOrder'])->get();
+
+        $totalTonsDeliverd = 0;
+        foreach ($ordersOfCurrentYear as $key => $order) {
+            if ($order->tdfOrder) {
+                $totalTonsDeliverd += ($order->tdfOrder->end_weight - $order->tdfOrder->start_weight) / 2000;
+            } else if ($order->steel) {
+                $totalTonsDeliverd += ($order->steel->end_weight - $order->steel->start_weight) / 2240;
+            }
+        }
+        return array('totalLoads' => $ordersOfCurrentYear->count(), 'totalTonsDelivered' => $totalTonsDeliverd);
     }
 }

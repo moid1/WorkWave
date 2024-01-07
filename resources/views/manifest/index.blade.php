@@ -116,7 +116,8 @@
 
                                 <tr>
                                     <div class="d-flex flex-column">
-                                        <span class="inputField" style="display: inline-block;"></span>
+                                        <span class="inputField"
+                                            style="display: inline-block;">{{ $data->order->customer->company_registration }}</span>
                                         <label class="inputLabel">Registration Number/Type of Generator</label>
                                     </div>
                                 </tr>
@@ -167,7 +168,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td style="justify-content:left">
+                                    {{-- <td style="justify-content:left">
                                         <div style="display: inline-flex;width:200px;">
                                             <span style="display: inline-block;height:20px" class="inputField">Fort
                                                 Worth</span>
@@ -182,125 +183,171 @@
                                             <span style="display: inline-block" class="inputField">76120</span>
                                             <label class="inputLabel">Zip</label>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                                 @php
-                                    $typesOfPassangerTires = !empty($data->type_of_passenger) ? json_decode($data->type_of_passenger, true) : [];
-                                    $typesOfTruckTires = !empty($data->type_of_truck_tyre) ? json_decode($data->type_of_truck_tyre, true) : [];
-                                    $typesOfAgriTires = !empty($data->type_of_agri_tyre) ? json_decode($data->type_of_agri_tyre, true) : [];
-                                    $typesOfOtherTires = !empty($data->type_of_other) ? json_decode($data->type_of_other, true) : [];
+                                    $totalSum = 0;
                                 @endphp
-                                @foreach ($typesOfPassangerTires as $item)
-                                    @foreach ($item as $key => $value)
-                                        {
-                                        <tr>
-                                            <div>
-                                                <label class="inputLabel"
-                                                    style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{ $value }}</span>
+                                @if ($data->load_type == 'box_truck_route')
+                                    @php
+                                        $typesOfPassangerTires = !empty($data->type_of_passenger) ? json_decode($data->type_of_passenger, true) : [];
+                                        $typesOfTruckTires = !empty($data->type_of_truck_tyre) ? json_decode($data->type_of_truck_tyre, true) : [];
+                                        $typesOfAgriTires = !empty($data->type_of_agri_tyre) ? json_decode($data->type_of_agri_tyre, true) : [];
+                                        $typesOfOtherTires = !empty($data->type_of_other) ? json_decode($data->type_of_other, true) : [];
+
+                                        $totalSum = 0;
+                                    @endphp
+                                    @foreach ($typesOfPassangerTires as $item)
+                                        @foreach ($item as $key => $value)
+                                            {
+                                            @php
+                                                $eachCharge = 0;
+                                                if ($key == 'lawnmowers_atvmotorcycle') {
+                                                    $eachCharge = $data->customerPricing->lawnmowers_atvmotorcycle;
+                                                } elseif ($key == 'lawnmowers_atvmotorcyclewithrim') {
+                                                    $eachCharge = $data->customerPricing->lawnmowers_atvmotorcyclewithrim;
+                                                } elseif ($key == 'passanger_lighttruck') {
+                                                    $eachCharge = $data->customerPricing->passanger_lighttruck;
+                                                } elseif ($key == 'passanger_lighttruckwithrim') {
+                                                    $eachCharge = $data->customerPricing->passanger_lighttruckwithrim;
+                                                }
+                                            @endphp
+                                            <tr>
+                                                <div>
+                                                    <label class="inputLabel"
+                                                        style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value }}</span>
 
 
-                                                <label class="inputLabel inputLabelExtraSmall" style="width: 25px;">@
-                                                    $</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->order->customer->passenger_pricing }}</span>
+                                                    <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
+                                                        ${{ $eachCharge }}
+                                                    </label>
+                                                    <span style=""></span>
 
-                                                <label class="inputLabel inputLabelSmall">Total $</label>
-                                                @php
-                                                    $total_passenger_pricing = 0;
-                                                    if ($data->no_of_passenger) {
-                                                        $total_passenger_pricing = floatval($data->no_of_passenger) * floatval($data->order->customer->passenger_pricing);
-                                                    }
-                                                @endphp
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $total_passenger_pricing }}</span>
-                                            </div>
-                                        </tr>
-                                        }
+                                                    <label class="inputLabel inputLabelSmall">Total $</label>
+                                                    @php
+                                                        $total_passenger_pricing = $eachCharge * $value;
+                                                        $totalSum += $total_passenger_pricing;
+                                                    @endphp
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $total_passenger_pricing }}</span>
+                                                </div>
+                                            </tr>
+                                            }
+                                        @endforeach
                                     @endforeach
-                                @endforeach
 
-                                @foreach ($typesOfTruckTires as $item)
-                                    @foreach ($item as $key => $value)
-                                        {
-                                        <tr>
-                                            <div class="mt-2">
-                                                <label class="inputLabel"
-                                                    style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{ $value }}</span>
+                                    @foreach ($typesOfTruckTires as $item)
+                                        @foreach ($item as $key => $value)
+                                            {
 
-                                                <label class="inputLabel inputLabelExtraSmall" style="width: 25px;">@
-                                                    $</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->order->customer->truck_pricing }}</span>
+                                            <tr>
+                                                <div>
+                                                    <label class="inputLabel"
+                                                        style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value }}</span>
 
-                                                <label class="inputLabel inputLabelSmall">Total $</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->order->customer->truck_pricing }}</span>
 
-                                            </div>
-                                        </tr>}
+                                                    <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
+                                                        ${{ $data->customerPricing->{$key} }}
+                                                    </label>
+                                                    <span style=""></span>
+
+                                                    <label class="inputLabel inputLabelSmall">Total $</label>
+                                                    @php $totalSum += $data->customerPricing->{$key} * $value; @endphp
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->customerPricing->{$key} * $value }}</span>
+                                                </div>
+                                            </tr>
+                                            }
+                                        @endforeach
                                     @endforeach
-                                @endforeach
-                                @foreach ($typesOfPassangerTires as $item)
-                                    @foreach ($item as $key => $value)
-                                        {
-                                        <tr>
-                                            <div class="mt-2">
-                                                <label class="inputLabel"
-                                                    style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
-
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{ $value }}</span>
+                                    @foreach ($typesOfAgriTires as $item)
+                                        @foreach ($item as $key => $value)
+                                            {
+                                            <tr>
+                                                <div>
+                                                    <label class="inputLabel"
+                                                        style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value }}</span>
 
 
-                                                <label class="inputLabel inputLabelExtraSmall" style="width: 25px;">@
-                                                    $</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->order->customer->agri_pricing }}</span>
+                                                    <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
+                                                        ${{ $data->customerPricing->{$key} }}
+                                                    </label>
+                                                    <span style=""></span>
 
-
-
-                                                <label class="inputLabel inputLabelSmall">Total $</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->order->customer->agri_pricing }}</span>
-                                            </div>
-                                        </tr>}
+                                                    <label class="inputLabel inputLabelSmall">Total $</label>
+                                                    @php $totalSum += $data->customerPricing->{$key} * $value; @endphp
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->customerPricing->{$key} * $value }}</span>
+                                                </div>
+                                            </tr>
+                                            }
+                                        @endforeach
                                     @endforeach
-                                @endforeach
-                                @foreach ($typesOfPassangerTires as $item)
-                                    @foreach ($item as $key => $value)
-                                        {
-                                        <tr>
-                                            <div class="mt-2">
-                                                <label class="inputLabel"
-                                                    style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
-
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{ $value }}</span>
-
-                                                <label class="inputLabel inputLabelExtraSmall">@ $</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->order->customer->other }}</span>
+                                    @foreach ($typesOfOtherTires as $item)
+                                        @foreach ($item as $key => $value)
+                                            {
+                                            <tr>
+                                                <div>
+                                                    <label class="inputLabel"
+                                                        style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value }}</span>
 
 
-                                                <label class="inputLabel inputLabelSmall">Total $</label>
-                                                <span
-                                                    style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->order->customer->other }}</span>
+                                                    <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
+                                                        ${{ $data->customerPricing->{$key} }}
+                                                    </label>
+                                                    <span style=""></span>
 
-                                            </div>
-                                        </tr>}
+                                                    <label class="inputLabel inputLabelSmall">Total $</label>
+                                                    @php $totalSum += $data->customerPricing->{$key} * $value; @endphp
+                                                    <span
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->customerPricing->{$key} * $value }}</span>
+                                                </div>
+                                            </tr>
+                                            }
+                                        @endforeach
                                     @endforeach
-                                @endforeach
+                                @endif
+
+                                @if (!empty($data->orderType) && $data->orderType == 'stateWeight' && $data->order->load_type == 'state')
+                                    <tr>
+                                        <div class="mt-2">
+                                            <label class="inputLabel" style="margin-top: 10px;width:90px; ">Start
+                                                Weight</label>
+
+                                            <span
+                                                style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{ $data->stateOrder->start_weight }}</span>
+
+                                            <label class="inputLabel inputLabelExtraSmall">End Weight</label>
+                                            <span
+                                                style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->stateOrder->end_weight }}</span>
+
+                                        </div>
+                                    </tr>
+                                @endif
+
+                                @php
+                                    if ($data->order->load_type == 'trailer_swap') {
+                                        $totalSum = $data->customerPricing->swap_total;
+                                    }else if(!empty($data->orderType) && $data->orderType == 'stateWeight'){
+                                        $totalSum = ($data->stateOrder->end_weight - $data->stateOrder->start_weight) * $data->customerPricing->price_per_lb;
+                                    }
+                                @endphp
                                 <tr style="text-align: right;">
                                     <!-- Total $ - 1 -->
                                     <div class="mt-2 ">
                                         <label class="inputLabel inputLabelSmall">Total $</label>
 
-                                        <input type="text" name="" value=""
-                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
+                                        <input type="text" name=""
+                                            value="{{ number_format($totalSum, 2) }}"
+                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:70px;margin-right:5em;" />
                                     </div>
                                 </tr>
 
@@ -315,40 +362,35 @@
                                     </div>
                                 </tr>
 
+                                @php
+                                    $customerTax = $data->order->customer->tax ?? 0;
+                                    $totalSumWithTax = 0;
+                                    if ($customerTax == 0) {
+                                        $totalSumWithTax = number_format($totalSum, 2);
+                                    } else {
+                                        $totalSumWithTax = $totalSum * ($customerTax / 100);
+                                        $totalSumWithTax += $totalSum;
+                                        $totalSumWithTax = number_format($totalSumWithTax, 2);
+                                    }
+                                @endphp
+
                                 <tr style="text-align: right;">
                                     <div class="mt-2 ">
                                         <label class="inputLabel inputLabelSmall">Total $</label>
-                                        <input type="text" name=""
-                                            value="{{ $data->order->customer->tax }}"
-                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
+                                        <input type="text" name="" value="{{ $totalSumWithTax ?? 0 }}"
+                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:70px;margin-right:5em;" />
                                     </div>
                                 </tr>
                                 @if ($data->cheque_no)
                                     <tr>
                                         <div class="mt-2 ">
                                             <label class="inputLabel inputLabelSmall">Charge Type</label>
-                                            <input type="text" name="" value="Cheque"
+                                            <input type="text" name="" value="Check"
                                                 style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                         </div>
                                     </tr>
                                 @endif
-                                @if ($data->start_weight && $data->end_weight)
-                                    <tr>
-                                        <div class="mt-2">
-                                            <label class="inputLabel" style="margin-top: 10px;width:90px; ">Start
-                                                Weight</label>
 
-                                            <span
-                                                style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{ $data->start_weight }}</span>
-
-                                            <label class="inputLabel inputLabelExtraSmall">End Weight</label>
-                                            <span
-                                                style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->end_weight }}</span>
-
-
-                                        </div>
-                                    </tr>
-                                @endif
                             </tbody>
                         </table>
                     </div>

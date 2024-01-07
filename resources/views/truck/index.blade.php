@@ -92,7 +92,11 @@
                                             </td>
                                             <td>{{ $truck->truckDriver ? $truck->truckDriver->user->name : 'N/A' }}</td>
                                             <td><i class="mdi mdi-account update_driver"
-                                                    data-truck-id="{{ $truck->id }}" title="Update Driver"></i></td>
+                                                    data-truck-id="{{ $truck->id }}" title="Update Driver"></i> /
+                                                <a style="text-decoration: none;color:black"
+                                                    href="{{ route('truck.update', $truck->id) }}"> <i
+                                                        class="mdi mdi-truck " title="Update Truck"></i></a>
+                                            </td>
 
                                         </tr>
                                     @endforeach
@@ -111,8 +115,10 @@
 @section('pageSpecificJs')
     <script>
         jQuery(document).ready(function() {
+            let truckId;
+
             $('.update_driver').on('click', function() {
-                // $('.orderID').val($(this).data('truck_id'))
+                truckId = $(this).attr('data-truck-id');
                 $('#driversList').modal('show');
             });
 
@@ -126,9 +132,12 @@
                     },
                     data: {
                         user_id: driverID,
-                        truck_id: $('.update_driver').attr('data-truck-id')
+                        truck_id: truckId
                     },
                     success: function(data) {
+                        if (data.success) {
+                            location.reload(true);
+                        }
                         alert(data.message);
                     }
                 })

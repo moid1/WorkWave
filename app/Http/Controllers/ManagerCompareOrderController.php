@@ -41,8 +41,12 @@ class ManagerCompareOrderController extends Controller
 
         if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
             foreach ($passangerTireTypes as $key => $value) {
+                $input = $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
                 $availablePassangerTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }
@@ -55,8 +59,12 @@ class ManagerCompareOrderController extends Controller
 
         if (!empty($truckTireTypes) && count($truckTireTypes)) {
             foreach ($truckTireTypes as $key => $value) {
+                $input = $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
                 $availableTruckTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }
@@ -68,8 +76,12 @@ class ManagerCompareOrderController extends Controller
 
         if (!empty($agriTireTypes) && count($agriTireTypes)) {
             foreach ($agriTireTypes as $key => $value) {
+                $input = $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
                 $availableAgriTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }
@@ -80,8 +92,12 @@ class ManagerCompareOrderController extends Controller
 
         if (!empty($otrTireTypes) && count($otrTireTypes)) {
             foreach ($otrTireTypes as $key => $value) {
+                $input = $request[$value];
+                $values = explode(" ", $input);
+                $values = array_map('intval', $values);
+                $sum = array_sum($values);
                 $availableOtrTireTypesArr[] = [
-                    $value => $request[$value]
+                    $value => $sum
                 ];
             }
         }

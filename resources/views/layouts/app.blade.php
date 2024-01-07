@@ -163,6 +163,11 @@
                             <a href="{{route('truck.index')}}" class="waves-effect"><i
                                     class="mdi mdi-truck"></i><span> Trucks </span></a>
                         </li>
+                        
+                        <li>
+                            <a href="{{route('admin.settings.index')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Admin Settings </span></a>
+                        </li>
 
                         {{-- <li>
                             <a href="{{route('generate.daily.count.sheet')}}" class="waves-effect"><i
@@ -175,6 +180,10 @@
                         <li>
                             <a href="{{route('order.driver.index')}}" class="waves-effect"><i
                                     class="mdi mdi-calendar-check"></i><span> Assigned Orders </span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('order.driver.manifest')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Manifest </span></a>
                         </li>
                         @endif
                     </ul>

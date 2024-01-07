@@ -84,18 +84,30 @@ class TruckController extends Controller
 
     public function assignTruckToDriver(Request $request)
     {
-        $isAlreadyExists = TruckDriver::where([['truck_id', $request->truck_id], ['user_id', $request->user_id]])->get();
-        if ($isAlreadyExists && count($isAlreadyExists)) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Truck already Assigned to this Driver'
-            ]);
-        } else {
-            TruckDriver::create($request->all());
+            TruckDriver::updateOrCreate(['user_id'=>$request->user_id], $request->all());
             return response()->json([
                 'success' => true,
                 'message' => 'Truck Assigned to the Driver'
             ]);
+    }
+
+    public function updateTruck($id)
+    {
+        $truck = Truck::find($id);
+        if ($truck) {
+            return view('truck.update', compact('truck'));
         }
+        return back()->with('error', 'Sorry, Truck is not available');
+    }
+
+    public function updateTruckStore(Request $request)
+    {
+        $truck = Truck::find($request->truck_id);
+        if ($truck) {
+            $truck->name = $request->name;
+            $truck->update();
+            return redirect('/truck');
+        }
+        return back()->with('error', 'Sorry, Truck is not available');
     }
 }

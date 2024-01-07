@@ -72,7 +72,7 @@
                                                 aria-label=".form-select-lg example">
                                                 <option value="" disabled>Please select payment type</option>
                                                 <option value="CreditCard">Credit Card</option>
-                                                <option value="Cheque">Cheque</option>
+                                                <option value="Cheque">Check</option>
                                                 <option value="Credit Card on File">Credit Card on File</option>
                                                 <option value="Cash">Cash</option>
                                                 <option value="Charge">Charge</option>
@@ -83,7 +83,7 @@
 
                                     <div class="col-lg-6 d-none" id="chequeCol">
                                         <div class="form-group">
-                                            <label>Cheque No (If any)</label>
+                                            <label>Check No (If any)</label>
                                             <input id="cheque_no" type="text" class="form-control" name="cheque_no"
                                                 value="{{ old('cheque_no') }}" autofocus>
                                         </div>
