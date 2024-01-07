@@ -415,7 +415,7 @@ class HomeController extends Controller
         $materialOrders = ['tdf', 'steel'];
         $ordersOfCurrentYear =  Order::whereYear('created_at', $currentYear)->whereIn('load_type', $materialOrders)->with(['steel', 'tdfOrder'])->get();
 
-        $totalTonsDeliverd = 0;
+        $totalTonsDeliverd = 1;
         foreach ($ordersOfCurrentYear as $key => $order) {
             if ($order->tdfOrder) {
                 $totalTonsDeliverd += ($order->tdfOrder->end_weight - $order->tdfOrder->start_weight) / 2000;

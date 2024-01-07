@@ -37,6 +37,7 @@
                                         <th>Processor Manifest</th>
                                         <th>Disposal Manifest</th>
                                         <th>Original Manifest</th>
+                                        <th>Count Sheet</th>
                                     </tr>
                                 </thead>
     
@@ -86,7 +87,8 @@
             {data: 'transporter', name: 'transporter_manifest',orderable: false, searchable: false},
             {data: 'processor', name: 'processor_manifest',orderable: false, searchable: false},
             {data: 'disposal', name: 'disposal_manifest',orderable: false, searchable: false},
-            {data: 'original_generator', name: 'original_manifest',orderable: false, searchable: false}
+            {data: 'original_generator', name: 'original_manifest',orderable: false, searchable: false},
+            {data: 'count_sheet', name: 'count_sheet',orderable: false, searchable: false}
         ]
     });
   

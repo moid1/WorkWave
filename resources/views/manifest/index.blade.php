@@ -333,13 +333,33 @@
                                     </tr>
                                 @endif
 
+                                @if ($data->order->load_type == 'tdf')
+                                    <tr>
+                                        <div class="mt-2">
+                                            <label class="inputLabel" style="margin-top: 10px;width:90px; ">Start
+                                                Weight</label>
+
+                                            <span
+                                                style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:120px">{{ $data->tdf->start_weight }}</span>
+
+                                            <label class="inputLabel inputLabelExtraSmall">End Weight</label>
+                                            <span
+                                                style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->tdf->end_weight }}</span>
+
+                                        </div>
+                                    </tr>
+                                @endif
+
                                 @php
                                     if ($data->order->load_type == 'trailer_swap') {
                                         $totalSum = $data->customerPricing->swap_total;
-                                    }else if(!empty($data->orderType) && $data->orderType == 'stateWeight'){
+                                    } elseif (!empty($data->orderType) && $data->orderType == 'stateWeight') {
                                         $totalSum = ($data->stateOrder->end_weight - $data->stateOrder->start_weight) * $data->customerPricing->price_per_lb;
+                                    } elseif ($data->order->load_type == 'tdf') {
+                                        $totalSum = (($data->tdf->end_weight - $data->tdf->start_weight) / 2000) * $data->customerPricing->price_per_ton;
                                     }
                                 @endphp
+                                @if($data->order->load_type !== 'state')
                                 <tr style="text-align: right;">
                                     <!-- Total $ - 1 -->
                                     <div class="mt-2 ">
@@ -350,8 +370,8 @@
                                             style="background:none;border:none;border-bottom: 1px solid #333;max-width:70px;margin-right:5em;" />
                                     </div>
                                 </tr>
-
-
+                                @endif
+                                @if($data->order->load_type !== 'state')
                                 <tr style="text-align: right;">
                                     <div class="mt-2 ">
                                         <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Sales Tax
@@ -361,16 +381,21 @@
                                             style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                     </div>
                                 </tr>
+                                @endif
 
                                 @php
-                                    $customerTax = $data->order->customer->tax ?? 0;
-                                    $totalSumWithTax = 0;
-                                    if ($customerTax == 0) {
+                                    if ($data->order->load_type !== 'state') {
+                                        $customerTax = $data->order->customer->tax ?? 0;
+                                        $totalSumWithTax = 0;
+                                        if ($customerTax == 0) {
+                                            $totalSumWithTax = number_format($totalSum, 2);
+                                        } else {
+                                            $totalSumWithTax = $totalSum * ($customerTax / 100);
+                                            $totalSumWithTax += $totalSum;
+                                            $totalSumWithTax = number_format($totalSumWithTax, 2);
+                                        }
+                                    }else{
                                         $totalSumWithTax = number_format($totalSum, 2);
-                                    } else {
-                                        $totalSumWithTax = $totalSum * ($customerTax / 100);
-                                        $totalSumWithTax += $totalSum;
-                                        $totalSumWithTax = number_format($totalSumWithTax, 2);
                                     }
                                 @endphp
 

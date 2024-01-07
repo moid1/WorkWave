@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ManifestPDF;
 use DataTables;
-
+use Carbon\Carbon;
 class ManifestPDFController extends Controller
 {
     /**
@@ -18,7 +18,9 @@ class ManifestPDFController extends Controller
             $data = ManifestPDF::where('customer_id', $id)->get();
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
-                $data = $data->whereBetween('created_at', [$request->from_date, $request->to_date]);
+                $fromDate = Carbon::parse($request->from_date)->format('YYYY-MM-DD');
+                $toDate = Carbon::parse($request->to_date)->format('YYYY-MM-DD');
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
             }
 
             return Datatables::of($data)
@@ -27,26 +29,48 @@ class ManifestPDFController extends Controller
                     return '000' . $row->order_id;
                 })
                 ->editColumn('generator', function ($row) {
-                    $btn = '<a href=' . url($row->generator) . '>View</a>';
-                    return $btn;
+                    if ($row->generator) {
+                        $btn = '<a href=' . url($row->generator) . '>View</a>';
+                        return $btn;
+                    }
+                    return 'N/A';
                 })
                 ->editColumn('transporter', function ($row) {
-                    $btn = '<a href=' . url($row->transporter) . '>View</a>';
-                    return $btn;
+                    if ($row->transporter) {
+                        $btn = '<a href=' . url($row->transporter) . '>View</a>';
+                        return $btn;
+                    }
+                    return 'N/A';
                 })
                 ->editColumn('processor', function ($row) {
-                    $btn = '<a href=' . url($row->processor) . '>View</a>';
-                    return $btn;
+                    if ($row->processor) {
+                        $btn = '<a href=' . url($row->processor) . '>View</a>';
+                        return $btn;
+                    }
+                    return 'N/A';
                 })
                 ->editColumn('disposal', function ($row) {
-                    $btn = '<a href=' . url($row->disposal) . '>View</a>';
-                    return $btn;
+                    if ($row->disposal) {
+                        $btn = '<a href=' . url($row->disposal) . '>View</a>';
+                        return $btn;
+                    }
+                    return 'N/A';
                 })
                 ->editColumn('original_generator', function ($row) {
-                    $btn = '<a href=' . url($row->original_generator) . '>View</a>';
-                    return $btn;
+                    if ($row->original_generator) {
+                        $btn = '<a href=' . url($row->original_generator) . '>View</a>';
+                        return $btn;
+                    }
+                    return 'N/A';
                 })
-                ->rawColumns(['generator', 'transporter', 'processor', 'disposal', 'original_generator'])
+                ->editColumn('count_sheet', function ($row) {
+                    if ($row->count_sheet) {
+                        $btn = '<a href=' . url($row->count_sheet ?? '') . '>View</a>';
+                        return $btn;
+                    }
+                    return 'N/A';
+                })
+                ->rawColumns(['generator', 'transporter', 'processor', 'disposal', 'original_generator', 'count_sheet'])
                 ->make(true);
         }
 

@@ -255,6 +255,14 @@
                                             </div>
                                         </div>
 
+                                        <div id="" class="col-lg-6 ">
+                                            <div class="form-group">
+                                                <label>Per Metric Ton</label>
+                                                <input id="" type="number" step="0.1" class="form-control" name="per_metric_ton"
+                                                    value="{{ old('per_metric_ton', optional(optional($customerPricing))->per_metric_ton) }}" autofocus>
+                                            </div>
+                                        </div>
+
 
                                         <div class="col-lg-12 justify-content-center text-center mt-5">
                                             <div class="form-group">

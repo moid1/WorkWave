@@ -122,7 +122,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>TDF</th>
+                    <th>Steel</th>
                     <th>Date ({{ $data->created_at->format('M d Y') }})</th>
                     <th>Time ({{ $data->created_at->format('H:i:s') }})</th>
                     <th>DRIVER ({{ $data->driver->name }})</th>
@@ -145,6 +145,12 @@
                 <tr>
                     <td></td>
                     <td class=""></td>
+                    <td style="text-align: right;">Per Metric Ton</td>
+                    <td class="">{{ $data->customerPricing->per_metric_ton }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class=""></td>
                     <td style="text-align: right;">Total Weight Metric Tons</td>
                     <td>{{ number_format(($data->steel->start_weight - $data->steel->end_weight) / 2240, 2) }}</td>
                 </tr>
@@ -153,6 +159,7 @@
                     <td class="">{{ $data->steel->bol }}</td>
                     <td style="text-align: right;">Total</td>
                     <td>
+                        {{ number_format((($data->steel->start_weight - $data->steel->end_weight) / 2240) *$data->customerPricing->per_metric_ton ?? 0, 2) }}
                     </td>
                 </tr>
                 <tr>

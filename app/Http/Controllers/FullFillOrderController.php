@@ -191,8 +191,8 @@ class FullFillOrderController extends Controller
             $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            // $output = $pdf->output();
-            return $pdf->stream();
+            $output = $pdf->output();
+            // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
@@ -379,8 +379,8 @@ class FullFillOrderController extends Controller
     public function tdfOrderCreate(Request $request)
     {
 
-        $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        // $pdfTypes = ['Generator'];
+        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        $pdfTypes = ['Generator'];
         $folderPath = 'signatures/';
 
         $image_parts = explode(";base64,", $request->signed);
@@ -414,12 +414,14 @@ class FullFillOrderController extends Controller
 
         $order->update();
         $fullFillOrder['order'] = $order;
+        $fullFillOrder['tdf'] = $fullFillOrder;
+        $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
+        $fullFillOrder['customerPricing'] = $customerPricing;
 
         $manifestPDF = new ManifestPDF();
         $manifestPDF->order_id = $request->order_id;
         $manifestPDF->customer_id = $order->customer_id;
 
-        $pdfArray = array();
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $pdf = \App::make('dompdf.wrapper');
@@ -515,8 +517,8 @@ class FullFillOrderController extends Controller
             $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            // $output = $pdf->output();
-            return $pdf->stream();
+            $output = $pdf->output();
+            // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
@@ -601,8 +603,8 @@ class FullFillOrderController extends Controller
             $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            // $output = $pdf->output();
-            return $pdf->stream();
+            $output = $pdf->output();
+            // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);

@@ -467,8 +467,12 @@
                                 <div class="box">
                                     <span>Completion %</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{ number_format((optional($adminSettings)->total_tons_need / 12) / $materialShippedData['totalTonsDelivered'], 2) }}</span>
+                                        @if($materialShippedData['totalTonsDelivered'] > 0)
+                                            <span>{{ number_format((optional($adminSettings)->total_tons_need / 12) / $materialShippedData['totalTonsDelivered'], 2) }}</span>
                                         &nbsp;
+                                        @else
+                                            <span>N/A</span>
+                                        @endif
 
                                     </div>
                                 </div>

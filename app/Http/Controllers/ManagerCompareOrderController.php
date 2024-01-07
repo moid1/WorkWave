@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerPricing;
 use App\Models\ManagerCompareOrder;
+use App\Models\ManifestPDF;
 use App\Models\Order;
 use App\Models\StateWeight;
 use App\Models\SteelOrder;
@@ -159,41 +160,58 @@ class ManagerCompareOrderController extends Controller
 
         $pdf = \App::make('dompdf.wrapper');
         $order['customerPricing'] = $customerPricing;
-
+        $output = null;
 
         if ($order && $order->load_type == 'box_truck_route') {
             $customPaper = array(0, 0, 1000, 2000);
             $pdf->setPaper($customPaper);
 
             $pdf->loadView('countsheet.index', ['data' => $order]);
-            // $output = $pdf->output();
-            return $pdf->stream();
+            $output = $pdf->output();
+            // return $pdf->stream();
         } else if ($order && $order->load_type == 'tdf') {
             $pdf->setPaper('landscape');
 
             $pdf->loadView('countsheet.tdf', ['data' => $order]);
-            // $output = $pdf->output();
-            return $pdf->stream();
+            $output = $pdf->output();
+            // return $pdf->stream();
         } else if ($order && $order->load_type == 'trailer_swap') {
             $pdf->setPaper('landscape');
 
             $pdf->loadView('countsheet.trailerswap', ['data' => $order]);
-            // $output = $pdf->output();
-            return $pdf->stream();
+            $output = $pdf->output();
+            // return $pdf->stream();
         } else if ($order && $order->load_type == 'state') {
             $isStateWeight = StateWeight::where('order_id', $order->id)->exists();
             if ($isStateWeight) {
                 $pdf->setPaper('landscape');
                 $pdf->loadView('countsheet.state_weight', ['data' => $order]);
-                // $output = $pdf->output();
-                return $pdf->stream();
+                $output = $pdf->output();
+                // return $pdf->stream();
             }
         } else if ($order && $order->load_type == 'steel') {
             $pdf->setPaper('landscape');
             $pdf->loadView('countsheet.steel', ['data' => $order]);
-            // $output = $pdf->output();
-            return $pdf->stream();
+            $output = $pdf->output();
+            // return $pdf->stream();
         }
+
+        $pdfPath = public_path() . '/countsheets/' . time() . '.pdf';
+        $abPDFPath  = 'countsheets/' . time() . '.pdf';
+        file_put_contents($pdfPath, $output);
+
+        $manifestPDF = ManifestPDF::where('order_id', $order->id)->latest()->first();
+        if($manifestPDF){
+            $manifestPDF->count_sheet = $abPDFPath;
+            $manifestPDF->update();
+        }else{
+            $manifestPDF = new ManifestPDF();
+            $manifestPDF->order_id = $order->id;
+            $manifestPDF->customer_id = $order->customer_id;
+            $manifestPDF->count_sheet = $abPDFPath;
+            $manifestPDF->save();
+        }
+       return $pdf->stream();
     }
 
     public function generateWeightSheet($id)
