@@ -188,7 +188,7 @@
                                 @php
                                     $totalSum = 0;
                                 @endphp
-                                @if ($data->load_type == 'box_truck_route')
+                                @if ($data->order->load_type == 'box_truck_route')
                                     @php
                                         $typesOfPassangerTires = !empty($data->type_of_passenger) ? json_decode($data->type_of_passenger, true) : [];
                                         $typesOfTruckTires = !empty($data->type_of_truck_tyre) ? json_decode($data->type_of_truck_tyre, true) : [];
@@ -359,28 +359,29 @@
                                         $totalSum = (($data->tdf->end_weight - $data->tdf->start_weight) / 2000) * $data->customerPricing->price_per_ton;
                                     }
                                 @endphp
-                                @if($data->order->load_type !== 'state')
-                                <tr style="text-align: right;">
-                                    <!-- Total $ - 1 -->
-                                    <div class="mt-2 ">
-                                        <label class="inputLabel inputLabelSmall">Total $</label>
+                                @if ($data->order->load_type !== 'state')
+                                    <tr style="text-align: right;">
+                                        <!-- Total $ - 1 -->
+                                        <div class="mt-2 ">
+                                            <label class="inputLabel inputLabelSmall">Total $</label>
 
-                                        <input type="text" name=""
-                                            value="{{ number_format($totalSum, 2) }}"
-                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:70px;margin-right:5em;" />
-                                    </div>
-                                </tr>
+                                            <input type="text" name=""
+                                                value="{{ number_format($totalSum, 2) }}"
+                                                style="background:none;border:none;border-bottom: 1px solid #333;max-width:70px;margin-right:5em;" />
+                                        </div>
+                                    </tr>
                                 @endif
-                                @if($data->order->load_type !== 'state')
-                                <tr style="text-align: right;">
-                                    <div class="mt-2 ">
-                                        <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Sales Tax
-                                            $</label>
-                                        <input type="text" name=""
-                                            value="{{ $data->order->customer->tax ?? 0 }}%"
-                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
-                                    </div>
-                                </tr>
+                                @if ($data->order->load_type !== 'state')
+                                    <tr style="text-align: right;">
+                                        <div class="mt-2 ">
+                                            <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Sales
+                                                Tax
+                                                $</label>
+                                            <input type="text" name=""
+                                                value="{{ $data->order->customer->tax ?? 0 }}%"
+                                                style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
+                                        </div>
+                                    </tr>
                                 @endif
 
                                 @php
@@ -394,7 +395,7 @@
                                             $totalSumWithTax += $totalSum;
                                             $totalSumWithTax = number_format($totalSumWithTax, 2);
                                         }
-                                    }else{
+                                    } else {
                                         $totalSumWithTax = number_format($totalSum, 2);
                                     }
                                 @endphp
@@ -491,6 +492,11 @@
                                         <label class="inputLabel">Signature</label>
                                     </div>
                                 </tr>
+                                @if ($data->driver_signature)
+                                <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
+                                    src="{{ $data->driver_signature }}" class="" alt="">
+                                @endif
+
 
                                 <tr>
                                     <div class="row">
@@ -561,10 +567,6 @@
                                         <label class="inputLabel">Signature</label>
                                     </div>
                                 </tr>
-                                @if ($data->driver_signature)
-                                    <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
-                                        src="{{ $data->driver_signature }}" class="" alt="">
-                                @endif
 
                             </tbody>
                         </table>

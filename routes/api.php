@@ -37,3 +37,7 @@ Route::get('/get-all-managers', [ManagerController::class, 'apiGetAllManagers'])
 Route::get('/get-all-drivers', [ManagerController::class, 'apiGetAllDrivers'])->middleware('auth:sanctum');
 Route::get('/get-all-customer-notes', [NotesController::class, 'apiGetAllCustomersNotes'])->middleware('auth:sanctum');
 Route::post('/change-password', [AuthController::class, 'apiChangePassword'])->middleware('auth:sanctum');
+
+//Customers
+
+Route::get('get-customers-order', [CustomerController::class, 'apiGetCustomerOrders'])->middleware('auth:sanctum');

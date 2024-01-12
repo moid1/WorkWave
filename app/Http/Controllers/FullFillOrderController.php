@@ -13,6 +13,7 @@ use App\Models\SteelOrder;
 use App\Models\TdfOrder;
 use App\Models\TrailerSwapOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class FullFillOrderController extends Controller
 {
@@ -263,41 +264,7 @@ class FullFillOrderController extends Controller
         return view('orders.fulfill.index', compact('orders'));
     }
 
-    public function getTotalWeight($request)
-    {
-        // 'full_fill_orders_id' => $fullFillOrder->id,
-        // 'lawnmowers_atvmotorcycle' => $request->lawnmowers_atvmotorcycle ?? null,
-        // 'lawnmowers_atvmotorcyclewithrim' => $request->lawnmowers_atvmotorcyclewithrim ?? null,
-        // 'passanger_lighttruck' => $request->passanger_lighttruck ?? null,
-        // 'passanger_lighttruckwithrim' => $request->passanger_lighttruckwithrim ?? null,
-        // 'semi_truck' => $request->semi_truck ?? null,
-        // 'semi_super_singles' => $request->semi_super_singles ?? null,
-        // 'semi_truck_with_rim' => $request->semi_truck_with_rim ?? null,
-        $lawnmowers_atvmotorcycle = 15;
-        $lawnmowers_atvmotorcycle_with_rim = 15;
-        $passanger_lighttruck = 25;
-        $passanger_lighttruckwithrim = 25;
-        $semi_truck = 110;
-        $semi_super_singles = 125;
-        $semi_truck_with_rim = 110;
 
-        $totalPassangerTiresWeight = 0;
-        $totalTruckTiresWeight = 0;
-
-        $totalPassangerTiresWeight = ($request->lawnmowers_atvmotorcycle * $lawnmowers_atvmotorcycle) +
-            ($request->lawnmowers_atvmotorcyclewithrim * $lawnmowers_atvmotorcycle_with_rim) +
-            ($request->passanger_lighttruck * $passanger_lighttruck) +
-            ($request->passanger_lighttruckwithrim * $passanger_lighttruckwithrim);
-
-        $totalTruckTiresWeight = ($request->semi_truck * $semi_truck) +
-            ($request->semi_super_singles * $semi_super_singles) +
-            ($request->semi_truck_with_rim) * $semi_truck_with_rim;
-
-        return [
-            'totalPassangerTiresWeight' => $totalPassangerTiresWeight,
-            'totalTruckTiresWeight' => $totalTruckTiresWeight
-        ];
-    }
 
     public function compareOrder($id)
     {
@@ -305,63 +272,6 @@ class FullFillOrderController extends Controller
         return view('manager.compare.compare', compact('order'));
     }
 
-    public function compareOrderPost(Request $request)
-    {
-        $order = Order::find($request->order_id);
-        $fullFill = FullFillOrder::where('order_id', $order->id)->latest()->first();
-        $tyreFulFil = FulfilTyre::where('full_fill_orders_id', $fullFill->id)->first();
-        $isEveryThingOK = true;
-        $errorsArray = [];
-        if ($order && $fullFill) {
-            if ($request->passenger_tire != $fullFill->no_of_passenger) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'Passanger Tire Counting is different';
-            }
-            if ($request->lawnmowers_atvmotorcycle != $tyreFulFil->lawnmowers_atvmotorcycle) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'No of Lawnmowers/ATVMotorcycle Counting is different';
-            }
-            if ($request->lawnmowers_atvmotorcyclewithrim != $tyreFulFil->lawnmowers_atvmotorcyclewithrim) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'Lawnmowers/ATVMotorcycle With Rim Counting is different';
-            }
-            if ($request->passanger_lighttruck != $tyreFulFil->passanger_lighttruck) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'Passanger/Light truck Counting is different';
-            }
-            if ($request->passanger_lighttruckwithrim != $tyreFulFil->passanger_lighttruckwithrim) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'Passanger/Light truck with Rim Counting is different';
-            }
-            if ($request->truck_tire != $fullFill->no_of_truck_tyre) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'Truck Tires Counting is different';
-            }
-
-            if ($request->semi_truck != $tyreFulFil->semi_truck) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'No of Semi Truck Counting is different';
-            }
-            if ($request->semi_super_singles != $tyreFulFil->semi_super_singles) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'Semi Super Singles Counting is different';
-            }
-            if ($request->semi_truck_with_rim != $tyreFulFil->semi_truck_with_rim) {
-                $isEveryThingOK = false;
-                $errorsArray[] = 'Semi Truck With Rim Counting is different';
-            }
-        }
-
-        if ($isEveryThingOK) {
-            $order->status = 'compared';
-            $order->update();
-            return back()->with('success', 'Tire Counting is Same');
-        } else {
-            $order->status = 'error-compared';
-            $order->update();
-            return back()->with('error', $errorsArray);
-        }
-    }
 
     public function loadByWeight($id)
     {
@@ -376,11 +286,133 @@ class FullFillOrderController extends Controller
         return view('orders.fulfill.create', compact('order', 'registrationNos'));
     }
 
+    public function getTotalWeightOfOrder($todayOrder)
+    {
+        $typesOfPassangerTires = !empty($todayOrder->fulfilled->type_of_passenger) ? json_decode($todayOrder->fulfilled->type_of_passenger, true) : [];
+        $typesOfTruckTires = !empty($todayOrder->fulfilled->type_of_truck_tyre) ? json_decode($todayOrder->fulfilled->type_of_truck_tyre, true) : [];
+        $typesOfAgriTires = !empty($todayOrder->fulfilled->type_of_agri_tyre) ? json_decode($todayOrder->fulfilled->type_of_agri_tyre, true) : [];
+        $typesOfOtherTires = !empty($todayOrder->fulfilled->type_of_other) ? json_decode($todayOrder->fulfilled->type_of_other, true) : [];
+
+        //for single passanger
+        $lawnmowers_atvmotorcycle = 0;
+        $lawnmowers_atvmotorcyclewithrim = 0;
+        $passanger_lighttruck = 0;
+        $passanger_lighttruckwithrim = 0;
+        foreach ($typesOfPassangerTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'lawnmowers_atvmotorcycle') {
+                    $lawnmowers_atvmotorcycle = $value;
+                } elseif ($key == 'lawnmowers_atvmotorcyclewithrim') {
+                    $lawnmowers_atvmotorcyclewithrim = $value;
+                } elseif ($key == 'passanger_lighttruck') {
+                    $passanger_lighttruck = $value;
+                } elseif ($key == 'passanger_lighttruckwithrim') {
+                    $passanger_lighttruckwithrim = $value;
+                }
+            }
+        }
+
+
+
+        //for single truck
+        $semi_truck = 0;
+        $semi_super_singles = 0;
+        $semi_truck_with_rim = 0;
+        foreach ($typesOfTruckTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'semi_truck') {
+                    $semi_truck = $value;
+                } elseif ($key == 'semi_super_singles') {
+                    $semi_super_singles = $value;
+                } elseif ($key == 'semi_truck_with_rim') {
+                    $semi_truck_with_rim = $value;
+                }
+            }
+        }
+
+        // for single agri
+
+        $ag_med_truck_19_5_skid_steer = 0;
+        $ag_med_truck_19_5_with_rim = 0;
+        $farm_tractor_last_two_digits = 0;
+
+        foreach ($typesOfAgriTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'ag_med_truck_19_5_skid_steer') {
+                    $ag_med_truck_19_5_skid_steer = $value;
+                } elseif ($key == 'ag_med_truck_19_5_with_rim') {
+                    $ag_med_truck_19_5_with_rim = $value;
+                } elseif ($key == 'farm_tractor_last_two_digits') {
+                    $farm_tractor_last_two_digits = $value;
+                }
+            }
+        }
+
+        $driver_15_5_24 = 0;
+        $driver_17_5_25 = 0;
+        $driver_20_5_25 = 0;
+        $driver_23_5_25 = 0;
+        $driver_26_5_25 = 0;
+        $driver_29_5_25 = 0;
+        $driver_24_00R35 = 0;
+        $driver_13_00_24 = 0;
+        $driver_14_00_24 = 0;
+        $driver_19_5L_24 = 0;
+
+        foreach ($typesOfOtherTires as $item) {
+            foreach ($item as $key => $value) {
+                switch ($key) {
+                    case '15_5_24':
+                        $driver_15_5_24 = $value;
+                        break;
+                    case '17_5_25':
+                        $driver_17_5_25 = $value;
+                        break;
+                    case '20_5_25':
+                        $driver_20_5_25 = $value;
+                        break;
+                    case '23_5_25':
+                        $driver_23_5_25 = $value;
+                        break;
+                    case '26_5_25':
+                        $driver_26_5_25 = $value;
+                        break;
+                    case '29_5_25':
+                        $driver_29_5_25 = $value;
+                        break;
+                    case '24_00R35':
+                        $driver_24_00R35 = $value;
+                        break;
+                    case '13_00_24':
+                        $driver_13_00_24 = $value;
+                        break;
+                    case '14_00_24':
+                        $driver_14_00_24 = $value;
+                        break;
+                    case '19_5L_24':
+                        $driver_19_5L_24 = $value;
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        }
+
+        $passangerTotal = $passanger_lighttruckwithrim * 25 + $passanger_lighttruck * 15 + $lawnmowers_atvmotorcyclewithrim * 25 + $lawnmowers_atvmotorcycle * 15;
+        $truckTotal = $semi_truck * 110 + $semi_super_singles * 110 + $semi_truck_with_rim * 125;
+        $agriTotal = $farm_tractor_last_two_digits * 5 + $ag_med_truck_19_5_with_rim * 60 + $ag_med_truck_19_5_skid_steer * 60;
+        $otherTotal = $driver_19_5L_24 * 192 + $driver_14_00_24 * 293 + $driver_13_00_24 * 158 + $driver_24_00R35 * 1816 + $driver_29_5_25 * 1279 + $driver_26_5_25 * 1000 + $driver_23_5_25 * 551 + $driver_20_5_25 * 330 + $driver_17_5_25 * 300 + $driver_15_5_24 * 158;
+        $allTotal  = $passangerTotal + $truckTotal + $agriTotal + $otherTotal;
+        return $allTotal;
+    }
+
+
     public function tdfOrderCreate(Request $request)
     {
 
-        // $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        $pdfTypes = ['Generator'];
+        $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        // $pdfTypes = ['Generator'];
         $folderPath = 'signatures/';
 
         $image_parts = explode(";base64,", $request->signed);
@@ -404,8 +436,32 @@ class FullFillOrderController extends Controller
             'cx_signature' => $file
         ]);
 
-        $fullFillOrder = TdfOrder::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed']));
+        //TODO: NEED TO FETCH TRAILERSWAP and BOXTRUCK ORDERS FOR CURRENT DAY.
+        $today = Carbon::now()->toDateString();
+        $todayOrders = Order::whereDate('created_at', $today)
+            ->whereIn('load_type', ['box_truck_route', 'trailer_swap'])
+            ->where('is_pick_tdf', false)
+            ->with('fulfilled')->get();
+        $totalWeightTillOrder = 0;
+        $tdfAssignedOrder = [];
+        // Need to get total Weight for 40K
+        foreach ($todayOrders as $key => $todayOrder) {
+            if ($todayOrder->load_type == 'box_truck_route') {
+                if ($totalWeightTillOrder >= 40000) {
+                    break;
+                }
+                $totalWeightTillOrder += $this->getTotalWeightOfOrder($todayOrder);
+                $todayOrder->load_value = $totalWeightTillOrder;
 
+                $tdfAssignedOrder[] = $todayOrder->id;
+                $todayOrder->is_pick_tdf = true;
+                $todayOrder->update();
+            }
+        }
+
+        $fullFillOrder = TdfOrder::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed']));
+        $fullFillOrder->recyle_order =  implode(',', $tdfAssignedOrder);
+        $fullFillOrder->update();
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
 
@@ -421,18 +477,20 @@ class FullFillOrderController extends Controller
         $manifestPDF = new ManifestPDF();
         $manifestPDF->order_id = $request->order_id;
         $manifestPDF->customer_id = $order->customer_id;
-
+        $test = null;
+        $fullFillOrder['todaysOrder'] = $todayOrders;
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $pdf = \App::make('dompdf.wrapper');
 
             $customPaper = array(0, 0, 900, 1300);
             $pdf->setPaper($customPaper);
-            $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
+            $pdf->loadView('manifest.tdf', ['data' => $fullFillOrder]);
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $output = $pdf->output();
-            // return $pdf->stream();
+            $test = $pdf;
+
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
@@ -459,7 +517,7 @@ class FullFillOrderController extends Controller
             //  return view('manifest.index');
         }
         $manifestPDF->save();
-
+        return $test->stream();
 
         return redirect('/driver-orders')->with('success', 'Manifest has been created successfully');
     }

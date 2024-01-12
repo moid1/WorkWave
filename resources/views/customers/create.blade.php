@@ -24,7 +24,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>Business Name</label>
-                                                        <input id="business_name" type="text" class="form-control @error('business_name') is-invalid @enderror" name="business_name" value="{{ old('business_name') }}" required autofocus>
+                                                        <input id="business_name" type="text" class="form-control @error('business_name') is-invalid @enderror" name="business_name" value="{{ old('business_name') }}"  autofocus>
                                                         @error('business_name')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -49,7 +49,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>No to Physical Address</label>
-                                                        <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" required >
+                                                        <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}"  >
 
                                                         @error('address')
                                                             <span class="invalid-feedback" role="alert">
@@ -62,7 +62,7 @@
                                             <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>Phone #</label>
-                                                        <input id="phone_no" type="text" class="form-control @error('phone_no') is-invalid @enderror" name="phone_no" required>
+                                                        <input id="phone_no" type="text" class="form-control @error('phone_no') is-invalid @enderror" name="phone_no" >
 
                                                         @error('phone_no')
                                                             <span class="invalid-feedback" role="alert">
@@ -76,7 +76,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Company Registration#</label>
-                                                    <input id="company_registration" type="text" class="form-control @error('company_registration') is-invalid @enderror" name="company_registration" required>
+                                                    <input id="company_registration" type="text" class="form-control @error('company_registration') is-invalid @enderror" name="company_registration" >
 
                                                     @error('company_registration')
                                                         <span class="invalid-feedback" role="alert">
@@ -90,7 +90,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>POC Name</label>
-                                                    <input id="poc_name" type="text" class="form-control @error('poc_name') is-invalid @enderror" name="poc_name" value="{{ old('poc_name') }}" required autofocus>
+                                                    <input id="poc_name" type="text" class="form-control @error('poc_name') is-invalid @enderror" name="poc_name" value="{{ old('poc_name') }}"  autofocus>
                                                     @error('poc_name')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -180,7 +180,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Tax</label>
-                                                    <input id="tax" type="number" step="0.1" class="form-control @error('tax') is-invalid @enderror" name="tax" value="{{ old('tax') }}"  autofocus>
+                                                    <input id="tax" type="number" step="0.01" class="form-control @error('tax') is-invalid @enderror" name="tax" value="{{ old('tax') }}"  autofocus>
                                                     @error('tax')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>

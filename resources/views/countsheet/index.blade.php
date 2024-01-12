@@ -118,7 +118,10 @@
 
 <body>
     <h2 style="text-align: center">Driver Count and Calculations Table</h2>
-    <p style="margin-top: 40px; margin-bottom: 30px">Pick Up Earliest Time ____</p>
+    <div class="" style="display: flex">
+        <p style="margin-top: 40px; margin-bottom: 10px"><span style="font-weight: bold"> Business Name:</span> {{$data->customer->business_name}}</p>
+        <p style=""><span style="font-weight: bold">Address:</span> {{$data->customer->address}}</p>
+</div>
     @php
         $typesOfPassangerTires = !empty($data->fulfilled->type_of_passenger) ? json_decode($data->fulfilled->type_of_passenger, true) : [];
         $typesOfTruckTires = !empty($data->fulfilled->type_of_truck_tyre) ? json_decode($data->fulfilled->type_of_truck_tyre, true) : [];

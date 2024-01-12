@@ -24,17 +24,19 @@
 
                                 </thead>
                                 <tbody>
-                                    @foreach ($orders as $order)
-                                    <tr>
-                                        <td>000{{$order->id}}</td>
-                                        <td>000{{$order->created_at}}</td>
-                                        <td><a href="{{url($order->manifest->generator)}}"> Manifest</a></td>
-                                        <td><a href="{{url($order->manifest->transporter)}}"> Manifest</a></td>
-                                        <td><a href="{{url($order->manifest->processor)}}"> Manifest</a></td>
-                                        <td><a href="{{url($order->manifest->disposal)}}"> Manifest</a></td>
-                                        <td><a href="{{url($order->manifest->original_generator)}}"> Manifest</a></td>
-                                    </tr>
-                                    @endforeach
+                                    @if($orders && count($orders))
+                                        @foreach ($orders as $order)
+                                        <tr>
+                                            <td>000{{$order->id}}</td>
+                                            <td>000{{$order->created_at}}</td>
+                                            <td><a href="{{url($order->manifest->generator ?? '')}}"> Manifest</a></td>
+                                            <td><a href="{{url($order->manifest->transporter ?? '')}}"> Manifest</a></td>
+                                            <td><a href="{{url($order->manifest->processor ?? '')}}"> Manifest</a></td>
+                                            <td><a href="{{url($order->manifest->disposal ?? '')}}"> Manifest</a></td>
+                                            <td><a href="{{url($order->manifest->original_generator ?? '')}}"> Manifest</a></td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
 
                                 </tbody>
                             </table>

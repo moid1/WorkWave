@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\ManifestPDF;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,8 +39,7 @@ class CustomerController extends Controller
             'business_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:customers', 'unique:users'],
             'address' => ['required', 'string'],
-            'phone_no' => ['required', 'string', 'min:8'],
-            'poc_name' => ['required', 'string', 'max:255'],
+            'phone_no' => ['required', 'string', 'min:8']
         ]);
         $user =  User::create([
             'name' => $request->business_name,
@@ -185,6 +185,32 @@ class CustomerController extends Controller
                 'message' => 'Customers Manifest',
                 'data' => $pdfManifest,
             ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function apiGetCustomerOrders()
+    {
+        try {
+            $user = Auth::user();
+            if ($user && $user->type == 3) {
+                $customerId = Customer::where('user_id', Auth::id())->first()->only('id');
+                $orders = Order::where('customer_id', $customerId['id'])->with(['manifest', 'user', 'driver', 'customer'])->get();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Customer Orders',
+                    'data' => $orders,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You dont have access'
+                ], 500);
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

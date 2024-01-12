@@ -152,14 +152,14 @@
                     <td></td>
                     <td class=""></td>
                     <td style="text-align: right;">Total Weight Metric Tons</td>
-                    <td>{{ number_format(($data->steel->start_weight - $data->steel->end_weight) / 2240, 2) }}</td>
+                    <td>{{ number_format(($data->steel->end_weight - $data->steel->start_weight) / 2240, 2) }}</td>
                 </tr>
                 <tr>
                     <td>Bol #</td>
                     <td class="">{{ $data->steel->bol }}</td>
                     <td style="text-align: right;">Total</td>
                     <td>
-                        {{ number_format((($data->steel->start_weight - $data->steel->end_weight) / 2240) *$data->customerPricing->per_metric_ton ?? 0, 2) }}
+                        {{ number_format((($data->steel->end_weight - $data->steel->start_weight) / 2240) *$data->customerPricing->per_metric_ton ?? 0, 2) }}
                     </td>
                 </tr>
                 <tr>

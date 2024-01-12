@@ -261,7 +261,7 @@
                 </tr>
 
                 @php
-                    $truckTotal = $semi_truck * 110 + $semi_truck * 110 + $semi_truck * 125;
+                    $truckTotal = $semi_truck * 110 + $semi_super_singles * 110 + $semi_truck_with_rim * 125;
                 @endphp
                 <tr style="border: none;">
                     <td style="border: none;" colspan="2"></td>
