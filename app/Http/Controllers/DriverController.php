@@ -6,7 +6,7 @@ use App\Models\Driver;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
-use PDO;
+use Illuminate\Support\Facades\Hash;
 
 class DriverController extends Controller
 {
@@ -89,5 +89,24 @@ class DriverController extends Controller
         $driver = User::find($id);
         return view('driver.orders', compact('orders', 'driver'));
 
+    }
+
+    public function showDriverDetails($id){
+      $user = User::find($id);
+      return view('driver.show', compact('user'));
+    }
+
+    public function updateDriver(Request $request){
+        $user = User::find($request->user_id);
+        if($user){
+            $user->name = $request->name;
+            $user->driver_license = $request->driver_license;
+            if ($request->password)
+                $user->password = Hash::make($request->password);
+
+            $user->update();
+
+            return back()->with('success', 'Driver is updated successfully');
+        }
     }
 }

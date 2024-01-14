@@ -357,9 +357,9 @@
                                     if ($data->order->load_type == 'trailer_swap') {
                                         $totalSum = $data->customerPricing->swap_total;
                                     } elseif (!empty($data->orderType) && $data->orderType == 'stateWeight') {
-                                        $totalSum = ($data->stateOrder->end_weight - $data->stateOrder->start_weight) * $data->customerPricing->price_per_lb;
+                                        $totalSum = (abs($data->stateOrder->end_weight - $data->stateOrder->start_weight)) * $data->customerPricing->price_per_lb;
                                     } elseif ($data->order->load_type == 'tdf') {
-                                        $totalSum = (($data->tdf->end_weight - $data->tdf->start_weight) / 2000) * $data->customerPricing->price_per_ton;
+                                        $totalSum = (abs($data->tdf->end_weight - $data->tdf->start_weight) / 2000) * $data->customerPricing->price_per_ton;
                                     }
                                 @endphp
                                 @if ($data->order->load_type !== 'state')
@@ -1360,10 +1360,10 @@
                                             <label class="inputLabel">Print Name</label>
                                         </div>
                                     </tr>
-                                    @if ($todayOrder->fulfilled->driver_signature)
-                                    <img style="display:inline-block;width:70%;border:none;"
-                                        src="{{ $todayOrder->fulfilled->driver_signature }}" class="" alt="">
-                                @endif
+                                    @if (!empty($todayOrder->fulfilled) && $todayOrder->fulfilled->driver_signature)
+                                        <img style="display:inline-block;width:70%;border:none;"
+                                            src="{{ $todayOrder->fulfilled->driver_signature }}" class="" alt="">
+                                    @endif
                                     <tr>
                                         <div class="">
                                             <input type="text" name="" value=""

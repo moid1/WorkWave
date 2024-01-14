@@ -56,7 +56,7 @@ class HomeController extends Controller
             $notAssignedTrucksArr = [];
             foreach ($boxTruckOrdersWithDriver as $order) {
                 $assignedTruck = TruckDriver::where('user_id', $order->driver_id)->with('truck')->first();
-                if ($assignedTruck) {
+                if ($assignedTruck && $assignedTruck->truck) {
                     $assignedTrucksNameArr[] = $assignedTruck->truck->name;
                     $assignedTrucksArr[] = $assignedTruck->truck->id;
                 }

@@ -122,7 +122,7 @@
             var endWeight = parseFloat($("#endWeight").val()) || 0;
 
             // Calculate the total weight
-            var totalWeight =startWeight - endWeight  ;
+            var totalWeight = Math.abs(startWeight - endWeight);
 
             // Update the totalWeight input field
             if(startWeight && endWeight)

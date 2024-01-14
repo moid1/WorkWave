@@ -39,13 +39,17 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //Register Manager
 Route::get('/register-manager',  [UserController::class, 'index'])->name('register.manager');
+Route::get('/manager/{id}',  [UserController::class, 'showManagerDetails'])->name('manager.show');
 Route::post('/create-manager',  [UserController::class, 'createManager'])->name('create.manager');
+Route::post('/update-manager',  [UserController::class, 'updateManager'])->name('manager.update');
 
-//Register Manager
+//Register Driver
 Route::get('/register-driver',  [DriverController::class, 'index'])->name('register.driver');
 Route::post('/create-driver',  [DriverController::class, 'store'])->name('create.driver');
 Route::get('/driver-delete/{id}',  [DriverController::class, 'deleteDriver'])->name('driver.delete');
 Route::get('/get-driver-orders/{id}', [DriverController::class, 'getOrders'])->name('driver.orders');
+Route::get('/driver/{id}', [DriverController::class, 'showDriverDetails'])->name('driver.show');
+Route::post('/update-driver',  [DriverController::class, 'updateDriver'])->name('driver.update');
 
 
 //Customers
