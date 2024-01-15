@@ -213,9 +213,10 @@ class OrderController extends Controller
 
     public function getTodaysManifestForDriver()
     {
+        $orderStatus = ['compared', 'fulfilled'];
         $orders = Order::whereDate('created_at', now()->toDateString())
-            ->where([['driver_id', Auth::id()], ['status', 'fulfilled']])->get();
-        
-            return view('orders.driver.manifest', compact('orders'));
+            ->where('driver_id', Auth::id())->whereIn('status', $orderStatus)->get();
+
+        return view('orders.driver.manifest', compact('orders'));
     }
 }

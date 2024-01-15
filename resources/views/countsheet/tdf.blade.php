@@ -152,7 +152,7 @@
                     <td>Bol #</td>
                     <td class=""></td>
                     <td style="text-align: right;">Total</td>
-                    <td>$ {{ number_format((($data->tdfOrder->end_weight - $data->tdfOrder->start_weight) / 2000) *
+                    <td>$ {{ number_format((abs($data->tdfOrder->end_weight - $data->tdfOrder->start_weight) / 2000) *
                         $data->customerPricing->price_per_ton, 2) }}
                     </td>
                 </tr>
@@ -164,7 +164,7 @@
                 </tr>
                 <tr>
                     <td>Manifest #</td>
-                    <td></td>
+                    <td>000{{$data->tdfOrder->order_id }}</td>
                     <td></td>
                     <td></td>
                 </tr>

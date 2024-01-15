@@ -918,10 +918,10 @@
                         <div class="col-6">
                             <label class="inputLabel">print name</label>
 
-                            @if ($data->customer_signature)
+                            {{-- @if ($data->customer_signature)
                                 <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
                                     src="{{ $data->customer_signature }}" class="" alt="">
-                            @endif
+                            @endif --}}
                         </div>
                     </td>
 
@@ -929,9 +929,9 @@
                         <div class="col-6">
                             <label class="inputLabel">print name</label>
 
-                            @if ($data->customer_signature)
+                            @if ($data->tdf->cx_signature)
                                 <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
-                                    src="{{ $data->customer_signature }}" class="" alt="">
+                                    src="{{ $data->tdf->cx_signature }}" class="" alt="">
                             @endif
                         </div>
                     </td>

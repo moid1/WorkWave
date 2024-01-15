@@ -193,6 +193,7 @@ class FullFillOrderController extends Controller
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $output = $pdf->output();
+            $test = $pdf;
             // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
@@ -220,7 +221,7 @@ class FullFillOrderController extends Controller
             //  return view('manifest.index');
         }
         $manifestPDF->save();
-
+        return $test->stream();
 
         return redirect('/driver-orders')->with('success', 'Manifest has been created successfully');
     }
@@ -651,7 +652,7 @@ class FullFillOrderController extends Controller
         $manifestPDF = new ManifestPDF();
         $manifestPDF->order_id = $request->order_id;
         $manifestPDF->customer_id = $order->customer_id;
-
+        $testPDF = null;
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $pdf = \App::make('dompdf.wrapper');
@@ -662,6 +663,7 @@ class FullFillOrderController extends Controller
 
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
             $output = $pdf->output();
+            $testPDF = $pdf;
             // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
             $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
@@ -689,6 +691,7 @@ class FullFillOrderController extends Controller
             //  return view('manifest.index');
         }
         $manifestPDF->save();
+            return $testPDF->stream();
 
 
         return redirect('/driver-orders')->with('success', 'Manifest has been created successfully');

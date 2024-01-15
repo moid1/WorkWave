@@ -42,7 +42,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Start Weight</label>
-                                                <input type="text" class="form-control  "name="start_weight"
+                                                <input id="startWeight" type="text" class="form-control  "name="start_weight"
                                                     value="{{ old('start_weight') }}" required>
                                             </div>
                                         </div>
@@ -50,14 +50,14 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>End Weight</label>
-                                                <input type="text" class="form-control  "name="end_weight"
+                                                <input id="endWeight" type="text" class="form-control  "name="end_weight"
                                                     value="{{ old('end_weight') }}" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Total Weight in LBS</label>
-                                                <input type="text" class="form-control  "name="total_weight_lbs"
+                                                <input id="totalWeight" type="text" class="form-control  "name="total_weight_lbs"
                                                     value="{{ old('total_weight_lbs') }}" required>
                                             </div>
                                         </div>
@@ -108,6 +108,23 @@
             e.preventDefault();
             sig.signature('clear');
             $("#signature64").val('');
+        });
+    </script>
+@endsection
+
+@section('pageSpecificJs')
+    <script>
+        $("#startWeight, #endWeight").on("input", function() {
+            // Get the values from the input fields
+            var startWeight = parseFloat($("#startWeight").val()) || 0;
+            var endWeight = parseFloat($("#endWeight").val()) || 0;
+
+            // Calculate the total weight
+            var totalWeight = Math.abs(startWeight - endWeight);
+
+            // Update the totalWeight input field
+            if(startWeight && endWeight)
+                $("#totalWeight").val(totalWeight.toFixed(2)); // You can adjust the decimal places as needed
         });
     </script>
 @endsection

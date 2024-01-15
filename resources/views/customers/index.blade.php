@@ -42,10 +42,6 @@
                                         <th>Address</th>
                                         <th>Phone#</th>
                                         <th>RTD Location</th>
-                                        <th>Passenger Pricing</th>
-                                        <th>Truck Pricing</th>
-                                        {{-- <th>Agri Pricing</th> --}}
-                                        <th>Other Pricing</th>
                                         <th>TAX</th>
                                         <th>2nd POC</th>
                                         <th>2nd Email</th>
@@ -72,12 +68,8 @@
                                         <td>{{$customer->address}}</td>
                                         <td>{{$customer->phone_no}}</td>
                                         <td>{{$customer->rtd_location ?? 'N/A'}}</td>
-                                        <td>{{$customer->passenger_pricing ?? '0'}}</td>
-                                        <td>{{$customer->truck_pricing ?? '0'}}</td>
-                                        {{-- <td>{{$customer->agri_pricing ?? '0'}}</td> --}}
-                                        <td>{{$customer->other ?? 'N/A'}}</td>
                                         <td>{{$customer->tax ?? 'N/A'}}</td>
-                                        <td>{{$customer->second_poc}}</td>
+                                        <td>{{$customer->second_poc ?? 'N/A'}}</td>
                                         <td>{{$customer->second_mail}}</td>
                                         <td>{{$customer->mail_phone}}</td>
                                         <td>{{$customer->charge_type}}</td>

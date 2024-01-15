@@ -36,7 +36,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'business_name' => ['required', 'string', 'max:255'],
+            'business_name' => ['required', 'string', 'max:255','unique:customers'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:customers', 'unique:users'],
             'address' => ['required', 'string'],
             'phone_no' => ['required', 'string', 'min:8']
