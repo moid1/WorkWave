@@ -144,10 +144,6 @@
                                     class="mdi mdi-calendar-check"></i><span> Books </span></a>
                         </li>
 
-                        <li>
-                            <a href="{{route('company.registration')}}" class="waves-effect"><i
-                                    class="mdi mdi-calendar-check"></i><span> Reg No </span></a>
-                        </li>
 
                         <li>
                             <a href="{{route('orders.fullfilled')}}" class="waves-effect"><i
@@ -167,6 +163,11 @@
                         <li>
                             <a href="{{route('admin.settings.index')}}" class="waves-effect"><i
                                     class="mdi mdi-calendar-check"></i><span> Admin Settings </span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('fill.manifest.index')}}" class="waves-effect"><i
+                                    class="mdi mdi-note"></i><span> Fill Manifest </span></a>
                         </li>
 
                         {{-- <li>

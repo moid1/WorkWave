@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\CompanyReg;
 use App\Models\CustomerPricing;
-use App\Models\FulfilTyre;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
 use App\Models\Order;
@@ -448,7 +447,8 @@ class FullFillOrderController extends Controller
         // Need to get total Weight for 40K
         foreach ($todayOrders as $key => $todayOrder) {
             if ($todayOrder->load_type == 'box_truck_route') {
-                if ($totalWeightTillOrder >= 40000) {
+                $lessThenWeight = abs((int) $request->start_weight) - ((int)$request->end_weight);
+                if ($totalWeightTillOrder >= $lessThenWeight) {
                     break;
                 }
                 $totalWeightTillOrder += $this->getTotalWeightOfOrder($todayOrder);
@@ -518,7 +518,7 @@ class FullFillOrderController extends Controller
             //  return view('manifest.index');
         }
         $manifestPDF->save();
-        return $test->stream();
+        // return $test->stream();
 
         return redirect('/driver-orders')->with('success', 'Manifest has been created successfully');
     }

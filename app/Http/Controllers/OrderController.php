@@ -219,4 +219,14 @@ class OrderController extends Controller
 
         return view('orders.driver.manifest', compact('orders'));
     }
+
+    public function getUnfilledManifest(){
+        $orders = Order::where('is_filled_by_manager', false)->get();
+        return view('orders.unfill.index', compact('orders'));
+    }
+
+    public function getUnfilledManifestOrder($id){
+        $order = Order::find($id);
+        return view('orders.unfill.create', compact('order'));
+    }
 }

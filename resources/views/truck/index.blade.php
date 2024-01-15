@@ -91,8 +91,8 @@
                                                     href="{{ route('change.truck.status', $truck->id) }}">{{ $truck->is_active ? 'Active' : 'InActive' }}</a>
                                             </td>
                                             <td>{{ $truck->truckDriver ? $truck->truckDriver->user->name : 'N/A' }}</td>
-                                            <td><a href="" class="update_driver"> <i class="mdi mdi-account "
-                                                        data-truck-id="{{ $truck->id }}" title="Update Driver"></i></a>
+                                            <td><a href="" class="update_driver" data-truck-id="{{ $truck->id }}"> <i class="mdi mdi-account "
+                                                         title="Update Driver"></i></a>
                                                 /
                                                 <a style="text-decoration: none;color:black"
                                                     href="{{ route('truck.update', $truck->id) }}"> <i

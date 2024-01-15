@@ -48,6 +48,7 @@ class HomeController extends Controller
                 ->count();
             $boxTruckOrders = Order::where('load_type', 'box_truck_route')
                 ->whereDate('created_at', now()->toDateString())
+                ->with(['fulfilled'])
                 ->get();
             $boxTruckOrdersWithDriver = $boxTruckOrders->whereNotNull('driver_id');
             $boxTruckOrdersWithoutDriver = $boxTruckOrders->whereNull('driver_id');
@@ -57,7 +58,11 @@ class HomeController extends Controller
             foreach ($boxTruckOrdersWithDriver as $order) {
                 $assignedTruck = TruckDriver::where('user_id', $order->driver_id)->with('truck')->first();
                 if ($assignedTruck && $assignedTruck->truck) {
-                    $assignedTrucksNameArr[] = $assignedTruck->truck->name;
+                    $weight = $this->getTotalWeightOfOrder($order);
+                    $assignedTrucksNameArr[] = [
+                        'truckName'  => $assignedTruck->truck->name,
+                        'is_overload' => $weight >=  16000 ? true : false
+                    ];
                     $assignedTrucksArr[] = $assignedTruck->truck->id;
                 }
             }
@@ -424,5 +429,127 @@ class HomeController extends Controller
             }
         }
         return array('totalLoads' => $ordersOfCurrentYear->count(), 'totalTonsDelivered' => $totalTonsDeliverd);
+    }
+
+    public function getTotalWeightOfOrder($todayOrder)
+    {
+        $typesOfPassangerTires = !empty($todayOrder->fulfilled->type_of_passenger) ? json_decode($todayOrder->fulfilled->type_of_passenger, true) : [];
+        $typesOfTruckTires = !empty($todayOrder->fulfilled->type_of_truck_tyre) ? json_decode($todayOrder->fulfilled->type_of_truck_tyre, true) : [];
+        $typesOfAgriTires = !empty($todayOrder->fulfilled->type_of_agri_tyre) ? json_decode($todayOrder->fulfilled->type_of_agri_tyre, true) : [];
+        $typesOfOtherTires = !empty($todayOrder->fulfilled->type_of_other) ? json_decode($todayOrder->fulfilled->type_of_other, true) : [];
+
+        //for single passanger
+        $lawnmowers_atvmotorcycle = 0;
+        $lawnmowers_atvmotorcyclewithrim = 0;
+        $passanger_lighttruck = 0;
+        $passanger_lighttruckwithrim = 0;
+        foreach ($typesOfPassangerTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'lawnmowers_atvmotorcycle') {
+                    $lawnmowers_atvmotorcycle = $value;
+                } elseif ($key == 'lawnmowers_atvmotorcyclewithrim') {
+                    $lawnmowers_atvmotorcyclewithrim = $value;
+                } elseif ($key == 'passanger_lighttruck') {
+                    $passanger_lighttruck = $value;
+                } elseif ($key == 'passanger_lighttruckwithrim') {
+                    $passanger_lighttruckwithrim = $value;
+                }
+            }
+        }
+
+
+
+        //for single truck
+        $semi_truck = 0;
+        $semi_super_singles = 0;
+        $semi_truck_with_rim = 0;
+        foreach ($typesOfTruckTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'semi_truck') {
+                    $semi_truck = $value;
+                } elseif ($key == 'semi_super_singles') {
+                    $semi_super_singles = $value;
+                } elseif ($key == 'semi_truck_with_rim') {
+                    $semi_truck_with_rim = $value;
+                }
+            }
+        }
+
+        // for single agri
+
+        $ag_med_truck_19_5_skid_steer = 0;
+        $ag_med_truck_19_5_with_rim = 0;
+        $farm_tractor_last_two_digits = 0;
+
+        foreach ($typesOfAgriTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'ag_med_truck_19_5_skid_steer') {
+                    $ag_med_truck_19_5_skid_steer = $value;
+                } elseif ($key == 'ag_med_truck_19_5_with_rim') {
+                    $ag_med_truck_19_5_with_rim = $value;
+                } elseif ($key == 'farm_tractor_last_two_digits') {
+                    $farm_tractor_last_two_digits = $value;
+                }
+            }
+        }
+
+        $driver_15_5_24 = 0;
+        $driver_17_5_25 = 0;
+        $driver_20_5_25 = 0;
+        $driver_23_5_25 = 0;
+        $driver_26_5_25 = 0;
+        $driver_29_5_25 = 0;
+        $driver_24_00R35 = 0;
+        $driver_13_00_24 = 0;
+        $driver_14_00_24 = 0;
+        $driver_19_5L_24 = 0;
+
+        foreach ($typesOfOtherTires as $item) {
+            foreach ($item as $key => $value) {
+                switch ($key) {
+                    case '15_5_24':
+                        $driver_15_5_24 = $value;
+                        break;
+                    case '17_5_25':
+                        $driver_17_5_25 = $value;
+                        break;
+                    case '20_5_25':
+                        $driver_20_5_25 = $value;
+                        break;
+                    case '23_5_25':
+                        $driver_23_5_25 = $value;
+                        break;
+                    case '26_5_25':
+                        $driver_26_5_25 = $value;
+                        break;
+                    case '29_5_25':
+                        $driver_29_5_25 = $value;
+                        break;
+                    case '24_00R35':
+                        $driver_24_00R35 = $value;
+                        break;
+                    case '13_00_24':
+                        $driver_13_00_24 = $value;
+                        break;
+                    case '14_00_24':
+                        $driver_14_00_24 = $value;
+                        break;
+                    case '19_5L_24':
+                        $driver_19_5L_24 = $value;
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        }
+
+        $passangerTotal = $passanger_lighttruckwithrim * 25 + $passanger_lighttruck * 15 + $lawnmowers_atvmotorcyclewithrim * 25 + $lawnmowers_atvmotorcycle * 15;
+        $truckTotal = $semi_truck * 110 + $semi_super_singles * 110 + $semi_truck_with_rim * 125;
+        $agriTotal = $farm_tractor_last_two_digits * 5 + $ag_med_truck_19_5_with_rim * 60 + $ag_med_truck_19_5_skid_steer * 60;
+        $otherTotal = $driver_19_5L_24 * 192 + $driver_14_00_24 * 293 + $driver_13_00_24 * 158 + $driver_24_00R35 * 1816 + $driver_29_5_25 * 1279 + $driver_26_5_25 * 1000 + $driver_23_5_25 * 551 + $driver_20_5_25 * 330 + $driver_17_5_25 * 300 + $driver_15_5_24 * 158;
+        $allTotal  = $passangerTotal + $truckTotal + $agriTotal + $otherTotal;
+        
+        return $allTotal;
     }
 }

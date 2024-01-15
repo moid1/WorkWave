@@ -17,6 +17,10 @@
         padding-top: 10px;
 
     }
+
+    .overloaded{
+        color: red
+    }
 </style>
 @section('content')
     <div class="page-content-wrapper ">
@@ -35,7 +39,7 @@
                                     <span>BOX Truck With Assigned Routes</span>
                                     <div class=" justify-content-center">
                                         @foreach ($dataArray['boxTruckassignedTrucks'] as $assignedTruck)
-                                            <span>{{ $assignedTruck }}</span> &nbsp;
+                                            <span class="{{$assignedTruck['is_overload'] ? 'overloaded' : ''}}">{{ $assignedTruck['truckName'] }}</span> &nbsp;
                                         @endforeach
 
 

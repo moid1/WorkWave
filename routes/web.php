@@ -14,7 +14,8 @@ use App\Http\Controllers\ManagerCompareOrderController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\TruckController;
-
+use App\Http\Controllers\UnfillManifestController;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -149,3 +150,7 @@ Route::get('generate-daily-count-sheet', [HomeController::class, 'generateDailyC
 
 Route::get('admin-settings', [AdminSettingsController::class, 'index'])->name('admin.settings.index');
 Route::post('admin-settings', [AdminSettingsController::class, 'store'])->name('admin.settings.store');
+
+Route::get('fill-manifest', [OrderController::class, 'getUnfilledManifest'])->name('fill.manifest.index');
+Route::get('fill-manifest/{id}', [OrderController::class, 'getUnfilledManifestOrder'])->name('unfill.manifest.order');
+Route::post('fill-manifest-order', [UnfillManifestController::class, 'store'])->name('unfill.fill.order');
