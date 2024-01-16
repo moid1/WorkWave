@@ -867,6 +867,7 @@
                             <label class="inputLabel">signature</label>
                             <input style="border-bottom: 1px solid #333;width:70%" type="number" name=""
                                 value="" class="" />
+                                
                         </div>
                     </td>
 
@@ -884,10 +885,10 @@
                         <div class="col-6">
                             <label class="inputLabel">print name</label>
 
-                            {{-- @if ($data->customer_signature)
+                            @if ($data->unfill && $data->unfill->signature)
                                 <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
-                                    src="{{ $data->customer_signature }}" class="" alt="">
-                            @endif --}}
+                                    src="{{ $data->unfill->signature }}" class="" alt="">
+                            @endif
                         </div>
                     </td>
 
@@ -895,10 +896,10 @@
                         <div class="col-6">
                             <label class="inputLabel">print name</label>
 
-                            {{-- @if ($data->customer_signature)
+                            @if ($data->unfill && $data->unfill->signature)
                                 <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
-                                    src="{{ $data->customer_signature }}" class="" alt="">
-                            @endif --}}
+                                    src="{{ $data->unfill->signature }}" class="" alt="">
+                            @endif
                         </div>
                     </td>
                 </tr>

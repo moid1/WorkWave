@@ -33,7 +33,29 @@ class UnfillManifestController extends Controller
      */
     public function store(Request $request)
     {
-        $unfillManifest = UnfillManifest::updateOrCreate(['order_id'=>$request->order_id], $request->all());
+        $folderPath = 'signatures/';
+
+        $image_parts = explode(";base64,", $request->signed);
+
+        $image_type_aux = explode("image/", $image_parts[0]);
+
+        if (!$image_type_aux[0] != '') {
+            return back()->with('error', 'Signature Required');
+        }
+
+        $image_type = $image_type_aux[1];
+
+
+        $image_base64 = base64_decode($image_parts[1]);
+
+        $file = $folderPath . uniqid() . '.' . $image_type;
+        file_put_contents($file, $image_base64);
+
+        $request->merge([
+            'signature' => $file
+        ]);
+
+        $unfillManifest = UnfillManifest::updateOrCreate(['order_id'=>$request->order_id], $request->except('signed'));
 
         $order = Order::find($request->order_id);
         $order->is_filled_by_manager = true;
