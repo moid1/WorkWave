@@ -105,14 +105,15 @@
                                 $passangersTotalTires = 0;
                                 foreach ($typesOfPassangerTires as $item) {
                                     foreach ($item as $key => $value) {
-                                        $passangersTotalTires += $value;
                                         if ($key == 'lawnmowers_atvmotorcycle') {
                                             $lawnmowers_atvmotorcycle = $value;
                                         } elseif ($key == 'lawnmowers_atvmotorcyclewithrim') {
                                             $lawnmowers_atvmotorcyclewithrim = $value;
                                         } elseif ($key == 'passanger_lighttruck') {
+                                            $passangersTotalTires += $value;
                                             $passanger_lighttruck = $value;
                                         } elseif ($key == 'passanger_lighttruckwithrim') {
+                                            $passangersTotalTires += $value;
                                             $passanger_lighttruckwithrim = $value;
                                         }
                                     }
@@ -143,6 +144,7 @@
                                 $farm_tractor_last_two_digits = 0;
 
                                 $agriTotalTires = 0;
+                                $tractor = 0;
 
                                 foreach ($typesOfAgriTires as $item) {
                                     foreach ($item as $key => $value) {
@@ -153,7 +155,7 @@
                                         } elseif ($key == 'ag_med_truck_19_5_with_rim') {
                                             $ag_med_truck_19_5_with_rim = $value;
                                         } elseif ($key == 'farm_tractor_last_two_digits') {
-                                            $farm_tractor_last_two_digits = $value;
+                                            $tractor += $value;
                                         }
                                     }
                                 }
@@ -211,6 +213,30 @@
                                     }
                                 }
 
+
+                                $typesOfReusePassangerTires = !empty($order['compared']['reuse_type_of_passenger']) ? json_decode($order['compared']['reuse_type_of_passenger'], true) : [];
+                                $typesOfReuseAgriTires = !empty($order['compared']['reuse_type_of_agri_tyre']) ? json_decode($order['compared']['reuse_type_of_agri_tyre'], true) : [];
+                                $typesOfReuseTruckTires = !empty($order['compared']['reuse_type_of_truck_tyre']) ? json_decode($order['compared']['reuse_type_of_truck_tyre'], true) : [];
+                                $typesOfReuseOtherTires = !empty($order['compared']['reuse_type_of_other']) ? json_decode($order['compared']['reuse_type_of_other'], true) : [];
+
+                               $totalSumReusePassangerTires = collect($typesOfReusePassangerTires)->flatMap(function ($item) {
+                                return $item;
+                                })->sum();
+
+                                $totalSumReuseAgriTires = collect($typesOfReuseAgriTires)->flatMap(function ($item) {
+                                return $item;
+                                })->sum();
+
+                                $totalSumReuseTruckTires = collect($typesOfReuseTruckTires)->flatMap(function ($item) {
+                                return $item;
+                                })->sum();
+
+                                $totalSumReuseOtherTires = collect($typesOfReuseOtherTires)->flatMap(function ($item) {
+                                return $item;
+                                })->sum();
+
+                                $totalReuse = $totalSumReusePassangerTires +$totalSumReuseAgriTires+$totalSumReuseTruckTires+$totalSumReuseOtherTires;
+
                             @endphp
                             <tr>
                                 <td class="red">{{ $key2 == 0 ? $assignedTruck->name ?? '' : '' }}</td>
@@ -219,14 +245,14 @@
                                 <td>{{ $passangersTotalTires }}</td>
                                 <td>{{ $semiTotalTires }}</td>
                                 <td> {{ $agriTotalTires }}</td>
-                                <td> {{ $otherTotal }}</td>
-                                <td></td>
-                                <td></td>
-                                <td class="pink"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>0</td>
+                                <td> {{ $tractor }}</td>
+                                <td>{{$lawnmowers_atvmotorcyclewithrim + $lawnmowers_atvmotorcycle}}</td>
+                                <td>{{$passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor}}</td>
+                                <td class="pink">{{$totalReuse}}</td>
+                                <td>*</td>
+                                <td>*</td>
+                                <td>{{abs($passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor - $totalReuse)}} </td>
+                                <td>{{$passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor}}</td>
                             </tr>
                         @endforeach
                     @endforeach

@@ -170,10 +170,10 @@
                                     class="mdi mdi-note"></i><span> Fill Manifest </span></a>
                         </li>
 
-                        {{-- <li>
+                        <li>
                             <a href="{{route('generate.daily.count.sheet')}}" class="waves-effect"><i
                                     class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
-                        </li> --}}
+                        </li>
 
                         @endif
 

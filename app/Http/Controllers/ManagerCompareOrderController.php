@@ -7,9 +7,7 @@ use App\Models\ManagerCompareOrder;
 use App\Models\ManifestPDF;
 use App\Models\Order;
 use App\Models\StateWeight;
-use App\Models\SteelOrder;
 use Illuminate\Http\Request;
-use PDO;
 
 class ManagerCompareOrderController extends Controller
 {
@@ -34,11 +32,11 @@ class ManagerCompareOrderController extends Controller
      */
     public function store(Request $request)
     {
-
         //STORING TIRES TYPE IN JSON STRING
 
         $passangerTireTypes = $request->passanger_tyres_type;
         $availablePassangerTireTypesArr = [];
+        $reusePassangerTireTypesArr = [];
 
         if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
             foreach ($passangerTireTypes as $key => $value) {
@@ -50,6 +48,15 @@ class ManagerCompareOrderController extends Controller
                     $value => $sum
                 ];
             }
+
+            foreach ($passangerTireTypes as $key => $value) {
+                $concatInput = "reuse_".$value;
+                $reusePassangerTireTypesArr[] = [
+                    $concatInput => $request[$concatInput]
+                ];
+            }
+
+            // dd($reusePassangerTireTypesArr);
         }
 
 
@@ -57,6 +64,7 @@ class ManagerCompareOrderController extends Controller
 
         $truckTireTypes = $request->truck_tyres_type;
         $availableTruckTireTypesArr = [];
+        $reuseTruckTireTypesArr = [];
 
         if (!empty($truckTireTypes) && count($truckTireTypes)) {
             foreach ($truckTireTypes as $key => $value) {
@@ -68,12 +76,19 @@ class ManagerCompareOrderController extends Controller
                     $value => $sum
                 ];
             }
+
+            foreach ($truckTireTypes as $key => $value) {
+                $concatInput = "reuse_".$value;
+                $reuseTruckTireTypesArr[] = [
+                    $concatInput => $request[$concatInput]
+                ];
+            }
         }
 
-        // dd($availableTruckTireTypesArr);
 
         $agriTireTypes = $request->agri_tires_type;
         $availableAgriTireTypesArr = [];
+        $reuseAgriTireTypesArr = [];
 
         if (!empty($agriTireTypes) && count($agriTireTypes)) {
             foreach ($agriTireTypes as $key => $value) {
@@ -85,11 +100,20 @@ class ManagerCompareOrderController extends Controller
                     $value => $sum
                 ];
             }
+
+            foreach ($agriTireTypes as $key => $value) {
+                $concatInput = "reuse_".$value;
+                $reuseAgriTireTypesArr[] = [
+                    $concatInput => $request[$concatInput]
+                ];
+            }
         }
+
 
 
         $otrTireTypes = $request->otr_tires_type;
         $availableOtrTireTypesArr = [];
+        $reuseOTRTireTypesArr = [];
 
         if (!empty($otrTireTypes) && count($otrTireTypes)) {
             foreach ($otrTireTypes as $key => $value) {
@@ -101,6 +125,13 @@ class ManagerCompareOrderController extends Controller
                     $value => $sum
                 ];
             }
+
+            foreach ($otrTireTypes as $key => $value) {
+                $concatInput = "reuse_".$value;
+                $reuseOTRTireTypesArr[] = [
+                    $concatInput => $request[$concatInput]
+                ];
+            }
         }
 
 
@@ -109,6 +140,10 @@ class ManagerCompareOrderController extends Controller
             'type_of_agri_tyre' => count($availableAgriTireTypesArr) ? json_encode($availableAgriTireTypesArr) : null,
             'type_of_truck_tyre' => count($availableTruckTireTypesArr) ? json_encode($availableTruckTireTypesArr) : null,
             'type_of_other' => count($availableOtrTireTypesArr) ? json_encode($availableOtrTireTypesArr) : null,
+            'reuse_type_of_passenger' => count($reusePassangerTireTypesArr) ? json_encode($reusePassangerTireTypesArr) : null,
+            'reuse_type_of_truck_tyre' => count($reuseTruckTireTypesArr) ? json_encode($reuseTruckTireTypesArr) : null,
+            'reuse_type_of_agri_tyre' => count($reuseAgriTireTypesArr) ? json_encode($reuseAgriTireTypesArr) : null,
+            'reuse_type_of_other' => count($reuseOTRTireTypesArr) ? json_encode($reuseOTRTireTypesArr) : null,
             'order_id' => $request->order_id ?? null,
         ]);
 

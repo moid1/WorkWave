@@ -74,7 +74,19 @@ class HomeController extends Controller
             $dataArray['customersCountYTD'] = $customersCountYTD;
             $dataArray['ordersCount'] = Order::all()->count();
             $dataArray['notesCount'] = Notes::all()->count();
-            $assignedTrucksNameArr = array_unique($assignedTrucksNameArr);
+            // Extract 'truckName' column
+            $truckNames = array_column($assignedTrucksNameArr, 'truckName');
+
+            // Get unique truck names
+            $uniqueTruckNames = array_unique($truckNames);
+
+            // Create a new array with unique truck names
+            $uniqueAssignedTrucksNameArr = array_map(function ($truckName) use ($assignedTrucksNameArr) {
+                $key = array_search($truckName, array_column($assignedTrucksNameArr, 'truckName'));
+                return $assignedTrucksNameArr[$key];
+            }, $uniqueTruckNames);
+
+            $assignedTrucksNameArr = $uniqueAssignedTrucksNameArr;
 
             $dataArray['boxTruckassignedTrucks'] = $assignedTrucksNameArr;
             $dataArray['boxNotAssignedTrucks'] = $notAssignedTrucks;
@@ -291,7 +303,7 @@ class HomeController extends Controller
     {
         $todaysOrders = Order::whereDate('created_at', now()->toDateString())
             ->whereNotNull('driver_id')
-            ->with(['driver', 'customer', 'fulfilled'])
+            ->with(['driver', 'customer', 'fulfilled', 'compared'])
             ->get()
             ->groupBy('driver_id')
             ->map

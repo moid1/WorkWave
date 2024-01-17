@@ -128,7 +128,7 @@
                         </div>
                     </div>
 
-                    <div class=" col-lg-2 ">
+                    {{-- <div class=" col-lg-2 ">
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title text-center">
@@ -147,7 +147,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class=" col-lg-2 ">
                         <div class="card">
@@ -298,7 +298,7 @@
                         </div>
                     </div>
 
-                    <div class=" col-lg-3 ">
+                    {{-- <div class=" col-lg-3 ">
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title text-center">
@@ -320,7 +320,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class=" col-lg-3 ">
                         <div class="card">

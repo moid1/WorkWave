@@ -234,9 +234,14 @@
         //for dock manager
 
         $dockTypesOfPassangerTires = !empty($data->compared->type_of_passenger) ? json_decode($data->compared->type_of_passenger, true) : [];
+        $dockTypesOfReusePassangerTires = !empty($data->compared->reuse_type_of_passenger) ? json_decode($data->compared->reuse_type_of_passenger, true) : [];
         $dockTypesOfTruckTires = !empty($data->compared->type_of_truck_tyre) ? json_decode($data->compared->type_of_truck_tyre, true) : [];
+        $dockTypesOfReuseTruckTires = !empty($data->compared->reuse_type_of_truck_tyre) ? json_decode($data->compared->reuse_type_of_truck_tyre, true) : [];
         $dockTypesOfAgriTires = !empty($data->compared->type_of_agri_tyre) ? json_decode($data->compared->type_of_agri_tyre, true) : [];
+        $dockTypesOfReuseAgriTires = !empty($data->compared->reuse_type_of_agri_tyre) ? json_decode($data->compared->reuse_type_of_agri_tyre, true) : [];
+
         $dockTypesOfOtherTires = !empty($data->compared->type_of_other) ? json_decode($data->compared->type_of_other, true) : [];
+        $dockTypesOfReuseOtherTires = !empty($data->compared->reuse_type_of_other) ? json_decode($data->compared->reuse_type_of_other, true) : [];
 
         //for single passanger
         $dockLawnmowers_atvmotorcycle = 0;
@@ -256,7 +261,33 @@
                 }
             }
         }
+
+        // REUSE
+        $reuse_dockLawnmowers_atvmotorcycle = 0;
+        $reuse_dockLawnmowers_atvmotorcyclewithrim = 0;
+        $reuse_dockPassanger_lighttruck = 0;
+        $reuse_dockPassanger_lighttruckwithrim = 0;
+
+        foreach ($dockTypesOfReusePassangerTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'reuse_lawnmowers_atvmotorcycle') {
+                    $reuse_dockLawnmowers_atvmotorcycle = $value;
+                } elseif ($key == 'reuse_lawnmowers_atvmotorcyclewithrim') {
+                    $reuse_dockLawnmowers_atvmotorcyclewithrim = $value;
+                } elseif ($key == 'reuse_passanger_lighttruck') {
+                    $reuse_dockPassanger_lighttruck = $value;
+                } elseif ($key == 'reuse_passanger_lighttruckwithrim') {
+                    $reuse_dockPassanger_lighttruckwithrim = $value;
+                }
+            }
+        }
+
+
+
+
         //for single truck
+
+
         $dock_semi_truck = 0;
         $dock_semi_super_singles = 0;
         $dock_semi_truck_with_rim = 0;
@@ -268,6 +299,21 @@
                     $dock_semi_super_singles = $value;
                 } elseif ($key == 'semi_truck_with_rim') {
                     $dock_semi_truck_with_rim = $value;
+                }
+            }
+        }
+
+        $reuse_dock_semi_truck = 0;
+        $reuse_dock_semi_super_singles = 0;
+        $reuse_dock_semi_truck_with_rim = 0;
+        foreach ($dockTypesOfReuseTruckTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'reuse_semi_truck') {
+                    $reuse_dock_semi_truck = $value;
+                } elseif ($key == 'reuse_semi_super_singles') {
+                    $reuse_dock_semi_super_singles = $value;
+                } elseif ($key == 'reuse_semi_truck_with_rim') {
+                    $reuse_dock_semi_truck_with_rim = $value;
                 }
             }
         }
@@ -286,6 +332,22 @@
                     $dock_ag_med_truck_19_5_with_rim = $value;
                 } elseif ($key == 'farm_tractor_last_two_digits') {
                     $dock_farm_tractor_last_two_digits = $value;
+                }
+            }
+        }
+
+        $reuse_dock_ag_med_truck_19_5_skid_steer = 0;
+        $reuse_dock_ag_med_truck_19_5_with_rim = 0;
+        $reuse_dock_farm_tractor_last_two_digits = 0;
+
+        foreach ($dockTypesOfReuseAgriTires as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == 'reuse_ag_med_truck_19_5_skid_steer') {
+                    $reuse_dock_ag_med_truck_19_5_skid_steer = $value;
+                } elseif ($key == 'reuse_ag_med_truck_19_5_with_rim') {
+                    $reuse_dock_ag_med_truck_19_5_with_rim = $value;
+                } elseif ($key == 'reuse_farm_tractor_last_two_digits') {
+                    $reuse_dock_farm_tractor_last_two_digits = $value;
                 }
             }
         }
@@ -333,6 +395,38 @@
                     case '19_5L_24':
                         $dock_19_5L_24 = $value;
                         break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        }
+
+
+        //REUSE
+
+        $reuse_dock_15_5_24 = 0;
+        $reuse_dock_17_5_25 = 0;
+        $reuse_dock_20_5_25 = 0;
+        $reuse_dock_23_5_25 = 0;
+       
+        foreach ($dockTypesOfReuseOtherTires as $item) {
+            foreach ($item as $key => $value) {
+                switch ($key) {
+                    case 'reuse_15_5_24':
+                        $reuse_dock_15_5_24 = $value;
+                        break;
+                    case 'reuse_17_5_25':
+                        $reuse_dock_17_5_25 = $value;
+                        break;
+                    case 'reuse_20_5_25':
+                        $reuse_dock_20_5_25 = $value;
+                        break;
+                    case 'reuse_23_5_25':
+                        $reuse_dock_23_5_25 = $value;
+                        break;
+                  
 
                     default:
                         # code...
@@ -674,15 +768,15 @@
                                 {{ number_format($totalWithTax, 2) }}
                             </td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td colspan="1">Credit Card:</td>
                             <td colspan="2" class="gray">Convienience Fee 4%</td>
                             <td colspan="1" class=""></td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td colspan="1">Cash</td>
                             <td colspan="2" class="gray">Total Due</td>
-                            <td colspan="1" class="">$0.00</td>
+                            <td colspan="1" class="">  {{ number_format($totalWithTax, 2) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -708,24 +802,24 @@
                         <tr class="{{ $lawnmowers_atvmotorcycle == $dockLawnmowers_atvmotorcycle ? '' : 'red' }} ">
                             <td>Lawnmowers/ATV/Motorcycle</td>
                             <td class="purple">{{ $dockLawnmowers_atvmotorcycle }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dockLawnmowers_atvmotorcycle}}</td>
                         </tr>
                         <tr
                             class="{{ $lawnmowers_atvmotorcyclewithrim == $dockLawnmowers_atvmotorcyclewithrim ? '' : 'red' }} ">
                             <td>Lawnmowers/ATV/Motorcycle with RIM</td>
                             <td class="purple">{{ $dockLawnmowers_atvmotorcyclewithrim }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dockLawnmowers_atvmotorcyclewithrim}}</td>
                         </tr>
                         <tr class="{{ $passanger_lighttruck == $dockPassanger_lighttruck ? '' : 'red' }} ">
                             <td>Passenger/Light</td>
                             <td class="purple">{{ $dockPassanger_lighttruck }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dockPassanger_lighttruck}}</td>
                         </tr>
                         <tr
                             class="{{ $passanger_lighttruckwithrim == $dockPassanger_lighttruckwithrim ? '' : 'red' }} ">
                             <td>Passenger/Light truck with Rim</td>
                             <td class="purple">{{ $dockPassanger_lighttruckwithrim }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dockPassanger_lighttruckwithrim}}</td>
                         </tr>
                         <tr>
                             <td style="color: white">asd</td>
@@ -748,17 +842,17 @@
                         <tr class="{{ $semi_truck == $dock_semi_truck ? '' : 'red' }} ">
                             <td>Semi Truck</td>
                             <td class="purple">{{ $dock_semi_truck }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_semi_truck}}</td>
                         </tr>
                         <tr class="{{ $semi_super_singles == $dock_semi_super_singles ? '' : 'red' }} ">
                             <td>Semi Super Singles</td>
                             <td class="purple">{{ $dock_semi_super_singles }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_semi_truck}}</td>
                         </tr>
                         <tr class="{{ $semi_truck_with_rim == $dock_semi_truck_with_rim ? '' : 'red' }} ">
                             <td>Semi Truck with RIM </td>
                             <td class="purple">{{ $dock_semi_truck_with_rim }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_semi_truck}}</td>
                         </tr>
                         <tr>
                             <td style="color: white">asd</td>
@@ -774,25 +868,24 @@
                             </tr>
                         </thead>
                     </tbody>
-
                     <tbody>
                         <tr
                             class="{{ $ag_med_truck_19_5_skid_steer == $dock_ag_med_truck_19_5_skid_steer ? '' : 'red' }} ">
                             <td>AG Med Truck 19.5/ Skid Steer</td>
                             <td class="purple">{{ $dock_ag_med_truck_19_5_skid_steer }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_ag_med_truck_19_5_skid_steer}}</td>
                         </tr>
                         <tr
                             class="{{ $ag_med_truck_19_5_with_rim == $dock_ag_med_truck_19_5_with_rim ? '' : 'red' }} ">
                             <td>AG Med Truck 19.5/ with Rim</td>
                             <td class="purple">{{ $dock_ag_med_truck_19_5_with_rim }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_ag_med_truck_19_5_with_rim}}</td>
                         </tr>
                         <tr
                             class="{{ $farm_tractor_last_two_digits == $dock_farm_tractor_last_two_digits ? '' : 'red' }} ">
                             <td>Farm Tractor $1.25 per, Last two digits</td>
                             <td class="purple">{{ $dock_farm_tractor_last_two_digits }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_farm_tractor_last_two_digits}}</td>
                         </tr>
 
 
@@ -810,22 +903,22 @@
                         <tr class="{{ $driver_15_5_24 == $dock_15_5_24 ? '' : 'red' }} ">
                             <td>15.5-25</td>
                             <td class="purple">{{ $dock_15_5_24 }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_15_5_24}}</td>
                         </tr>
                         <tr class="{{ $driver_17_5_25 == $dock_17_5_25 ? '' : 'red' }} ">
                             <td>17,5-25 (Radial)</td>
                             <td class="purple">{{ $dock_17_5_25 }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_17_5_25}}</td>
                         </tr>
                         <tr class="{{ $driver_20_5_25 == $dock_20_5_25 ? '' : 'red' }} ">
                             <td>20.5-25 (Radial)</td>
                             <td class="purple">{{ $dock_20_5_25 }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_20_5_25}}</td>
                         </tr>
                         <tr class="{{ $driver_23_5_25 == $dock_23_5_25 ? '' : 'red' }} ">
                             <td>23.5-25 (Radial)</td>
                             <td class="purple">{{ $dock_23_5_25 }}</td>
-                            <td class="darkpurple"></td>
+                            <td class="darkpurple">{{$reuse_dock_23_5_25}}</td>
                         </tr>
                         {{-- <tr class="{{ $driver_26_5_25 == $dock_26_5_25 ? '' : 'red' }} ">
                             <td>26.5-25 (Radial)</td>

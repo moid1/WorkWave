@@ -59,12 +59,30 @@
                                             </div>
                                         </div>
 
+                                        <div id="reusecollawnmowersatvmotorcycle" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Lawnmowers/ATVMotorcycle</label>
+                                                <input id="reuselawnmowers_atvmotorcycle" type="text" class="form-control"
+                                                    name="reuse_lawnmowers_atvmotorcycle"
+                                                    value="{{ old('resuse_lawnmowers_atvmotorcycle') }}" autofocus>
+                                            </div>
+                                        </div>
+
                                         <div id="collawnmowers_atvmotorcyclewithrim" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>Lawnmowers/ATVMotorcycle With Rim</label>
                                                 <input id="lawnmowers_atvmotorcyclewithrim" type="text"
                                                     class="form-control" name="lawnmowers_atvmotorcyclewithrim"
                                                     value="{{ old('lawnmowers_atvmotorcyclewithrim') }}" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div id="reusecollawnmowers_atvmotorcyclewithrim" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Lawnmowers/ATVMotorcycle With Rim</label>
+                                                <input id="reuselawnmowers_atvmotorcyclewithrim" type="text"
+                                                    class="form-control" name="reuse_lawnmowers_atvmotorcyclewithrim"
+                                                    value="{{ old('resuse_lawnmowers_atvmotorcyclewithrim') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -77,12 +95,31 @@
                                             </div>
                                         </div>
 
+                                        <div id="reusecolpassanger_lighttruck" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Passanger/Light truck</label>
+                                                <input id="reusepassanger_lighttruck" type="text" class="form-control"
+                                                    name="reuse_passanger_lighttruck" value="{{ old('reuse_passanger_lighttruck') }}"
+                                                    autofocus>
+                                            </div>
+                                        </div>
+
+
                                         <div id="colpassanger_lighttruckwithrim" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>Passanger/Light truck with Rim</label>
                                                 <input id="passanger_lighttruckwithrim" type="text" class="form-control"
                                                     name="passanger_lighttruckwithrim"
                                                     value="{{ old('passanger_lighttruckwithrim') }}" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div id="reusecolpassanger_lighttruckwithrim" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Passanger/Light truck with Rim</label>
+                                                <input id="reusepassanger_lighttruckwithrim" type="text" class="form-control"
+                                                    name="reuse_passanger_lighttruckwithrim"
+                                                    value="{{ old('reuse_passanger_lighttruckwithrim') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -115,11 +152,28 @@
                                             </div>
                                         </div>
 
+                                        <div id="reusecolsemitruck" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Semi Truck</label>
+                                                <input id="reusesemi_truck" type="text" class="form-control" name="reuse_semi_truck"
+                                                    value="{{ old('reuse_semi_truck') }}" autofocus>
+                                            </div>
+                                        </div>
+
                                         <div id="colsemisupersingles" class="col-lg-6 d-none">
                                             <div class="form-group">
-                                                <label>Semi Super Singles</label>
+                                                <label>No of Semi Super Singles</label>
                                                 <input id="semi_super_singles" type="text" class="form-control"
                                                     name="semi_super_singles" value="{{ old('semi_super_singles') }}"
+                                                    autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div id="reusecolsemisupersingles" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Semi Super Singles</label>
+                                                <input id="reusesemi_super_singles" type="text" class="form-control"
+                                                    name="reuse_semi_super_singles" value="{{ old('reuse_semi_super_singles') }}"
                                                     autofocus>
                                             </div>
                                         </div>
@@ -129,6 +183,15 @@
                                                 <label>Semi Truck With Rim</label>
                                                 <input id="semi_truck_with_rim" type="text" class="form-control"
                                                     name="semi_truck_with_rim" value="{{ old('semi_truck_with_rim') }}"
+                                                    autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div id="reusecolsemitruckwithrim" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Semi Truck With Rim</label>
+                                                <input id="reusesemi_truck_with_rim" type="text" class="form-control"
+                                                    name="reuse_semi_truck_with_rim" value="{{ old('reuse_semi_truck_with_rim') }}"
                                                     autofocus>
                                             </div>
                                         </div>
@@ -164,6 +227,15 @@
                                             </div>
                                         </div>
 
+                                        <div id="reusecolag_med_truck_19_5_skid_steer" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse AG Med Truck 19.5/ Skid Steer</label>
+                                                <input id="reuseag_med_truck_19_5_skid_steer" type="text"
+                                                    class="form-control" name="reuse_ag_med_truck_19_5_skid_steer"
+                                                    value="{{ old('reuse_ag_med_truck_19_5_skid_steer') }}" autofocus>
+                                            </div>
+                                        </div>
+
                                         <div id="colag_med_truck_19_5_with_rim" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of AG Med Truck 19.5/ with Rim</label>
@@ -173,12 +245,31 @@
                                             </div>
                                         </div>
 
+                                        <div id="reusecolag_med_truck_19_5_with_rim" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse AG Med Truck 19.5/ with Rim</label>
+                                                <input id="reuseag_med_truck_19_5_with_rim" type="text"
+                                                    class="form-control" name="reuse_ag_med_truck_19_5_with_rim"
+                                                    value="{{ old('reuse_ag_med_truck_19_5_with_rim') }}" autofocus>
+                                            </div>
+                                        </div>
+
                                         <div id="colfarm_tractor_last_two_digits" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of Farm Tractor $1.25 per, Last two digits</label>
                                                 <input id="farm_tractor_last_two_digits" type="text"
                                                     class="form-control" name="farm_tractor_last_two_digits"
                                                     value="{{ old('farm_tractor_last_two_digits') }}" autofocus>
+                                            </div>
+                                        </div>
+
+
+                                        <div id="reusecolfarm_tractor_last_two_digits" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse Farm Tractor $1.25 per, Last two digits</label>
+                                                <input id="reusefarm_tractor_last_two_digits" type="text"
+                                                    class="form-control" name="reuse_farm_tractor_last_two_digits"
+                                                    value="{{ old('reuse_farm_tractor_last_two_digits') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -224,11 +315,27 @@
                                             </div>
                                         </div>
 
+                                        <div id="reusecol15_5_24" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse 15_5_24</label>
+                                                <input id="reuse15_5_24" type="text" class="form-control" name="reuse_15_5_24"
+                                                    value="{{ old('reuse_15_5_24') }}" autofocus>
+                                            </div>
+                                        </div>
+
                                         <div id="col17_5_25" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of 17.5-25 (Radial)</label>
                                                 <input id="17_5_25" type="text" class="form-control" name="17_5_25"
                                                     value="{{ old('17_5_25') }}" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div id="reusecol17_5_25" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse 17.5-25 (Radial)</label>
+                                                <input id="reuse17_5_25" type="text" class="form-control" name="reuse_17_5_25"
+                                                    value="{{ old('reuse_17_5_25') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -240,11 +347,27 @@
                                             </div>
                                         </div>
 
+                                        <div id="reusecol20_5_25" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse 20.5-25 (Radial)</label>
+                                                <input id="reuse20_5_25" type="text" class="form-control" name="reuse_20_5_25"
+                                                    value="{{ old('reuse_20_5_25') }}" autofocus>
+                                            </div>
+                                        </div>
+
                                         <div id="col23_5_25" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of 23.5-25 (Radial)</label>
                                                 <input id="23_5_25" type="text" class="form-control" name="23_5_25"
                                                     value="{{ old('23_5_25') }}" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div id="reusecol23_5_25" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Reuse 23.5-25 (Radial)</label>
+                                                <input id="reuse23_5_25" type="text" class="form-control" name="reuse_23_5_25"
+                                                    value="{{ old('reuse_23_5_25') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -343,15 +466,19 @@
             switch (data.id) {
                 case 'lawnmowers_atvmotorcycle':
                     $('#collawnmowersatvmotorcycle').removeClass('d-none');
+                    $('#reusecollawnmowersatvmotorcycle').removeClass('d-none');
                     break;
                 case 'lawnmowers_atvmotorcyclewithrim':
                     $('#collawnmowers_atvmotorcyclewithrim').removeClass('d-none');
+                    $('#reusecollawnmowers_atvmotorcyclewithrim').removeClass('d-none');
                     break;
                 case 'passanger_lighttruck':
                     $('#colpassanger_lighttruck').removeClass('d-none');
+                    $('#reusecolpassanger_lighttruck').removeClass('d-none');
                     break;
                 case 'passanger_lighttruckwithrim':
                     $('#colpassanger_lighttruckwithrim').removeClass('d-none');
+                    $('#reusecolpassanger_lighttruckwithrim').removeClass('d-none');
                     break;
             }
         });
@@ -361,19 +488,27 @@
             switch (data.id) {
                 case 'lawnmowers_atvmotorcycle':
                     $('#collawnmowersatvmotorcycle').addClass('d-none');
+                    $('#reusecollawnmowersatvmotorcycle').addClass('d-none');
                     $('#lawnmowersatvmotorcycle').val();
+                    $('#reusecollawnmowersatvmotorcycle').val();
                     break;
                 case 'lawnmowers_atvmotorcyclewithrim':
                     $('#collawnmowers_atvmotorcyclewithrim').addClass('d-none');
-                    $('#lawnmowers_atvmotorcyclewithrim').val();
+                    $('#lawnmowers_atvmotorcyclewithrim').val(); 
+                    $('#reusecollawnmowers_atvmotorcyclewithrim').addClass('d-none');
+                    $('#reusecollawnmowers_atvmotorcyclewithrim').val();
                     break;
                 case 'passanger_lighttruck':
                     $('#colpassanger_lighttruck').addClass('d-none');
                     $('#passanger_lighttruck').val();
+                    $('#reusecolpassanger_lighttruck').addClass('d-none');
+                    $('#reusepassanger_lighttruck').val();
                     break;
                 case 'passanger_lighttruckwithrim':
                     $('#colpassanger_lighttruckwithrim').addClass('d-none');
                     $('#passanger_lighttruckwithrim').val();
+                    $('#reusecolpassanger_lighttruckwithrim').addClass('d-none');
+                    $('#reusepassanger_lighttruckwithrim').val();
                     break;
             }
         });
@@ -384,12 +519,15 @@
             switch (data.id) {
                 case 'semi_truck':
                     $('#colsemitruck').removeClass('d-none');
+                    $('#reusecolsemitruck').removeClass('d-none');
                     break;
                 case 'semi_super_singles':
                     $('#colsemisupersingles').removeClass('d-none');
+                    $('#reusecolsemisupersingles').removeClass('d-none');
                     break;
                 case 'semi_truck_with_rim':
                     $('#colsemitruckwithrim').removeClass('d-none');
+                    $('#reusecolsemitruckwithrim').removeClass('d-none');
                     break;
 
             }
@@ -401,14 +539,20 @@
                 case 'semi_truck':
                     $('#colsemitruck').addClass('d-none');
                     $('#semi_truck').val();
+                    $('#reusecolsemitruck').addClass('d-none');
+                    $('#reusesemi_truck').val();
                     break;
                 case 'semi_super_singles':
                     $('#colsemisupersingles').addClass('d-none');
                     $('#semi_super_singles').val();
+                    $('#reusecolsemisupersingles').addClass('d-none');
+                    $('#reusesemi_super_singles').val();
                     break;
                 case 'semi_truck_with_rim':
                     $('#colsemitruckwithrim').addClass('d-none');
                     $('#semi_truck_with_rim').val();
+                    $('#reusecolsemitruckwithrim').addClass('d-none');
+                    $('#reusesemi_truck_with_rim').val();
                     break;
             }
         });
@@ -418,12 +562,15 @@
             switch (data.id) {
                 case 'ag_med_truck_19_5_skid_steer':
                     $('#colag_med_truck_19_5_skid_steer').removeClass('d-none');
+                    $('#reusecolag_med_truck_19_5_skid_steer').removeClass('d-none');
                     break;
                 case 'ag_med_truck_19_5_with_rim':
                     $('#colag_med_truck_19_5_with_rim').removeClass('d-none');
+                    $('#reusecolag_med_truck_19_5_with_rim').removeClass('d-none');
                     break;
                 case 'farm_tractor_last_two_digits':
                     $('#colfarm_tractor_last_two_digits').removeClass('d-none');
+                    $('#reusecolfarm_tractor_last_two_digits').removeClass('d-none');
                     break;
 
             }
@@ -435,14 +582,20 @@
                 case 'ag_med_truck_19_5_skid_steer':
                     $('#colag_med_truck_19_5_skid_steer').addClass('d-none');
                     $('#ag_med_truck_19_5_skid_steer').val();
+                    $('#reusecolag_med_truck_19_5_skid_steer').addClass('d-none');
+                    $('#reuseag_med_truck_19_5_skid_steer').val();
                     break;
                 case 'ag_med_truck_19_5_with_rim':
                     $('#colag_med_truck_19_5_with_rim').addClass('d-none');
                     $('#ag_med_truck_19_5_with_rim').val();
+                    $('#reusecolag_med_truck_19_5_with_rim').addClass('d-none');
+                    $('#reuseag_med_truck_19_5_with_rim').val();
                     break;
                 case 'farm_tractor_last_two_digits':
                     $('#colfarm_tractor_last_two_digits').addClass('d-none');
                     $('#farm_tractor_last_two_digits').val();
+                    $('#reusecolfarm_tractor_last_two_digits').addClass('d-none');
+                    $('#reusefarm_tractor_last_two_digits').val();
                     break;
             }
         });
@@ -452,15 +605,19 @@
             switch (data.id) {
                 case '15_5_24':
                     $('#col15_5_24').removeClass('d-none');
+                    $('#reusecol15_5_24').removeClass('d-none');
                     break;
                 case '17_5_25':
                     $('#col17_5_25').removeClass('d-none');
+                    $('#reusecol17_5_25').removeClass('d-none');
                     break;
                 case '20_5_25':
                     $('#col20_5_25').removeClass('d-none');
+                    $('#reusecol20_5_25').removeClass('d-none');
                     break;
                 case '23_5_25':
                     $('#col23_5_25').removeClass('d-none');
+                    $('#reusecol23_5_25').removeClass('d-none');
                     break;
 
                 case '26_5_25':
@@ -493,18 +650,26 @@
                 case '15_5_24':
                     $('#col15_5_24').addClass('d-none');
                     $('#col15_5_24').val();
+                    $('#reusecol15_5_24').addClass('d-none');
+                    $('#reusecol15_5_24').val();
                     break;
                 case '17_5_25':
                     $('#col17_5_25').addClass('d-none');
                     $('#17_5_25').val();
+                    $('#reusecol17_5_25').addClass('d-none');
+                    $('#reuse17_5_25').val();
                     break;
                 case '20_5_25':
                     $('#col20_5_25').addClass('d-none');
                     $('#20_5_25').val();
+                    $('#reusecol20_5_25').addClass('d-none');
+                    $('#reuse20_5_25').val();
                     break;
                 case '23_5_25':
                     $('#col20_5_25').addClass('d-none');
                     $('#20_5_25').val();
+                    $('#reusecol20_5_25').addClass('d-none');
+                    $('#reuse20_5_25').val();
                     break;
                 case '26_5_25':
                     $('#col26_5_25').addClass('d-none');
