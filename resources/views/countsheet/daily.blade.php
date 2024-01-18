@@ -80,8 +80,20 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $totalPassanger = 0;
+                        $lastSemi = 0;
+                        $lastAG = 0;
+                        $lastTractor = 0;
+                        $lastMCATV = 0;
+                        $lastTotal = 0;
+                        $lastResale = 0;
+                        $lastTotalRims = 0;
+                        $lastShredding = 0;
+                    @endphp
                     @foreach ($todaysOrders as $key => $groupOrder)
                         @php
+                            $sumOfRims = 0;
                             $assignedTruck;
                             $assignedTruck = \App\Models\TruckDriver::where('user_id', $key)->first();
                             if ($assignedTruck) {
@@ -118,6 +130,7 @@
                                         }
                                     }
                                 }
+                                $sumOfRims += $passanger_lighttruckwithrim + $lawnmowers_atvmotorcyclewithrim;
 
                                 //for single truck
                                 $semi_truck = 0;
@@ -136,6 +149,8 @@
                                         }
                                     }
                                 }
+
+                                $sumOfRims += $semi_truck_with_rim;
 
                                 // for single agri
 
@@ -159,6 +174,8 @@
                                         }
                                     }
                                 }
+
+                                $sumOfRims += $ag_med_truck_19_5_with_rim;
 
                                 $driver_15_5_24 = 0;
                                 $driver_17_5_25 = 0;
@@ -213,46 +230,64 @@
                                     }
                                 }
 
-
                                 $typesOfReusePassangerTires = !empty($order['compared']['reuse_type_of_passenger']) ? json_decode($order['compared']['reuse_type_of_passenger'], true) : [];
                                 $typesOfReuseAgriTires = !empty($order['compared']['reuse_type_of_agri_tyre']) ? json_decode($order['compared']['reuse_type_of_agri_tyre'], true) : [];
                                 $typesOfReuseTruckTires = !empty($order['compared']['reuse_type_of_truck_tyre']) ? json_decode($order['compared']['reuse_type_of_truck_tyre'], true) : [];
                                 $typesOfReuseOtherTires = !empty($order['compared']['reuse_type_of_other']) ? json_decode($order['compared']['reuse_type_of_other'], true) : [];
 
-                               $totalSumReusePassangerTires = collect($typesOfReusePassangerTires)->flatMap(function ($item) {
-                                return $item;
-                                })->sum();
+                                $totalSumReusePassangerTires = collect($typesOfReusePassangerTires)
+                                    ->flatMap(function ($item) {
+                                        return $item;
+                                    })
+                                    ->sum();
 
-                                $totalSumReuseAgriTires = collect($typesOfReuseAgriTires)->flatMap(function ($item) {
-                                return $item;
-                                })->sum();
+                                $totalSumReuseAgriTires = collect($typesOfReuseAgriTires)
+                                    ->flatMap(function ($item) {
+                                        return $item;
+                                    })
+                                    ->sum();
 
-                                $totalSumReuseTruckTires = collect($typesOfReuseTruckTires)->flatMap(function ($item) {
-                                return $item;
-                                })->sum();
+                                $totalSumReuseTruckTires = collect($typesOfReuseTruckTires)
+                                    ->flatMap(function ($item) {
+                                        return $item;
+                                    })
+                                    ->sum();
 
-                                $totalSumReuseOtherTires = collect($typesOfReuseOtherTires)->flatMap(function ($item) {
-                                return $item;
-                                })->sum();
+                                $totalSumReuseOtherTires = collect($typesOfReuseOtherTires)
+                                    ->flatMap(function ($item) {
+                                        return $item;
+                                    })
+                                    ->sum();
 
-                                $totalReuse = $totalSumReusePassangerTires +$totalSumReuseAgriTires+$totalSumReuseTruckTires+$totalSumReuseOtherTires;
+                                $totalReuse = $totalSumReusePassangerTires + $totalSumReuseAgriTires + $totalSumReuseTruckTires + $totalSumReuseOtherTires;
 
                             @endphp
                             <tr>
                                 <td class="red">{{ $key2 == 0 ? $assignedTruck->name ?? '' : '' }}</td>
                                 <td class="red">{{ $order['customer']['business_name'] }}</td>
-
+@php
+$totalPassanger += $passangersTotalTires;
+$lastSemi += $semiTotalTires;
+$lastAG += $agriTotalTires;
+$lastTractor += $tractor;
+$lastMCATV += $lawnmowers_atvmotorcyclewithrim + $lawnmowers_atvmotorcycle;
+$lastTotal += $passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor;
+$lastResale += $totalReuse;
+$lastTotalRims += $sumOfRims;
+$lastShredding += abs($passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor) - $totalReuse - $sumOfRims ;
+@endphp
                                 <td>{{ $passangersTotalTires }}</td>
                                 <td>{{ $semiTotalTires }}</td>
                                 <td> {{ $agriTotalTires }}</td>
                                 <td> {{ $tractor }}</td>
-                                <td>{{$lawnmowers_atvmotorcyclewithrim + $lawnmowers_atvmotorcycle}}</td>
-                                <td>{{$passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor}}</td>
-                                <td class="pink">{{$totalReuse}}</td>
+                                <td>{{ $lawnmowers_atvmotorcyclewithrim + $lawnmowers_atvmotorcycle }}</td>
+                                <td>{{ $passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor }}</td>
+                                <td class="pink">{{ $totalReuse }}</td>
                                 <td>*</td>
-                                <td>*</td>
-                                <td>{{abs($passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor - $totalReuse)}} </td>
-                                <td>{{$passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor}}</td>
+                                <td>{{ $sumOfRims }}</td>
+                                <td>{{ abs($passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor) - $totalReuse - $sumOfRims }}
+                                </td>
+                                <td>{{ $passangersTotalTires + $semiTotalTires + $agriTotalTires + $tractor }}</td>
                             </tr>
                         @endforeach
                     @endforeach
@@ -261,17 +296,17 @@
                     <tr>
                         <td></td>
                         <td class="blue">Daily Tools</td>
-                        <td class="blue">1833</td>
-                        <td class="blue">190</td>
-                        <td class="blue">103</td>
-                        <td class="blue">23</td>
-                        <td class="blue">78</td>
-                        <td class="blue">2227</td>
-                        <td class="blue">97</td>
-                        <td class="blue">0</td>
-                        <td class="blue">1</td>
-                        <td class="blue">2135</td>
-                        <td class="blue">2227</td>
+                        <td class="blue">{{$totalPassanger}}</td>
+                        <td class="blue">{{$lastSemi}}</td>
+                        <td class="blue">{{$lastAG}}</td>
+                        <td class="blue">{{$lastTractor}}</td>
+                        <td class="blue">{{$lastMCATV}}</td>
+                        <td class="blue">{{$lastTotal}}</td>
+                        <td class="blue">{{$lastResale}}</td>
+                        <td class="blue">*</td>
+                        <td class="blue">{{$lastTotalRims}}</td>
+                        <td class="blue">{{$lastShredding }}</td>
+                        <td class="blue">{{$lastTotal}}</td>
                     </tr>
                     <!-- Add your table data here -->
                 </tbody>
