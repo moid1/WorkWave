@@ -66,7 +66,7 @@
                     <tr>
                         <th>Truck</th>
                         <th>Generator ()</th>
-                        <th>Passenge r/LT</th>
+                        <th>Passenger/LT</th>
                         <th>Semi</th>
                         <th>AG</th>
                         <th>Tractor</th>
@@ -104,10 +104,11 @@
                         <!-- first -->
                         @foreach ($groupOrder as $key2 => $order)
                             @php
-                                $typesOfPassangerTires = !empty($order['fulfilled']['type_of_passenger']) ? json_decode($order['fulfilled']['type_of_passenger'], true) : [];
-                                $typesOfTruckTires = !empty($order['fulfilled']['type_of_truck_tyre']) ? json_decode($order['fulfilled']['type_of_truck_tyre'], true) : [];
-                                $typesOfAgriTires = !empty($order['fulfilled']['type_of_agri_tyre']) ? json_decode($order['fulfilled']['type_of_agri_tyre'], true) : [];
-                                $typesOfOtherTires = !empty($order['fulfilled']['type_of_other']) ? json_decode($order['fulfilled']['type_of_other'], true) : [];
+                                $keyssss  = $order['load_type'] == 'trailer_swap' ? 'compared' : 'fulfilled';
+                                $typesOfPassangerTires = !empty($order[$keyssss]['type_of_passenger']) ? json_decode($order[$keyssss]['type_of_passenger'], true) : [];
+                                $typesOfTruckTires = !empty($order[$keyssss]['type_of_truck_tyre']) ? json_decode($order[$keyssss]['type_of_truck_tyre'], true) : [];
+                                $typesOfAgriTires = !empty($order[$keyssss]['type_of_agri_tyre']) ? json_decode($order[$keyssss]['type_of_agri_tyre'], true) : [];
+                                $typesOfOtherTires = !empty($order[$keyssss]['type_of_other']) ? json_decode($order[$keyssss]['type_of_other'], true) : [];
 
                                 //for single passanger
                                 $lawnmowers_atvmotorcycle = 0;

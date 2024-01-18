@@ -260,7 +260,7 @@ class FullFillOrderController extends Controller
     public function getFullFilledOrders()
     {
         $fullFilledOrderStatus = ['error-compared', 'fulfilled'];
-        $orders = Order::whereIn('status', $fullFilledOrderStatus)->get();
+        $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
         return view('orders.fulfill.index', compact('orders'));
     }
 
@@ -556,7 +556,7 @@ class FullFillOrderController extends Controller
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
         $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
 
-        $order->status = 'compared';
+        $order->status = 'fulfilled';
         $order->payment_type = $request->payment_type ?? null;
 
         $order->update();

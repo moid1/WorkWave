@@ -380,7 +380,7 @@
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{ $tdfData['totalTonsDelivered'] }}</span> &nbsp;
+                                        <span>{{ abs($tdfData['totalTonsDelivered']) }}</span> &nbsp;
                                     </div>
                                 </div>
 
@@ -420,7 +420,7 @@
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{ $steelData['totalTonsDelivered'] }}</span> &nbsp;
+                                        <span>{{ number_format(abs($steelData['totalTonsDelivered']), 2) }}</span> &nbsp;
 
                                     </div>
                                 </div>
@@ -456,7 +456,7 @@
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{ $materialShippedData['totalTonsDelivered'] }}</span>
+                                        <span>{{ number_format($materialShippedData['totalTonsDelivered'], 2) }}</span>
                                     </div>
                                 </div>
                                 <hr>
@@ -500,7 +500,7 @@
                                 <div class="box">
                                     <span>Total Tons Delivered</span>
                                     <div class="d-flex justify-content-center">
-                                        <span>{{ $materialShippedYearly['totalTonsDelivered'] }}</span>
+                                        <span>{{ number_format($materialShippedYearly['totalTonsDelivered'],2) }}</span>
                                     </div>
                                 </div>
                                 <hr>
