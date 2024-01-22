@@ -301,7 +301,9 @@ class HomeController extends Controller
 
     public function generateDailyCountSheet()
     {
+        $NotIncluded = ['steel', 'tdf'];
         $todaysOrders = Order::whereDate('created_at', now()->toDateString())
+        ->whereNotIn('load_type', $NotIncluded)
             ->whereNotNull('driver_id')
             ->with(['driver', 'customer', 'fulfilled', 'compared'])
             ->get()
