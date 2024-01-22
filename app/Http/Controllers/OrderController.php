@@ -220,13 +220,59 @@ class OrderController extends Controller
         return view('orders.driver.manifest', compact('orders'));
     }
 
-    public function getUnfilledManifest(){
+    public function getUnfilledManifest()
+    {
         $orders = Order::where('is_filled_by_manager', false)->get();
         return view('orders.unfill.index', compact('orders'));
     }
 
-    public function getUnfilledManifestOrder($id){
+    public function getUnfilledManifestOrder($id)
+    {
         $order = Order::find($id);
         return view('orders.unfill.create', compact('order'));
+    }
+
+    public function apiCreateOrder(Request $request)
+    {
+        try {
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                    'customer_id' => ['required'],
+                    'notes' => ['required'],
+                    'load_type' => ['required'],
+                    'driver_id' => ['required']
+
+                ]
+            );
+
+            if ($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 401);
+            }
+
+            $order = Order::create([
+                'customer_id' => $request['customer_id'],
+                'user_id' => Auth::id(),
+                'notes' => $request['notes'] ?? 'N/A',
+                'load_type' => $request['load_type'],
+                'driver_id' => $request['driver_id'] ?? null
+
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order Created Successfully',
+                'user' => $order,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }

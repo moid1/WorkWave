@@ -31,12 +31,15 @@ Route::post('/register-customer', [AuthController::class, 'registerCustomer'])->
 Route::get('/get-dashboard-stats',[HomeController::class,'getDashboardStats'])->middleware('auth:sanctum');
 Route::get('/get-customers',[CustomerController::class,'apiGetCustomers'])->middleware('auth:sanctum');
 Route::get('/get-customer-manifest',[CustomerController::class,'apiGetCustomersManifest'])->middleware('auth:sanctum');
-Route::get('/get-orders', [OrderController::class, 'apiGetOrders'])->middleware('auth:sanctum');
 Route::post('/assign-driver', [OrderController::class,'apiUpdateDriver'])->middleware('auth:sanctum');
 Route::get('/get-all-managers', [ManagerController::class, 'apiGetAllManagers'])->middleware('auth:sanctum');
 Route::get('/get-all-drivers', [ManagerController::class, 'apiGetAllDrivers'])->middleware('auth:sanctum');
 Route::get('/get-all-customer-notes', [NotesController::class, 'apiGetAllCustomersNotes'])->middleware('auth:sanctum');
 Route::post('/change-password', [AuthController::class, 'apiChangePassword'])->middleware('auth:sanctum');
+
+//Orders
+Route::get('/get-orders', [OrderController::class, 'apiGetOrders'])->middleware('auth:sanctum');
+Route::post('/order', [OrderController::class,'apiCreateOrder'])->middleware('auth:sanctum');
 
 //Customers
 
