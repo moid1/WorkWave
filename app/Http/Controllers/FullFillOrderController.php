@@ -691,7 +691,7 @@ class FullFillOrderController extends Controller
             //  return view('manifest.index');
         }
         $manifestPDF->save();
-            return $testPDF->stream();
+        return $testPDF->stream();
 
 
         return redirect('/driver-orders')->with('success', 'Manifest has been created successfully');
@@ -732,5 +732,136 @@ class FullFillOrderController extends Controller
         $order->update();
 
         return redirect('/driver-orders')->with('success', 'Order FulFilled Successfully');
+    }
+
+    // apis
+    public function apiFulFillTDFOrder(Request $request)
+    {
+
+        try {
+            //code...
+
+            $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+            $folderPath = 'signatures/';
+
+            $image_parts = explode(";base64,", $request->signed);
+
+            $image_type_aux = explode("image/", $image_parts[0]);
+
+            if (!$image_type_aux[0] != '') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Signatures is required'
+                ], 400);
+            }
+
+
+            $image_type = $image_type_aux[1];
+
+
+            $image_base64 = base64_decode($image_parts[1]);
+
+            $file = $folderPath . uniqid() . '.' . $image_type;
+            file_put_contents($file, $image_base64);
+
+            $request->merge([
+                'cx_signature' => $file
+            ]);
+
+            //TODO: NEED TO FETCH TRAILERSWAP and BOXTRUCK ORDERS FOR CURRENT DAY.
+            $today = Carbon::now()->toDateString();
+            $todayOrders = Order::whereDate('created_at', $today)
+                ->whereIn('load_type', ['box_truck_route', 'trailer_swap'])
+                ->where('is_pick_tdf', false)
+                ->with('fulfilled')->get();
+            $totalWeightTillOrder = 0;
+            $tdfAssignedOrder = [];
+            // Need to get total Weight for 40K
+            foreach ($todayOrders as $key => $todayOrder) {
+                if ($todayOrder->load_type == 'box_truck_route') {
+                    $lessThenWeight = abs((int) $request->start_weight) - ((int)$request->end_weight);
+                    if ($totalWeightTillOrder >= $lessThenWeight) {
+                        break;
+                    }
+                    $totalWeightTillOrder += $this->getTotalWeightOfOrder($todayOrder);
+                    $todayOrder->load_value = $totalWeightTillOrder;
+
+                    $tdfAssignedOrder[] = $todayOrder->id;
+                    $todayOrder->is_pick_tdf = true;
+                    $todayOrder->update();
+                }
+            }
+
+            $fullFillOrder = TdfOrder::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed']));
+            $fullFillOrder->recyle_order =  implode(',', $tdfAssignedOrder);
+            $fullFillOrder->update();
+
+            $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+
+            $order->status = 'fulfilled';
+            $order->payment_type = $request->payment_type ?? null;
+
+            $order->update();
+            $fullFillOrder['order'] = $order;
+            $fullFillOrder['tdf'] = $fullFillOrder;
+            $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
+            $fullFillOrder['customerPricing'] = $customerPricing;
+
+            $manifestPDF = new ManifestPDF();
+            $manifestPDF->order_id = $request->order_id;
+            $manifestPDF->customer_id = $order->customer_id;
+            $test = null;
+            $fullFillOrder['todaysOrder'] = $todayOrders;
+            for ($i = 0; $i < count($pdfTypes); $i++) {
+                $fullFillOrder['pdfType'] = $pdfTypes[$i];
+                $pdf = \App::make('dompdf.wrapper');
+
+                $customPaper = array(0, 0, 900, 1300);
+                $pdf->setPaper($customPaper);
+                $pdf->loadView('manifest.tdf', ['data' => $fullFillOrder]);
+
+                $fullFillOrder['pdfType'] = $pdfTypes[$i];
+                $output = $pdf->output();
+
+                $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
+                $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+                file_put_contents($pdfPath, $output);
+                switch ($pdfTypes[$i]) {
+                    case 'Generator':
+                        $manifestPDF->generator = $abPDFPath;
+                        break;
+                    case 'Transporter':
+                        $manifestPDF->transporter = $abPDFPath;
+                        break;
+                    case 'Processor':
+                        $manifestPDF->processor = $abPDFPath;
+                        break;
+                    case 'Disposal':
+                        $manifestPDF->disposal = $abPDFPath;
+                        break;
+                    case 'Original Generator':
+                        $manifestPDF->original_generator = $abPDFPath;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            $manifestPDF->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'TDF Order FullFilled Successfully',
+                'order' => $fullFillOrder,
+                'manifest_link' => $manifestPDF->transporter
+            ], 200);
+
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }

@@ -3,10 +3,12 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\FullFillOrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\OrderController;
+use App\Models\FullFillOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +43,7 @@ Route::post('/change-password', [AuthController::class, 'apiChangePassword'])->m
 //Orders
 Route::get('/get-orders', [OrderController::class, 'apiGetOrders'])->middleware('auth:sanctum');
 Route::post('/order', [OrderController::class,'apiCreateOrder'])->middleware('auth:sanctum');
+Route::post('tdf-order', [FullFillOrderController::class, 'apiFulFillTDFOrder'])->middleware('auth:sanctum');
 
 //Customers
 
