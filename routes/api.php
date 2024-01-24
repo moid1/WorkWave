@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotesController;
@@ -44,3 +45,6 @@ Route::post('/order', [OrderController::class,'apiCreateOrder'])->middleware('au
 //Customers
 
 Route::get('get-customers-order', [CustomerController::class, 'apiGetCustomerOrders'])->middleware('auth:sanctum');
+Route::get('get-driver-orders', [DriverController::class, 'apiGetLoggedInDriverOrders'])->middleware('auth:sanctum');
+
+Route::get('driver-orders/{id}', [DriverController::class, 'apiGetDriverOrders'])->middleware('auth:sanctum');
