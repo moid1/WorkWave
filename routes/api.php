@@ -44,6 +44,7 @@ Route::post('/change-password', [AuthController::class, 'apiChangePassword'])->m
 Route::get('/get-orders', [OrderController::class, 'apiGetOrders'])->middleware('auth:sanctum');
 Route::post('/order', [OrderController::class,'apiCreateOrder'])->middleware('auth:sanctum');
 Route::post('tdf-order', [FullFillOrderController::class, 'apiFulFillTDFOrder'])->middleware('auth:sanctum');
+Route::post('trailer-swap-order', [FullFillOrderController::class, 'apiFulFillTrailerSwapOrder'])->middleware('auth:sanctum');
 
 //Customers
 
