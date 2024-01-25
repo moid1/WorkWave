@@ -275,4 +275,39 @@ class OrderController extends Controller
             ], 500);
         }
     }
+
+    public function apiGetCompareOrders()
+    {
+        try {
+            $orders = Order::where('status', 'compared')->orWhereIn('load_type', ['tdf', 'trailer_swap'])->latest()->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Orders',
+                'orders' => $orders,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function apiGetFulFillOrders()
+    {
+        try {
+            $fullFilledOrderStatus = ['error-compared', 'fulfilled'];
+            $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Orders',
+                'orders' => $orders,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }

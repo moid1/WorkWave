@@ -45,6 +45,10 @@ Route::get('/get-orders', [OrderController::class, 'apiGetOrders'])->middleware(
 Route::post('/order', [OrderController::class,'apiCreateOrder'])->middleware('auth:sanctum');
 Route::post('tdf-order', [FullFillOrderController::class, 'apiFulFillTDFOrder'])->middleware('auth:sanctum');
 Route::post('trailer-swap-order', [FullFillOrderController::class, 'apiFulFillTrailerSwapOrder'])->middleware('auth:sanctum');
+Route::post('fulfill-box', [FullFillOrderController::class, 'apiFulFillOrder'])->middleware('auth:sanctum');
+
+Route::get('compare-orders', [OrderController::class, 'apiGetCompareOrders'])->middleware('auth:sanctum');
+Route::get('get-fulfill-orders', [OrderController::class, 'apiGetFulFillOrders'])->middleware('auth:sanctum');
 
 //Customers
 

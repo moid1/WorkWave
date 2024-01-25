@@ -855,7 +855,6 @@ class FullFillOrderController extends Controller
                 'order' => $fullFillOrder,
                 'manifest_link' => $manifestPDF->transporter
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -903,26 +902,26 @@ class FullFillOrderController extends Controller
 
             $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
             $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
-    
+
             $order->status = 'fulfilled';
             $order->payment_type = $request->payment_type ?? null;
-    
+
             $order->update();
             $fullFillOrder['order'] = $order;
             $fullFillOrder['customerPricing'] = $customerPricing;
-    
+
             $manifestPDF = new ManifestPDF();
             $manifestPDF->order_id = $request->order_id;
             $manifestPDF->customer_id = $order->customer_id;
-    
+
             for ($i = 0; $i < count($pdfTypes); $i++) {
                 $fullFillOrder['pdfType'] = $pdfTypes[$i];
                 $pdf = \App::make('dompdf.wrapper');
-    
+
                 $customPaper = array(0, 0, 900, 1300);
                 $pdf->setPaper($customPaper);
                 $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
-    
+
                 $fullFillOrder['pdfType'] = $pdfTypes[$i];
                 $output = $pdf->output();
                 // return $pdf->stream();
@@ -945,7 +944,7 @@ class FullFillOrderController extends Controller
                     case 'Original Generator':
                         $manifestPDF->original_generator = $abPDFPath;
                         break;
-    
+
                     default:
                         break;
                 }
@@ -959,8 +958,197 @@ class FullFillOrderController extends Controller
                 'order' => $fullFillOrder,
                 'manifest_link' => $manifestPDF->transporter
             ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function apiFulFillOrder(Request $request)
+    {
+        try {
+
+            $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+            $folderPath = 'signatures/';
+
+            $image_parts = explode(";base64,", $request->signed);
+            $driverSign = explode(";base64,", $request->driver_signed);
+
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $driver_sign_aux = explode("image/", $driverSign[0]);
+
+            if (!$image_type_aux[0] != '') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Customer Signatures is required'
+                ], 400);
+            }
+            if (!$driver_sign_aux[0] != '') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Driver Signatures is required'
+                ], 400);
+            };
+
+            $image_type = $image_type_aux[1];
+            $driver_image_type =  $driver_sign_aux[1];
 
 
+            $image_base64 = base64_decode($image_parts[1]);
+            $driver_base64 = base64_decode($driverSign[1]);
+
+            $file = $folderPath . uniqid() . '.' . $image_type;
+            file_put_contents($file, $image_base64);
+            // DRIVER SIGN
+            $driverSignFile = $folderPath . uniqid() . '.' . $driver_image_type;
+            file_put_contents($driverSignFile, $driver_base64);
+
+            //STORING TIRES TYPE IN JSON STRING
+
+            $passangerTireTypes = $request->passanger_tyres_type;
+            $availablePassangerTireTypesArr = [];
+
+            if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
+                foreach ($passangerTireTypes as $key => $value) {
+                    $input =  $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+
+                    $availablePassangerTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+            }
+
+
+            //TRUCK TIRES TYPE
+
+            $truckTireTypes = $request->truck_tyres_type;
+            $availableTruckTireTypesArr = [];
+
+            if (!empty($truckTireTypes) && count($truckTireTypes)) {
+                foreach ($truckTireTypes as $key => $value) {
+                    $input =  $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+                    $availableTruckTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+            }
+
+            // dd($availableTruckTireTypesArr);
+
+            $agriTireTypes = $request->agri_tires_type;
+            $availableAgriTireTypesArr = [];
+
+            if (!empty($agriTireTypes) && count($agriTireTypes)) {
+                foreach ($agriTireTypes as $key => $value) {
+                    $input =  $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+                    $availableAgriTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+            }
+
+
+            $otrTireTypes = $request->otr_tires_type;
+            $availableOtrTireTypesArr = [];
+
+            if (!empty($otrTireTypes) && count($otrTireTypes)) {
+                foreach ($otrTireTypes as $key => $value) {
+                    $input =  $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+                    $availableOtrTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+            }
+
+
+
+
+            $fullFillOrder =  FullFillOrder::create([
+                'type_of_passenger' => count($availablePassangerTireTypesArr) ? json_encode($availablePassangerTireTypesArr) : null,
+                'type_of_agri_tyre' => count($availableAgriTireTypesArr) ? json_encode($availableAgriTireTypesArr) : null,
+                'type_of_truck_tyre' => count($availableTruckTireTypesArr) ? json_encode($availableTruckTireTypesArr) : null,
+                'type_of_other' => count($availableOtrTireTypesArr) ? json_encode($availableOtrTireTypesArr) : null,
+                'order_id' => $request->order_id ?? null,
+                'processor_reg_no' => $request->company_reg ?? null,
+                'customer_signature' => $file ?? null,
+                'driver_signature' => $driverSignFile ?? null,
+                'cheque_no' => $request->cheque_no ?? null
+            ]);
+
+
+            $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+            $customerPricing = CustomerPricing::where('customer_id', $order->customer->id)->first();
+
+            $order->status = 'fulfilled';
+            $order->payment_type = $request->payment_type ?? null;
+
+            $order->update();
+            $fullFillOrder['order'] = $order;
+            $fullFillOrder['customerPricing'] = $customerPricing;
+
+            $manifestPDF = new ManifestPDF();
+            $manifestPDF->order_id = $request->order_id;
+            $manifestPDF->customer_id = $order->customer_id;
+
+            for ($i = 0; $i < count($pdfTypes); $i++) {
+                $fullFillOrder['pdfType'] = $pdfTypes[$i];
+                $pdf = \App::make('dompdf.wrapper');
+
+                $customPaper = array(0, 0, 900, 1500);
+                $pdf->setPaper($customPaper);
+                $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
+
+                $fullFillOrder['pdfType'] = $pdfTypes[$i];
+                $output = $pdf->output();
+                $test = $pdf;
+                // return $pdf->stream();
+                $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
+                $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+                file_put_contents($pdfPath, $output);
+                switch ($pdfTypes[$i]) {
+                    case 'Generator':
+                        $manifestPDF->generator = $abPDFPath;
+                        break;
+                    case 'Transporter':
+                        $manifestPDF->transporter = $abPDFPath;
+                        break;
+                    case 'Processor':
+                        $manifestPDF->processor = $abPDFPath;
+                        break;
+                    case 'Disposal':
+                        $manifestPDF->disposal = $abPDFPath;
+                        break;
+                    case 'Original Generator':
+                        $manifestPDF->original_generator = $abPDFPath;
+                        break;
+
+                    default:
+                        break;
+                }
+                //  return view('manifest.index');
+            }
+            $manifestPDF->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order FullFilled Successfully',
+                'order' => $fullFillOrder,
+                'manifest_link' => $manifestPDF->transporter
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
