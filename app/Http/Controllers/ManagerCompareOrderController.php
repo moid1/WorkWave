@@ -50,7 +50,7 @@ class ManagerCompareOrderController extends Controller
             }
 
             foreach ($passangerTireTypes as $key => $value) {
-                $concatInput = "reuse_".$value;
+                $concatInput = "reuse_" . $value;
                 $reusePassangerTireTypesArr[] = [
                     $concatInput => $request[$concatInput]
                 ];
@@ -78,7 +78,7 @@ class ManagerCompareOrderController extends Controller
             }
 
             foreach ($truckTireTypes as $key => $value) {
-                $concatInput = "reuse_".$value;
+                $concatInput = "reuse_" . $value;
                 $reuseTruckTireTypesArr[] = [
                     $concatInput => $request[$concatInput]
                 ];
@@ -102,7 +102,7 @@ class ManagerCompareOrderController extends Controller
             }
 
             foreach ($agriTireTypes as $key => $value) {
-                $concatInput = "reuse_".$value;
+                $concatInput = "reuse_" . $value;
                 $reuseAgriTireTypesArr[] = [
                     $concatInput => $request[$concatInput]
                 ];
@@ -127,7 +127,7 @@ class ManagerCompareOrderController extends Controller
             }
 
             foreach ($otrTireTypes as $key => $value) {
-                $concatInput = "reuse_".$value;
+                $concatInput = "reuse_" . $value;
                 $reuseOTRTireTypesArr[] = [
                     $concatInput => $request[$concatInput]
                 ];
@@ -236,17 +236,17 @@ class ManagerCompareOrderController extends Controller
         file_put_contents($pdfPath, $output);
 
         $manifestPDF = ManifestPDF::where('order_id', $order->id)->latest()->first();
-        if($manifestPDF){
+        if ($manifestPDF) {
             $manifestPDF->count_sheet = $abPDFPath;
             $manifestPDF->update();
-        }else{
+        } else {
             $manifestPDF = new ManifestPDF();
             $manifestPDF->order_id = $order->id;
             $manifestPDF->customer_id = $order->customer_id;
             $manifestPDF->count_sheet = $abPDFPath;
             $manifestPDF->save();
         }
-       return $pdf->stream();
+        return $pdf->stream();
     }
 
     public function generateWeightSheet($id)
@@ -262,6 +262,141 @@ class ManagerCompareOrderController extends Controller
             $pdf->loadView('weightsheet.create', ['data' => $order]);
             // $output = $pdf->output();
             return $pdf->stream();
+        }
+    }
+
+    public function apiCompareOrder(Request $request)
+    {
+        try {
+
+            //STORING TIRES TYPE IN JSON STRING
+
+            $passangerTireTypes = $request->passanger_tyres_type;
+            $availablePassangerTireTypesArr = [];
+            $reusePassangerTireTypesArr = [];
+
+            if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
+                foreach ($passangerTireTypes as $key => $value) {
+                    $input = $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+                    $availablePassangerTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+
+                foreach ($passangerTireTypes as $key => $value) {
+                    $concatInput = "reuse_" . $value;
+                    $reusePassangerTireTypesArr[] = [
+                        $concatInput => $request[$concatInput]
+                    ];
+                }
+            }
+
+
+            //TRUCK TIRES TYPE
+
+            $truckTireTypes = $request->truck_tyres_type;
+            $availableTruckTireTypesArr = [];
+            $reuseTruckTireTypesArr = [];
+
+            if (!empty($truckTireTypes) && count($truckTireTypes)) {
+                foreach ($truckTireTypes as $key => $value) {
+                    $input = $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+                    $availableTruckTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+
+                foreach ($truckTireTypes as $key => $value) {
+                    $concatInput = "reuse_" . $value;
+                    $reuseTruckTireTypesArr[] = [
+                        $concatInput => $request[$concatInput]
+                    ];
+                }
+            }
+
+
+            $agriTireTypes = $request->agri_tires_type;
+            $availableAgriTireTypesArr = [];
+            $reuseAgriTireTypesArr = [];
+
+            if (!empty($agriTireTypes) && count($agriTireTypes)) {
+                foreach ($agriTireTypes as $key => $value) {
+                    $input = $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+                    $availableAgriTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+
+                foreach ($agriTireTypes as $key => $value) {
+                    $concatInput = "reuse_" . $value;
+                    $reuseAgriTireTypesArr[] = [
+                        $concatInput => $request[$concatInput]
+                    ];
+                }
+            }
+
+
+
+            $otrTireTypes = $request->otr_tires_type;
+            $availableOtrTireTypesArr = [];
+            $reuseOTRTireTypesArr = [];
+
+            if (!empty($otrTireTypes) && count($otrTireTypes)) {
+                foreach ($otrTireTypes as $key => $value) {
+                    $input = $request[$value];
+                    $values = explode(" ", $input);
+                    $values = array_map('intval', $values);
+                    $sum = array_sum($values);
+                    $availableOtrTireTypesArr[] = [
+                        $value => $sum
+                    ];
+                }
+
+                foreach ($otrTireTypes as $key => $value) {
+                    $concatInput = "reuse_" . $value;
+                    $reuseOTRTireTypesArr[] = [
+                        $concatInput => $request[$concatInput]
+                    ];
+                }
+            }
+
+
+            ManagerCompareOrder::create([
+                'type_of_passenger' => count($availablePassangerTireTypesArr) ? json_encode($availablePassangerTireTypesArr) : null,
+                'type_of_agri_tyre' => count($availableAgriTireTypesArr) ? json_encode($availableAgriTireTypesArr) : null,
+                'type_of_truck_tyre' => count($availableTruckTireTypesArr) ? json_encode($availableTruckTireTypesArr) : null,
+                'type_of_other' => count($availableOtrTireTypesArr) ? json_encode($availableOtrTireTypesArr) : null,
+                'reuse_type_of_passenger' => count($reusePassangerTireTypesArr) ? json_encode($reusePassangerTireTypesArr) : null,
+                'reuse_type_of_truck_tyre' => count($reuseTruckTireTypesArr) ? json_encode($reuseTruckTireTypesArr) : null,
+                'reuse_type_of_agri_tyre' => count($reuseAgriTireTypesArr) ? json_encode($reuseAgriTireTypesArr) : null,
+                'reuse_type_of_other' => count($reuseOTRTireTypesArr) ? json_encode($reuseOTRTireTypesArr) : null,
+                'order_id' => $request->order_id ?? null,
+            ]);
+
+            $order = Order::find($request->order_id);
+            if ($order) {
+                $order->status = 'compared';
+                $order->update();
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Counting is saved',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
     }
 }

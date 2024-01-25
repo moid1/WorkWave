@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FullFillOrderController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ManagerCompareOrderController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\OrderController;
@@ -46,6 +47,10 @@ Route::post('/order', [OrderController::class,'apiCreateOrder'])->middleware('au
 Route::post('tdf-order', [FullFillOrderController::class, 'apiFulFillTDFOrder'])->middleware('auth:sanctum');
 Route::post('trailer-swap-order', [FullFillOrderController::class, 'apiFulFillTrailerSwapOrder'])->middleware('auth:sanctum');
 Route::post('fulfill-box', [FullFillOrderController::class, 'apiFulFillOrder'])->middleware('auth:sanctum');
+
+//CompareOrders
+Route::post('compare-orders', [ManagerCompareOrderController::class, 'apiCompareOrder'])->middleware('auth:sanctum');
+
 
 Route::get('compare-orders', [OrderController::class, 'apiGetCompareOrders'])->middleware('auth:sanctum');
 Route::get('get-fulfill-orders', [OrderController::class, 'apiGetFulFillOrders'])->middleware('auth:sanctum');
