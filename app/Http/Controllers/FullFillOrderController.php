@@ -852,7 +852,6 @@ class FullFillOrderController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'TDF Order FullFilled Successfully',
-                'order' => $fullFillOrder,
                 'manifest_link' => $manifestPDF->transporter
             ], 200);
         } catch (\Throwable $th) {
@@ -955,7 +954,6 @@ class FullFillOrderController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Trailer Swap Order FullFilled Successfully',
-                'order' => $fullFillOrder,
                 'manifest_link' => $manifestPDF->transporter
             ], 200);
         } catch (\Throwable $th) {
@@ -1146,9 +1144,157 @@ class FullFillOrderController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Order FullFilled Successfully',
-                'order' => $fullFillOrder,
                 'manifest_link' => $manifestPDF->transporter
             ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function apiFulFilSteelOrder(Request $request)
+    {
+        try {
+            $folderPath = 'signatures/';
+            $image_parts = explode(";base64,", $request->signed);
+
+            $image_type_aux = explode("image/", $image_parts[0]);
+
+            if (!$image_type_aux[0] != '') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Signatures is required'
+                ], 400);
+            }
+
+
+            $image_type = $image_type_aux[1];
+
+
+            $image_base64 = base64_decode($image_parts[1]);
+
+            $file = $folderPath . uniqid() . '.' . $image_type;
+            file_put_contents($file, $image_base64);
+
+            $request->merge([
+                'cx_signature' => $file
+            ]);
+
+            $fullFillOrder = SteelOrder::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed', 'address']));
+
+
+            $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+
+            $order->status = 'compared';
+
+            $order->update();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order FullFilled Successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function apiStateByWeight(Request $request){
+        try {
+            $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
+        // $pdfTypes = ['Generator'];
+        $folderPath = 'signatures/';
+
+        $image_parts = explode(";base64,", $request->signed);
+
+        $image_type_aux = explode("image/", $image_parts[0]);
+
+        if (!$image_type_aux[0] != '') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Signatures is required'
+            ], 400);
+        }
+
+
+        $image_type = $image_type_aux[1];
+
+
+        $image_base64 = base64_decode($image_parts[1]);
+
+        $file = $folderPath . uniqid() . '.' . $image_type;
+        file_put_contents($file, $image_base64);
+
+        $request->merge([
+            'cx_signature' => $file
+        ]);
+
+        $fullFillOrder = StateWeight::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed', 'address']));
+
+
+        $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+        $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
+
+        $order->status = 'compared';
+
+        $order->update();
+        $fullFillOrder['order'] = $order;
+        $fullFillOrder['orderType'] = 'stateWeight';
+        $fullFillOrder['stateOrder'] = $fullFillOrder;
+        $fullFillOrder['customerPricing'] = $customerPricing;
+        $manifestPDF = new ManifestPDF();
+        $manifestPDF->order_id = $request->order_id;
+        $manifestPDF->customer_id = $order->customer_id;
+        $testPDF = null;
+        for ($i = 0; $i < count($pdfTypes); $i++) {
+            $fullFillOrder['pdfType'] = $pdfTypes[$i];
+            $pdf = \App::make('dompdf.wrapper');
+
+            $customPaper = array(0, 0, 900, 1300);
+            $pdf->setPaper($customPaper);
+            $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
+
+            $fullFillOrder['pdfType'] = $pdfTypes[$i];
+            $output = $pdf->output();
+            $testPDF = $pdf;
+            // return $pdf->stream();
+            $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
+            $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+            file_put_contents($pdfPath, $output);
+            switch ($pdfTypes[$i]) {
+                case 'Generator':
+                    $manifestPDF->generator = $abPDFPath;
+                    break;
+                case 'Transporter':
+                    $manifestPDF->transporter = $abPDFPath;
+                    break;
+                case 'Processor':
+                    $manifestPDF->processor = $abPDFPath;
+                    break;
+                case 'Disposal':
+                    $manifestPDF->disposal = $abPDFPath;
+                    break;
+                case 'Original Generator':
+                    $manifestPDF->original_generator = $abPDFPath;
+                    break;
+
+                default:
+                    break;
+            }
+            //  return view('manifest.index');
+        }
+        $manifestPDF->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Order FullFilled Successfully',
+            'manifest_link' => $manifestPDF->transporter
+        ], 200);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

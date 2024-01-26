@@ -47,6 +47,8 @@ Route::post('/order', [OrderController::class,'apiCreateOrder'])->middleware('au
 Route::post('tdf-order', [FullFillOrderController::class, 'apiFulFillTDFOrder'])->middleware('auth:sanctum');
 Route::post('trailer-swap-order', [FullFillOrderController::class, 'apiFulFillTrailerSwapOrder'])->middleware('auth:sanctum');
 Route::post('fulfill-box', [FullFillOrderController::class, 'apiFulFillOrder'])->middleware('auth:sanctum');
+Route::post('steel-order', [FullFillOrderController::class, 'apiFulFilSteelOrder'])->middleware('auth:sanctum');
+Route::post('state-weight', [FullFillOrderController::class, 'apiStateByWeight'])->middleware('auth:sanctum');
 
 //CompareOrders
 Route::post('compare-orders', [ManagerCompareOrderController::class, 'apiCompareOrder'])->middleware('auth:sanctum');
