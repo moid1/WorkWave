@@ -279,7 +279,7 @@ class OrderController extends Controller
     public function apiGetCompareOrders()
     {
         try {
-            $orders = Order::where('status', 'compared')->orWhereIn('load_type', ['tdf', 'trailer_swap'])->latest()->get();
+            $orders = Order::where('status', 'compared')->orWhereIn('load_type', ['tdf', 'trailer_swap'])->with('customer')->latest()->get();
             return response()->json([
                 'status' => true,
                 'message' => 'Orders',
@@ -297,7 +297,7 @@ class OrderController extends Controller
     {
         try {
             $fullFilledOrderStatus = ['error-compared', 'fulfilled'];
-            $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
+            $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->with(['customer', 'user', 'driver'])->get();
             return response()->json([
                 'status' => true,
                 'message' => 'Orders',
