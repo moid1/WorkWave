@@ -13,6 +13,7 @@ use App\Models\TdfOrder;
 use App\Models\TrailerSwapOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class FullFillOrderController extends Controller
 {
@@ -446,7 +447,7 @@ class FullFillOrderController extends Controller
         $tdfAssignedOrder = [];
         // Need to get total Weight for 40K
         foreach ($todayOrders as $key => $todayOrder) {
-            if ($todayOrder->load_type == 'box_truck_route') {
+            if ($todayOrder->load_type == 'box_truck_route' && !empty($todayOrder->fulfilled)) {
                 $lessThenWeight = abs((int) $request->start_weight) - ((int)$request->end_weight);
                 if ($totalWeightTillOrder >= $lessThenWeight) {
                     break;
@@ -778,7 +779,7 @@ class FullFillOrderController extends Controller
             $tdfAssignedOrder = [];
             // Need to get total Weight for 40K
             foreach ($todayOrders as $key => $todayOrder) {
-                if ($todayOrder->load_type == 'box_truck_route') {
+                if ($todayOrder->load_type == 'box_truck_route' && !empty($todayOrder->fulfilled)) {
                     $lessThenWeight = abs((int) $request->start_weight) - ((int)$request->end_weight);
                     if ($totalWeightTillOrder >= $lessThenWeight) {
                         break;
@@ -967,6 +968,10 @@ class FullFillOrderController extends Controller
     public function apiFulFillOrder(Request $request)
     {
         try {
+            
+           
+    // Log::critical($request->passanger_tyres_type);
+    // return;
 
             $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
             $folderPath = 'signatures/';
@@ -1005,7 +1010,7 @@ class FullFillOrderController extends Controller
 
             //STORING TIRES TYPE IN JSON STRING
 
-            $passangerTireTypes = $request->passanger_tyres_type;
+            $passangerTireTypes = explode(',',$request->passanger_tyres_type);
             $availablePassangerTireTypesArr = [];
 
             if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
@@ -1024,7 +1029,7 @@ class FullFillOrderController extends Controller
 
             //TRUCK TIRES TYPE
 
-            $truckTireTypes = $request->truck_tyres_type;
+            $truckTireTypes = explode(',',$request->truck_tyres_type);
             $availableTruckTireTypesArr = [];
 
             if (!empty($truckTireTypes) && count($truckTireTypes)) {
