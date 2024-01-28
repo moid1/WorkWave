@@ -885,14 +885,14 @@
                             class="{{ $farm_tractor_last_two_digits == $dock_farm_tractor_last_two_digits ? '' : 'red' }} ">
                             <td>Farm Tractor $1.25 per, Last two digits</td>
                             <td class="purple">{{ $dock_farm_tractor_last_two_digits }}</td>
-                            <td class="darkpurple">{{$reuse_dock_farm_tractor_last_two_digits}}</td>
+                            <td class="darkpurple">{{$reuse_dock_farm_tractor_last_two_digits}}</td>                            
+                        </tr>
+                        <tr>
+                            <td style="color: white">asd</td>
+                            <td class=""></td>
+                            <td class=""></td>
                         </tr>
 
-
-                    </tbody>
-                    {{-- $dock_15_5_24 = 0; $dock_17_5_25=0; $dock_20_5_25=0; $dock_23_5_25 =0; $dock_26_5_25 = 0 ;
-                    $dock_29_5_25 =0; $dock_24_00R35 =0; $dock_13_00_24 =0; $dock_14_00_24 =0;$dock_19_5L_24 =0; --}}
-                    <tbody>
                         <thead>
                             <tr>
                                 <th>OTR</th>
@@ -900,6 +900,11 @@
                                 <th>REUSE</th>
                             </tr>
                         </thead>
+                    </tbody>
+                    {{-- $dock_15_5_24 = 0; $dock_17_5_25=0; $dock_20_5_25=0; $dock_23_5_25 =0; $dock_26_5_25 = 0 ;
+                    $dock_29_5_25 =0; $dock_24_00R35 =0; $dock_13_00_24 =0; $dock_14_00_24 =0;$dock_19_5L_24 =0; --}}
+                    <tbody>
+                       
                         <tr class="{{ $driver_15_5_24 == $dock_15_5_24 ? '' : 'red' }} ">
                             <td>15.5-25</td>
                             <td class="purple">{{ $dock_15_5_24 }}</td>
@@ -1026,29 +1031,8 @@
                             <td></td>
                             <td style="color: white">.</td>
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td style="color: white">.</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td style="color: white">.</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td style="color: white">.</td>
-                        </tr>
-                        <tr style="text-align: center">
-                            <td colspan="4" style="border: 1px solid white; text-align: center">
-                                {{-- <button class="btn1">Driver Filled</button>
-                                <button class="btn2">Front Desk Filled</button>
+                      
 
-                                <button class="btn3">Rowdy/Dock Filled</button> --}}
-                            </td>
-                        </tr>
 
                     </tbody>
                 </table>
