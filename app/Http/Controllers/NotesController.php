@@ -78,7 +78,7 @@ class NotesController extends Controller
 
     public function getUserNotes($id)
     {
-        $notes = Notes::where([['customer_id', $id]])->orderBy('created_at', 'DESC')->get();
+        $notes = Notes::where('customer_id', $id)->orderBy('created_at', 'desc')->get();
         $customer = Customer::find($id);
         return view('notes.user-notes', compact('notes', 'customer'));
     }

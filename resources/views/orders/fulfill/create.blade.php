@@ -363,6 +363,28 @@
                                             </div>
                                         </div> --}}
 
+                                        
+                                        <div class="col-lg-6 " id="">
+                                            <div class="form-group">
+                                                <label>No of tires left</label>
+                                                <input id="tires_left" type="text" class="form-control"
+                                                    name="tires_left" value="{{ old('tires_left') }}" autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 " id="">
+                                            <div class="form-group">
+                                                <label>Do you want us back?</label>
+                                                <select id="" name="want_back"
+                                                class="form-control form-select form-select-lg mb-3"
+                                                aria-label=".form-select-lg example">
+                                                <option value="no">No</option>
+                                                <option value="yes">yes</option>
+                                            </select>
+                                            </div>
+                                        </div>
+
+
                                         <div class="col-lg-6 d-none" id="chequeCol">
                                             <div class="form-group">
                                                 <label>Cheque No (If any)</label>

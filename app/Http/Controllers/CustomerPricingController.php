@@ -22,7 +22,7 @@ class CustomerPricingController extends Controller
      */
     public function create($id)
     {
-        $customerPricing = CustomerPricing::whereCustomerId($id)->latest()->first();
+        $customerPricing = CustomerPricing::whereCustomerId($id)->with('customer')->latest()->first();
         $customerId = $id;
         return view('customers.pricing.create', compact('customerPricing', 'customerId'));
     }

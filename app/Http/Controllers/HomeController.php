@@ -299,18 +299,30 @@ class HomeController extends Controller
     }
 
 
-    public function generateDailyCountSheet()
+    public function generateDailyCountSheet(Request $request)
     {
         $NotIncluded = ['steel', 'tdf'];
-        $todaysOrders = Order::whereDate('created_at', now()->toDateString())
-        ->whereNotIn('load_type', $NotIncluded)
-            ->whereNotNull('driver_id')
-            ->with(['driver', 'customer', 'fulfilled', 'compared'])
-            ->get()
-            ->groupBy('driver_id')
-            ->map
-            ->flatten()
-            ->toArray();
+
+        if ($request->date) {
+            $todaysOrders = Order::whereDate('created_at', $request->date)->whereNotIn('load_type', $NotIncluded)
+                ->whereNotNull('driver_id')
+                ->with(['driver', 'customer', 'fulfilled', 'compared'])
+                ->get()
+                ->groupBy('driver_id')
+                ->map
+                ->flatten()
+                ->toArray();;
+        } else {
+            $todaysOrders = Order::whereDate('created_at', now()->toDateString())
+                ->whereNotIn('load_type', $NotIncluded)
+                ->whereNotNull('driver_id')
+                ->with(['driver', 'customer', 'fulfilled', 'compared'])
+                ->get()
+                ->groupBy('driver_id')
+                ->map
+                ->flatten()
+                ->toArray();
+        }
         // dd($todaysOrders);
         return view('countsheet.daily', compact('todaysOrders'));
     }

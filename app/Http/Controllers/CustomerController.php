@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
@@ -149,7 +150,9 @@ class CustomerController extends Controller
 
     public function getCustomers()
     {
-        $customers = Customer::where('status', 1)->get();
+        $today = Carbon::today();
+        $customerIds = Order::whereDate('created_at', $today)->pluck('customer_id');
+        $customers = Customer::where('status', 1)->whereIn('id', $customerIds)->get();
         return view('books.index', compact('customers'));
     }
 

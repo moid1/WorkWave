@@ -160,7 +160,31 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-12  ">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Spoke With</label>
+                                               <input type="text" name="spoke_with" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Estimated Tires</label>
+                                               <input type="text" name="estimated_tires" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Want to create Order</label>
+                                                <select id="" name="create_order" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                                    <option value="createOrder">Yes</option>
+                                                    <option value="createOrder">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-lg-6  ">
                                             <div class="form-group ">
                                                 <label>Notes</label>
                                              <textarea   class="form-control " name="notes" id="notes" cols="30" rows="2"></textarea>

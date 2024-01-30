@@ -55,10 +55,19 @@
 </head>
 
 <body>
+
     <div class="body">
         <h4 style="text-align: center">RELIABLE TIRE DISPOSAL DAILY COUNT SHEET</h4>
         <h4 style="text-align: center">3345 E State Hwy 29 Burrnet , TX 78611</>
             <h4 style="text-align: center">512-762-8219</h4>
+
+            <div class="float-right">
+                <form action="{{route('generate.daily.count.sheet')}}">
+                <input type="date" class="form-control" name="date">
+                <button class="btn btn-primary" type="submit">Fetch</button>
+            </form>
+
+            </div>
 
             <p style="margin-bottom: 10px; margin-top: 30px">{{ now()->format('D, M d Y') }}</p>
             <table>

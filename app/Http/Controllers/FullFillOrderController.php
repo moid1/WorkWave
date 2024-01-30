@@ -14,6 +14,8 @@ use App\Models\TrailerSwapOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class FullFillOrderController extends Controller
 {
@@ -168,8 +170,21 @@ class FullFillOrderController extends Controller
             'cheque_no' => $request->cheque_no ?? null
         ]);
 
+      
+
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+        if ($request->want_back == 'yes') {
+            Order::create([
+                'customer_id' => $order->customer->id,
+                'user_id' => Auth::id(),
+                'notes' =>  $request['tires_left'] ? 'No of Tires left over '. $request['tires_left'] : 'N/A',
+                'load_type' => 'box_truck_route',
+                'driver_id' => Auth::id()
+            ]);
+        }
+
+
         $customerPricing = CustomerPricing::where('customer_id', $order->customer->id)->first();
 
         $order->status = 'fulfilled';
@@ -258,10 +273,58 @@ class FullFillOrderController extends Controller
         //
     }
 
-    public function getFullFilledOrders()
+    public function getFullFilledOrders(Request $request)
     {
         $fullFilledOrderStatus = ['error-compared', 'fulfilled'];
         $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
+
+        if ($request->ajax()) {
+            $data = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date);
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+            }
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('M d Y');
+                })
+              
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })
+
+                ->editColumn('status', function ($row) {
+                    if ($row->driver)
+                        return $row->status;
+                    return 'N/A';
+                })
+                ->editColumn('action', function ($row) {
+                    $route = route("compare.order", $row->id);
+                return '<a href=' . $route . ' class="update_driver"> <i class="mdi mdi-compare" ></i></a>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
         return view('orders.fulfill.index', compact('orders'));
     }
 

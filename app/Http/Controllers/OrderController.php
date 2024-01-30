@@ -9,16 +9,62 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use DataTables;
 
 class OrderController extends Controller
 {
 
-    protected $WORKWAVE_URL = 'https://wwrm.workwave.com/api/v1/territories/9c7ab89c-81d3-4d0a-9cd8-61390a286ad8/orders';
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->ajax()) {
+            $data = Order::with(['customer', 'user', 'driver'])->get();
+
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date);
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+            }
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('M d Y');
+                })
+                ->editColumn('email', function ($row) {
+                    return $row->customer->email;
+                })
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })
+                // ->editColumn('update_driver', function ($row) {
+                //     return '<a href="#" class="update_driver"> <i class="mdi mdi-account" data-order_id="'.$row->id.'"  title="Update Driver"></i></a>';
+                // })
+                // ->rawColumns(['update_driver'])
+                ->make(true);
+        }
+
         $drivers = User::where('type', 2)->get();
         $orders = Order::with(['customer', 'user', 'driver'])->get();
         return view('orders.index', compact('orders', 'drivers'));
@@ -39,19 +85,22 @@ class OrderController extends Controller
     public function store(Request $request)
     {
 
-        Order::create([
-            'customer_id' => $request['customer_id'],
-            'user_id' => Auth::id(),
-            'notes' => $request['notes'] ?? 'N/A',
-            'load_type' => $request['load_type'],
-            'driver_id' => $request['driver_id'] ?? null
+        if ($request->create_order == 'createOrder') {
+            Order::create([
+                'customer_id' => $request['customer_id'],
+                'user_id' => Auth::id(),
+                'notes' => $request['notes'] ?? 'N/A',
+                'load_type' => $request['load_type'],
+                'driver_id' => $request['driver_id'] ?? null
 
-        ]);
-
+            ]);
+        }
         Notes::create([
             'customer_id' => $request['customer_id'],
             'user_id' => Auth::id(),
             'note' => $request['notes'] ?? 'N/A',
+            'estimated_tires' => $request->estimated_tires ?? 'N/A',
+            'spoke_with' => $request->spoke_with ?? 'N/A',
             'title' => 'Order Note'
         ]);
         return redirect('/orders')->with('success', 'Order Created Successfully');
@@ -89,15 +138,6 @@ class OrderController extends Controller
         //
     }
 
-    public function callWorkWave($data)
-    {
-
-        $response = Http::withHeaders([
-            'X-WorkWave-Key' => '476563b3-8bc4-4493-81e6-4098be89dbbc',
-        ])->post($this->WORKWAVE_URL, $data, $data);
-
-        return ($response->json());
-    }
 
     public function driverOrders()
     {
@@ -205,8 +245,59 @@ class OrderController extends Controller
         }
     }
 
-    public function getComparedOrders()
+    public function getComparedOrders(Request $request)
     {
+        if ($request->ajax()) {
+            $data = Order::where('status', 'compared')->orWhereIn('load_type', ['tdf', 'trailer_swap'])->latest()->get();
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date);
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+            }
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('load_type', function ($row) {
+                    return $row->load_type;
+                })
+
+                ->editColumn('email', function ($row) {
+                    return $row->customer->email;
+                    return 'N/A';
+                })
+
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('M d Y');
+                })
+
+                ->editColumn('generate', function ($row) {
+                    $route = route('generate.countsheet', $row->id);
+                    $weightRoute = route('generate.weightsheet', $row->id);
+                    // <a href="{{ route('generate.countsheet', $order->id) }}"> </a>
+                    return '<a href=' . $route . '> Count Sheet</a>' . ($row->load_type == 'box_truck_route' ? ' / <a href=' . $weightRoute . '>Weight Sheet</a>' : '');
+                })
+                ->rawColumns(['generate'])
+                ->make(true);
+        }
         $orders = Order::where('status', 'compared')->orWhereIn('load_type', ['tdf', 'trailer_swap'])->latest()->get();
         return view('orders.compared.index', compact('orders'));
     }
@@ -220,8 +311,57 @@ class OrderController extends Controller
         return view('orders.driver.manifest', compact('orders'));
     }
 
-    public function getUnfilledManifest()
+    public function getUnfilledManifest(Request $request)
     {
+
+        if ($request->ajax()) {
+            $data = Order::where('is_filled_by_manager', false)->get();
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date);
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+            }
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+
+                ->editColumn('email', function ($row) {
+                    return $row->customer->email;
+                    return 'N/A';
+                })
+
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('M d Y');
+                })
+
+                ->editColumn('action', function ($row) {
+                    $route = route('unfill.manifest.order', $row->id);
+                    return '<a href=' . $route . '> <i class="mdi mdi-note " 
+                    ></i></a>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         $orders = Order::where('is_filled_by_manager', false)->get();
         return view('orders.unfill.index', compact('orders'));
     }

@@ -152,7 +152,7 @@
 
                         <li>
                             <a href="{{route('orders.compared')}}" class="waves-effect"><i
-                                    class="mdi mdi-calendar-check"></i><span> Compared Orders </span></a>
+                                    class="mdi mdi-calendar-check"></i><span> Daily Invoices </span></a>
                         </li>
 
                         <li>
