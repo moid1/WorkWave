@@ -367,7 +367,7 @@
                                         <div class="col-lg-6 " id="">
                                             <div class="form-group">
                                                 <label>No of tires left</label>
-                                                <input id="tires_left" type="text" class="form-control"
+                                                <input required id="tires_left" type="text" class="form-control"
                                                     name="tires_left" value="{{ old('tires_left') }}" autofocus>
                                             </div>
                                         </div>
