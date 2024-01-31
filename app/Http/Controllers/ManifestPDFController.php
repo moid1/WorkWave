@@ -19,7 +19,7 @@ class ManifestPDFController extends Controller
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date)->format('YYYY-MM-DD');
-                $toDate = Carbon::parse($request->to_date)->format('YYYY-MM-DD');
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
                 $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
             }
 
