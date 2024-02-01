@@ -332,7 +332,7 @@ class FullFillOrderController extends Controller
 
     public function compareOrder($id)
     {
-        $order = Order::find($id);
+        $order = Order::whereId($id)->with('customer')->first();
         return view('manager.compare.compare', compact('order'));
     }
 

@@ -36,7 +36,7 @@
                                         <th>Order Date</th>
                                         <th>Email</th>
                                          <th>Driver</th>
-                                        {{-- <th>Update Driver</th> --}}
+                                        <th>Update Driver</th>
 
 
                                     </tr>
@@ -52,8 +52,8 @@
                                             <td>{{ $order->created_at }}</td>
                                             <td>{{ $order->customer->email }}</td>
                                             <td>{{ $order->driver ? $order->driver->name : 'N/A' }}</td>
-                                            {{-- <td><a href="" class="update_driver"><i class="mdi mdi-account " data-order_id="{{ $order->id }}"
-                                                    title="Update Driver"></i></a> </td>  --}}
+                                            <td><a href="" class="update_driver" data-order_id="{{ $order->id }}"><i class="mdi mdi-account " 
+                                                    title="Update Driver"></i></a> </td> 
 
                                         </tr>
                                     @endforeach
@@ -128,9 +128,11 @@
     </script>
 
     <script>
-        $('.update_driver').click(function(e){
-            e.preventDefault();
-            alert();
+      $('.update_driver').click(function(e){
+        e.preventDefault();
+        console.log($(this).data('order_id'));
+            $('.orderID').val($(this).data('order_id'))
+            $('#driversList').modal('show');
         })
         // $('.update_driver').on('click', function() {
         //     $('.orderID').val($(this).data('order_id'))
@@ -151,6 +153,7 @@
                 },
                 success: function(data) {
                     alert(data.message);
+                    window.location.reload();
                 }
             })
         });

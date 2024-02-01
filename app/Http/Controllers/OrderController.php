@@ -58,10 +58,10 @@ class OrderController extends Controller
                         return $row->driver->name;
                     return 'N/A';
                 })
-                // ->editColumn('update_driver', function ($row) {
-                //     return '<a href="#" class="update_driver"> <i class="mdi mdi-account" data-order_id="'.$row->id.'"  title="Update Driver"></i></a>';
-                // })
-                // ->rawColumns(['update_driver'])
+                ->editColumn('update_driver', function ($row) {
+                    return '<a href="#" class="update_driver"> <i class="mdi mdi-account" data-order_id="'.$row->id.'"  title="Update Driver"></i></a>';
+                })
+                ->rawColumns(['update_driver'])
                 ->make(true);
         }
 

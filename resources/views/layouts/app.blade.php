@@ -147,7 +147,7 @@
 
                         <li>
                             <a href="{{route('orders.fullfilled')}}" class="waves-effect"><i
-                                    class="mdi mdi-calendar-check"></i><span> Fullfilled Orders </span></a>
+                                    class="mdi mdi-calendar-check"></i><span> Dock Count </span></a>
                         </li>
 
                         <li>
