@@ -37,8 +37,6 @@
                                         <th>Email</th>
                                          <th>Driver</th>
                                         <th>Update Driver</th>
-
-
                                     </tr>
                                 </thead>
 
@@ -94,8 +92,7 @@
                 },
                 columns: [{
                         data: 'id',
-                        name: 'id',
-                        searchable: true
+                        name: 'id'
                     },
                     {
                         data: 'business_name',
@@ -116,6 +113,10 @@
                     {
                         data: 'driver',
                         name: 'Driver'
+                    },
+                     {
+                        data: 'update_driver',
+                        name: 'Update Driver'
                     }
                 ]
             });
@@ -128,18 +129,10 @@
     </script>
 
     <script>
-      $('.update_driver').click(function(e){
-        e.preventDefault();
-        console.log($(this).data('order_id'));
-            $('.orderID').val($(this).data('order_id'))
+    function updateDriver(id){
+            $('.orderID').val(id)
             $('#driversList').modal('show');
-        })
-        // $('.update_driver').on('click', function() {
-        //     $('.orderID').val($(this).data('order_id'))
-        //     $('#driversList').modal('show');
-        // });
-
-        $('#selectDriver').on('change', function() {
+                    $('#selectDriver').on('change', function() {
             let driverID = this.value;
             $.ajax({
                 url: '{{ route('order.updateDriver') }}',
@@ -155,7 +148,9 @@
                     alert(data.message);
                     window.location.reload();
                 }
-            })
+            });
         });
+    }
+
     </script>
 @endsection

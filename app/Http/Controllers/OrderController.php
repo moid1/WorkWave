@@ -59,7 +59,12 @@ class OrderController extends Controller
                     return 'N/A';
                 })
                 ->editColumn('update_driver', function ($row) {
-                    return '<a href="#" class="update_driver"> <i class="mdi mdi-account" data-order_id="'.$row->id.'"  title="Update Driver"></i></a>';
+                    // return '<a href="#" class="update_driver"> <i class="mdi mdi-account" data-order_id="'.$row->id.'"  title="Update Driver"></i></a>';
+                    $button = '
+                    <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateDriver(\'' . $row->id . '\')">Update Driver
+                    </button>
+                ';
+                    return $button;
                 })
                 ->rawColumns(['update_driver'])
                 ->make(true);
