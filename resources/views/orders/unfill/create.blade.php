@@ -28,6 +28,7 @@
                     <div class="card-body">
 
                         <p class="text-muted m-b-30 font-14">Fill This instructions Carefully.</p>
+                        <p>{{$order->customer->business_name}}</p>
                         @if (Session::has('success'))
                         <div class="alert alert-success" role="alert">
                             {{ Session::get('success') }}

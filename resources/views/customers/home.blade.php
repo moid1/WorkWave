@@ -30,7 +30,7 @@
                                         <tr>
                                             <td>000{{$order->id}}</td>
                                             <td>{{$order->created_at->format('d M Y')}}</td>
-                                            @if($order->manifest)
+                                            @if($order->manifest && $order->manifest->generator)
                                                 <td><a href="{{url($order->manifest->generator ?? '')}}">Manifest </a></td>
                                             @else
                                             <td>N/A</td>

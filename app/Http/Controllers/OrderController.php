@@ -373,7 +373,7 @@ class OrderController extends Controller
 
     public function getUnfilledManifestOrder($id)
     {
-        $order = Order::find($id);
+        $order = Order::whereId($id)->with('customer')->first();
         return view('orders.unfill.create', compact('order'));
     }
 
