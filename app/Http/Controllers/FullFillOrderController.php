@@ -1155,8 +1155,21 @@ class FullFillOrderController extends Controller
                 'cheque_no' => $request->cheque_no ?? null
             ]);
 
+            
+
 
             $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+
+            if ($request->backUs == true) {
+                Order::create([
+                    'customer_id' => $order->customer->id,
+                    'user_id' => Auth::id(),
+                    'notes' =>  $request['tiresLeft'] ? 'No of Tires left over '. $request['tiresLeft'] : 'N/A',
+                    'load_type' => 'box_truck_route',
+                    'driver_id' => Auth::id()
+                ]);
+            }
+
             $customerPricing = CustomerPricing::where('customer_id', $order->customer->id)->first();
 
             $order->status = 'fulfilled';

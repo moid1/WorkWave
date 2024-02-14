@@ -33,7 +33,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::view('privacy-policy', 'privacy');
 Route::get('/manifestsssss', [HomeController::class, 'getManifest'])->name('manifest');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
