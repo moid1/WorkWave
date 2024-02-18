@@ -35,8 +35,8 @@
                                         <th>Created By</th>
                                         <th>Order Date</th>
                                         <th>Email</th>
-                                         <th>Driver</th>
-                                        <th>Update Driver</th>
+                                        <th>Driver</th>
+                                        <th>Action </th>
                                     </tr>
                                 </thead>
 
@@ -50,8 +50,9 @@
                                             <td>{{ $order->created_at }}</td>
                                             <td>{{ $order->customer->email }}</td>
                                             <td>{{ $order->driver ? $order->driver->name : 'N/A' }}</td>
-                                            <td><a href="" class="update_driver" data-order_id="{{ $order->id }}"><i class="mdi mdi-account " 
-                                                    title="Update Driver"></i></a> </td> 
+                                            <td><a href="" class="update_driver"
+                                                    data-order_id="{{ $order->id }}"><i class="mdi mdi-account "
+                                                        title="Update Driver"></i></a> </td>
 
                                         </tr>
                                     @endforeach
@@ -71,11 +72,22 @@
 @section('pageSpecificJs')
     <script type="text/javascript">
         $(function() {
+            var startDate = localStorage.getItem('startDate');
+            var endDate = localStorage.getItem('endDate');
+            if (startDate && endDate) {
+                startDate = new Date(startDate);
+                endDate = new Date(endDate);
 
-            $('input[name="daterange"]').daterangepicker({
-                startDate: moment().subtract(1, 'M'),
-                endDate: moment()
-            });
+                $('input[name="daterange"]').daterangepicker({
+                    startDate: startDate,
+                    endDate: endDate
+                });
+            } else {
+                $('input[name="daterange"]').daterangepicker({
+                    startDate: moment().subtract(1, 'M'),
+                    endDate: moment()
+                });
+            }
 
             let url = "{{ route('order.index') }}";
             var table = $('.data-table').DataTable({
@@ -95,8 +107,8 @@
                         name: 'id'
                     },
                     {
-                        data: 'business_name',
-                        name: 'Business Name'
+                        data: 'customer.business_name',
+                        name: 'customer.business_name'
                     },
                     {
                         data: 'created_by',
@@ -104,17 +116,24 @@
                     },
                     {
                         data: 'created_at',
-                        name: 'Order Date'
+                        name: 'created_at'
                     },
                     {
-                        data: 'email',
-                        name: 'Email'
+                        data: 'customer.email',
+                        name: 'customer.email'
                     },
                     {
                         data: 'driver',
-                        name: 'Driver'
+                        name: 'driver',
+                        render: function(data, type, full, meta) {
+                            if (full.driver) {
+                                return full.driver;
+                            } else {
+                                return 'N/A';
+                            }
+                        }
                     },
-                     {
+                    {
                         data: 'update_driver',
                         name: 'Update Driver'
                     }
@@ -122,6 +141,12 @@
             });
 
             $(".filter").click(function() {
+                localStorage.setItem('startDate', $('input[name="daterange"]').data('daterangepicker')
+                    .startDate);
+
+                localStorage.setItem('endDate', $('input[name="daterange"]').data('daterangepicker')
+                    .endDate);
+
                 table.draw();
             });
 
@@ -129,28 +154,27 @@
     </script>
 
     <script>
-    function updateDriver(id){
+        function updateDriver(id) {
             $('.orderID').val(id)
             $('#driversList').modal('show');
-                    $('#selectDriver').on('change', function() {
-            let driverID = this.value;
-            $.ajax({
-                url: '{{ route('order.updateDriver') }}',
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    order_id: $('.orderID').val(),
-                    driver_id: driverID
-                },
-                success: function(data) {
-                    alert(data.message);
-                    window.location.reload();
-                }
+            $('#selectDriver').on('change', function() {
+                let driverID = this.value;
+                $.ajax({
+                    url: '{{ route('order.updateDriver') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        order_id: $('.orderID').val(),
+                        driver_id: driverID
+                    },
+                    success: function(data) {
+                        alert(data.message);
+                        window.location.reload();
+                    }
+                });
             });
-        });
-    }
-
+        }
     </script>
 @endsection

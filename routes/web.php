@@ -69,9 +69,11 @@ Route::get('/toggle-customer-status/{id}', [CustomerController::class, 'toggleCu
 
 //Orders
 Route::get('/orders',  [OrderController::class, 'index'])->name('order.index');
+Route::get('order/{id}', [OrderController::class, 'getOrderById'])->name('order.show');
 Route::get('/create-orders',  [OrderController::class, 'create'])->name('order.create');
 Route::post('/orders',  [OrderController::class, 'store'])->name('order.store');
 Route::post('/assign-driver', [OrderController::class, 'updateDriver'])->name('order.updateDriver');
+Route::post('update-order', [OrderController::class, 'updateOrder'])->name('order.updateOrder');
 
 //Driver ORders
 Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('order.driver.index');

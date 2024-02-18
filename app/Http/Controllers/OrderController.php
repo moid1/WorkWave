@@ -20,7 +20,6 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
             $data = Order::with(['customer', 'user', 'driver'])->get();
 
@@ -59,12 +58,17 @@ class OrderController extends Controller
                     return 'N/A';
                 })
                 ->editColumn('update_driver', function ($row) {
-                    // return '<a href="#" class="update_driver"> <i class="mdi mdi-account" data-order_id="'.$row->id.'"  title="Update Driver"></i></a>';
                     $button = '
                     <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateDriver(\'' . $row->id . '\')">Update Driver
                     </button>
                 ';
-                    return $button;
+                $showBtn = '';
+
+                if ($row->status == 'created') {
+                    $orderShowRoute = route('order.show', $row->id);
+                    $showBtn =  '/<a href="'.$orderShowRoute.'" > <i class="fa fa-edit"  title="update order"></i></a>';
+                }
+                    return $button . $showBtn;
                 })
                 ->rawColumns(['update_driver'])
                 ->make(true);
@@ -320,7 +324,7 @@ class OrderController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = Order::where('is_filled_by_manager', false)->get();
+            $data = Order::where('is_filled_by_manager', false)->with(['customer', 'driver', 'user'])->get();
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
@@ -454,5 +458,29 @@ class OrderController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function getOrderById($id){
+        $order = Order::whereId($id)->with(['customer', 'driver'])->first();
+        $drivers = User::where('type', 2)->get();
+        return view('orders.show', compact('order', 'drivers'));
+    }
+
+    public function updateOrder(Request $request){
+        $order = Order::find($request->order_id);
+        $order->load_type = $request['load_type'];
+        $order->driver_id = $request['driver_id'];
+        $order->update();
+
+        Notes::create([
+            'customer_id' => $request['customer_id'],
+            'user_id' => Auth::id(),
+            'note' => $request['notes'] ?? 'N/A',
+            'estimated_tires' => $request->estimated_tires ?? 'N/A',
+            'spoke_with' => $request->spoke_with ?? 'N/A',
+            'title' => 'Order Note'
+        ]);
+        
+        return redirect('/orders')->with('success', 'Order Updated Successfully');
     }
 }
