@@ -106,4 +106,23 @@ class NotesController extends Controller
             ], 500);
         }
     }
+
+
+    public function getLastNote(Request $request){
+        try {
+            $note = Notes::where('customer_id', $request->id)->latest()->first();
+               
+            return response()->json([
+                'status' => true,
+                'message' => 'Customer Note',
+                'data' => $note,
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -67,6 +67,37 @@
         </div><!-- container-fluid -->
     </div>
     @include('orders.includes.change_driver')
+
+    <div class="modal fade" id="customerSummary" tabindex="-1" aria-labelledby="schoolUsersListLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="schoolUsersListLabel">Customer Summary</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <p>Customer Last Note</p>&nbsp;
+                            <p id="lastNote"></p>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <p>Estimated tires</p>&nbsp;
+                            <p id="estimatedTires"></p>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <p>Spoke With</p>&nbsp;
+                            <p id="spokeWith"></p>
+                        </div>
+
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('pageSpecificJs')
@@ -108,7 +139,15 @@
                     },
                     {
                         data: 'customer.business_name',
-                        name: 'customer.business_name'
+                        name: 'customer.business_name',
+                        render: function(data, type, full, meta) {
+                            if (full.customer && full.customer.business_name) {
+                                return '<span class="customerName" data-customer-id=' + full
+                                    .customer.id + '>' + full.customer.business_name + '</span>';
+                            } else {
+                                return 'N/A';
+                            }
+                        }
                     },
                     {
                         data: 'created_by',
@@ -137,7 +176,36 @@
                         data: 'update_driver',
                         name: 'Update Driver'
                     }
-                ]
+                ],
+                drawCallback: function(settings) {
+                    window.scrollTo(0, 0);
+
+                    // Attach click event listener to customer name
+                    $('.data-table').on('click', '.customerName', function() {
+                        var customerId = $(this).data('customer-id');
+                        $.ajax({
+                            url: '{{ route('customer.last.note') }}',
+                            type: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            },
+                            data: {
+                                id: customerId
+                            },
+                            success: function(response) {
+                                $('#estimatedTires').text(' '+response.data.estimated_tires)
+                                $('#lastNote').text(' '+response.data.note)
+                                $('#spokeWith').text(' '+response.data.spoke_with)
+
+                                
+                                $('#customerSummary').modal('show');
+                            }
+                        });
+
+
+                    });
+                }
             });
 
             $(".filter").click(function() {

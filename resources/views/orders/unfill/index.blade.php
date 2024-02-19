@@ -127,7 +127,10 @@
                     data: 'action',
                     name: 'Action'
                 }
-            ]
+            ],
+            drawCallback: function(settings) {
+                    window.scrollTo(0, 0);
+                }
         });
 
         $(".filter").click(function() {
