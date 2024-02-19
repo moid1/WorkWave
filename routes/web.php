@@ -156,3 +156,6 @@ Route::post('admin-settings', [AdminSettingsController::class, 'store'])->name('
 Route::get('fill-manifest', [OrderController::class, 'getUnfilledManifest'])->name('fill.manifest.index');
 Route::get('fill-manifest/{id}', [OrderController::class, 'getUnfilledManifestOrder'])->name('unfill.manifest.order');
 Route::post('fill-manifest-order', [UnfillManifestController::class, 'store'])->name('unfill.fill.order');
+
+
+Route::post('get-customer-last-notes', [NotesController::class, 'getLastNote'])->name('customer.last.note');
