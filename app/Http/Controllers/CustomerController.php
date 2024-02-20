@@ -37,17 +37,21 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'business_name' => ['required', 'string', 'max:255','unique:customers'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:customers', 'unique:users'],
+            'business_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'address' => ['required', 'string'],
             'phone_no' => ['required', 'string', 'min:8']
         ]);
-        $user =  User::create([
-            'name' => $request->business_name,
-            'email' => $request->email,
-            'password' => Hash::make('12345678'),
-            'type' => 3
-        ]);
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+        } else {
+            $user =  User::create([
+                'name' => $request->business_name,
+                'email' => $request->email,
+                'password' => Hash::make('12345678'),
+                'type' => 3
+            ]);
+        }
         $request->merge([
             'user_id' => $user->id
         ]);
