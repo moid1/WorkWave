@@ -36,7 +36,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>Mailing Address</label>
-                                                        <input id="mail_address" type="text" class="form-control @error('mail_address') is-invalid @enderror" name="mail_address" value="{{ old('mail_address') }}" >
+                                                        <input id="location" type="text" class="form-control @error('mail_address') is-invalid @enderror" name="mail_address" value="{{ old('mail_address') }}" >
                                                         @error('mail_address')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -259,3 +259,22 @@
     </div>
 
 @endsection
+
+<script type="text/javascript"
+    src="https://maps.google.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&libraries=places">
+</script>
+
+<script>
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+    function initialize() {
+        var input = document.getElementById('location');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            console.log(place);
+        });
+    }
+</script>
+

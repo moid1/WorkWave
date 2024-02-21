@@ -9,6 +9,7 @@ use App\Http\Controllers\ManagerCompareOrderController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RoutingController;
 use App\Models\FullFillOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -63,3 +64,9 @@ Route::get('get-customers-order', [CustomerController::class, 'apiGetCustomerOrd
 Route::get('get-driver-orders', [DriverController::class, 'apiGetLoggedInDriverOrders'])->middleware('auth:sanctum');
 
 Route::get('driver-orders/{id}', [DriverController::class, 'apiGetDriverOrders'])->middleware('auth:sanctum');
+
+//Routing SOftware
+Route::post('create-route', [RoutingController::class, 'store'])->middleware('auth:sanctum');
+Route::get('get-not-started-group-routes', [RoutingController::class, 'getNotStartedRouteGroups'])->middleware('auth:sanctum');
+Route::get('get-route-by-id/{id}', [RoutingController::class, 'getRoutesById'])->middleware('auth:sanctum');
+
