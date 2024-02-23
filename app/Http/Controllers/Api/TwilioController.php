@@ -33,7 +33,7 @@ class TwilioController extends Controller
     {
         $sid = getenv('TWILIO_SID');
         $token = getenv('TWILIO_AUTH_TOKEN');
-        $twilioNumber = getenv('TWILIO_NUMBER');
+        $twilioNumber = '+18669361596';
 
         $twilio = new Client($sid, $token);
 
@@ -44,7 +44,7 @@ class TwilioController extends Controller
                 'body' => $message,
             ]
         );
-       
+
     }
 
     private function formatPhoneNumber($phoneNumber)
