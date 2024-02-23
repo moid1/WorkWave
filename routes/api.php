@@ -10,6 +10,7 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RoutingController;
+use App\Http\Controllers\Api\TwilioController;
 use App\Models\FullFillOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,4 +70,6 @@ Route::get('driver-orders/{id}', [DriverController::class, 'apiGetDriverOrders']
 Route::post('create-route', [RoutingController::class, 'store'])->middleware('auth:sanctum');
 Route::get('get-not-started-group-routes', [RoutingController::class, 'getNotStartedRouteGroups'])->middleware('auth:sanctum');
 Route::get('get-route-by-id/{id}', [RoutingController::class, 'getRoutesById'])->middleware('auth:sanctum');
+
+Route::get('send-message', [TwilioController::class, 'sendMessage'])->name('send-message');
 

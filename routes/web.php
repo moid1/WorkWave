@@ -159,3 +159,5 @@ Route::post('fill-manifest-order', [UnfillManifestController::class, 'store'])->
 
 
 Route::post('get-customer-last-notes', [NotesController::class, 'getLastNote'])->name('customer.last.note');
+
+
