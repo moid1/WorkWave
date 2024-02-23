@@ -67,6 +67,8 @@ Route::get('get-driver-orders', [DriverController::class, 'apiGetLoggedInDriverO
 Route::get('driver-orders/{id}', [DriverController::class, 'apiGetDriverOrders'])->middleware('auth:sanctum');
 
 //Routing SOftware
+Route::get('all-routes', [RoutingController::class, 'index'])->middleware('auth:sanctum');
+Route::get('delete-route/{id}', [RoutingController::class, 'deleteRoute'])->middleware('auth:sanctum');
 Route::post('create-route', [RoutingController::class, 'store'])->middleware('auth:sanctum');
 Route::get('get-not-started-group-routes', [RoutingController::class, 'getNotStartedRouteGroups'])->middleware('auth:sanctum');
 Route::get('get-route-by-id/{id}', [RoutingController::class, 'getRoutesById'])->middleware('auth:sanctum');
