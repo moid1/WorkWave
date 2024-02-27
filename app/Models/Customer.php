@@ -14,4 +14,9 @@ class Customer extends Model
     public function notes(){
         return $this->hasMany(Notes::class, 'customer_id')->where('title', 'Order Note')->latest();
     }
+
+     public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
