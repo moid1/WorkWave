@@ -73,5 +73,5 @@ Route::post('create-route', [RoutingController::class, 'store'])->middleware('au
 Route::get('get-not-started-group-routes', [RoutingController::class, 'getNotStartedRouteGroups'])->middleware('auth:sanctum');
 Route::get('get-route-by-id/{id}', [RoutingController::class, 'getRoutesById'])->middleware('auth:sanctum');
 
-Route::get('send-message', [TwilioController::class, 'sendMessage'])->name('send-message');
+Route::post('send-message', [TwilioController::class, 'sendMessage'])->name('send-message');
 
