@@ -175,6 +175,11 @@
                                     class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
                         </li>
 
+
+                        <li>
+                            <a href="{{route('calander.index')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Calander </span></a>
+                        </li>
                         @endif
 
                         @if(Auth::user()->type == 2)

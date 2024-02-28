@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminSettingsController;
+use App\Http\Controllers\CalanderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyRegController;
 use App\Http\Controllers\HomeController;
@@ -100,6 +101,8 @@ Route::get('/company-registration/{id}', [CompanyRegController::class, 'delete']
 Route::get('/change-password', [HomeController::class, 'changePassword'])->name('change-password');
 Route::post('/change-password', [HomeController::class, 'updatePassword'])->name('update-password');
 
+Route::get('/calander', [CalanderController::class, 'index'])->name('calander.index');
+Route::get('/calander-event', [CalanderController::class, 'eventsForCalander'])->name('calander.events');
 
 Route::get('clear_cache', function () {
 
