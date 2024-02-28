@@ -100,8 +100,8 @@ class OrderController extends Controller
                 'user_id' => Auth::id(),
                 'notes' => $request['notes'] ?? 'N/A',
                 'load_type' => $request['load_type'],
-                'driver_id' => $request['driver_id'] ?? null
-
+                'driver_id' => $request['driver_id'] ?? null,
+                'delivery_date'=>$request['date']
             ]);
         }
         Notes::create([
@@ -470,6 +470,7 @@ class OrderController extends Controller
         $order = Order::find($request->order_id);
         $order->load_type = $request['load_type'];
         $order->driver_id = $request['driver_id'];
+        $order->delivery_date = $request['date'];
         $order->update();
 
         Notes::create([

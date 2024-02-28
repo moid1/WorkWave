@@ -39,7 +39,7 @@
                                             <div class="form-group">
                                                 <label>Date</label>
                                                 <input name="date" class="form-control readonly" type = "date"
-                                                    value="{{ $order->created_at }}" />
+                                                    value="{{ $order->delivery_date }}" />
                                             </div>
                                         </div>
 

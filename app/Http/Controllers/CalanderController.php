@@ -27,7 +27,9 @@ class CalanderController extends Controller
                     if ($truck) {
                         $testData[] = array(
                             'title' => $order->customer->business_name . '-' . $truck->truck->name,
-                            'start' => $value->created_at
+                            'start' => $value->created_at,
+                            'id'=>$order->id,
+                            'route_id'=>$value->id
                         );
                     }
                 }
@@ -35,5 +37,22 @@ class CalanderController extends Controller
 
             return response()->json($testData);
         }
+    }
+
+    public function changeOrderDate(Request $request){
+        $route = Routing::findOrFail($request->route_id);
+        if($route){
+            $orderIds = explode(',', $route->order_ids);
+            $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
+            $updatedOrderIdsString = implode(',', $updatedOrderIds);
+            $route->order_ids = $updatedOrderIdsString;
+            $route->save();
+            $order = Order::findOrFail($request->order_id);
+            $order->delivery_date = $request->start;
+            $order->save();
+        }
+        return response()->json([
+            'success'=>true
+        ], 200);
     }
 }

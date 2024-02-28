@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use App\Models\Order;
+use App\Models\Routing;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
 
 class DriverController extends Controller
 {
@@ -132,9 +134,26 @@ class DriverController extends Controller
 
     public function apiGetLoggedInDriverOrders()
     {
+        $existingOrderIds = Routing::pluck('order_ids')->toArray();
 
         try {
-            $orders = Order::where([['driver_id', Auth::id()], ['status', 'created']])->with(['customer', 'user', 'manifest'])->latest()->get();
+            $currentDate = Carbon::now()->toDateString();
+            $orders = Order::where([
+                ['driver_id', Auth::id()],
+                ['status', 'created'],
+            ])
+                ->whereDate('delivery_date', $currentDate)
+                ->whereNotIn('id', function ($query) use ($existingOrderIds) {
+                    foreach ($existingOrderIds as $ids) {
+                        $orderIdsArray = explode(',', $ids);
+                        foreach ($orderIdsArray as $orderId) {
+                            $query->orWhere('id', $orderId);
+                        }
+                    }
+                })
+                ->with(['customer', 'user', 'manifest'])
+                ->latest()
+                ->get();
             return response()->json([
                 'status' => true,
                 'message' => 'Driver Orders',

@@ -63,7 +63,7 @@
 
 
         var calendar = $('#calendar').fullCalendar({
-            // editable: true, // Enable dragging
+            editable: true, // Enable dragging
             eventBackgroundColor: "#de1f1f",
             header: {
                 left: 'prev,next',
@@ -123,22 +123,18 @@
                 })
             },
             eventDrop: function(event, delta) {
-                var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
-                var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
-                var title = event.title;
-                var id = event.id;
+                var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD');
+                var order_id = event.id;
                 $.ajax({
-                    url: "",
+                    url: "{{route('calander.order.update')}}",
                     type: "POST",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
-                        title: title,
                         start: start,
-                        end: end,
-                        id: id,
-                        type: 'update'
+                        order_id: order_id,
+                        route_id: event.route_id
                     },
                     success: function(response) {
                         calendar.fullCalendar('refetchEvents');
