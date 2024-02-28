@@ -27,6 +27,7 @@
     <link href="{{asset('dashboard/assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('dashboard/assets/css/icons.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('dashboard/assets/css/style.css')}}" rel="stylesheet" type="text/css">
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
 </head>
 
@@ -363,6 +364,7 @@
     <!-- App js -->
     <script src="{{asset('dashboard/')}}assets/js/app.js"></script>
     @yield('pageSpecificJs')
+   
 </body>
 
 </html>

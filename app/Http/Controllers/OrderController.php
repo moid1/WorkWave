@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderCreated;
 use App\Models\Notes;
 use App\Models\Order;
 use App\Models\User;
@@ -62,12 +63,12 @@ class OrderController extends Controller
                     <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateDriver(\'' . $row->id . '\')">Update Driver
                     </button>
                 ';
-                $showBtn = '';
+                    $showBtn = '';
 
-                if ($row->status == 'created') {
-                    $orderShowRoute = route('order.show', $row->id);
-                    $showBtn =  '/<a href="'.$orderShowRoute.'" > <i class="fa fa-edit"  title="update order"></i></a>';
-                }
+                    if ($row->status == 'created') {
+                        $orderShowRoute = route('order.show', $row->id);
+                        $showBtn =  '/<a href="' . $orderShowRoute . '" > <i class="fa fa-edit"  title="update order"></i></a>';
+                    }
                     return $button . $showBtn;
                 })
                 ->rawColumns(['update_driver'])
@@ -93,15 +94,15 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
+        $order = null;
         if ($request->create_order == 'createOrder') {
-            Order::create([
+            $order = Order::create([
                 'customer_id' => $request['customer_id'],
                 'user_id' => Auth::id(),
                 'notes' => $request['notes'] ?? 'N/A',
                 'load_type' => $request['load_type'],
                 'driver_id' => $request['driver_id'] ?? null,
-                'delivery_date'=>$request['date']
+                'delivery_date' => $request['date']
             ]);
         }
         Notes::create([
@@ -112,6 +113,10 @@ class OrderController extends Controller
             'spoke_with' => $request->spoke_with ?? 'N/A',
             'title' => 'Order Note'
         ]);
+
+        // OrderCreated::dispatch($order);
+        event(new OrderCreated($order));
+
         return redirect('/orders')->with('success', 'Order Created Successfully');
     }
 
@@ -460,13 +465,15 @@ class OrderController extends Controller
         }
     }
 
-    public function getOrderById($id){
+    public function getOrderById($id)
+    {
         $order = Order::whereId($id)->with(['customer', 'driver'])->first();
         $drivers = User::where('type', 2)->get();
         return view('orders.show', compact('order', 'drivers'));
     }
 
-    public function updateOrder(Request $request){
+    public function updateOrder(Request $request)
+    {
         $order = Order::find($request->order_id);
         $order->load_type = $request['load_type'];
         $order->driver_id = $request['driver_id'];
@@ -481,7 +488,7 @@ class OrderController extends Controller
             'spoke_with' => $request->spoke_with ?? 'N/A',
             'title' => 'Order Note'
         ]);
-        
+
         return redirect('/orders')->with('success', 'Order Updated Successfully');
     }
 }

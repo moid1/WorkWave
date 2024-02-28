@@ -39,6 +39,7 @@
 
 
 @section('pageSpecificJs')
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/gcal.js"></script>
@@ -164,5 +165,18 @@
                 // }
             }
         });
+
+        Pusher.logToConsole = true;
+
+var pusher = new Pusher('3f3145c56ea4cf5b928c', {
+  cluster: 'us2'
+});
+
+      // Listen for events from Pusher
+      pusher.subscribe('routes').bind('route-created', function(data) {
+  // When an event is received, trigger a rerender of the calendar
+  calendar.fullCalendar('refetchEvents');
+});
+
     </script>
 @endsection

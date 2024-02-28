@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RouteCreated;
 use App\Models\Order;
 use App\Models\Routing;
 use Illuminate\Http\Request;
@@ -50,6 +51,9 @@ class RoutingController extends Controller
                 'driver_id' => ['required']
             ]);
             $routing = Routing::create($request->all());
+
+            event(new RouteCreated());
+            
             return response()->json([
                 'success' => true,
                 'data' => $routing,

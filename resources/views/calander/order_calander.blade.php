@@ -104,5 +104,18 @@
                 // }
             }
         });
+
+        // Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
+var pusher = new Pusher('3f3145c56ea4cf5b928c', {
+  cluster: 'us2'
+});
+
+      // Listen for events from Pusher
+pusher.subscribe('orders').bind('order-created', function(data) {
+  // When an event is received, trigger a rerender of the calendar
+  calendar.fullCalendar('refetchEvents');
+});
     </script>
 @endsection
