@@ -14,6 +14,11 @@ class CalanderController extends Controller
         return view('calander.index');
     }
 
+    public function viewForOrderCalander()
+    {
+        return view('calander.order_calander');
+    }
+
     public function eventsForCalander(Request $request)
     {
         if ($request->ajax()) {
@@ -28,8 +33,8 @@ class CalanderController extends Controller
                         $testData[] = array(
                             'title' => $order->customer->business_name . '-' . $truck->truck->name,
                             'start' => $value->created_at,
-                            'id'=>$order->id,
-                            'route_id'=>$value->id
+                            'id' => $order->id,
+                            'route_id' => $value->id
                         );
                     }
                 }
@@ -39,9 +44,26 @@ class CalanderController extends Controller
         }
     }
 
-    public function changeOrderDate(Request $request){
+    public function ordersForCalander(Request $request)
+    {
+        if ($request->ajax()) {
+            $orders = Order::whereDate('created_at', '>=', $request->start)->get();
+            $testData = array();
+            foreach ($orders as $key => $order) {
+                $testData[] = array(
+                    'title' => $order->customer->business_name,
+                    'start' => $order->delivery_date,
+                );
+            }
+
+            return response()->json($testData);
+        }
+    }
+
+    public function changeOrderDate(Request $request)
+    {
         $route = Routing::findOrFail($request->route_id);
-        if($route){
+        if ($route) {
             $orderIds = explode(',', $route->order_ids);
             $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
             $updatedOrderIdsString = implode(',', $updatedOrderIds);
@@ -52,7 +74,7 @@ class CalanderController extends Controller
             $order->save();
         }
         return response()->json([
-            'success'=>true
+            'success' => true
         ], 200);
     }
 }

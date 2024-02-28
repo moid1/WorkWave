@@ -175,10 +175,15 @@
                                     class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
                         </li>
 
-
-                        <li>
-                            <a href="{{route('calander.index')}}" class="waves-effect"><i
-                                    class="mdi mdi-calendar-check"></i><span> Calander </span></a>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>
+                                Calander </span><i class="fa fa-caret-down" style="margin-left:20px; "
+                                    aria-hidden="true"></i>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a href="{{route('calander.index')}}">Routing Calander</a></li>
+                                <li><a href="{{route('calander.order.view')}}">Order Calander</a></li>
+                            </ul>
                         </li>
                         @endif
 

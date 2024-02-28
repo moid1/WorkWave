@@ -104,6 +104,9 @@ Route::post('/change-password', [HomeController::class, 'updatePassword'])->name
 Route::get('/calander', [CalanderController::class, 'index'])->name('calander.index');
 Route::get('/calander-event', [CalanderController::class, 'eventsForCalander'])->name('calander.events');
 
+Route::get('/calander-order', [CalanderController::class, 'viewForOrderCalander'])->name('calander.order.view');
+Route::get('/calander-orders', [CalanderController::class, 'ordersForCalander'])->name('calander.order');
+
 Route::post('/calander-update-order', [CalanderController::class, 'changeOrderDate'])->name('calander.order.update');
 
 Route::get('clear_cache', function () {
