@@ -5,6 +5,16 @@
     .fc-time {
         display: none !important;
     }
+    .fc-day{
+        background: #0000FF !important;
+    }
+    .fc-day-number{
+        color: white;
+    }
+
+    .fc-event{
+        background: transparent !important;
+    }
 </style>
 @section('content')
     <div class="page-content-wrapper ">
@@ -63,8 +73,7 @@
 
 
         var calendar = $('#calendar').fullCalendar({
-            editable: false, // Enable dragging
-            eventBackgroundColor: "#de1f1f",
+            editable: true, // Enable dragging
             header: {
                 left: 'prev,next',
                 right: 'title'
@@ -80,7 +89,25 @@
                 
             },
             eventDrop: function(event, delta) {
-              
+                console.log(event);
+                var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD');
+                var order_id = event.id;
+                $.ajax({
+                    url: "{{route('calander.order.update')}}",
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        start: start,
+                        order_id: order_id,
+                        onlyOrder: true
+                    },
+                    success: function(response) {
+                        calendar.fullCalendar('refetchEvents');
+                       
+                    }
+                })
             },
             eventClick: function(event) {
                 // if(confirm("Are you sure you want to remove it?"))

@@ -143,14 +143,7 @@ class DriverController extends Controller
                 ['status', 'created'],
             ])
                 ->whereDate('delivery_date', $currentDate)
-                ->whereNotIn('id', function ($query) use ($existingOrderIds) {
-                    foreach ($existingOrderIds as $ids) {
-                        $orderIdsArray = explode(',', $ids);
-                        foreach ($orderIdsArray as $orderId) {
-                            $query->orWhere('id', $orderId);
-                        }
-                    }
-                })
+               
                 ->with(['customer', 'user', 'manifest'])
                 ->latest()
                 ->get();

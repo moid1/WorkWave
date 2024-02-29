@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderCreated;
 use App\Models\Order;
 use App\Models\Routing;
 use App\Models\TruckDriver;
@@ -53,6 +54,7 @@ class CalanderController extends Controller
                 $testData[] = array(
                     'title' => $order->customer->business_name,
                     'start' => $order->delivery_date,
+                    'id' => $order->id,
                 );
             }
 
@@ -62,17 +64,26 @@ class CalanderController extends Controller
 
     public function changeOrderDate(Request $request)
     {
-        $route = Routing::findOrFail($request->route_id);
-        if ($route) {
-            $orderIds = explode(',', $route->order_ids);
-            $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
-            $updatedOrderIdsString = implode(',', $updatedOrderIds);
-            $route->order_ids = $updatedOrderIdsString;
-            $route->save();
+        if ($request->has('onlyOrder') && $request->onlyOrder) {
             $order = Order::findOrFail($request->order_id);
             $order->delivery_date = $request->start;
             $order->save();
+        } else {
+            $route = Routing::findOrFail($request->route_id);
+            if ($route) {
+                $orderIds = explode(',', $route->order_ids);
+                $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
+                $updatedOrderIdsString = implode(',', $updatedOrderIds);
+                $route->order_ids = $updatedOrderIdsString;
+                $route->save();
+                $order = Order::findOrFail($request->order_id);
+                $order->delivery_date = $request->start;
+                $order->save();
+            }
         }
+
+        event(new OrderCreated($order));
+
         return response()->json([
             'success' => true
         ], 200);

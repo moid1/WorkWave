@@ -5,6 +5,16 @@
     .fc-time {
         display: none !important;
     }
+    .fc-day{
+        background: #0000FF !important;
+    }
+    .fc-day-number{
+        color: white;
+    }
+
+    .fc-event{
+        background: transparent !important;
+    }
 </style>
 @section('content')
     <div class="page-content-wrapper ">
