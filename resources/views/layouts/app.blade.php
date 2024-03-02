@@ -145,6 +145,10 @@
                                     class="mdi mdi-calendar-check"></i><span> Books </span></a>
                         </li>
 
+                        <li>
+                            <a href="{{route('books.customer')}}" class="waves-effect"><i
+                                    class="mdi mdi-calendar-check"></i><span> Stair </span></a>
+                        </li>
 
                         <li>
                             <a href="{{route('orders.fullfilled')}}" class="waves-effect"><i

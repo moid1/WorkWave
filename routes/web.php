@@ -53,6 +53,7 @@ Route::get('/get-driver-orders/{id}', [DriverController::class, 'getOrders'])->n
 Route::get('/driver/{id}', [DriverController::class, 'showDriverDetails'])->name('driver.show');
 Route::post('/update-driver',  [DriverController::class, 'updateDriver'])->name('driver.update');
 
+Route::view('stairs', 'stairs.index');
 
 //Customers
 Route::get('/register-customer',  [CustomerController::class, 'create'])->name('register.customer');
