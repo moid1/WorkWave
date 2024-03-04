@@ -80,6 +80,119 @@ class OrderController extends Controller
         return view('orders.index', compact('orders', 'drivers'));
     }
 
+    public function ordersByDriver(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Order::with(['customer', 'user', 'driver'])->get();
+
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+            }
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('M d Y');
+                })
+                ->editColumn('email', function ($row) {
+                    return $row->customer->email;
+                })
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })->editColumn('status', function ($row) {
+                    if ($row->status)
+                        return $row->status;
+                    return 'N/A';
+                })
+                ->make(true);
+        }
+
+        $drivers = User::where('type', 2)->get();
+        $orders = Order::with(['customer', 'user', 'driver'])->get();
+        return view('orders.driver.driver_filter', compact('orders', 'drivers'));
+    }
+
+    public function lateOrders(Request $request)
+    {
+        if ($request->ajax()) {
+            $currentDate = Carbon::now();
+            $data = Order::where('status', 'created')
+                ->whereDate('end_date', '<=', $currentDate)
+                ->with(['customer', 'user', 'driver'])
+                ->get();
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+            }
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('M d Y');
+                })
+                ->editColumn('end_date', function ($row) {
+                    if (!empty($row->end_date)) {
+                        return  Carbon::parse($row->end_date)->format('M d Y');
+                    } elseif (!empty($row->created_at)) {
+                        return Carbon::parse($row->created_at)->format('M d Y');
+                    }
+                    return 'N/A'; 
+                })
+                ->editColumn('email', function ($row) {
+                    return $row->customer->email;
+                })
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })->editColumn('status', function ($row) {
+                    if ($row->status)
+                        return $row->status;
+                    return 'N/A';
+                })
+                ->make(true);
+        }
+
+        $drivers = User::where('type', 2)->get();
+        $orders = Order::with(['customer', 'user', 'driver'])->get();
+        return view('orders.late', compact('orders', 'drivers'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -102,7 +215,8 @@ class OrderController extends Controller
                 'notes' => $request['notes'] ?? 'N/A',
                 'load_type' => $request['load_type'],
                 'driver_id' => $request['driver_id'] ?? null,
-                'delivery_date' => $request['date']
+                'delivery_date' => $request['date'],
+                'end_date' => $request['end_date']
             ]);
         }
         Notes::create([
