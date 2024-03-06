@@ -884,10 +884,33 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="individual_going" class="mb-1 mt-3">Individual Going</label>
+                <select class="form-control" id="individual_going">
+                    @for ($i = 222; $i <= 280; $i = $i + 1)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+
+
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="width" class="mb-1 mt-3">Width</label>
+                <select class="form-control" id="widthSVG">
+                    @for ($i = 600; $i <= 1000; $i = $i + 5)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+
+
+                </select>
+            </div>
+
         </div>
 
         <div class="col-lg-9">
-            <svg id="svg" width="940" height="700">
+            <svg id="svg" width="1004" height="700">
                 <defs>
                     <pattern id="mdf" patternUnits="userSpaceOnUse" width="1000px" height="1000px">
                         <image style="-moz-user-select: text;"
@@ -938,7 +961,7 @@
                     <g>
                         <g transform="translate(0 0)  rotate(0)"></g>
                         <g transform="translate(0 0)  rotate(0)">
-                            <g>
+                            <g id="noOfS">
                                 <g transform="translate(-413.5 0)  rotate(0)">
                                     <rect x="0" y="-16" width="827" height="238" fill="url(#mdf)"
                                         style="stroke:black;stroke-width:2;;" id="run1_tread1" class=""></rect>
@@ -1071,7 +1094,7 @@
                     <g>
                         <g transform="translate(0 0)  rotate(0)"></g>
                         <g transform="translate(0 0)  rotate(0)">
-                            <g>
+                            <g id="leftHandle">
                                 <g transform="translate(-413.5 0)  rotate(0)"></g>
                                 <g transform="translate(-413.5 222)  rotate(0)"></g>
                                 <g transform="translate(-413.5 444)  rotate(0)"></g>
@@ -1105,15 +1128,15 @@
                     </g>
                     <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="80" height="80">
                         <path d="M-20,20 l40,-40
-                            M0,80 l80,-80
-                            M60,100 l40,-40" style="stroke:grey; stroke-width:4"></path>
+                                            M0,80 l80,-80
+                                            M60,100 l40,-40" style="stroke:grey; stroke-width:4"></path>
                     </pattern>
                     <path d="" fill="white" fill-opacity="0.3"></path>
                     <path d="" fill="url(#diagonalHatch)" fill-opacity="1" stroke-width="6" stroke="black"></path>
                     <g>
                         <g transform="translate(0 0)  rotate(0)"></g>
                         <g transform="translate(0 0)  rotate(0)">
-                            <g>
+                            <g id="rightHandle">
                                 <g transform="translate(-413.5 0)  rotate(0)"></g>
                                 <g transform="translate(-413.5 222)  rotate(0)"></g>
                                 <g transform="translate(-413.5 444)  rotate(0)"></g>
@@ -5888,7 +5911,7 @@
                     $("#risers").empty().append('<option value="' + value + '">' + value + ' @ ' +
                         absoluteValue + 'mm</option>');
                 });
-                $('#svg').html(svg_300);
+                // $('#svg').html(svg_300);
 
             } else if (floorHeight >= 500 && floorHeight < 700) {
                 if (floorHeight >= 600 && floorHeight <= 660) {
@@ -5900,7 +5923,7 @@
                             absoluteValue + 'mm</option>');
                     });
                 }
-                $('#svg').html(svg_500);
+                // $('#svg').html(svg_500);
             } else if (floorHeight >= 700 && floorHeight < 900) {
                 if (floorHeight < 750) {
                     $("#risers").empty();
@@ -5927,7 +5950,7 @@
                             absoluteValue + 'mm</option>');
                     });
                 }
-                $('#svg').html(svg_700);
+                // $('#svg').html(svg_700);
             } else if (floorHeight >= 900 && floorHeight < 1100) {
                 if (floorHeight >= 900 && floorHeight < 1050) {
                     $("#risers").empty();
@@ -5946,7 +5969,7 @@
                             absoluteValue + 'mm</option>');
                     });
                 }
-                $('#svg').html(svg_900);
+                // $('#svg').html(svg_900);
             } else if (floorHeight >= 1100 && floorHeight < 1300) {
                 if (floorHeight > 1100 && floorHeight < 1200) {
                     $("#risers").empty();
@@ -5957,7 +5980,7 @@
                             absoluteValue + 'mm</option>');
                     });
                 }
-                $('#svg').html(svg_1100);
+                // $('#svg').html(svg_1100);
             } else if (floorHeight >= 1300 && floorHeight < 1500) {
                 if (floorHeight >= 1200 && floorHeight < 1350) {
                     $("#risers").empty();
@@ -5976,7 +5999,7 @@
                             absoluteValue + 'mm</option>');
                     });
                 }
-                $('#svg').html(svg_1300);
+                // $('#svg').html(svg_1300);
             } else if (floorHeight >= 1500 && floorHeight < 1700) {
                 if (floorHeight >= 1500 && floorHeight < 1545) {
                     $("#risers").empty();
@@ -6000,7 +6023,7 @@
                             absoluteValue + 'mm</option>');
                     });
                 }
-                $('#svg').html(svg_1500);
+                // $('#svg').html(svg_1500);
             } else if (floorHeight >= 1700 && floorHeight < 1900) {
                 if (floorHeight > 1650 && floorHeight <= 1765) {
                     $("#risers").empty();
@@ -6027,46 +6050,94 @@
                             absoluteValue + 'mm</option>');
                     });
                 }
-                $('#svg').html(svg_1700);
+                // $('#svg').html(svg_1700);
             } else if (floorHeight >= 1900 && floorHeight < 2100) {
-                $('#svg').html(svg_1900);
+                // $('#svg').html(svg_1900);
             } else if (floorHeight >= 2100 && floorHeight < 2300) {
-                $('#svg').html(svg_2100);
+                // $('#svg').html(svg_2100);
             } else if (floorHeight >= 2300 && floorHeight < 2500) {
-                $('#svg').html(svg_2300);
+                // $('#svg').html(svg_2300);
             } else if (floorHeight >= 2500 && floorHeight < 2700) {
-                $('#svg').html(svg_2500);
+                // $('#svg').html(svg_2500);
             } else if (floorHeight >= 2700 && floorHeight < 2900) {
-                $('#svg').html(svg_2700);
+                // $('#svg').html(svg_2700);
             } else if (floorHeight >= 2900 && floorHeight < 3100) {
-                $('#svg').html(svg_2900);
+                // $('#svg').html(svg_2900);
             } else if (floorHeight >= 3100 && floorHeight < 3300) {
-                $('#svg').html(svg_3100);
+                // $('#svg').html(svg_3100);
             } else if (floorHeight >= 3300 && floorHeight < 3500) {
-                $('#svg').html(svg_3300);
+                // $('#svg').html(svg_3300);
             } else if (floorHeight >= 3500 && floorHeight < 3700) {
-                $('#svg').html(svg_3500);
+                // $('#svg').html(svg_3500);
             } else if (floorHeight >= 3700 && floorHeight < 3900) {
-                $('#svg').html(svg_3700);
+                // $('#svg').html(svg_3700);
             } else if (floorHeight >= 3900 && floorHeight < 4100) {
-                $('#svg').html(svg_3900);
+                // $('#svg').html(svg_3900);
             }
 
         });
     </script>
     {{-- for no of risers change --}}
     <script>
+        var numberOfSteps
         $('#risers').on('change', function() {
-            var numberOfSteps = parseInt($(this).val());
-            if (floorHeight == 1500 && numberOfSteps == 7) {
-                $('#svg').html(svg_1500_7);
-            } else if (floorHeight == 1500 && numberOfSteps == 8) {
-                $('#svg').html(svg_1500);
-            } else if (floorHeight == 1500 && numberOfSteps == 9) {
-                $('#svg').html(svg_1500_9);
-            } else if (floorHeight == 1500 && numberOfSteps == 10) {
-                $('#svg').html(svg_1500_10);
+            numberOfSteps = parseInt($(this).val());
+            var indiGoing = parseInt($('#individual_going').val());
+            $('#noOfS').empty();
+            $('#leftHandle').empty();
+
+            for (let index = 0; index < numberOfSteps - 1; index++) {
+                var sssw = `  <g transform="translate(-413.5 ${index*indiGoing})  rotate(0)">
+                                    <rect x="0" y="-16" width="827" height="238" fill="url(#mdf)"
+                                        style="stroke:black;stroke-width:2;;" id="run1_tread${index+1}" class=""></rect>
+                                    <rect x="0" y="0" width="827" height="10" fill="none"
+                                        style="stroke:black;stroke-width:1;;" id="run1_tread${index+1}" class=""></rect>
+                                    <text x="388.5" y="-131"
+                                        style="font-size: 55px; font-family: Arial, Helvetica, sans-serif; color: black;"
+                                        transform="translate (0,0) rotate(180) scale(-1,1)">#${index+1}</text>
+                                </g>`;
+
+                        var leftHanlde = ``;
+                $('#noOfS').append(sssw);
+
+
             }
+
+
+
+            if (floorHeight == 1500 && numberOfSteps == 7) {
+                // $('#svg').html(svg_1500_7);
+            } else if (floorHeight == 1500 && numberOfSteps == 8) {
+                // $('#svg').html(svg_1500);
+            } else if (floorHeight == 1500 && numberOfSteps == 9) {
+                // $('#svg').html(svg_1500_9);
+            } else if (floorHeight == 1500 && numberOfSteps == 10) {
+                // $('#svg').html(svg_1500_10);
+            }
+        });
+
+        $('#widthSVG').on('change', function() {
+            var width = parseInt($(this).val());
+            for (let index = 1; index < numberOfSteps; index++) {
+                let ss = 'run1_tread' + index;
+                var rectElement = $(`#${ss}`);
+                rectElement.attr('width', width - 38);
+            }
+        });
+
+        $('#individual_going').on('change', function() {
+            var gElements = $('g[transform*="translate(-413.5"]');
+            var newY = 0;
+            let vall = parseInt($(this).val());
+            gElements.each(function() {
+                var currentTransform = $(this).attr('transform');
+                var translateY = parseInt(currentTransform.match(/translate\(-413.5 (-?\d+)/)[1]);
+                var newTransform = currentTransform.replace(/translate\(-413.5 (-?\d+)/,
+                    'translate(-413.5 ' + newY);
+                $(this).attr('transform', newTransform);
+                newY += vall;
+
+            });
         });
     </script>
 @endsection
