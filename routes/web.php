@@ -14,6 +14,7 @@ use App\Http\Controllers\FullFillOrderController;
 use App\Http\Controllers\ManagerCompareOrderController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UnfillManifestController;
 use App\Models\Order;
@@ -169,5 +170,7 @@ Route::post('fill-manifest-order', [UnfillManifestController::class, 'store'])->
 
 
 Route::post('get-customer-last-notes', [NotesController::class, 'getLastNote'])->name('customer.last.note');
+
+Route::get('create-route', [RoutingController::class, 'createRouting'])->name('routing.create');
 
 

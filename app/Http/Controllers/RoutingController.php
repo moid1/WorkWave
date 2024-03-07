@@ -155,4 +155,8 @@ class RoutingController extends Controller
             ], 500);
         }
     }
+
+    public function createRouting(){
+        return view('routing.create');
+    }
 }
