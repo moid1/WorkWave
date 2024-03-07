@@ -900,7 +900,7 @@
                 <label for="width" class="mb-1 mt-3">Width</label>
                 <select class="form-control" id="widthSVG">
                     @for ($i = 600; $i <= 1000; $i = $i + 5)
-                        <option value="{{ $i }}">{{ $i }}</option>
+                        <option value="{{ $i }}" {{ $i == 865 ? 'selected' : '' }}>{{ $i }}</option>
                     @endfor
 
 
@@ -1128,8 +1128,8 @@
                     </g>
                     <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="80" height="80">
                         <path d="M-20,20 l40,-40
-                                            M0,80 l80,-80
-                                            M60,100 l40,-40" style="stroke:grey; stroke-width:4"></path>
+                                                M0,80 l80,-80
+                                                M60,100 l40,-40" style="stroke:grey; stroke-width:4"></path>
                     </pattern>
                     <path d="" fill="white" fill-opacity="0.3"></path>
                     <path d="" fill="url(#diagonalHatch)" fill-opacity="1" stroke-width="6" stroke="black"></path>
@@ -5894,6 +5894,7 @@
         var newOptions = [];
         var floorHeight = 0;
         $('#FloorHeight').on('change', function() {
+            updateLeftRightStrings()
             floorHeight = parseInt($(this).val());
             if ((floorHeight) <= 2100) {
                 $('#celingHeight').hide();
@@ -6097,7 +6098,7 @@
                                         transform="translate (0,0) rotate(180) scale(-1,1)">#${index+1}</text>
                                 </g>`;
 
-                        var leftHanlde = ``;
+                var leftHanlde = ``;
                 $('#noOfS').append(sssw);
 
 
@@ -6139,5 +6140,18 @@
 
             });
         });
+
+        function updateLeftRightStrings() {
+            let $leftString = $('#run1_leftString');
+            let $rightString = $('#run1_rightString');
+
+            let floorHeightTest = parseInt($('#FloorHeight').val());
+
+            if (floorHeightTest < 400) {
+                $leftString.attr('height', 462)
+                $rightString.attr('height', 462)
+            }
+
+        }
     </script>
 @endsection
