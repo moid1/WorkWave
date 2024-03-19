@@ -171,7 +171,7 @@ class OrderController extends Controller
                     } elseif (!empty($row->created_at)) {
                         return Carbon::parse($row->created_at)->format('M d Y');
                     }
-                    return 'N/A'; 
+                    return 'N/A';
                 })
                 ->editColumn('email', function ($row) {
                     return $row->customer->email;
@@ -216,7 +216,8 @@ class OrderController extends Controller
                 'load_type' => $request['load_type'],
                 'driver_id' => $request['driver_id'] ?? null,
                 'delivery_date' => $request['date'],
-                'end_date' => $request['end_date']
+                'end_date' => $request['end_date'],
+                'is_recurring_order' => $request['is_recurring_order'] == 'on' ? true : false,
             ]);
         }
         Notes::create([

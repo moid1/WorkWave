@@ -1,7 +1,11 @@
 @extends('layouts.app')
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="http://maps.google.com/maps/api/js?key=AIzaSyATph3BCKxFTZucYVofwV2tuUIB-YXqHFg"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
 <style type="text/css">
     #mymap {
@@ -29,14 +33,24 @@
 
         <div class="col-lg-7">
             <div class="select-driver">
-                <select name="" id="" class="js-example-basic-multiple form-control form-select  mb-3">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-
+                <label for="">Select Driver</label>
+                <select id="driverID" name="" id=""
+                    class="js-example-basic-multiple form-control form-select  mb-3">
+                    @foreach ($drivers as $driver)
+                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                    @endforeach
                 </select>
             </div>
+
+            <div class="d-flex mt-3 justify-content-between">
+                <div style="">
+                    <strong>Date Filter:</strong>
+                    <input type="text" name="daterange" value="" />
+                    <button class="btn btn-success filter">Filter</button>
+                </div>
+                <div class="btn btn-primary ">Generate Routes</div>
+            </div>
+
         </div>
 
 
@@ -49,7 +63,40 @@
 @section('pageSpecificJs')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>
+    <script type="text/javascript">
+        $(function() {
+            var startDate = localStorage.getItem('startDate');
+            var endDate = localStorage.getItem('endDate');
+            if (startDate && endDate) {
+                startDate = new Date(startDate);
+                endDate = new Date(endDate);
+
+                $('input[name="daterange"]').daterangepicker({
+                    startDate: startDate,
+                    endDate: endDate
+                });
+            } else {
+                $('input[name="daterange"]').daterangepicker({
+                    startDate: moment().subtract(1, 'M'),
+                    endDate: moment()
+                });
+            }
+
+
+
+            $(".filter").click(function() {
+                localStorage.setItem('startDate', $('input[name="daterange"]').data('daterangepicker')
+                    .startDate);
+
+                localStorage.setItem('endDate', $('input[name="daterange"]').data('daterangepicker')
+                    .endDate);
+
+                table.draw();
+            });
+
+        });
+
+
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2();
         });

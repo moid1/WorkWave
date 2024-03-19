@@ -1108,7 +1108,7 @@ class FullFillOrderController extends Controller
 
             // dd($availableTruckTireTypesArr);
 
-            $agriTireTypes = $request->agri_tires_type;
+            $agriTireTypes =  explode(',',$request->agri_tires_type);
             $availableAgriTireTypesArr = [];
 
             if (!empty($agriTireTypes) && count($agriTireTypes)) {

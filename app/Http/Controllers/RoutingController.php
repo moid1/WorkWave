@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\RouteCreated;
 use App\Models\Order;
 use App\Models\Routing;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -157,6 +158,7 @@ class RoutingController extends Controller
     }
 
     public function createRouting(){
-        return view('routing.create');
+        $drivers = User::where('type', 2)->get();
+        return view('routing.create', compact('drivers'));
     }
 }
