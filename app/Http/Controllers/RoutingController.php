@@ -6,6 +6,7 @@ use App\Events\RouteCreated;
 use App\Models\Order;
 use App\Models\Routing;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -160,5 +161,17 @@ class RoutingController extends Controller
     public function createRouting(){
         $drivers = User::where('type', 2)->get();
         return view('routing.create', compact('drivers'));
+    }
+
+    public function getDriverOrderRouting(Request $request){
+        $data = Order::where('driver_id', $request->driver_id)->with(['customer', 'user', 'driver'])->get();
+
+        if ($request->filled('from_date') && $request->filled('to_date')) {
+            $fromDate = Carbon::parse($request->from_date);
+            $toDate = Carbon::parse($request->to_date)->endOfDay();
+            $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+        }
+        return response()->json($data);
+
     }
 }

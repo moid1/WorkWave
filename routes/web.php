@@ -173,4 +173,6 @@ Route::post('get-customer-last-notes', [NotesController::class, 'getLastNote'])-
 
 Route::get('create-route', [RoutingController::class, 'createRouting'])->name('routing.create');
 
+Route::get('get-driver-orders-routing', [RoutingController::class, 'getDriverOrderRouting']);
+
 
