@@ -14,57 +14,64 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        @if (Session::has('success'))
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                    aria-hidden="true">×</span></button>
-            {{ Session::get('success') }}
-        </div>
-        @elseif(Session::has('error'))
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                    aria-hidden="true">×</span></button>
-            {{ Session::get('error') }}
-        </div>
-        @endif
-    </div>
-
-    <div class="col-lg-7">
-        <div class="select-driver">
-            <label for="">Select Driver</label>
-            <select id="driverID" name="" id="" class="js-example-basic-multiple form-control form-select  mb-3">
-                @foreach ($drivers as $driver)
-                <option value="{{ $driver->id }}">{{ $driver->name }}</option>
-                @endforeach
-            </select>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            @if (Session::has('success'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    {{ Session::get('success') }}
+                </div>
+            @elseif(Session::has('error'))
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    {{ Session::get('error') }}
+                </div>
+            @endif
         </div>
 
-        <div class="d-flex mt-3 justify-content-between">
-            <div style="">
-                <strong>Date Filter:</strong>
-                <input type="text" name="daterange" value="" />
-                <button class="btn btn-success filter">Filter</button>
+        <div class="col-lg-7">
+            <div class="select-driver">
+                <label for="">Select Driver</label>
+                <select id="driverID" name="" id=""
+                    class="js-example-basic-multiple form-control form-select  mb-3">
+                    @foreach ($drivers as $driver)
+                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                    @endforeach
+                </select>
             </div>
-            <div id="generateRoutes" class="btn btn-primary ">Generate Routes</div>
+
+            <div class="d-flex mt-3 justify-content-between">
+                <div style="">
+                    <strong>Date Filter:</strong>
+                    <input type="text" name="daterange" value="" />
+                    <button class="btn btn-success filter">Filter</button>
+                </div>
+                <div id="generateRoutes" class="btn btn-primary ">Generate Routes</div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-lg-12" id="orderDetailDiv">
+
+                </div>
+            </div>
+
         </div>
 
-    </div>
 
-
-    <div class="col-lg-5">
-        <div id="mymap"></div>
+        <div class="col-lg-5">
+            <div id="mymap"></div>
+        </div>
     </div>
-</div>
 @endsection
 
 @section('pageSpecificJs')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script type="text/javascript">
-    var latlngs = [];
-    $(function() {
+    <script type="text/javascript">
+        var latlngs = [];
+        $(function() {
             var startDate = localStorage.getItem('startDate');
             var endDate = localStorage.getItem('endDate');
             if (startDate && endDate) {
@@ -96,149 +103,128 @@
 
         });
 
-        function geocodeAddress(response, address, index) {
-    // Geocoder object
-    var geocoder = new google.maps.Geocoder();
+        function geocodeAddress(response, address, index, waypoints) {
+            // Geocoder object
+            var geocoder = new google.maps.Geocoder();
 
-    // Geocode request
-    geocoder.geocode({ 'address': address }, function(results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-            if (results.length > 0) {
-                var location = results[0].geometry.location;
-                console.log('Latitude: ' + location.lat());
-                console.log('Longitude: ' + location.lng());
-                latlngs.push({lat:location.lat(), lng:location.lng()})
+            // Geocode request
+            geocoder.geocode({
+                'address': address
+            }, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (results.length > 0) {
 
-                if (latlngs.length === response.length) {
-                    // All geocoding requests are completed, create and add the polyline
-                  
+                        $('#orderDetailDiv').append(`
+                        <div class="row">
+                        <div class="col-lg-3">
+                            <p class="border p-2">Business Name = ${response[index].customer.business_name}<p>
+                        </div>
+                        <div class="col-lg-3">
+                            <p class="border p-2 ml-3">Order ID = 000${response[index].id}<p>
+                        </div>
+
+                    </div>
+                        `)
+                        var location = results[0].geometry.location;
+                        console.log('Latitude: ' + location.lat());
+                        console.log('Longitude: ' + location.lng());
+                        var tempLatLng = new google.maps.LatLng(location.lat(), location.lng());
+
+                        latlngs.push({
+                            lat: location.lat(),
+                            lng: location.lng()
+                        })
+
+                        waypoints.push({
+                            location: {
+                                lat: location.lat(),
+                                lng: location.lng()
+                            }
+                        })
+
+                        if (latlngs.length === response.length) {
+
+                            var directionsService = new google.maps.DirectionsService();
+                            var directionsRenderer = new google.maps.DirectionsRenderer({
+                                map: mymap
+                            });
+
+
+                            var request = {
+                                origin: waypoints[0].location,
+                                destination: waypoints[waypoints.length - 1].location,
+                                waypoints: waypoints.slice(1, -1),
+                                travelMode: 'DRIVING'
+                            };
+
+                            directionsService.route(request, function(response, status) {
+                                if (status == 'OK') {
+                                    console.log(response);
+                                    directionsRenderer.setDirections(response);
+                                } else {
+                                    window.alert('Directions request failed due to ' + status);
+                                }
+                            });
+
+                        }
+
+                        var markerLabel = {
+                            color: 'white',
+                            fontFamily: 'Arial, sans-serif',
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            text: '' + (index + 1)
+                        };
+
+
+                    } else {
+                        console.log('No results found');
+                    }
+                } else {
+                    console.log('Geocode was not successful for the following reason: ' + status);
                 }
-
-                 var markerLabel = {
-                color: 'white',
-                fontFamily: 'Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 'bold',
-                text: '' + (index + 1)
-            };
-            mymap.addMarker({
-                lat: location.lat(),
-                lng: location.lng(),
-                icon: {
-                    labelOrigin: new google.maps.Point(16, 16) // Adjust label position
-                },
-                label: markerLabel
             });
-            } else {
-                console.log('No results found');
-            }
-        } else {
-            console.log('Geocode was not successful for the following reason: ' + status);
         }
-    });
-}
 
 
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2();
             let startDate = $('input[name="daterange"]').data('daterangepicker').startDate.format('YYYY-MM-DD');
             let endDate = $('input[name="daterange"]').data('daterangepicker').endDate.format('YYYY-MM-DD');
-            $('#generateRoutes').on('click', function(){
-               let driverId = $('#driverID').val();
-               $.ajax({
-                url:'/get-driver-orders-routing',
-                type:'GET',
-                data:{'driver_id':driverId, from_date:startDate, to_date:endDate},
-                success:function (response) {
-                    response.forEach(function(order, index) {
-                        // Do something with each item in the array
-                        geocodeAddress(response,order.customer.mail_address, index);
-                    });
+            $('#generateRoutes').on('click', function() {
+                let driverId = $('#driverID').val();
+                $.ajax({
+                    url: '/get-driver-orders-routing',
+                    type: 'GET',
+                    data: {
+                        'driver_id': driverId,
+                        from_date: startDate,
+                        to_date: endDate
+                    },
+                    success: function(response) {
+                        var waypoints = [{
+                            location: {
+                                lat: 30.749860,
+                                lng: -98.180590
+                            }
+                        }];
 
-                    //////////
-
-                    var waypoints = []; // Array to store waypoints for the route
-
-                    response.forEach(function(order, index) {
-                        // Do something with each item in the array
-                        waypoints.push({
-                            location: order.customer.mail_address,
-                            stopover: true
+                        response.forEach(function(order, index) {
+                            // Do something with each item in the array
+                            geocodeAddress(response, order.customer.mail_address,
+                                index, waypoints);
                         });
-                    });
+                    }
+                })
+            });
+        });
 
-    // Define the directions request
-    var directionsRequest = {
-        origin: waypoints[0].location,
-        destination: waypoints[waypoints.length - 1].location,
-        waypoints: waypoints.slice(1, waypoints.length - 1),
-        travelMode: 'driving' // Assuming you want to draw driving routes
-    };
-
-    // Send the directions request
-    mymap.getRoutes({
-        origin: directionsRequest.origin,
-        destination: directionsRequest.destination,
-        waypoints: directionsRequest.waypoints,
-        travelMode: directionsRequest.travelMode,
-        callback: function(routes) {
-            if (routes.length > 0) {
-                // Draw the route on the map
-                mymap.drawRoute({
-                    origin: directionsRequest.origin,
-                    destination: directionsRequest.destination,
-                    waypoints: directionsRequest.waypoints,
-                    travelMode: directionsRequest.travelMode,
-                    routes: routes
-                });
-            } else {
-                console.error('No routes found.');
-            }
+        var myLatlng = new google.maps.LatLng(30.749860, -98.180590);
+        var myOptions = {
+            zoom: 20,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
         }
-    });
-
-                    
-                   
-                }
-            })
-            });
-        });
-        var mymap = new GMaps({
-            el: '#mymap',
-            lat: 30.749860,
-            lng: -98.180590,
-            zoom: 6,
-            mapType: 'satellite' // Set the map type to satellite
-
-        });
-
-        var markersData = [{
-            lat: 30.749860,
-            lng: -98.180590,
-            label: '0'
-        }];
-
-        // Add markers to the map
-        markersData.forEach(function(marker) {
-            var markerLabel = {
-                color: 'white',
-                fontFamily: 'Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 'bold',
-                text: marker.label
-            };
-            mymap.addMarker({
-                lat: marker.lat,
-                lng: marker.lng,
-                icon: {
-                    labelOrigin: new google.maps.Point(16, 16) // Adjust label position
-                },
-                label: markerLabel
-            });
-        });
-
-        mymap.fitZoom();
-
-        
-</script>
+        var mymap = new google.maps.Map(document.getElementById("mymap"), myOptions);
+    </script>
 @endsection
