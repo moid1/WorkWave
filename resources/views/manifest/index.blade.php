@@ -568,6 +568,11 @@
                                     </div>
                                 </tr>
 
+                                @if ($data->customer_signature)
+                                <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
+                                    src="{{ $data->customer_signature }}" class="" alt="">
+                                @endif
+
                             </tbody>
                         </table>
 

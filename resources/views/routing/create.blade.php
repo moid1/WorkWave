@@ -15,6 +15,10 @@
         width: 100%;
         height: 500px;
     }
+
+    .cross {
+        cursor: pointer;
+    }
 </style>
 @section('content')
     <div class="row justify-content-center">
@@ -52,14 +56,18 @@
                 </div>
                 <div id="generateRoutes" class="btn btn-primary ">Generate Routes</div>
             </div>
-
+            <hr>
+            <div class="col-6 mt-3">
+                <label for="route_name">Please enter the route name</label>
+                <input type="text" name="route_name" id="routeName" class="form-control">
+            </div>
             <div class="row mt-5">
                 <h4> Route Details </h4>
-                <div class="col-lg-12" id="orderDetailDiv">
+                <div class="col-lg-12 mt-3" id="orderDetailDiv">
                 </div>
             </div>
 
-            <div class="row float-right">
+            <div class="row w-100 text-center justify-content-center mt-5">
                 <button id="createRoute" class="btn btn-primary d-none">Create Route</button>
             </div>
 
@@ -144,7 +152,7 @@
                             }
                         })
 
-                        if (latlngs.length === response.length) {
+                        if (Object.keys(response).length === latlngs.length) {
 
 
 
@@ -169,36 +177,49 @@
                             sortedIndices.forEach(function(index) {
                                 sortedWaypoints.push(waypoints[index + 1]);
                             });
-
+                            // 30.749860
                             // Construct the request object
                             var request = {
                                 origin: sortedWaypoints[0].location,
-                                destination: sortedWaypoints[sortedWaypoints.length - 1].location,
-                                waypoints: sortedWaypoints.slice(1, -1),
+                                destination: {
+                                    location: {
+                                        lat: 30.749760,
+                                        lng: -98.180590
+                                    }
+                                },
+                                waypoints: sortedWaypoints.slice(1),
                                 travelMode: 'DRIVING'
                             };
-                            sortedIndices.forEach(function(sorIn, index) {
-                                var alphabet = String.fromCharCode(66 + index); // 'A' has ASCII code 65
+                            $('#orderDetailDiv').append(
+                                `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
+                            Object.keys(response).forEach(function(key, index) {
+                                var order = response[key];
+                                var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
                                 $('#orderDetailDiv').append(`
-                        <div class="row">
-                            <span class="removeOrder mt-2" data-orderid=${response[sorIn].id} >X</span>
-                            <div class="col-lg-2">
-                          Stop ${alphabet} <p class="border p-2">${response[sorIn].customer.business_name}<p>
-                            </div>
-                            <div class="col-lg-3">
-                                <p class="border p-2 ml-3">000${response[sorIn].id}<p>
-                            </div>
-                            <div class="col-lg-3">
-                                <p class="border p-2 ml-3">${response[sorIn].load_type}<p>
-                            </div>
-                            <div class="col-lg-2 d-none">
-                                <input type="number" min="1" max="${response.length}" value=${index+1} class="form-control changeOrdering"/>
-                            </div>
-                        </div>
-                        `)
+        <div class="row">
+            <div class="col-lg-2">
+                <p class="border p-2">${order.customer.business_name}</p>
+            </div>
+            <div class="col-lg-3">
+                <p class="border p-2 ml-3">000${order.id}</p>
+            </div>
+            <div class="col-lg-3">
+                <p class="border p-2 ml-3">${order.load_type}</p>
+            </div>
+            <div class="col-lg-3">
+                <a target="_blank" href="order/${order.id}"><span><i class="fa fa-eye ml-3"></i></span></a> |
+                <span class="removeOrder mt-2" data-orderid="${order.id}"><span class="text-primary cross"><i class="mdi mdi-delete "></i></span></span>
+            </div>
+            <div class="col-lg-2 d-none">
+                <input type="number" min="1" max="${Object.keys(response).length}" value="${index + 1}" class="form-control changeOrdering" />
+            </div>
+        </div>
+    `);
                             });
 
+
+                            $('#orderDetailDiv').append(`<div>End Route: Reliable Tire Disposal</div>`)
 
                             $('.removeOrder').on('click', function() {
                                 // Retrieve the removeOrderID
@@ -206,8 +227,20 @@
                                 console.log(removeOrderID);
 
                                 // Filter out the object with the specified ID
-                                actualResponse = actualResponse.filter(obj => obj.id !== removeOrderID);
+                                // Convert the object to an array of its values
+                                const actualResponseArray = Object.values(actualResponse);
 
+                                // Remove the item with the specified id
+                                const filteredArray = actualResponseArray.filter(obj => obj.id !==
+                                    removeOrderID);
+
+                                // Convert the filtered array back to an object if necessary
+                                const filteredObject = Object.fromEntries(filteredArray.map(obj => [obj.id,
+                                    obj
+                                ]));
+
+                                // Update the actualResponse object
+                                actualResponse = filteredObject;
                                 // Clear existing markers and directions
                                 clearWaypoints(directionsRenderer);
 
@@ -316,7 +349,6 @@
                         actualResponse = response;
                         generateWayPoints(response);
 
-
                     }
                 })
             });
@@ -337,6 +369,27 @@
                     }
                 });
                 console.log(orderIds)
+                let driverId = $('#driverID').val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/create-routing-web',
+                    type: 'POST',
+                    data: {
+                        driver_id: driverId,
+                        order_ids: orderIds,
+                        route_name: $('#routeName').val()
+                    },
+                    success: function(response) {
+
+                        location.reload()
+
+                    }
+                })
+
 
             })
         });
@@ -347,20 +400,20 @@
             center: myLatlng,
             mapTypeId: google.maps.MapTypeId.HYBRID,
             mapTypeControl: true,
-    mapTypeControlOptions: {
-        mapTypeIds: [google.maps.MapTypeId.HYBRID],
-        style: google.maps.MapTypeControlStyle.DEFAULT,
-        position: google.maps.ControlPosition.TOP_RIGHT
-    }
+            mapTypeControlOptions: {
+                mapTypeIds: [google.maps.MapTypeId.HYBRID],
+                style: google.maps.MapTypeControlStyle.DEFAULT,
+                position: google.maps.ControlPosition.TOP_RIGHT
+            }
         }
         var mymap = new google.maps.Map(document.getElementById("mymap"), myOptions);
         var directionsService = new google.maps.DirectionsService();
         var directionsRenderer = new google.maps.DirectionsRenderer({
-            map: mymap
+            map: mymap,
+
         });
 
         function generateWayPoints(response) {
-
             latlngs = [];
             var waypoints = [{
                 location: {
@@ -369,13 +422,11 @@
                 }
             }];
 
-            response.forEach(function(order, index) {
-                // Do something with each item in the array
+            Object.values(response).forEach(function(order, index) {
+                // Do something with each item in the object
                 console.log('index', index);
-                geocodeAddress(response, order.customer.mail_address,
-                    index, waypoints);
+                geocodeAddress(response, order.customer.address, index, waypoints);
             });
-
         }
 
         function clearWaypoints(directionsRenderer) {

@@ -179,10 +179,18 @@
                                     class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
                         </li>
 
-                        <li>
-                            <a href="{{route('routing.create')}}" class="waves-effect"><i
-                                    class="mdi mdi-calendar-check"></i><span> Routing Software </span></a>
+
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>
+                                Routing </span><i class="fa fa-caret-down" style="margin-left:20px; "
+                                    aria-hidden="true"></i>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a href="{{route('routing.create')}}">Create Routes</a></li>
+                                <li><a href="{{route('routing.all')}}">All Routes</a></li>
+                            </ul>
                         </li>
+
 
                         <li class="has_sub">
                             <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>

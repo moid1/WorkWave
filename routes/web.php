@@ -172,7 +172,11 @@ Route::post('fill-manifest-order', [UnfillManifestController::class, 'store'])->
 Route::post('get-customer-last-notes', [NotesController::class, 'getLastNote'])->name('customer.last.note');
 
 Route::get('create-route', [RoutingController::class, 'createRouting'])->name('routing.create');
+Route::get('get-routes', [RoutingController::class, 'getRoutes'])->name('routing.all');
+Route::get('delete-route/{id}', [RoutingController::class, 'deleteRouteWeb'])->name('routing.delete');
 
 Route::get('get-driver-orders-routing', [RoutingController::class, 'getDriverOrderRouting']);
+
+Route::post('create-routing-web', [RoutingController::class, 'createWebRoute']);
 
 
