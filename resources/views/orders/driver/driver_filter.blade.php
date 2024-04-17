@@ -47,7 +47,7 @@
                                             <td>{{ $order->id }}</td>
                                             <td>{{ $order->customer->business_name }}</td>
                                             <td>{{ $order->user->name }}</td>
-                                            <td>{{ $order->created_at }}</td>
+                                            <td>{{ $order->delivery_date }}</td>
                                             <td>{{ $order->customer->email }}</td>
                                             <td>{{ $order->driver ? $order->driver->name : 'N/A' }}</td>
                                         </tr>
@@ -150,8 +150,8 @@
                         name: 'Created By'
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'delivery_date',
+                        name: 'delivery_date'
                     },
                     {
                         data: 'customer.email',

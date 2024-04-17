@@ -284,6 +284,17 @@
             var place = autocomplete.getPlace();
             console.log(place);
         });
+
+
+        var newINput = document.getElementById('address');
+        var newAutoComplete = new google.maps.places.Autocomplete(newINput);
+
+        newAutoComplete.addListener('place_changed', function() {
+            var place = newAutoComplete.getPlace();
+            console.log(place);
+        });
+
+        
     }
 </script>
 

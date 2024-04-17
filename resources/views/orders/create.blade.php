@@ -165,6 +165,13 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-lg-3">
+                                            <input type="checkbox" id="is_recurring_order" name="is_recurring_order" class="">
+                                            <label for="is_recurring_order">Is Recurring Order</label>
+                                       
+                                        </div>
+                                        
+
 
                                      
                                         <div class="col-lg-12 justify-content-center text-center mt-5">

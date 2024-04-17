@@ -88,7 +88,7 @@ class OrderController extends Controller
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+                $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
             }
 
             return Datatables::of($data)
@@ -108,8 +108,10 @@ class OrderController extends Controller
                     }
                     return 'N/A';
                 })
-                ->editColumn('created_at', function ($row) {
-                    return $row->created_at->format('M d Y');
+                ->editColumn('delivery_date', function ($row) {
+                    if($row->delivery_date)
+                    return $row->delivery_date->format('M d Y');
+                    return 'N/A';
                 })
                 ->editColumn('email', function ($row) {
                     return $row->customer->email;
@@ -171,7 +173,7 @@ class OrderController extends Controller
                     } elseif (!empty($row->created_at)) {
                         return Carbon::parse($row->created_at)->format('M d Y');
                     }
-                    return 'N/A'; 
+                    return 'N/A';
                 })
                 ->editColumn('email', function ($row) {
                     return $row->customer->email;
@@ -216,7 +218,8 @@ class OrderController extends Controller
                 'load_type' => $request['load_type'],
                 'driver_id' => $request['driver_id'] ?? null,
                 'delivery_date' => $request['date'],
-                'end_date' => $request['end_date']
+                'end_date' => $request['end_date'],
+                'is_recurring_order' => $request['is_recurring_order'] == 'on' ? true : false,
             ]);
         }
         Notes::create([
