@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Driver;
 
 class AdminController extends Controller
 {
@@ -29,5 +30,27 @@ class AdminController extends Controller
             // Return response indicating user doesn't exist
             return response()->json(['exists' => false, 'user' => $user]);
         }
+    }
+
+     public function driverLocation(Request $request)
+    {
+        // Validate incoming data
+        $validatedData = $request->validate([
+            'users_id' => 'required|integer',
+            'users_location' => 'required|string',
+            'users_lat' => 'required|numeric',
+            'users_long' => 'required|numeric',
+        ]);
+
+        // Create a new driver
+        $driver = new Driver();
+        $driver->users_id = $validatedData['users_id'];
+        $driver->users_location = $validatedData['users_location'];
+        $driver->users_lat = $validatedData['users_lat'];
+        $driver->users_long = $validatedData['users_long'];
+        $driver->save();
+
+        // Return a success response
+        return response()->json(['message' => 'Driver Location stored successfully'], 201);
     }
 }
