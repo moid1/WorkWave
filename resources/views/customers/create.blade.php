@@ -168,13 +168,22 @@
                                                         <option value="cash">Cash</option>
 
                                                     </select>
-                                                    @error('second_mail')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
                                                 </div>
                                             </div>  
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Load Type</label>
+                                                    <select id="loadType" name="load_type" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                                        <option value="box_truck_route">Box Truck Route</option>
+                                                        <option value="trailer_swap">Trailer Swap</option>
+                                                        <option value="state">State</option>
+                                                        <option value="tdf">TDF</option>
+                                                        <option value="steel">Steel</option>
+    
+                                                    </select>
+                                                </div>
+                                            </div>
 
                                             
                                             <div class="col-lg-6">
@@ -275,6 +284,17 @@
             var place = autocomplete.getPlace();
             console.log(place);
         });
+
+
+        var newINput = document.getElementById('address');
+        var newAutoComplete = new google.maps.places.Autocomplete(newINput);
+
+        newAutoComplete.addListener('place_changed', function() {
+            var place = newAutoComplete.getPlace();
+            console.log(place);
+        });
+
+        
     }
 </script>
 

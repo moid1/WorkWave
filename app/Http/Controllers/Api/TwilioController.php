@@ -21,7 +21,7 @@ class TwilioController extends Controller
 
             $phoneNumber = $this->formatPhoneNumber($customer->phone_no);
 
-            $this->sendSMS($phoneNumber, 'Your order has been processed.');
+            $this->sendSMS($phoneNumber, 'Driver From Reliable Tire Disposal is reaching to your location');
 
             return response()->json(['message' => 'SMS sent successfully'], 200);
         } catch (\Exception $e) {
@@ -44,23 +44,21 @@ class TwilioController extends Controller
                 'body' => $message,
             ]
         );
-
     }
 
     private function formatPhoneNumber($phoneNumber)
-{
-    // Remove any non-numeric characters from the phone number
-    $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+    {
+        // Remove any non-numeric characters from the phone number
+        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
 
-    // Prepend the country code if it's missing
-    if (substr($phoneNumber, 0, 1) !== '+') {
-        // Extract the country code from the original formatted number
-        preg_match('/\+(\d+)/', $phoneNumber, $matches);
-        $countryCode = $matches[1] ?? ''; // Extracted country code
-        $phoneNumber = '+' . $countryCode . substr($phoneNumber, strlen($countryCode));
+        // Prepend the country code if it's missing
+        if (substr($phoneNumber, 0, 1) !== '+') {
+            // Extract the country code from the original formatted number
+            preg_match('/\+(\d+)/', $phoneNumber, $matches);
+            $countryCode = $matches[1] ?? ''; // Extracted country code
+            $phoneNumber = '+' . $countryCode . substr($phoneNumber, strlen($countryCode));
+        }
+
+        return $phoneNumber;
     }
-
-    return $phoneNumber;
-}
-
 }

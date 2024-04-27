@@ -55,10 +55,18 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Date</label>
+                                                <label>From Date</label>
                                                 <input name="date" class="form-control" type = "date"  value="<?php echo date('Y-m-d'); ?>"/>
                                             </div>
                                         </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>End Date</label>
+                                                <input name="end_date" class="form-control" type = "date"  value="<?php echo date('Y-m-d'); ?>"/>
+                                            </div>
+                                        </div>
+
 
 
 
@@ -96,41 +104,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>2nd Email</label>
-                                                <input readonly id="second_mail" type="email"
-                                                    class="form-control "
-                                                    name="second_mail" value=""  autofocus>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>2nd POC</label>
-                                                <input readonly id="second_poc" type="text"
-                                                    class="form-control "
-                                                    name="second_poc" value=""  autofocus>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Mail Address</label>
-                                                <input readonly id="mail_address" type="text"
-                                                    class="form-control "
-                                                    name="mail_address" value=""  autofocus>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Charge type</label>
-                                                <input readonly id="charge_type" type="text"
-                                                    class="form-control "
-                                                    name="charge_type" value=""  autofocus>
-                                            </div>
-                                        </div> --}}
+                                     
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -191,6 +165,13 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-lg-3">
+                                            <input type="checkbox" id="is_recurring_order" name="is_recurring_order" class="">
+                                            <label for="is_recurring_order">Is Recurring Order</label>
+                                       
+                                        </div>
+                                        
+
 
                                      
                                         <div class="col-lg-12 justify-content-center text-center mt-5">
@@ -241,6 +222,7 @@
             $('#poc_name').val($(this).data('poc'));
             $('#email').val($(this).data('email'));
             $('#notes').val($(this).data('lastest-note'));
+            $('#loadType').val($(this).data('order-type'));
             // $('#second_poc').val($(this).data('second-poc'));
             // $('#mail_address').val($(this).data('mail-address'));
             // $('#charge_type').val($(this).data('charge-type'));

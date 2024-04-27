@@ -27,6 +27,7 @@
     <link href="{{asset('dashboard/assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('dashboard/assets/css/icons.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('dashboard/assets/css/style.css')}}" rel="stylesheet" type="text/css">
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
 </head>
 
@@ -130,6 +131,9 @@
                             <ul class="list-unstyled">
                                 <li><a href="{{route('order.create')}}">Create Order</a></li>
                                 <li><a href="{{route('order.index')}}">All Orders</a></li>
+                                <li><a href="{{route('order.drivers')}}">Driver Orders</a></li>
+                                <li><a href="{{route('orders.late')}}">Late Orders</a></li>
+                                
                             </ul>
                         </li>
 
@@ -175,6 +179,29 @@
                                     class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
                         </li>
 
+
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>
+                                Routing </span><i class="fa fa-caret-down" style="margin-left:20px; "
+                                    aria-hidden="true"></i>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a href="{{route('routing.create')}}">Create Routes</a></li>
+                                <li><a href="{{route('routing.all')}}">All Routes</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>
+                                Calander </span><i class="fa fa-caret-down" style="margin-left:20px; "
+                                    aria-hidden="true"></i>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a href="{{route('calander.index')}}">Routing Calander</a></li>
+                                <li><a href="{{route('calander.order.view')}}">Order Calander</a></li>
+                            </ul>
+                        </li>
                         @endif
 
                         @if(Auth::user()->type == 2)
@@ -353,6 +380,7 @@
     <!-- App js -->
     <script src="{{asset('dashboard/')}}assets/js/app.js"></script>
     @yield('pageSpecificJs')
+   
 </body>
 
 </html>

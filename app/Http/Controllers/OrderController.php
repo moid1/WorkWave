@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderCreated;
 use App\Models\Notes;
 use App\Models\Order;
 use App\Models\User;
@@ -62,12 +63,12 @@ class OrderController extends Controller
                     <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateDriver(\'' . $row->id . '\')">Update Driver
                     </button>
                 ';
-                $showBtn = '';
+                    $showBtn = '';
 
-                if ($row->status == 'created') {
-                    $orderShowRoute = route('order.show', $row->id);
-                    $showBtn =  '/<a href="'.$orderShowRoute.'" > <i class="fa fa-edit"  title="update order"></i></a>';
-                }
+                    if ($row->status == 'created') {
+                        $orderShowRoute = route('order.show', $row->id);
+                        $showBtn =  '/<a href="' . $orderShowRoute . '" > <i class="fa fa-edit"  title="update order"></i></a>';
+                    }
                     return $button . $showBtn;
                 })
                 ->rawColumns(['update_driver'])
@@ -77,6 +78,121 @@ class OrderController extends Controller
         $drivers = User::where('type', 2)->get();
         $orders = Order::with(['customer', 'user', 'driver'])->get();
         return view('orders.index', compact('orders', 'drivers'));
+    }
+
+    public function ordersByDriver(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Order::with(['customer', 'user', 'driver'])->get();
+
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+            }
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('delivery_date', function ($row) {
+                    if($row->delivery_date)
+                    return $row->delivery_date->format('M d Y');
+                    return 'N/A';
+                })
+                ->editColumn('email', function ($row) {
+                    return $row->customer->email;
+                })
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })->editColumn('status', function ($row) {
+                    if ($row->status)
+                        return $row->status;
+                    return 'N/A';
+                })
+                ->make(true);
+        }
+
+        $drivers = User::where('type', 2)->get();
+        $orders = Order::with(['customer', 'user', 'driver'])->get();
+        return view('orders.driver.driver_filter', compact('orders', 'drivers'));
+    }
+
+    public function lateOrders(Request $request)
+    {
+        if ($request->ajax()) {
+            $currentDate = Carbon::now();
+            $data = Order::where('status', 'created')
+                ->whereDate('end_date', '<=', $currentDate)
+                ->with(['customer', 'user', 'driver'])
+                ->get();
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+            }
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($row) {
+                    return $row->id;
+                })
+                ->editColumn('business_name', function ($row) {
+                    if ($row->customer->business_name) {
+                        return $row->customer->business_name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_by', function ($row) {
+                    if ($row->user->name) {
+                        return $row->user->name;
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('M d Y');
+                })
+                ->editColumn('end_date', function ($row) {
+                    if (!empty($row->end_date)) {
+                        return  Carbon::parse($row->end_date)->format('M d Y');
+                    } elseif (!empty($row->created_at)) {
+                        return Carbon::parse($row->created_at)->format('M d Y');
+                    }
+                    return 'N/A';
+                })
+                ->editColumn('email', function ($row) {
+                    return $row->customer->email;
+                })
+                ->editColumn('driver', function ($row) {
+                    if ($row->driver)
+                        return $row->driver->name;
+                    return 'N/A';
+                })->editColumn('status', function ($row) {
+                    if ($row->status)
+                        return $row->status;
+                    return 'N/A';
+                })
+                ->make(true);
+        }
+
+        $drivers = User::where('type', 2)->get();
+        $orders = Order::with(['customer', 'user', 'driver'])->get();
+        return view('orders.late', compact('orders', 'drivers'));
     }
 
     /**
@@ -93,15 +209,17 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
+        $order = null;
         if ($request->create_order == 'createOrder') {
-            Order::create([
+            $order = Order::create([
                 'customer_id' => $request['customer_id'],
                 'user_id' => Auth::id(),
                 'notes' => $request['notes'] ?? 'N/A',
                 'load_type' => $request['load_type'],
-                'driver_id' => $request['driver_id'] ?? null
-
+                'driver_id' => $request['driver_id'] ?? null,
+                'delivery_date' => $request['date'],
+                'end_date' => $request['end_date'],
+                'is_recurring_order' => $request['is_recurring_order'] == 'on' ? true : false,
             ]);
         }
         Notes::create([
@@ -112,6 +230,10 @@ class OrderController extends Controller
             'spoke_with' => $request->spoke_with ?? 'N/A',
             'title' => 'Order Note'
         ]);
+
+        // OrderCreated::dispatch($order);
+        event(new OrderCreated($order));
+
         return redirect('/orders')->with('success', 'Order Created Successfully');
     }
 
@@ -460,16 +582,19 @@ class OrderController extends Controller
         }
     }
 
-    public function getOrderById($id){
+    public function getOrderById($id)
+    {
         $order = Order::whereId($id)->with(['customer', 'driver'])->first();
         $drivers = User::where('type', 2)->get();
         return view('orders.show', compact('order', 'drivers'));
     }
 
-    public function updateOrder(Request $request){
+    public function updateOrder(Request $request)
+    {
         $order = Order::find($request->order_id);
         $order->load_type = $request['load_type'];
         $order->driver_id = $request['driver_id'];
+        $order->delivery_date = $request['date'];
         $order->update();
 
         Notes::create([
@@ -480,7 +605,7 @@ class OrderController extends Controller
             'spoke_with' => $request->spoke_with ?? 'N/A',
             'title' => 'Order Note'
         ]);
-        
+
         return redirect('/orders')->with('success', 'Order Updated Successfully');
     }
 }

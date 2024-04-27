@@ -305,7 +305,7 @@ class HomeController extends Controller
         $NotIncluded = ['steel', 'tdf'];
 
         if ($request->date) {
-            $todaysOrders = Order::whereDate('created_at', $request->date)->whereNotIn('load_type', $NotIncluded)
+            $todaysOrders = Order::whereDate('delivery_date', $request->date)->whereNotIn('load_type', $NotIncluded)
                 ->whereNotNull('driver_id')
                 ->with(['driver', 'customer', 'fulfilled', 'compared'])
                 ->get()
@@ -314,7 +314,7 @@ class HomeController extends Controller
                 ->flatten()
                 ->toArray();;
         } else {
-            $todaysOrders = Order::whereDate('created_at', now()->toDateString())
+            $todaysOrders = Order::whereDate('delivery_date', now()->toDateString())
                 ->whereNotIn('load_type', $NotIncluded)
                 ->whereNotNull('driver_id')
                 ->with(['driver', 'customer', 'fulfilled', 'compared'])

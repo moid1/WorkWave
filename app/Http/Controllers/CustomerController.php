@@ -115,7 +115,7 @@ class CustomerController extends Controller
                 $output = '<ul class="list-group" style="display: block; position: relative; z-index: 1">';
                 foreach ($data as $row) {
                     $notes =  count($row->notes) ? $row->notes[0]->note : "";
-                    $output .= '<li class="list-group-item" data-lastest-note="' . $notes . '"  data-charge-type="' . $row->charge_type . '" data-mail-phone="' . $row->mail_phone . '" data-mail-address="' . $row->mail_address . '" data-second-mail="' . $row->second_mail . '" data-second-poc="' . $row->second_poc . '"  data-id="' . $row->id . '" data-email="' . $row->email . '" data-poc="' . $row->poc_name . '" data-address="' . $row->address . '" data-phone="' . $row->phone_no . '">' . $row->business_name . '</li>';
+                    $output .= '<li class="list-group-item" data-order-type="'.$row->load_type.'" data-lastest-note="' . $notes . '"  data-charge-type="' . $row->charge_type . '" data-mail-phone="' . $row->mail_phone . '" data-mail-address="' . $row->mail_address . '" data-second-mail="' . $row->second_mail . '" data-second-poc="' . $row->second_poc . '"  data-id="' . $row->id . '" data-email="' . $row->email . '" data-poc="' . $row->poc_name . '" data-address="' . $row->address . '" data-phone="' . $row->phone_no . '">' . $row->business_name . '</li>';
                 }
                 $output .= '</ul>';
             } else {

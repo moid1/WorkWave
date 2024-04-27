@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminSettingsController;
+use App\Http\Controllers\CalanderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyRegController;
 use App\Http\Controllers\HomeController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\FullFillOrderController;
 use App\Http\Controllers\ManagerCompareOrderController;
 use App\Http\Controllers\ManifestPDFController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UnfillManifestController;
 use App\Models\Order;
@@ -69,11 +71,13 @@ Route::get('/toggle-customer-status/{id}', [CustomerController::class, 'toggleCu
 
 //Orders
 Route::get('/orders',  [OrderController::class, 'index'])->name('order.index');
+Route::get('/late-orders',  [OrderController::class, 'lateOrders'])->name('orders.late');
 Route::get('order/{id}', [OrderController::class, 'getOrderById'])->name('order.show');
 Route::get('/create-orders',  [OrderController::class, 'create'])->name('order.create');
 Route::post('/orders',  [OrderController::class, 'store'])->name('order.store');
 Route::post('/assign-driver', [OrderController::class, 'updateDriver'])->name('order.updateDriver');
 Route::post('update-order', [OrderController::class, 'updateOrder'])->name('order.updateOrder');
+Route::get('/orders-by-driver', [OrderController::class, 'ordersByDriver'])->name('order.drivers');
 
 //Driver ORders
 Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('order.driver.index');
@@ -100,6 +104,13 @@ Route::get('/company-registration/{id}', [CompanyRegController::class, 'delete']
 Route::get('/change-password', [HomeController::class, 'changePassword'])->name('change-password');
 Route::post('/change-password', [HomeController::class, 'updatePassword'])->name('update-password');
 
+Route::get('/calander', [CalanderController::class, 'index'])->name('calander.index');
+Route::get('/calander-event', [CalanderController::class, 'eventsForCalander'])->name('calander.events');
+
+Route::get('/calander-order', [CalanderController::class, 'viewForOrderCalander'])->name('calander.order.view');
+Route::get('/calander-orders', [CalanderController::class, 'ordersForCalander'])->name('calander.order');
+
+Route::post('/calander-update-order', [CalanderController::class, 'changeOrderDate'])->name('calander.order.update');
 
 Route::get('clear_cache', function () {
 
@@ -159,5 +170,13 @@ Route::post('fill-manifest-order', [UnfillManifestController::class, 'store'])->
 
 
 Route::post('get-customer-last-notes', [NotesController::class, 'getLastNote'])->name('customer.last.note');
+
+Route::get('create-route', [RoutingController::class, 'createRouting'])->name('routing.create');
+Route::get('get-routes', [RoutingController::class, 'getRoutes'])->name('routing.all');
+Route::get('delete-route/{id}', [RoutingController::class, 'deleteRouteWeb'])->name('routing.delete');
+
+Route::get('get-driver-orders-routing', [RoutingController::class, 'getDriverOrderRouting']);
+
+Route::post('create-routing-web', [RoutingController::class, 'createWebRoute']);
 
 
