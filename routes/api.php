@@ -11,6 +11,7 @@ use App\Http\Controllers\NotesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Api\TwilioController;
+use App\Http\Controllers\Api\AdminController;
 use App\Models\FullFillOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -74,4 +75,7 @@ Route::get('get-not-started-group-routes', [RoutingController::class, 'getNotSta
 Route::get('get-route-by-id/{id}', [RoutingController::class, 'getRoutesById'])->middleware('auth:sanctum');
 
 Route::post('send-message', [TwilioController::class, 'sendMessage'])->name('send-message');
+Route::post('/check-name-email', [AdminController::class, 'checkNameEmail'])->name('check-name-email');
+Route::post('/driver-location', [AdminController::class, 'driverLocation'])->name('driver-location');
+
 
