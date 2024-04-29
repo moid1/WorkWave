@@ -110,4 +110,25 @@ class TruckController extends Controller
         }
         return back()->with('error', 'Sorry, Truck is not available');
     }
+
+    public function showUserLocation($truck_id)
+    {
+        $truck = TruckDriver::findOrFail($truck_id);
+
+    $location = [
+        'lat' => $truck->users_lat, // Assuming 'users_lat' and 'users_long' are fields in the TruckDriver model
+        'lng' => $truck->users_long,
+    ];
+
+    $truckName = $truck->name;
+
+        return view('truck.map', compact('location', 'truckName'));
+    }
+
+    public function truckDriver()
+    {
+        $trucks = TruckDriver::with('truck')->get();
+        $drivers = User::where('type', 2)->get();
+        return view('truck.drivers', compact('trucks', 'drivers'));
+    }
 }

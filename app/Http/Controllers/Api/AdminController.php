@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Driver;
+use App\Models\TruckDriver;
 
 class AdminController extends Controller
 {
@@ -36,15 +36,15 @@ class AdminController extends Controller
     {
         // Validate incoming data
         $validatedData = $request->validate([
-            'users_id' => 'required|integer',
+            'user_id' => 'required|integer',
             'users_location' => 'required|string',
             'users_lat' => 'required|numeric',
             'users_long' => 'required|numeric',
         ]);
 
         // Create a new driver
-        $driver = new Driver();
-        $driver->users_id = $validatedData['users_id'];
+        $driver = new TruckDriver();
+        $driver->user_id = $validatedData['user_id'];
         $driver->users_location = $validatedData['users_location'];
         $driver->users_lat = $validatedData['users_lat'];
         $driver->users_long = $validatedData['users_long'];

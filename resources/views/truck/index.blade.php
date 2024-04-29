@@ -97,6 +97,10 @@
                                                 <a style="text-decoration: none;color:black"
                                                     href="{{ route('truck.update', $truck->id) }}"> <i
                                                         class="mdi mdi-truck " title="Update Truck"></i></a>
+                                                        /
+                                                        <a style="text-decoration: none;color:black"
+                                                    href="{{ route('show.truck.location', ['truck_id' => $truck->id]) }}"> <i
+                                                        class="mdi mdi-truck " title="Show Truck"></i></a>
                                             </td>
 
                                         </tr>
