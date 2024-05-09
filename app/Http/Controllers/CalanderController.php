@@ -74,7 +74,7 @@ class CalanderController extends Controller
                 $orderIds = explode(',', $route->order_ids);
                 $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
                 $updatedOrderIdsString = implode(',', $updatedOrderIds);
-                return $updatedOrderIdsString;
+                return [$updatedOrderIdsString];
                 $route->order_ids = $updatedOrderIdsString;
                 $route->save();
                 $order = Order::findOrFail($request->order_id);
