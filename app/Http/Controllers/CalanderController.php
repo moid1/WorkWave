@@ -23,7 +23,7 @@ class CalanderController extends Controller
     public function eventsForCalander(Request $request)
     {
         if ($request->ajax()) {
-            $orders = Order::whereDate('delivery_date', '>=', date('Y-m-d', strtotime($request->start)))->get();
+            $data = Order::whereDate('delivery_date', '>=', date('Y-m-d', strtotime($request->start)))->get();
             $testData = array();
             foreach ($data as $key => $value) {
                 $orderIdsArray = $value->order_ids ? explode(',', $value->order_ids) : [];
