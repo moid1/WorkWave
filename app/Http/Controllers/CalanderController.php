@@ -70,6 +70,7 @@ class CalanderController extends Controller
             $order->save();
         } else {
             $route = Routing::findOrFail($request->route_id);
+            return $route;
             if ($route) {
                 $orderIds = explode(',', $route->order_ids);
                 $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
