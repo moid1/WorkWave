@@ -23,7 +23,7 @@ class CalanderController extends Controller
     public function eventsForCalander(Request $request)
     {
         if ($request->ajax()) {
-            $data = Routing::whereDate('created_at', '>=', $request->start)->get();
+            $data = Routing::whereDate('delivery_date', '>=', $request->start)->get();
             $testData = array();
             foreach ($data as $key => $value) {
                 $orderIdsArray = $value->order_ids ? explode(',', $value->order_ids) : [];
@@ -33,7 +33,7 @@ class CalanderController extends Controller
                     if ($truck) {
                         $testData[] = array(
                             'title' => $order->customer->business_name . '-' . $truck->truck->name,
-                            'start' => $value->created_at,
+                            'start' => $value->delivery_date,
                             'id' => $order->id,
                             'route_id' => $value->id
                         );
@@ -48,7 +48,7 @@ class CalanderController extends Controller
     public function ordersForCalander(Request $request)
     {
         if ($request->ajax()) {
-            $orders = Order::whereDate('created_at', '>=', $request->start)->get();
+            $orders = Order::whereDate('delivery_date', '>=', $request->start)->get();
             $testData = array();
             foreach ($orders as $key => $order) {
                 $testData[] = array(
