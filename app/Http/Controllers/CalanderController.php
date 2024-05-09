@@ -24,6 +24,7 @@ class CalanderController extends Controller
     {
         if ($request->ajax()) {
             $data = Order::whereDate('delivery_date', '>=', date('Y-m-d', strtotime($request->start)))->get();
+            return $data;
             $testData = array();
             foreach ($data as $key => $value) {
                 $orderIdsArray = $value->order_ids ? explode(',', $value->order_ids) : [];
