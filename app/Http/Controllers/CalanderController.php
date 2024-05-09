@@ -33,7 +33,7 @@ class CalanderController extends Controller
                     if ($truck) {
                         $testData[] = array(
                             'title' => $order->customer->business_name . '-' . $truck->truck->name,
-                            'start' => $value->delivery_date,
+                            'start' => $order->delivery_date,
                             'id' => $order->id,
                             'route_id' => $value->id
                         );
