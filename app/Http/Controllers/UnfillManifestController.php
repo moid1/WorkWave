@@ -119,7 +119,9 @@ class UnfillManifestController extends Controller
         $fullFillOrder['unfill'] = $unfulfillData;
         $fullFillOrder['customerPricing'] = $customerPricing;
         $existingManifest = ManifestPDF::where('order_id', $order->id)->first();
-
+        if(!$existingManifest){
+            dd('FulFil the manifest first');
+        }
 
         for ($i = 0; $i < count($pdfTypes); $i++) {
             $fullFillOrder['pdfType'] = $pdfTypes[$i];
@@ -174,6 +176,9 @@ class UnfillManifestController extends Controller
         $fullFillOrder['customerPricing'] = $customerPricing;
 
         $existingManifest = ManifestPDF::where('order_id', $order->id)->first();
+        if(!$existingManifest){
+            dd('FulFil the manifest first');
+        }
 
         $test = null;
         for ($i = 0; $i < count($pdfTypes); $i++) {
