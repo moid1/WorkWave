@@ -110,7 +110,19 @@ class OrderController extends Controller
                 })
                 ->editColumn('delivery_date', function ($row) {
                     if($row->delivery_date)
-                    return $row->delivery_date->format('M d Y');
+                    {
+                        if ($row->delivery_date instanceof \DateTime) {
+                            return $row->delivery_date->format('M d Y');
+                        } else {
+                            // If it's a string, you might need to parse it into a DateTime object
+                            $deliveryDate = \DateTime::createFromFormat('Y-m-d', $row->delivery_date);
+                            if ($deliveryDate !== false) {
+                                return $deliveryDate->format('M d Y');
+                            } else {
+                                return 'Invalid date';
+                            }
+                        }
+                    }
                     return 'N/A';
                 })
                 ->editColumn('email', function ($row) {
