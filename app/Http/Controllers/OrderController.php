@@ -69,7 +69,10 @@ class OrderController extends Controller
                         $orderShowRoute = route('order.show', $row->id);
                         $showBtn =  '/<a href="' . $orderShowRoute . '" > <i class="fa fa-edit"  title="update order"></i></a>';
                     }
-                    return $button . $showBtn;
+                    $orderDeleteRoute = route('order.delete', $row->id);
+
+                    $deleteBtn = ' /<a href="' . $orderDeleteRoute . '" > <i class="fa fa-times text-primary"  title="delete order"></i></a>';
+                    return $button . $showBtn . $deleteBtn;
                 })
                 ->rawColumns(['update_driver'])
                 ->make(true);
@@ -619,5 +622,10 @@ class OrderController extends Controller
         ]);
 
         return redirect('/orders')->with('success', 'Order Updated Successfully');
+    }
+
+    public function deleteOrder($id){
+        Order::find($id)->delete();
+        return back()->with('success', 'Order is deleted successfully');
     }
 }

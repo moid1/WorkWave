@@ -71,6 +71,7 @@ Route::get('/toggle-customer-status/{id}', [CustomerController::class, 'toggleCu
 
 //Orders
 Route::get('/orders',  [OrderController::class, 'index'])->name('order.index');
+Route::get('/delete-order/{id}', [OrderController::class, 'deleteOrder'])->name('order.delete');
 Route::get('/late-orders',  [OrderController::class, 'lateOrders'])->name('orders.late');
 Route::get('order/{id}', [OrderController::class, 'getOrderById'])->name('order.show');
 Route::get('/create-orders',  [OrderController::class, 'create'])->name('order.create');
