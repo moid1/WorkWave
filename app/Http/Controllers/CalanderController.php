@@ -71,14 +71,23 @@ class CalanderController extends Controller
         } else {
             $route = Routing::findOrFail($request->route_id);
             if ($route) {
-                // $orderIds = explode(',', $route->order_ids);
-                // $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
-                // $updatedOrderIdsString = implode(',', $updatedOrderIds);
-                // $route->order_ids = $updatedOrderIdsString;
-                // $route->save();
+                $orderIds = explode(',', $route->order_ids);
                 $order = Order::findOrFail($request->order_id);
                 $order->delivery_date = $request->start;
                 $order->save();
+                    $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
+                    $updatedOrderIdsString = implode(',', $updatedOrderIds);
+                    $route->order_ids = $updatedOrderIdsString;
+                    $route->save();
+
+                    Routing::create([
+                        'route_name'=>$route->route_name,
+                        'order_ids'=>$request->order_id,
+                        'driver_id' => $route->driver_id,
+                    ]);
+                
+
+
             }
         }
 

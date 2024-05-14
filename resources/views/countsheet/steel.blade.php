@@ -152,7 +152,8 @@
                     <td></td>
                     <td class=""></td>
                     <td style="text-align: right;">Total Weight Metric Tons</td>
-                    <td>{{ number_format(($data->steel->end_weight - $data->steel->start_weight) / 2240, 2) }}</td>
+                    // need to change to postive number
+                    <td>{{ number_format(abs(($data->steel->end_weight - $data->steel->start_weight) / 2240), 2) }}</td>
                 </tr>
                 <tr>
                     <td>Bol #</td>
