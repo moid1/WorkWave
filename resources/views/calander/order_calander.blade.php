@@ -110,6 +110,7 @@
                 })
             },
             eventClick: function(event) {
+                location.href = `/order/${event.id}`;
                 // if(confirm("Are you sure you want to remove it?"))
                 // {
                 //     var id = event.id;
