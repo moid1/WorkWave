@@ -20,6 +20,10 @@ class CalanderController extends Controller
         return view('calander.order_calander');
     }
 
+    public function viewForSwapCalander(){
+        return view('calander.swap_calander');
+    }
+
     public function eventsForCalander(Request $request)
     {
         if ($request->ajax()) {
@@ -49,6 +53,22 @@ class CalanderController extends Controller
     {
         if ($request->ajax()) {
             $orders = Order::whereDate('created_at', '>=', $request->start)->get();
+            $testData = array();
+            foreach ($orders as $key => $order) {
+                $testData[] = array(
+                    'title' => $order->customer->business_name,
+                    'start' => $order->delivery_date,
+                    'id' => $order->id,
+                );
+            }
+
+            return response()->json($testData);
+        }
+    }
+
+    public function swapOrdersCalander(Request $request){
+        if ($request->ajax()) {
+            $orders = Order::where('load_type', 'trailer_swap')->whereDate('created_at', '>=', $request->start)->get();
             $testData = array();
             foreach ($orders as $key => $order) {
                 $testData[] = array(

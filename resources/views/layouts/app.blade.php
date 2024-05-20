@@ -200,6 +200,8 @@
                             <ul class="list-unstyled">
                                 <li><a href="{{route('calander.index')}}">Routing Calander</a></li>
                                 <li><a href="{{route('calander.order.view')}}">Order Calander</a></li>
+                                <li><a href="{{route('calander.swap.view')}}">Swap Calander</a></li>
+
                             </ul>
                         </li>
                         @endif

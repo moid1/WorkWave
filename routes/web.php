@@ -111,6 +111,9 @@ Route::get('/calander-event', [CalanderController::class, 'eventsForCalander'])-
 Route::get('/calander-order', [CalanderController::class, 'viewForOrderCalander'])->name('calander.order.view');
 Route::get('/calander-orders', [CalanderController::class, 'ordersForCalander'])->name('calander.order');
 
+Route::get('/swap-calander', [CalanderController::class, 'viewForSwapCalander'])->name('calander.swap.view');
+Route::get('/swap-calander-orders', [CalanderController::class, 'swapOrdersCalander'])->name('calander.swap.orders');
+
 Route::post('/calander-update-order', [CalanderController::class, 'changeOrderDate'])->name('calander.order.update');
 
 Route::get('clear_cache', function () {

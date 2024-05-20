@@ -180,7 +180,7 @@
                                                         <option value="state">State</option>
                                                         <option value="tdf">TDF</option>
                                                         <option value="steel">Steel</option>
-    
+                                                        <option value="flatbed">Flatbed</option>
                                                     </select>
                                                 </div>
                                             </div>
