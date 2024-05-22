@@ -59,7 +59,7 @@ class CalanderController extends Controller
                     'title' => $order->customer->business_name,
                     'start' => $order->delivery_date,
                     'id' => $order->id,
-                    'color' => '#060100'
+                    'color' => 'red'
                 );
             }
 
