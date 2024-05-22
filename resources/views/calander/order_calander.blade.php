@@ -64,6 +64,13 @@
                 left: 'prev,next',
                 right: 'title'
             },
+            themeSystem: 'bootstrap', // Use a theme like bootstrap
+    // Set background color directly in theme options
+    themeSystemOptions: {
+        bootstrap: {
+            backgroundColor: '#f0f0f0' // Set your desired background color
+        }
+    },
             events: {
                 url: "{{ route('calander.order') }}",
 
