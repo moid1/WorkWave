@@ -125,7 +125,7 @@
             return distance;
         }
 
-        function geocodeAddress(response, address, index, waypoints) {
+        function geocodeAddress(response, address, index, waypoints, order) {
             // Geocoder object
             var geocoder = new google.maps.Geocoder();
 
@@ -149,7 +149,8 @@
                             location: {
                                 lat: location.lat(),
                                 lng: location.lng()
-                            }
+                            },
+                            order_id: order.id
                         })
 
                         if (Object.keys(response).length === latlngs.length) {
@@ -165,6 +166,7 @@
                             // Create an array of indices and sort it based on distances
                             var sortedIndices = Array.from(Array(waypoints.length - 1)
                                 .keys()); // Exclude the first waypoint
+                            
                             sortedIndices.sort(function(a, b) {
                                 return distances[b] - distances[
                                     a]; // Sort from longest to shortest distance
@@ -175,8 +177,10 @@
                             // Reorder waypoints based on sorted indices
                             var sortedWaypoints = [waypoints[0]]; // Keep the first waypoint unchanged
                             sortedIndices.forEach(function(index) {
-                                sortedWaypoints.push(waypoints[index + 1]);
+                                sortedWaypoints.push({'location':waypoints[index + 1].location});
                             });
+
+                            console.log('SORTED', sortedWaypoints)
                             // 30.749860
                             // Construct the request object
                             var request = {
@@ -192,7 +196,7 @@
                             };
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
-                            Object.keys(response).forEach(function(key, index) {
+                                sortedIndices.forEach(function(key, index) {
                                 var order = response[key];
                                 var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
@@ -425,7 +429,7 @@
             Object.values(response).forEach(function(order, index) {
                 // Do something with each item in the object
                 console.log('index', index);
-                geocodeAddress(response, order.customer.address, index, waypoints);
+                geocodeAddress(response, order.customer.address, index, waypoints, order);
             });
         }
 
