@@ -1,7 +1,21 @@
 @extends('layouts.app')
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+<style>
+    .fc-time {
+        display: none !important;
+    }
+    .fc-day{
+        background: #0000FF !important;
+    }
+    .fc-day-number{
+        color: white;
+    }
 
+    .fc-event{
+        background: transparent !important;
+    }
+</style>
 @section('content')
     <div class="page-content-wrapper ">
         <div class="container-fluid">
@@ -64,13 +78,6 @@
                 left: 'prev,next',
                 right: 'title'
             },
-            themeSystem: 'bootstrap', // Use a theme like bootstrap
-    // Set background color directly in theme options
-    themeSystemOptions: {
-        bootstrap: {
-            backgroundColor: '#f0f0f0' // Set your desired background color
-        }
-    },
             events: {
                 url: "{{ route('calander.order') }}",
 
