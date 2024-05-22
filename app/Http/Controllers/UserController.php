@@ -84,6 +84,11 @@ class UserController extends Controller
         return redirect('/register-manager')->with('success', 'Manager Updated Successfully');
     }
 
+    public function deleteManager($id){
+        User::find($id)->delete();
+        return back()->with('success', 'Manager is deleted successfully');
+    }
+
     public function showManagerDetails($id)
     {
         $user = User::whereId($id)->first();

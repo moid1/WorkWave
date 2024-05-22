@@ -136,7 +136,12 @@
                                             <td>{{ $manager->email }}</td>
                                             <td>{{ $manager->manager ? $manager->manager->manager_type : 'N/A' }}</td>
                                             <td><a href="{{ route('manager.show', $manager->id) }}"><i
-                                                        class="mdi mdi-note"></i></a></td>
+                                                        class="mdi mdi-note"></i></a>
+                                                        / 
+                                                    
+                                                        <a style="color: red;" href="{{ route('manager.delete', $manager->id) }}"><i
+                                                            class="mdi mdi-delete"></i></a>
+                                                    </td>
 
 
                                         </tr>

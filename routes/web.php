@@ -45,6 +45,7 @@ Route::get('/register-manager',  [UserController::class, 'index'])->name('regist
 Route::get('/manager/{id}',  [UserController::class, 'showManagerDetails'])->name('manager.show');
 Route::post('/create-manager',  [UserController::class, 'createManager'])->name('create.manager');
 Route::post('/update-manager',  [UserController::class, 'updateManager'])->name('manager.update');
+Route::get('delete-manager/{id}', [UserController::class, 'deleteManager'])->name('manager.delete');
 
 //Register Driver
 Route::get('/register-driver',  [DriverController::class, 'index'])->name('register.driver');
