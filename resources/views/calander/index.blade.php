@@ -2,6 +2,12 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
 <style>
+    body:fullscreen{
+        overflow: scroll !important;
+    }
+    body:-ms-fullscreen{
+        overflow: scroll !important;
+    }
     .fc-time {
         display: none !important;
     }
