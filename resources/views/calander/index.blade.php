@@ -45,7 +45,7 @@
             <div class="row justify-content-center">
                 {{-- CaLANDER --}}
                 <div class="col-lg-8">
-                    <div id='calendar'></div>
+                    <div id='calendar' style="overflow: auto"></div>
                 </div>
             </div> <!-- end row -->
         </div><!-- container-fluid -->
