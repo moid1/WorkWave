@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminSettingsController;
 use App\Http\Controllers\CalanderController;
+use App\Http\Controllers\CallingTableController;
+use App\Models\CallingTable;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyRegController;
 use App\Http\Controllers\HomeController;
@@ -183,5 +185,9 @@ Route::get('delete-route/{id}', [RoutingController::class, 'deleteRouteWeb'])->n
 Route::get('get-driver-orders-routing', [RoutingController::class, 'getDriverOrderRouting']);
 
 Route::post('create-routing-web', [RoutingController::class, 'createWebRoute']);
+
+Route::get('calling-table', [CallingTableController::class, 'index'])->name('calling.table.index');
+Route::get('create-calling-table', [CallingTableController::class, 'create'])->name('calling.table.create');
+Route::post('calling-table', [CallingTableController::class, 'store'])->name('calling.table.store');
 
 

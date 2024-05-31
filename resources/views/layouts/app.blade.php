@@ -174,9 +174,15 @@
                                     class="mdi mdi-note"></i><span> Fill Manifest </span></a>
                         </li>
 
-                        <li>
-                            <a href="{{route('generate.daily.count.sheet')}}" class="waves-effect"><i
-                                    class="mdi mdi-calendar-check"></i><span> Daily Sheet </span></a>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>
+                                Action Items </span><i class="fa fa-caret-down" style="margin-left:20px; "
+                                    aria-hidden="true"></i>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a href="{{route('generate.daily.count.sheet')}}">Daily Sheet</a></li>
+                                <li><a href="{{route('calling.table.index')}}">Calling Table</a></li>
+                            </ul>
                         </li>
 
 
