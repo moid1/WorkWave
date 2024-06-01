@@ -36,6 +36,9 @@ class AdminController extends Controller
      public function driverLocation(Request $request)
     {
         // Validate incoming data
+        try {
+            //code...
+     
         $validatedData = $request->validate([
             'users_location' => 'required|string',
             'users_lat' => 'required|numeric',
@@ -52,5 +55,12 @@ class AdminController extends Controller
 
         // Return a success response
         return response()->json(['message' => 'Driver Location stored successfully'], 201);
+
+    } catch (\Throwable $th) {
+        return response()->json([
+            'status' => false,
+            'message' => $th->getMessage()
+        ], 500);
+    }
     }
 }
