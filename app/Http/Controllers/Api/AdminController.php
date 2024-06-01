@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Driver;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -36,7 +37,6 @@ class AdminController extends Controller
     {
         // Validate incoming data
         $validatedData = $request->validate([
-            'users_id' => 'required|integer',
             'users_location' => 'required|string',
             'users_lat' => 'required|numeric',
             'users_long' => 'required|numeric',
@@ -44,7 +44,7 @@ class AdminController extends Controller
 
         // Create a new driver
         $driver = new Driver();
-        $driver->users_id = $validatedData['users_id'];
+        $driver->users_id = Auth::id();
         $driver->users_location = $validatedData['users_location'];
         $driver->users_lat = $validatedData['users_lat'];
         $driver->users_long = $validatedData['users_long'];
