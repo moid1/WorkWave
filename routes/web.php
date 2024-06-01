@@ -148,6 +148,7 @@ Route::get('/generate-weight-sheet/{id}', [ManagerCompareOrderController::class,
 //Truck
 Route::get('/truck', [TruckController::class, 'index'])->name('truck.index');
 Route::post('/truck', [TruckController::class, 'store'])->name('truck.store');
+Route::get('/live-trucks', [TruckController::class, 'liveTrucks'])->name('truck.live');
 Route::get('/truck-status/{id}', [TruckController::class, 'changeTruckStatus'])->name('change.truck.status');
 Route::get('/update-truck/{id}', [TruckController::class, 'updateTruck'])->name('truck.update');
 Route::post('/update-truck/{id}', [TruckController::class, 'updateTruckStore'])->name('truck.update');

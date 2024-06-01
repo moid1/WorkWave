@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Truck;
 use App\Models\TruckDriver;
 use App\Models\User;
+use App\Models\Driver;
 use Illuminate\Http\Request;
 
 class TruckController extends Controller
@@ -84,11 +85,11 @@ class TruckController extends Controller
 
     public function assignTruckToDriver(Request $request)
     {
-            TruckDriver::updateOrCreate(['user_id'=>$request->user_id], $request->all());
-            return response()->json([
-                'success' => true,
-                'message' => 'Truck Assigned to the Driver'
-            ]);
+        TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Truck Assigned to the Driver'
+        ]);
     }
 
     public function updateTruck($id)
@@ -109,5 +110,20 @@ class TruckController extends Controller
             return redirect('/truck');
         }
         return back()->with('error', 'Sorry, Truck is not available');
+    }
+
+    public function liveTrucks()
+    {
+        $latestLocations = Driver::join(\DB::raw('(SELECT users_id, MAX(created_at) AS latest_date FROM drivers GROUP BY users_id) latest'), function ($join) {
+            $join->on('drivers.users_id', '=', 'latest.users_id')
+                 ->on('drivers.created_at', '=', 'latest.latest_date');
+        })
+        ->join('truck_drivers', 'truck_drivers.user_id', '=', 'drivers.users_id')
+        ->join('trucks', 'trucks.id', '=', 'truck_drivers.truck_id')
+        ->select('drivers.*', 'trucks.*')
+        ->get();
+        
+        // dd($latestLocations);
+       return view('truck.live', compact('latestLocations'));
     }
 }

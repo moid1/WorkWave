@@ -159,9 +159,16 @@
                                     class="mdi mdi-calendar-check"></i><span> Daily Invoices </span></a>
                         </li>
 
-                        <li>
-                            <a href="{{route('truck.index')}}" class="waves-effect"><i
-                                    class="mdi mdi-truck"></i><span> Trucks </span></a>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-buffer"></i> <span>
+                                Trucks </span><i class="fa fa-caret-down" style="margin-left:20px; "
+                                    aria-hidden="true"></i>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a href="{{route('truck.index')}}">All Trucks</a></li>
+                                <li><a href="{{route('truck.live')}}">Live Truck</a></li>
+                                
+                            </ul>
                         </li>
                         
                         <li>
