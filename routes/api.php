@@ -76,6 +76,6 @@ Route::get('get-route-by-id/{id}', [RoutingController::class, 'getRoutesById'])-
 
 Route::post('send-message', [TwilioController::class, 'sendMessage'])->name('send-message');
 Route::post('/check-name-email', [AdminController::class, 'checkNameEmail'])->name('check-name-email');
-Route::post('/driver-location', [AdminController::class, 'driverLocation'])->name('driver-location');
+Route::post('/driver-location', [AdminController::class, 'driverLocation'])->name('driver-location')->middleware('auth:sanctum');
 
 
