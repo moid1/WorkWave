@@ -121,7 +121,9 @@ class TruckController extends Controller
         ->join('truck_drivers', 'truck_drivers.user_id', '=', 'drivers.users_id')
         ->join('trucks', 'trucks.id', '=', 'truck_drivers.truck_id')
         ->select('drivers.*', 'trucks.*')
+        ->distinct()
         ->get();
+    
         
         // dd($latestLocations);
        return view('truck.live', compact('latestLocations'));
