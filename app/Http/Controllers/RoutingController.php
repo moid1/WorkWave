@@ -227,8 +227,7 @@ class RoutingController extends Controller
     {
         $data = Order::where('driver_id', $request->driver_id)
             ->where('is_routed', false)
-            ->with(['customer', 'user', 'driver'])
-            ->get();
+            ->with(['customer', 'user', 'driver']);
 
         if ($request->filled('from_date') && $request->filled('to_date')) {
             $fromDate = Carbon::parse($request->from_date);
@@ -236,11 +235,8 @@ class RoutingController extends Controller
             $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
         }
 
-        // Convert each item in the collection to a plain array
-        $dataArray = $data->map(function ($item) {
-            return array_values($item->toArray());
-        });
-        
+        // Convert the collection of Eloquent models to an array
+        $dataArray = $data->get();
 
         return response()->json($dataArray);
     }
