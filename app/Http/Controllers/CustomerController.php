@@ -225,4 +225,16 @@ class CustomerController extends Controller
             ], 500);
         }
     }
+
+    public function fetchCustomer(Request $request)
+    {
+        try {
+            $customerId = $request->query('customerId');
+            $customer = Customer::findOrFail($customerId);
+            return response()->json($customer);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

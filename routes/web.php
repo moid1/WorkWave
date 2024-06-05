@@ -66,6 +66,7 @@ Route::get('/create-customer',  [UserController::class, 'createCustomer'])->name
 Route::post('/add-customer',  [CustomerController::class, 'store'])->name('customer.store');
 Route::get('/show-customer/{id}',  [CustomerController::class, 'show'])->name('customer.show');
 Route::post('customer-update/{id}', [CustomerController::class, 'update'])->name('customer.update');
+Route::get('fetch-customer', [CustomerController::class, 'fetchCustomer'])->name('customer.fetch');
 
 Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer.search');
 Route::get('/customers/search-books', [CustomerController::class, 'searchCustomersBooks'])->name('customer.search.books');

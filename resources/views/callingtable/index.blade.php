@@ -61,17 +61,18 @@
         <h4 style="text-align: center">3345 E State Hwy 29 Burrnet , TX 78611</>
             <h4 style="text-align: center">512-762-8219</h4>
 
-           <a href="{{route('calling.table.create')}}" style="text-align: right;margin-bottom:20px">Add Data</a> <br> <br>
+            <a href="{{ route('calling.table.create') }}" style="text-align: right;margin-bottom:20px">Add Data</a> <br>
+            <br>
             <a href="{{ url('/home') }}" style="margin-top:80px" class="">Go Back</a>
 
-            <p style="margin-bottom: 10px; margin-top: 30px">Week {{$week}}</p>
+            <p style="margin-bottom: 10px; margin-top: 30px">Week {{ $week }}</p>
             <form action="{{ route('calling.table.index') }}" method="GET" id="weekForm">
                 @csrf
                 <select name="week" id="weekSelect'" class="form-control" style="margin-bottom: 20px">
-                    <option value="1" {{$week == '1' ? 'selected' : ''}}>1</option>
-                    <option value="2" {{$week == '2' ? 'selected' : ''}}>2</option>
-                    <option value="3" {{$week == '3' ? 'selected' : ''}}>3</option>
-                    <option value="4" {{$week == '4' ? 'selected' : ''}}>4</option>
+                    <option value="1" {{ $week == '1' ? 'selected' : '' }}>1</option>
+                    <option value="2" {{ $week == '2' ? 'selected' : '' }}>2</option>
+                    <option value="3" {{ $week == '3' ? 'selected' : '' }}>3</option>
+                    <option value="4" {{ $week == '4' ? 'selected' : '' }}>4</option>
                 </select>
                 <button type="submit">Submit</button>
             </form>
@@ -113,8 +114,8 @@
                                             @php
                                                 $customerData = \App\Models\Customer::find($customer);
                                             @endphp
-                                            {{ $customerData['business_name'] }}<br><br>
-                                        @endforeach
+                                            <a href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a> <br><br>
+@endforeach
                                     @endif
                                 </td>
 
@@ -194,4 +195,3 @@
 </body>
 
 </html>
-

@@ -201,6 +201,34 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
+
+        function fetchCustomerDetails(customerId) {
+        $.ajax({
+            url: '{{ route("customer.fetch") }}',
+            type: 'GET',
+            data: {'customerId': customerId},
+            success: function(data) {
+                // Populate input fields with customer details
+                $('#business_name').val(data.business_name);
+                $('#address').val(data.address);
+                $('#phone_no').val(data.phone_no);
+                $('#poc_name').val(data.poc_name);
+                $('#email').val(data.email);
+                $('#notes').val(data.notes);
+                $('#loadType').val(data.load_type);
+                $('input[name=customer_id]').val(data.id);
+            }
+        });
+    }
+
+    var customerId = new URLSearchParams(window.location.search).get('customerId');
+    if (customerId) {
+        // Fetch customer details if customerId is available
+        fetchCustomerDetails(customerId);
+    }
+
+
         $('#search').on('keyup',function () {
             var query = $(this).val();
             if(query.length<=1){

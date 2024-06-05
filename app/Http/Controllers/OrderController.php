@@ -213,10 +213,12 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $drivers = User::where('type', 2)->get();
-        return view('orders.create', compact('drivers'));
+        $customerId = $request->query('customerId');
+
+        return view('orders.create', compact('drivers', 'customerId'));
     }
 
     /**
