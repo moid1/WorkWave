@@ -237,10 +237,10 @@ class RoutingController extends Controller
         }
 
         // Convert each item in the collection to a plain array
-$dataArray = $data->map(function ($item) {
-    return $item->toArray();
-});
-
+        $dataArray = $data->map(function ($item) {
+            return array_values($item->toArray());
+        });
+        
 
         return response()->json($dataArray);
     }
