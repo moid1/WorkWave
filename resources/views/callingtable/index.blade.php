@@ -114,8 +114,10 @@
                                             @php
                                                 $customerData = \App\Models\Customer::find($customer);
                                             @endphp
-                                            <a href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a> <br><br>
-@endforeach
+                                            <a
+                                                href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
+                                            <br><br>
+                                        @endforeach
                                     @endif
                                 </td>
 
@@ -129,8 +131,9 @@
                                                 @php
                                                     $customerData = \App\Models\Customer::find($customer);
                                                 @endphp
-                                                {{ $customerData['business_name'] }}<br><br>
-                                            @endforeach
+  <a
+  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
+<br><br>                                            @endforeach
                                         @endforeach
                                     @endif
                                 </td>
@@ -146,8 +149,9 @@
                                                 @php
                                                     $customerData = \App\Models\Customer::find($customer);
                                                 @endphp
-                                                {{ $customerData['business_name'] }}<br><br>
-                                            @endforeach
+  <a
+  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
+<br><br>                                            @endforeach
                                         @endforeach
                                     @endif
                                 </td>
@@ -161,8 +165,9 @@
                                                 @php
                                                     $customerData = \App\Models\Customer::find($customer);
                                                 @endphp
-                                                {{ $customerData['business_name'] }}<br><br>
-                                            @endforeach
+  <a
+  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
+<br><br>                                            @endforeach
                                         @endforeach
                                     @endif
                                 </td>
@@ -176,8 +181,9 @@
                                                 @php
                                                     $customerData = \App\Models\Customer::find($customer);
                                                 @endphp
-                                                {{ $customerData['business_name'] }}<br><br>
-                                            @endforeach
+  <a
+  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
+<br><br>                                            @endforeach
                                         @endforeach
                                     @endif
                                 </td>

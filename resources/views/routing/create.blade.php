@@ -126,9 +126,6 @@
         }
 
         function geocodeAddress(response, address, index, waypoints, order) {
-            if(!order && !order.customer){
-                return;
-            }
             // Geocoder object
             var geocoder = new google.maps.Geocoder();
 
@@ -200,7 +197,7 @@
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
                                 sortedIndices.forEach(function(key, index) {
-                                var order = response[index];
+                                var order = response[key];
                                 var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
                                 $('#orderDetailDiv').append(`
