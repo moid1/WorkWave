@@ -200,7 +200,7 @@
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
                                 sortedIndices.forEach(function(key, index) {
-                                var order = response[key];
+                                var order = response[index];
                                 var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
                                 $('#orderDetailDiv').append(`
