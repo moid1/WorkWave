@@ -126,6 +126,9 @@
         }
 
         function geocodeAddress(response, address, index, waypoints, order) {
+            if(!order && !order.customer){
+                return;
+            }
             // Geocoder object
             var geocoder = new google.maps.Geocoder();
 
