@@ -194,33 +194,33 @@
                                 waypoints: sortedWaypoints.slice(1),
                                 travelMode: 'DRIVING'
                             };
-                            $('#orderDetailDiv').append(
-                                `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
-                                sortedIndices.forEach(function(key, index) {
-                                var order = response[key];
-                                var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
+    //                         $('#orderDetailDiv').append(
+    //                             `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
+    //                             sortedIndices.forEach(function(key, index) {
+    //                             var order = response[key];
+    //                             var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
-                                $('#orderDetailDiv').append(`
-        <div class="row">
-            <div class="col-lg-2">
-                <p class="border p-2">${order.customer.business_name}</p>
-            </div>
-            <div class="col-lg-3">
-                <p class="border p-2 ml-3">000${order.id}</p>
-            </div>
-            <div class="col-lg-3">
-                <p class="border p-2 ml-3">${order.load_type}</p>
-            </div>
-            <div class="col-lg-3">
-                <a target="_blank" href="order/${order.id}"><span><i class="fa fa-eye ml-3"></i></span></a> |
-                <span class="removeOrder mt-2" data-orderid="${order.id}"><span class="text-primary cross"><i class="mdi mdi-delete "></i></span></span>
-            </div>
-            <div class="col-lg-2 d-none">
-                <input type="number" min="1" max="${Object.keys(response).length}" value="${index + 1}" class="form-control changeOrdering" />
-            </div>
-        </div>
-    `);
-                            });
+    //                             $('#orderDetailDiv').append(`
+    //     <div class="row">
+    //         <div class="col-lg-2">
+    //             <p class="border p-2">${order.customer.business_name}</p>
+    //         </div>
+    //         <div class="col-lg-3">
+    //             <p class="border p-2 ml-3">000${order.id}</p>
+    //         </div>
+    //         <div class="col-lg-3">
+    //             <p class="border p-2 ml-3">${order.load_type}</p>
+    //         </div>
+    //         <div class="col-lg-3">
+    //             <a target="_blank" href="order/${order.id}"><span><i class="fa fa-eye ml-3"></i></span></a> |
+    //             <span class="removeOrder mt-2" data-orderid="${order.id}"><span class="text-primary cross"><i class="mdi mdi-delete "></i></span></span>
+    //         </div>
+    //         <div class="col-lg-2 d-none">
+    //             <input type="number" min="1" max="${Object.keys(response).length}" value="${index + 1}" class="form-control changeOrdering" />
+    //         </div>
+    //     </div>
+    // `);
+    //                         });
 
 
                             $('#orderDetailDiv').append(`<div>End Route: Reliable Tire Disposal</div>`)
