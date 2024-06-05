@@ -236,8 +236,11 @@ class RoutingController extends Controller
             $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
         }
 
-        // Convert the collection of Eloquent models to an array
-        $dataArray = $data;
+        // Convert each item in the collection to a plain array
+$dataArray = $data->map(function ($item) {
+    return $item->toArray();
+});
+
 
         return response()->json($dataArray);
     }
