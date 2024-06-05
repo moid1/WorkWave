@@ -237,7 +237,7 @@ class RoutingController extends Controller
         }
 
         // Convert the collection of Eloquent models to an array
-        $dataArray = $data->toArray();
+        $dataArray = $data;
 
         return response()->json($dataArray);
     }
