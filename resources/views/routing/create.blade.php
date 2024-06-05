@@ -164,7 +164,8 @@
                             });
 
                             // Create an array of indices and sort it based on distances
-                            var sortedIndices = Array(waypoints.length - 1); // Exclude the first waypoint
+                            var sortedIndices = Array.from(Array(waypoints.length - 1)
+                                .keys()); // Exclude the first waypoint
                             
                             sortedIndices.sort(function(a, b) {
                                 return distances[b] - distances[
@@ -195,10 +196,7 @@
                             };
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
-                                console.log('response',response);
-                                console.log('sortedINDDDD', sortedIndices);
                                 sortedIndices.forEach(function(key, index) {
-                                   
                                 var order = response[key];
                                 var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
