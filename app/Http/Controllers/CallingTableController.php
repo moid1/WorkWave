@@ -20,6 +20,8 @@ class CallingTableController extends Controller
             ->get()
             ->groupBy(['truck_id', 'day'])
             ->toArray();
+
+            // dd($callingTable);
     
         return view('callingtable.index', compact('callingTable', 'week'));
     }
@@ -48,11 +50,9 @@ class CallingTableController extends Controller
             ->first();
         
         if ($existingRecord) {
-            // Update the existing record
-            $existingRecord->update([
-                'customer_ids' => $customers,
-            ]);
-        
+                $existingRecord->update([
+                    'customer_ids' => $existingRecord->customer_ids . ',' . $customers,
+                ]);
             return back()->with('success', 'Calling table updated successfully.');
         } else {
             // Create a new record
@@ -98,5 +98,9 @@ class CallingTableController extends Controller
     public function destroy(CallingTable $callingTable)
     {
         //
+    }
+
+    public function deleteCallingTable(Request $request){
+
     }
 }
