@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\OrderCreated;
 use App\Models\Notes;
 use App\Models\Order;
+use App\Models\Truck;
+use App\Models\TruckDriver;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +23,8 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
+        $trucks = Truck::where('is_active', true)->get(); 
+
         if ($request->ajax()) {
             $data = Order::with(['customer', 'user', 'driver'])->get();
 
@@ -58,9 +62,9 @@ class OrderController extends Controller
                         return $row->driver->name;
                     return 'N/A';
                 })
-                ->editColumn('update_driver', function ($row) {
+                ->editColumn('update_truck', function ($row) {
                     $button = '
-                    <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateDriver(\'' . $row->id . '\')">Update Driver
+                    <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateDriver(\'' . $row->id . '\')">Update Truck
                     </button>
                 ';
                     $showBtn = '';
@@ -74,13 +78,13 @@ class OrderController extends Controller
                     $deleteBtn = ' /<a href="' . $orderDeleteRoute . '" > <i class="fa fa-times text-primary"  title="delete order"></i></a>';
                     return $button . $showBtn . $deleteBtn;
                 })
-                ->rawColumns(['update_driver'])
+                ->rawColumns(['update_truck'])
                 ->make(true);
         }
 
         $drivers = User::where('type', 2)->get();
         $orders = Order::with(['customer', 'user', 'driver'])->get();
-        return view('orders.index', compact('orders', 'drivers'));
+        return view('orders.index', compact('orders', 'drivers','trucks'));
     }
 
     public function ordersByDriver(Request $request)
@@ -217,8 +221,9 @@ class OrderController extends Controller
     {
         $drivers = User::where('type', 2)->get();
         $customerId = $request->query('customerId');
+        $trucks = Truck::where('is_active', true)->get(); 
 
-        return view('orders.create', compact('drivers', 'customerId'));
+        return view('orders.create', compact('drivers', 'customerId', 'trucks'));
     }
 
     /**
@@ -227,13 +232,23 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $order = null;
+        $truckID =  $request['truck_id'] ?? null;
+        $driverId = null;
+        if(!$truckID){
+            return;
+        }
+
+        $truckDriver = TruckDriver::where('truck_id', $truckID)->latest()->first();
+        if($truckDriver){
+            $driverId = $truckDriver->user_id;
+        }
         if ($request->create_order == 'createOrder') {
             $order = Order::create([
                 'customer_id' => $request['customer_id'],
                 'user_id' => Auth::id(),
                 'notes' => $request['notes'] ?? 'N/A',
                 'load_type' => $request['load_type'],
-                'driver_id' => $request['driver_id'] ?? null,
+                'driver_id' => $driverId,
                 'delivery_date' => $request['date'],
                 'end_date' => $request['end_date'],
                 'is_recurring_order' => $request['is_recurring_order'] == 'on' ? true : false,
@@ -296,20 +311,26 @@ class OrderController extends Controller
     public function updateDriver(Request $request)
     {
         $orderID = $request->order_id;
-        $driverID = $request->driver_id;
+        $truckId = $request->truck_id;
         $order = Order::find($orderID);
-        if ($order &&    $order->driver_id == $driverID) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Order is already assigned to this driver'
-            ]);
+        // if ($order && $order->driver_id == $driverID) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Order is already assigned to this driver'
+        //     ]);
+        // }
+
+        $truckDriver = TruckDriver::where('truck_id', $truckId)->latest()->first();
+        if($truckDriver){
+            $driverID = $truckDriver->user_id;
         }
+
         if ($order) {
             $order->driver_id = $driverID;
             $order->update();
             return response()->json([
                 'success' => true,
-                'message' => 'Order is successfully assigned to driver'
+                'message' => 'Order is successfully assigned to truck'
             ]);
         }
 

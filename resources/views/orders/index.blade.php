@@ -66,8 +66,28 @@
             </div> <!-- end row -->
         </div><!-- container-fluid -->
     </div>
-    @include('orders.includes.change_driver')
-
+    <div class="modal fade" id="driversList" tabindex="-1" aria-labelledby="schoolUsersListLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="schoolUsersListLabel">Truck</h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <input type="hidden" name="order_id" class="orderID">
+                    <select id="selectDriver" name="select_driver" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                        <option value=""  selected>Please select Truck</option>
+                        @foreach ($trucks as $truck)
+                        <option value="{{$truck->id}}">{{ucfirst($truck->name)}}</option>
+                        @endforeach
+                    </select>
+                 
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    
     <div class="modal fade" id="customerSummary" tabindex="-1" aria-labelledby="schoolUsersListLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -173,8 +193,8 @@
                         }
                     },
                     {
-                        data: 'update_driver',
-                        name: 'Update Driver'
+                        data: 'update_truck',
+                        name: 'Update Truck'
                     }
                 ],
                 drawCallback: function(settings) {
@@ -226,7 +246,7 @@
             $('.orderID').val(id)
             $('#driversList').modal('show');
             $('#selectDriver').on('change', function() {
-                let driverID = this.value;
+                let truckID = this.value;
                 $.ajax({
                     url: '{{ route('order.updateDriver') }}',
                     type: 'POST',
@@ -235,7 +255,7 @@
                     },
                     data: {
                         order_id: $('.orderID').val(),
-                        driver_id: driverID
+                        truck_id: truckID
                     },
                     success: function(data) {
                         alert(data.message);

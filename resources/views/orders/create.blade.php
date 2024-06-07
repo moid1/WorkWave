@@ -125,11 +125,11 @@
                                         
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Driver</label>
-                                                <select id="driver" name="driver_id" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                                                    <option value=""  selected>Please select Driver</option>
-                                                    @foreach ($drivers as $driver)
-                                                    <option value="{{$driver->id}}">{{ucfirst($driver->name)}}</option>
+                                                <label>Truck</label>
+                                                <select id="truck" name="truck_id" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                                    <option value=""  selected>Please select Truck</option>
+                                                    @foreach ($trucks as $truck)
+                                                    <option value="{{$truck->id}}">{{($truck->name)}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -144,7 +144,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Estimated Tires</label>
-                                               <input type="text" name="estimated_tires" class="form-control">
+                                               <input type="text" name="estimated_tires" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -152,7 +152,7 @@
                                                 <label>Want to create Order</label>
                                                 <select id="" name="create_order" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                                                     <option value="createOrder">Yes</option>
-                                                    <option value="createOrder">No</option>
+                                                    <option value="no">No</option>
                                                 </select>
                                             </div>
                                         </div>

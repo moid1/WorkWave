@@ -191,5 +191,6 @@ Route::post('create-routing-web', [RoutingController::class, 'createWebRoute']);
 Route::get('calling-table', [CallingTableController::class, 'index'])->name('calling.table.index');
 Route::get('create-calling-table', [CallingTableController::class, 'create'])->name('calling.table.create');
 Route::post('calling-table', [CallingTableController::class, 'store'])->name('calling.table.store');
+Route::get('delete-calling-table', [CallingTableController::class, 'deleteCallingTable'])->name('calling.table.delete');
 
 
