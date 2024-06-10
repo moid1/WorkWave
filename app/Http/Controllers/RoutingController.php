@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\RouteCreated;
 use App\Models\Order;
 use App\Models\Routing;
+use App\Models\Truck;
+use App\Models\TruckDriver;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -220,24 +222,30 @@ class RoutingController extends Controller
     public function createRouting()
     {
         $drivers = User::where('type', 2)->get();
-        return view('routing.create', compact('drivers'));
+        $trucks = Truck::where('is_active', true)->get();
+        return view('routing.create', compact('drivers', 'trucks'));
     }
 
     public function getDriverOrderRouting(Request $request)
     {
-        $data = Order::where('driver_id', $request->driver_id)
-            ->where('is_routed', false)
-            ->with(['customer', 'user', 'driver']);
+        $truckDriver = TruckDriver::where('truck_id', $request->truck_id)->latest()->first();
 
-        if ($request->filled('from_date') && $request->filled('to_date')) {
-            $fromDate = Carbon::parse($request->from_date);
-            $toDate = Carbon::parse($request->to_date)->endOfDay();
-            $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+        if ($truckDriver) {
+            $data = Order::where('driver_id', $truckDriver->user_id)
+                        ->where('is_routed', false)
+                        ->with(['customer', 'user', 'driver']);
+        
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                $data->whereBetween('delivery_date', [$fromDate, $toDate]);
+            }
+        
+            $dataArray = $data->get();
+        } else {
+            $dataArray = [];
         }
-
-        // Convert the collection of Eloquent models to an array
-        $dataArray = $data->get();
-
+        
         return response()->json($dataArray);
     }
 }

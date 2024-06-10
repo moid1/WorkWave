@@ -40,11 +40,11 @@
 
         <div class="col-lg-7">
             <div class="select-driver">
-                <label for="">Select Driver</label>
+                <label for="">Select Truck</label>
                 <select id="driverID" name="" id=""
                     class="js-example-basic-multiple form-control form-select  mb-3">
-                    @foreach ($drivers as $driver)
-                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                    @foreach ($trucks as $truck)
+                        <option value="{{ $truck->id }}">{{ $truck->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -341,7 +341,7 @@
                     url: '/get-driver-orders-routing',
                     type: 'GET',
                     data: {
-                        'driver_id': driverId,
+                        'truck_id': driverId,
                         from_date: startDate,
                         to_date: endDate
                     },
