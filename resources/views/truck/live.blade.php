@@ -33,7 +33,7 @@
         </div>
     </div>
 @endsection
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATph3BCKxFTZucYVofwV2tuUIB-YXqHFg&callback=initMap" async
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXsXxGcLCW2GFr9a9rHU0FTo41Q-v-bZE&callback=initMap" async
     defer></script>
 
 @section('pageSpecificJs')
