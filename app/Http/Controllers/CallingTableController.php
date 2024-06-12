@@ -21,8 +21,6 @@ class CallingTableController extends Controller
             ->groupBy(['truck_id', 'day'])
             ->toArray();
 
-            // dd($callingTable);
-    
         return view('callingtable.index', compact('callingTable', 'week'));
     }
 
@@ -48,11 +46,11 @@ class CallingTableController extends Controller
             ->where('day', $request->day)
             ->where('week', $request->week)
             ->first();
-        
+
         if ($existingRecord) {
-                $existingRecord->update([
-                    'customer_ids' => $existingRecord->customer_ids . ',' . $customers,
-                ]);
+            $existingRecord->update([
+                'customer_ids' => $existingRecord->customer_ids . ',' . $customers,
+            ]);
             return back()->with('success', 'Calling table updated successfully.');
         } else {
             // Create a new record
@@ -62,10 +60,10 @@ class CallingTableController extends Controller
                 'day' => $request->day,
                 'week' => $request->week
             ]);
-        
+
             return back()->with('success', 'Calling table created successfully.');
         }
-        
+
     }
 
     /**
@@ -100,7 +98,36 @@ class CallingTableController extends Controller
         //
     }
 
-    public function deleteCallingTable(Request $request){
+    public function deleteCallingTable(Request $request)
+    {
+        $callingId = $request->id;
+        $customerId = $request->customer_id;
+        $callingData = CallingTable::findOrFail($callingId);
+        if ($callingData) {
+            $customerIdsArray = explode(',', $callingData->customer_ids);
+        
+            // Remove the specified customerId from the array
+            $index = array_search($customerId, $customerIdsArray);
+            if ($index !== false) {
+                unset($customerIdsArray[$index]);
+            }
+        
+            // Implode the array back into a comma-separated string
+            $newCustomerIds = implode(',', $customerIdsArray);
+        
+            // Update the callingData with the new customer_ids
+            $callingData->customer_ids = $newCustomerIds;
+        
+            if (empty($newCustomerIds)) {
+                // If customer_ids is empty, delete the whole entry
+                $callingData->delete();
+                return back()->with('success', 'Entry deleted successfully');
+            } else {
+                $callingData->save();
+                return back()->with('success', 'Customer deleted successfully');
+            }
+        }
+        
 
     }
 }

@@ -104,86 +104,138 @@
                                     @if (isset($days['MONDAY']))
                                         @foreach ($days['MONDAY'] as $record)
                                             @php
-                                                $mondayCustomers = array_merge(
-                                                    $mondayCustomers,
-                                                    explode(',', $record['customer_ids']),
-                                                );
+                                                $mondayCustomersData = explode(',', $record['customer_ids']);
+                                                foreach ($mondayCustomersData as $customerId) {
+                                                    $customerData = \App\Models\Customer::find($customerId);
+                                                    $mondayCustomers[] = [
+                                                        'id' => $customerId,
+                                                        'business_name' => $customerData['business_name'],
+                                                        'color' => $customerData['color'],
+                                                        'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
+                                                    ];
+                                                }
                                             @endphp
                                         @endforeach
                                         @foreach ($mondayCustomers as $customer)
-                                            @php
-                                                $customerData = \App\Models\Customer::find($customer);
-                                            @endphp
-                                            <a
-                                                href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
+                                            <a style="color: {{ $customer['color'] }}"
+                                                href="{{ route('order.create', ['customerId' => $customer['id']]) }}">{{ $customer['business_name'] }}</a>
+                                            <a href="{{ route('calling.table.delete', ['id' => $customer['calling_id'], 'customer_id' => $customer['id']]) }}"
+                                                style="color: red">X</a>
                                             <br><br>
                                         @endforeach
                                     @endif
                                 </td>
 
                                 <td>
+                                    @php
+                                        $tuesdayCustomers = [];
+                                    @endphp
                                     @if (isset($days['TUESDAY']))
                                         @foreach ($days['TUESDAY'] as $record)
                                             @php
-                                                $tuesdayCustomers = explode(',', $record['customer_ids']);
+                                                $tuesdayCustomersData = explode(',', $record['customer_ids']);
+                                                foreach ($tuesdayCustomersData as $customerId) {
+                                                    $customerData = \App\Models\Customer::find($customerId);
+                                                    $tuesdayCustomers[] = [
+                                                        'id' => $customerId,
+                                                        'business_name' => $customerData['business_name'],
+                                                        'color' => $customerData['color'],
+                                                        'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
+                                                    ];
+                                                }
                                             @endphp
-                                            @foreach ($tuesdayCustomers as $customer)
-                                                @php
-                                                    $customerData = \App\Models\Customer::find($customer);
-                                                @endphp
-  <a
-  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
-<br><br>                                            @endforeach
+                                        @endforeach
+                                        @foreach ($tuesdayCustomers as $customer)
+                                            <a style="color: {{ $customer['color'] }}"
+                                                href="{{ route('order.create', ['customerId' => $customer['id']]) }}">{{ $customer['business_name'] }}</a>
+                                            <a href="{{ route('calling.table.delete', ['id' => $customer['calling_id'], 'customer_id' => $customer['id']]) }}"
+                                                style="color: red">X</a>
+                                            <br><br>
                                         @endforeach
                                     @endif
                                 </td>
 
-                                <!-- Add similar blocks for other days if needed -->
                                 <td>
+                                    @php
+                                        $wednesdayCustomers = [];
+                                    @endphp
                                     @if (isset($days['WEDNESDAY']))
                                         @foreach ($days['WEDNESDAY'] as $record)
                                             @php
-                                                $wednesdayCustomers = explode(',', $record['customer_ids']);
+                                                $wednesdayCustomersData = explode(',', $record['customer_ids']);
+                                                foreach ($wednesdayCustomersData as $customerId) {
+                                                    $customerData = \App\Models\Customer::find($customerId);
+                                                    $wednesdayCustomers[] = [
+                                                        'id' => $customerId,
+                                                        'business_name' => $customerData['business_name'],
+                                                        'color' => $customerData['color'],
+                                                        'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
+                                                    ];
+                                                }
                                             @endphp
-                                            @foreach ($wednesdayCustomers as $customer)
-                                                @php
-                                                    $customerData = \App\Models\Customer::find($customer);
-                                                @endphp
-  <a
-  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
-<br><br>                                            @endforeach
+                                        @endforeach
+                                        @foreach ($wednesdayCustomers as $customer)
+                                            <a style="color: {{ $customer['color'] }}"
+                                                href="{{ route('order.create', ['customerId' => $customer['id']]) }}">{{ $customer['business_name'] }}</a>
+                                            <a href="{{ route('calling.table.delete', ['id' => $customer['calling_id'], 'customer_id' => $customer['id']]) }}"
+                                                style="color: red">X</a>
+                                            <br><br>
                                         @endforeach
                                     @endif
                                 </td>
                                 <td>
+                                    @php
+                                        $thursdayCustomers = [];
+                                    @endphp
                                     @if (isset($days['THURSDAY']))
                                         @foreach ($days['THURSDAY'] as $record)
                                             @php
-                                                $thursdayCustomers = explode(',', $record['customer_ids']);
+                                                $thursdayCustomersData = explode(',', $record['customer_ids']);
+                                                foreach ($thursdayCustomersData as $customerId) {
+                                                    $customerData = \App\Models\Customer::find($customerId);
+                                                    $thursdayCustomers[] = [
+                                                        'id' => $customerId,
+                                                        'business_name' => $customerData['business_name'],
+                                                        'color' => $customerData['color'],
+                                                        'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
+                                                    ];
+                                                }
                                             @endphp
-                                            @foreach ($thursdayCustomers as $customer)
-                                                @php
-                                                    $customerData = \App\Models\Customer::find($customer);
-                                                @endphp
-  <a
-  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
-<br><br>                                            @endforeach
+                                        @endforeach
+                                        @foreach ($thursdayCustomersData as $customer)
+                                            <a style="color: {{ $customer['color'] }}"
+                                                href="{{ route('order.create', ['customerId' => $customer['id']]) }}">{{ $customer['business_name'] }}</a>
+                                            <a href="{{ route('calling.table.delete', ['id' => $customer['calling_id'], 'customer_id' => $customer['id']]) }}"
+                                                style="color: red">X</a>
+                                            <br><br>
                                         @endforeach
                                     @endif
                                 </td>
                                 <td>
+                                    @php
+                                        $fridayCustomers = [];
+                                    @endphp
                                     @if (isset($days['FRIDAY']))
                                         @foreach ($days['FRIDAY'] as $record)
                                             @php
-                                                $fridayCustomers = explode(',', $record['customer_ids']);
+                                                $fridayCustomersData = explode(',', $record['customer_ids']);
+                                                foreach ($fridayCustomersData as $customerId) {
+                                                    $customerData = \App\Models\Customer::find($customerId);
+                                                    $fridayCustomers[] = [
+                                                        'id' => $customerId,
+                                                        'business_name' => $customerData['business_name'],
+                                                        'color' => $customerData['color'],
+                                                        'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
+                                                    ];
+                                                }
                                             @endphp
-                                            @foreach ($fridayCustomers as $customer)
-                                                @php
-                                                    $customerData = \App\Models\Customer::find($customer);
-                                                @endphp
-  <a
-  href="{{ route('order.create', ['customerId' => $customer]) }}">{{ $customerData['business_name'] }}</a>
-<br><br>                                            @endforeach
+                                        @endforeach
+                                        @foreach ($fridayCustomers as $customer)
+                                            <a style="color: {{ $customer['color'] }}"
+                                                href="{{ route('order.create', ['customerId' => $customer['id']]) }}">{{ $customer['business_name'] }}</a>
+                                            <a href="{{ route('calling.table.delete', ['id' => $customer['calling_id'], 'customer_id' => $customer['id']]) }}"
+                                                style="color: red">X</a>
+                                            <br><br>
                                         @endforeach
                                     @endif
                                 </td>

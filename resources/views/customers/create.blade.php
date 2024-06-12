@@ -241,6 +241,16 @@
                                                     @enderror
                                                 </div>
                                             </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Select Color
+                                                    </label>
+                                                    <input id="po" type="color" name="color">
+                                                </div>
+                                            </div>
+
+
                                             
 
 
