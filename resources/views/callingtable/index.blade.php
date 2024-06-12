@@ -202,7 +202,7 @@
                                                 }
                                             @endphp
                                         @endforeach
-                                        @foreach ($thursdayCustomersData as $customer)
+                                        @foreach ($thursdayCustomers as $customer)
                                             <a style="color: {{ $customer['color'] }}"
                                                 href="{{ route('order.create', ['customerId' => $customer['id']]) }}">{{ $customer['business_name'] }}</a>
                                             <a href="{{ route('calling.table.delete', ['id' => $customer['calling_id'], 'customer_id' => $customer['id']]) }}"
