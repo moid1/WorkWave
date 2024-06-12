@@ -110,7 +110,7 @@
                                                     $mondayCustomers[] = [
                                                         'id' => $customerId,
                                                         'business_name' => $customerData['business_name'],
-                                                        'color' => $customerData['color'],
+                                                        $color = $customerData['color'] ?? '#000000',
                                                         'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
                                                     ];
                                                 }
@@ -139,7 +139,7 @@
                                                     $tuesdayCustomers[] = [
                                                         'id' => $customerId,
                                                         'business_name' => $customerData['business_name'],
-                                                        'color' => $customerData['color'],
+                                                        $color = $customerData['color'] ?? '#000000',
                                                         'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
                                                     ];
                                                 }
@@ -168,7 +168,7 @@
                                                     $wednesdayCustomers[] = [
                                                         'id' => $customerId,
                                                         'business_name' => $customerData['business_name'],
-                                                        'color' => $customerData['color'],
+                                                        $color = $customerData['color'] ?? '#000000',
                                                         'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
                                                     ];
                                                 }
@@ -196,7 +196,7 @@
                                                     $thursdayCustomers[] = [
                                                         'id' => $customerId,
                                                         'business_name' => $customerData['business_name'],
-                                                        'color' => $customerData['color'],
+                                                        $color = $customerData['color'] ?? '#000000',
                                                         'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
                                                     ];
                                                 }
@@ -224,7 +224,7 @@
                                                     $fridayCustomers[] = [
                                                         'id' => $customerId,
                                                         'business_name' => $customerData['business_name'],
-                                                        'color' => $customerData['color'],
+                                                        $color = $customerData['color'] ?? '#000000',
                                                         'calling_id' => $record['id'], // Replace 'attribute_name' with the actual attribute name
                                                     ];
                                                 }
