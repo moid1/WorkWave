@@ -40,6 +40,8 @@
     <script>
         function initMap() {
             var locations = @json($latestLocations);
+            var trailers = @json($trailers);
+            console.log(trailers);
             if (locations.length) {
                 var myLatlng = new google.maps.LatLng(locations[0].users_lat, locations[0].users_long);
                 var myOptions = {
@@ -60,6 +62,11 @@
                     url: 'https://maps.google.com/mapfiles/ms/icons/truck.png', // URL to the truck icon image
                     scaledSize: new google.maps.Size(50, 50), // Size of the icon
                 };
+                var blackBoxIcon = {
+                    url: 'https://maps.google.com/mapfiles/dir_walk_36.png', // Black box icon URL
+                    scaledSize: new google.maps.Size(50, 50)
+                };
+
                 locations.forEach(function(location) {
                     var marker = new google.maps.Marker({
                         position: {
@@ -71,11 +78,38 @@
                         label: {
                             text: location.name,
                             color: 'black', // Set the color of the text,
-                            fontWeight: 'bold'
+                          fontWeight: 'bold'  
 
                         }
                     });
                 });
+
+                var geocoder = new google.maps.Geocoder();
+                trailers.forEach(function(trailer) {
+                    geocoder.geocode({
+                        'address': trailer.customer.address
+                    }, function(results, status) {
+                        if (status === 'OK') {
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: results[0].geometry.location,
+                                title: trailer.trailer_swap_order ? trailer.trailer_swap_order
+                                    .trailer_drop_off : 'N/A',
+                                icon: blackBoxIcon, // Use black box icon for trailers,
+                                label: {
+                                    text: trailer.trailer_swap_order ? trailer.trailer_swap_order
+                                        .trailer_drop_off : 'N/A',
+                                    color: 'white', // Set the color of the text,
+                                    fontWeight: 'normal'  
+                                }
+
+                            });
+                        }
+                    })
+
+                });
+
+
             }
         }
     </script>

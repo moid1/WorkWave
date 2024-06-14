@@ -352,7 +352,7 @@
 
                                 @php
                                     if ($data->order->load_type == 'trailer_swap') {
-                                        $totalSum = $data->customerPricing->swap_total;
+                                        $totalSum = $data->customerPricing->swap_total ?? 0;
                                     } elseif (!empty($data->orderType) && $data->orderType == 'stateWeight') {
                                         $totalSum = ($data->stateOrder->end_weight - $data->stateOrder->start_weight) * $data->customerPricing->price_per_lb;
                                     } elseif ($data->order->load_type == 'tdf') {

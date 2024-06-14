@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Truck;
 use App\Models\TruckDriver;
 use App\Models\User;
@@ -123,9 +124,9 @@ class TruckController extends Controller
         ->select('drivers.*', 'trucks.*')
         ->distinct()
         ->get();
-    
+        $trailers = Order::where('load_type', 'trailer_swap')->with(['customer', 'trailerSwapOrder'])->get();
         
         // dd($latestLocations);
-       return view('truck.live', compact('latestLocations'));
+       return view('truck.live', compact('latestLocations', 'trailers'));
     }
 }
