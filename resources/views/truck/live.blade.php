@@ -92,9 +92,9 @@
 
                 var geocoder = new google.maps.Geocoder();
                 trailers.forEach(function(trailer) {
-                    if(!trailer.trailer_swap_order.trailer_drop_off){
-                        continue;
-                    }
+                    // if(!trailer.trailer_swap_order.trailer_drop_off){
+                    //     continue;
+                    // }
                     geocoder.geocode({
                         'address': trailer.customer.address
                     }, function(results, status) {
