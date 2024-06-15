@@ -95,6 +95,7 @@
                     geocoder.geocode({
                         'address': trailer.customer.address
                     }, function(results, status) {
+                        console.log('dskk', status);
                         if (status === 'OK') {
                             var marker = new google.maps.Marker({
                                 map: map,
