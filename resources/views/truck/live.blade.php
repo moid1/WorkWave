@@ -114,6 +114,7 @@
                             if (trailer.trailer_swap_order&& trailer.trailer_swap_order
                                         .trailer_pick_up && trailer.trailer_swap_order.trailer_going !== null && trailer.trailer_swap_order.trailer_going !== undefined && trailer.trailer_swap_order.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_swap_order.trailer_going)) {
                                 var coordinates = trailerCoordinates[trailer.trailer_going];
+                                console.log('thids ', coordinates);
 
                                 var markers = new google.maps.Marker({
                                     map: map,
