@@ -114,26 +114,26 @@
                                 }
 
                             });
-                            if (trailer.trailer_swap_order&&trailer.trailer_swap_order.trailer_going !== null && trailer.trailer_swap_order.trailer_going !== undefined && trailer.trailer_swap_order.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_swap_order.trailer_going)) {
-                                var coordinates = trailerCoordinates[trailer.trailer_going];
+                            // if (trailer.trailer_swap_order&&trailer.trailer_swap_order.trailer_going !== null && trailer.trailer_swap_order.trailer_going !== undefined && trailer.trailer_swap_order.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_swap_order.trailer_going)) {
+                            //     var coordinates = trailerCoordinates[trailer.trailer_going];
 
-                                var marker = new google.maps.Marker({
-                                    map: map,
-                                    position: { lat: coordinates.lat, lng: coordinates.lng },
-                                    title: trailer.trailer_swap_order ? trailer.trailer_swap_order
-                                        .trailer_pick_up : 'N/A',
-                                    icon: blackBoxIcon, // Use black box icon for trailers,
-                                    label: {
-                                        text: trailer.trailer_swap_order ? trailer
-                                            .trailer_swap_order
-                                            .trailer_pick_up : 'N/A',
-                                        color: 'white', // Set the color of the text,
-                                        fontWeight: 'normal',
+                            //     var markers = new google.maps.Marker({
+                            //         map: map,
+                            //         position: { lat: coordinates.lat, lng: coordinates.lng },
+                            //         title: trailer.trailer_swap_order ? trailer.trailer_swap_order
+                            //             .trailer_pick_up : 'N/A',
+                            //         icon: blackBoxIcon, // Use black box icon for trailers,
+                            //         label: {
+                            //             text: trailer.trailer_swap_order ? trailer
+                            //                 .trailer_swap_order
+                            //                 .trailer_pick_up : 'N/A',
+                            //             color: 'white', // Set the color of the text,
+                            //             fontWeight: 'normal',
 
-                                    }
+                            //         }
 
-                                });
-                            }
+                            //     });
+                            // }
                         }
                     })
 
