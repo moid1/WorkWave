@@ -93,7 +93,7 @@
                 var geocoder = new google.maps.Geocoder();
                 trailers.forEach(function(trailer) {
                     if(!trailer.trailer_swap_order.trailer_drop_off){
-                        return;
+                        continue;
                     }
                     geocoder.geocode({
                         'address': trailer.customer.address
