@@ -39,7 +39,7 @@
 @section('pageSpecificJs')
     <script>
         var trailerCoordinates = {
-    Burnet: { lat: 30.7587, lng: -98.2283 },
+    Burnet: { lat: 30.75042397995036, lng: -98.18061549016744 },
     Victoria: { lat: 28.8053, lng: -97.0036 },
     Robstown: { lat: 27.7909, lng: -97.6689 },
     Cemex: { lat: 27.7975, lng: -97.6689 }
