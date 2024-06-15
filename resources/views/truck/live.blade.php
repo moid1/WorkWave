@@ -114,7 +114,7 @@
                                 }
 
                             });
-                            if (trailer.trailer_swap_order.trailer_going !== null && trailer.trailer_swap_order.trailer_going !== undefined && trailer.trailer_swap_order.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_swap_order.trailer_going)) {
+                            if (trailer.trailer_swap_order&&trailer.trailer_swap_order.trailer_going !== null && trailer.trailer_swap_order.trailer_going !== undefined && trailer.trailer_swap_order.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_swap_order.trailer_going)) {
                                 var coordinates = trailerCoordinates[trailer.trailer_going];
 
                                 var marker = new google.maps.Marker({
