@@ -53,7 +53,7 @@
                                         <div class="form-group">
                                             <label>Trailer # Picked Up:</label>
                                             <input type="text" class="form-control  " name="trailer_pick_up"
-                                                value="{{ old('trailer_pick_up') }}" required>
+                                                value="{{ old('trailer_pick_up') }}">
                                         </div>
                                     </div>
 
