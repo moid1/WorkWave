@@ -189,6 +189,8 @@
                             <ul class="list-unstyled">
                                 <li><a href="{{route('generate.daily.count.sheet')}}">Daily Sheet</a></li>
                                 <li><a href="{{route('calling.table.index')}}">Calling Table</a></li>
+                                <li><a href="{{route('trailer.swap.create')}}">Trailers Report</a></li>
+
                             </ul>
                         </li>
 

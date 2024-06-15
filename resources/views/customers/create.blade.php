@@ -250,6 +250,18 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Trailer Gradation Type</label>
+                                                    <select id="" name="trailer_grading_type" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                                        <option value="" selected disabled>Please select</option>
+                                                        <option value="trailers_to_grade">Trailers To Grade</option>
+                                                        <option value="trailers_green_light">Trailers Green Light</option>
+  
+                                                    </select>
+                                                </div>
+                                            </div>
+
 
                                             
 

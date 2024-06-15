@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminSettingsController;
 use App\Http\Controllers\CalanderController;
 use App\Http\Controllers\CallingTableController;
+use App\Http\Controllers\GeneralController;
 use App\Models\CallingTable;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyRegController;
@@ -192,5 +193,7 @@ Route::get('calling-table', [CallingTableController::class, 'index'])->name('cal
 Route::get('create-calling-table', [CallingTableController::class, 'create'])->name('calling.table.create');
 Route::post('calling-table', [CallingTableController::class, 'store'])->name('calling.table.store');
 Route::get('delete-calling-table', [CallingTableController::class, 'deleteCallingTable'])->name('calling.table.delete');
+
+Route::get('/trailer-report', [GeneralController::class, 'trailerSwapReport'])->name('trailer.swap.create');
 
 

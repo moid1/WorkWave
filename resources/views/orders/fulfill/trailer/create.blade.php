@@ -113,6 +113,22 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-lg-6 " id="">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <input id="" type="text" class="form-control" name="status"
+                                                value="{{ old('status') }}" autofocus>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 " id="">
+                                        <div class="form-group">
+                                            <label>Location</label>
+                                            <input id="" type="text" class="form-control" name="location"
+                                                value="{{ old('location') }}" autofocus>
+                                        </div>
+                                    </div>
+
 
                                     <div class="col-md-12">
                                         <label class="" for="">Customer Signature:</label>
