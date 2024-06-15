@@ -38,12 +38,12 @@
 
 @section('pageSpecificJs')
     <script>
-//         var trailerCoordinates = {
-//     Burnet: { lat: 30.7587, lng: -98.2283 },
-//     Victoria: { lat: 28.8053, lng: -97.0036 },
-//     Robstown: { lat: 27.7909, lng: -97.6689 },
-//     Cemex: { lat: 27.7975, lng: -97.6689 }
-// };
+        var trailerCoordinates = {
+    Burnet: { lat: 30.7587, lng: -98.2283 },
+    Victoria: { lat: 28.8053, lng: -97.0036 },
+    Robstown: { lat: 27.7909, lng: -97.6689 },
+    Cemex: { lat: 27.7975, lng: -97.6689 }
+};
         function initMap() {
             var locations = @json($latestLocations);
             var trailers = @json($trailers);
@@ -95,14 +95,10 @@
                     geocoder.geocode({
                         'address': trailer.customer.address
                     }, function(results, status) {
-                        console.log('dskk', status);
                         if (status === 'OK') {
                             var marker = new google.maps.Marker({
                                 map: map,
-                                position: {
-                                    lat: parseFloat(location.users_lat),
-                                    lng: parseFloat(location.users_long)
-                                },
+                                position: results[0].geometry.location,
                                 title: trailer.trailer_swap_order ? trailer.trailer_swap_order
                                     .trailer_drop_off : 'N/A',
                                 icon: blackBoxIcon, // Use black box icon for trailers,
@@ -115,26 +111,26 @@
                                 }
 
                             });
-                            // if (trailer.trailer_swap_order&&trailer.trailer_swap_order.trailer_going !== null && trailer.trailer_swap_order.trailer_going !== undefined && trailer.trailer_swap_order.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_swap_order.trailer_going)) {
-                            //     var coordinates = trailerCoordinates[trailer.trailer_going];
+                            if (trailer.trailer_swap_order&&trailer.trailer_swap_order.trailer_going !== null && trailer.trailer_swap_order.trailer_going !== undefined && trailer.trailer_swap_order.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_swap_order.trailer_going)) {
+                                var coordinates = trailerCoordinates[trailer.trailer_going];
 
-                            //     var markers = new google.maps.Marker({
-                            //         map: map,
-                            //         position: { lat: coordinates.lat, lng: coordinates.lng },
-                            //         title: trailer.trailer_swap_order ? trailer.trailer_swap_order
-                            //             .trailer_pick_up : 'N/A',
-                            //         icon: blackBoxIcon, // Use black box icon for trailers,
-                            //         label: {
-                            //             text: trailer.trailer_swap_order ? trailer
-                            //                 .trailer_swap_order
-                            //                 .trailer_pick_up : 'N/A',
-                            //             color: 'white', // Set the color of the text,
-                            //             fontWeight: 'normal',
+                                var markers = new google.maps.Marker({
+                                    map: map,
+                                    position: { lat: coordinates.lat, lng: coordinates.lng },
+                                    title: trailer.trailer_swap_order ? trailer.trailer_swap_order
+                                        .trailer_pick_up : 'N/A',
+                                    icon: blackBoxIcon, // Use black box icon for trailers,
+                                    label: {
+                                        text: trailer.trailer_swap_order ? trailer
+                                            .trailer_swap_order
+                                            .trailer_pick_up : 'N/A',
+                                        color: 'white', // Set the color of the text,
+                                        fontWeight: 'normal',
 
-                            //         }
+                                    }
 
-                            //     });
-                            // }
+                                });
+                            }
                         }
                     })
 
