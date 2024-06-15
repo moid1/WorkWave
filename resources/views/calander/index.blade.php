@@ -98,7 +98,13 @@
                                         @if (isset($truckData['Monday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Monday'] as $route)
-                                                <!-- Display route details here -->
+                                            <div class="row">
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    <div class="col-lg-4">
+                                                        <span class="actor-tag">Order {{ $order_id }}</span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                             @endforeach
                                         @endif
                                     </td>
@@ -106,7 +112,13 @@
                                         @if (isset($truckData['Tuesday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Tuesday'] as $route)
-                                                <!-- Display route details here -->
+                                            <div class="row">
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    <div class="col-lg-4">
+                                                        <span class="actor-tag">Order {{ $order_id }}</span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                             @endforeach
                                         @endif
                                     </td>
@@ -114,7 +126,13 @@
                                         @if (isset($truckData['Wednesday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Wednesday'] as $route)
-                                                <!-- Display route details here -->
+                                            <div class="row">
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    <div class="col-lg-4">
+                                                        <span class="actor-tag">Order {{ $order_id }}</span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                             @endforeach
                                         @endif
                                     </td>
@@ -122,13 +140,13 @@
                                         @if (isset($truckData['Thursday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Thursday'] as $route)
-                                            <div class="row">
-                                                @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                <div class="col-lg-4">
-                                                    <span class="actor-tag">Order {{ $order_id }}</span>
+                                                <div class="row">
+                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                        <div class="col-lg-4">
+                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
-                                                @endforeach
-                                            </div>
                                             @endforeach
                                         @endif
                                     </td>
@@ -136,7 +154,13 @@
                                         @if (isset($truckData['Friday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Friday'] as $route)
-                                                <!-- Display route details here -->
+                                            <div class="row">
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    <div class="col-lg-4">
+                                                        <span class="actor-tag">Order {{ $order_id }}</span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                             @endforeach
                                         @endif
                                     </td>
