@@ -64,7 +64,7 @@
                                                 value="{{ old('trailer_drop_off') }}" required>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>Payment Type</label>
                                             <select id="payment_type" name="payment_type"
@@ -80,6 +80,22 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Trailer Going</label>
+                                            <select id="" name="trailer_going"
+                                                class="form-control form-select form-select-lg mb-3"
+                                                aria-label=".form-select-lg example">
+                                                <option value="" disabled>Please select where trailer going</option>
+                                                <option value="Burnet">Burnet</option>
+                                                <option value="Victoria">Victoria</option>
+                                                <option value="Robstown">Robstown</option>
+                                                <option value="Cemex">Cemex</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
 
                                     <div class="col-lg-6 d-none" id="chequeCol">
                                         <div class="form-group">

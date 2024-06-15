@@ -622,7 +622,7 @@ class FullFillOrderController extends Controller
         $order->status = 'fulfilled';
         $order->payment_type = $request->payment_type ?? null;
 
-        $order->update();
+        $order->save();
         $fullFillOrder['order'] = $order;
         $fullFillOrder['customerPricing'] = $customerPricing;
 

@@ -38,6 +38,12 @@
 
 @section('pageSpecificJs')
     <script>
+        var trailerCoordinates = {
+    Burnet: { lat: 30.7587, lng: -98.2283 },
+    Victoria: { lat: 28.8053, lng: -97.0036 },
+    Robstown: { lat: 27.7909, lng: -97.6689 },
+    Cemex: { lat: 27.7975, lng: -97.6689 }
+};
         function initMap() {
             var locations = @json($latestLocations);
             var trailers = @json($trailers);
@@ -78,7 +84,7 @@
                         label: {
                             text: location.name,
                             color: 'black', // Set the color of the text,
-                          fontWeight: 'bold'  
+                            fontWeight: 'bold'
 
                         }
                     });
@@ -92,7 +98,10 @@
                         if (status === 'OK') {
                             var marker = new google.maps.Marker({
                                 map: map,
-                                position: results[0].geometry.location,
+                                position: {
+                                    lat: parseFloat(location.users_lat),
+                                    lng: parseFloat(location.users_long)
+                                },
                                 title: trailer.trailer_swap_order ? trailer.trailer_swap_order
                                     .trailer_drop_off : 'N/A',
                                 icon: blackBoxIcon, // Use black box icon for trailers,
@@ -100,10 +109,31 @@
                                     text: trailer.trailer_swap_order ? trailer.trailer_swap_order
                                         .trailer_drop_off : 'N/A',
                                     color: 'white', // Set the color of the text,
-                                    fontWeight: 'normal'  
+                                    fontWeight: 'normal',
+
                                 }
 
                             });
+                            if (trailer.trailer_going !== null && trailer.trailer_going !== undefined && trailer.trailer_going !== '' && trailerCoordinates.hasOwnProperty(trailer.trailer_going)) {
+                                var coordinates = trailerCoordinates[trailer.trailer_going];
+
+                                var marker = new google.maps.Marker({
+                                    map: map,
+                                    position: { lat: coordinates.lat, lng: coordinates.lng },
+                                    title: trailer.trailer_swap_order ? trailer.trailer_swap_order
+                                        .trailer_pick_up : 'N/A',
+                                    icon: blackBoxIcon, // Use black box icon for trailers,
+                                    label: {
+                                        text: trailer.trailer_swap_order ? trailer
+                                            .trailer_swap_order
+                                            .trailer_pick_up : 'N/A',
+                                        color: 'white', // Set the color of the text,
+                                        fontWeight: 'normal',
+
+                                    }
+
+                                });
+                            }
                         }
                     })
 
