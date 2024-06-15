@@ -61,6 +61,7 @@ class RoutingController extends Controller
                 'route_name' => ['required'],
                 'driver_id' => ['required']
             ]);
+
             $routing = Routing::create($request->all());
 
             event(new RouteCreated());
@@ -88,11 +89,18 @@ class RoutingController extends Controller
         ]);
 
         try {
+
+            $truckDriver = TruckDriver::where('truck_id', $request->driver_id)->latest()->first();
+
             // Begin a database transaction
             DB::beginTransaction();
 
             // Create a new routing entry
-            $routing = Routing::create($request->all());
+            $routing = Routing::create([
+                'order_ids'=>$request->order_ids,
+                'route_name'=>$request->route_name,
+                'driver_id'=>$truckDriver->user_id
+            ]);
 
             // Extract order IDs from comma-separated string
             $orderIDs = explode(',', $request->order_ids);

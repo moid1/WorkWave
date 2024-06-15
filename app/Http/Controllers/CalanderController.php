@@ -7,12 +7,65 @@ use App\Models\Order;
 use App\Models\Routing;
 use App\Models\TruckDriver;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CalanderController extends Controller
 {
     public function index()
     {
-        return view('calander.index');
+        $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
+        $endOfWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
+        $data = Routing::whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->with('driver')->get();
+
+        $dataByDay = $data->groupBy(function ($item) {
+            return Carbon::parse($item->created_at)->englishDayOfWeek;
+        })->toArray();
+
+        $dataGroupedByTruck = [];
+        $englishDaysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        // Iterate over each truck's data
+        foreach ($dataByDay as $day => $routes) {
+            // Iterate over each route in the day's routes
+            foreach ($routes as $route) {
+                // Get the truck_id for the current route
+                $truckId = $route['driver']['truck_driver']['truck']['name'];
+
+                // Use Carbon to get the day name in English
+                $dayName = Carbon::parse($day)->isoFormat('dddd');
+
+                // Check if the truck_id exists in the grouped array, if not, initialize it
+                if (!isset($dataGroupedByTruck[$truckId])) {
+                    $dataGroupedByTruck[$truckId] = [];
+                }
+
+                // Initialize each day for the current truck if not already initialized
+                foreach ($englishDaysOfWeek as $dayOfWeek) {
+                    if (!isset($dataGroupedByTruck[$truckId][$dayOfWeek])) {
+                        $dataGroupedByTruck[$truckId][$dayOfWeek] = [];
+                    }
+                }
+
+                // Add the route to the truck_id's day array
+                $dataGroupedByTruck[$truckId][$dayName][] = $route;
+            }
+        }
+
+        // Ensure all days have empty arrays for trucks with no data
+        foreach ($dataGroupedByTruck as &$truckData) {
+            foreach ($englishDaysOfWeek as $dayOfWeek) {
+                if (!isset($truckData[$dayOfWeek])) {
+                    $truckData[$dayOfWeek] = [];
+                }
+            }
+        }
+
+
+
+        // dd($dataGroupedByTruck);
+
+
+        return view('calander.index', compact('dataGroupedByTruck'));
     }
 
     public function viewForOrderCalander()
@@ -20,7 +73,8 @@ class CalanderController extends Controller
         return view('calander.order_calander');
     }
 
-    public function viewForSwapCalander(){
+    public function viewForSwapCalander()
+    {
         return view('calander.swap_calander');
     }
 
@@ -67,7 +121,8 @@ class CalanderController extends Controller
         }
     }
 
-    public function swapOrdersCalander(Request $request){
+    public function swapOrdersCalander(Request $request)
+    {
         if ($request->ajax()) {
             $orders = Order::where('load_type', 'trailer_swap')->whereDate('created_at', '>=', $request->start)->get();
             $testData = array();
@@ -96,17 +151,17 @@ class CalanderController extends Controller
                 $order = Order::findOrFail($request->order_id);
                 $order->delivery_date = $request->start;
                 $order->save();
-                    $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
-                    $updatedOrderIdsString = implode(',', $updatedOrderIds);
-                    $route->order_ids = $updatedOrderIdsString;
-                    $route->save();
+                $updatedOrderIds = array_diff($orderIds, [$request->order_id]);
+                $updatedOrderIdsString = implode(',', $updatedOrderIds);
+                $route->order_ids = $updatedOrderIdsString;
+                $route->save();
 
-                    Routing::create([
-                        'route_name'=>$route->route_name,
-                        'order_ids'=>$request->order_id,
-                        'driver_id' => $route->driver_id,
-                    ]);
-                
+                Routing::create([
+                    'route_name' => $route->route_name,
+                    'order_ids' => $request->order_id,
+                    'driver_id' => $route->driver_id,
+                ]);
+
 
 
             }

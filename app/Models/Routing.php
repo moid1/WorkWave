@@ -12,6 +12,6 @@ class Routing extends Model
     protected $guarded = [];
 
     public function driver(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'driver_id')->with('truckDriver');
     }
 }

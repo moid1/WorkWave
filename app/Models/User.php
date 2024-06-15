@@ -49,4 +49,8 @@ class User extends Authenticatable
         return $this->hasOne(Manager::class);
     }
 
+    public function truckDriver(){
+        return $this->hasOne(TruckDriver::class)->with('truck');
+    }
+
 }
