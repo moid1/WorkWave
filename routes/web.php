@@ -196,4 +196,6 @@ Route::get('delete-calling-table', [CallingTableController::class, 'deleteCallin
 
 Route::get('/trailer-report', [GeneralController::class, 'trailerSwapReport'])->name('trailer.swap.create');
 
+Route::get('/get-orders-by-truck_routed', [GeneralController::class, 'getOrdersByTruckRouted']);
+
 

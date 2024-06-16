@@ -166,8 +166,9 @@ class FullFillOrderController extends Controller
             'order_id' => $request->order_id ?? null,
             'processor_reg_no' => $request->company_reg ?? null,
             'customer_signature' => $file ?? null,
-            'driver_signature' => $driverSignFile ?? null,
-            'cheque_no' => $request->cheque_no ?? null
+            'driver_signature' => $driverSignFile ?? null,  
+            'cheque_no' => $request->cheque_no ?? null,
+            'left_over'=>$request->tires_left ?? null
         ]);
 
       
@@ -190,7 +191,7 @@ class FullFillOrderController extends Controller
         $order->status = 'fulfilled';
         $order->payment_type = $request->payment_type ?? null;
 
-        $order->update();
+        $order->save();
         $fullFillOrder['order'] = $order;
         $fullFillOrder['customerPricing'] = $customerPricing;
 

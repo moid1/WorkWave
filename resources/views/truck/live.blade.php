@@ -59,6 +59,8 @@
 
         function initMap() {
             var locations = @json($latestLocations);
+            console.log('latest', locations);
+
             var trailers = @json($trailers);
             console.log(trailers);
             if (locations.length) {
@@ -101,6 +103,12 @@
 
                         }
                     });
+
+                    // Add onclick event listener to the marker
+    marker.addListener('click', function() {
+
+        window.location.href= `/get-orders-by-truck_routed?driver_id=${location.users_id}`
+    });
                 });
 
                 var geocoder = new google.maps.Geocoder();

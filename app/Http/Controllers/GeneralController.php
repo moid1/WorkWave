@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Routing;
 use Illuminate\Http\Request;
 
 class GeneralController extends Controller
@@ -26,5 +27,23 @@ class GeneralController extends Controller
         }
         return view('reports.trailer', compact('graded', 'notGraded'));
 
+    }
+
+    public function getOrdersByTruckRouted(Request $request)
+    {
+        $driver_id = $request->driver_id;
+        if (!$driver_id) {
+            return;
+        }
+
+        $routing = Routing::where('driver_id', $driver_id)->latest()->first();
+        if ($routing) {
+            $orderIds = explode(',', $routing->order_ids);
+
+            // Fetch orders from database
+            $orders = Order::whereIn('id', $orderIds)->with('customer')->get();
+            return view('truck.orders', compact('orders'));
+
+        }
     }
 }

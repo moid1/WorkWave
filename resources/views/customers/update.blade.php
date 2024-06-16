@@ -299,6 +299,22 @@
                                         </div>
 
 
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Trailer Duration
+                                                </label>
+                                                <input id="" type="number"
+                                                    class="form-control @error('trailer_duration') is-invalid @enderror"
+                                                    name="trailer_duration" value="{{ old('trailer_duration') }}">
+                                                @error('trailer_duration')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+
 
                                         <div class="col-lg-6">
                                             <div class="form-group">

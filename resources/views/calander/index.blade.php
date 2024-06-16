@@ -88,23 +88,38 @@
                                 <th>Wednesday</th>
                                 <th>Thursday</th>
                                 <th>Friday</th>
+                                <th>Left Over</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($dataGroupedByTruck as $key => $truckData)
+                                @php
+                                    $totalLeftOver = 0;
+                                    $truckInfo = \App\Models\Truck::where('name', $key)->latest()->first();
+                                @endphp
                                 <tr>
-                                    <td>{{ $key }}</td>
+                                    <td> <a href={{ route('change.truck.status', $truckInfo->id) }}
+                                        class="{{ $truckInfo->is_active ? 'text-success' : 'text-primary' }}">
+                                        {{ $key }} </a></td>
                                     <td>
                                         @if (isset($truckData['Monday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Monday'] as $route)
-                                            <div class="row">
-                                                @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                    <div class="col-lg-4">
-                                                        <span class="actor-tag">Order {{ $order_id }}</span>
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                                                <div class="row">
+                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                        @php
+                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                                ->find($order_id)
+                                                                ->toArray();
+                                                            if ($tempOrder['fulfilled']) {
+                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                            }
+                                                        @endphp
+                                                        <div class="col-lg-4">
+                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             @endforeach
                                         @endif
                                     </td>
@@ -112,13 +127,21 @@
                                         @if (isset($truckData['Tuesday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Tuesday'] as $route)
-                                            <div class="row">
-                                                @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                    <div class="col-lg-4">
-                                                        <span class="actor-tag">Order {{ $order_id }}</span>
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                                                <div class="row">
+                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                        @php
+                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                                ->find($order_id)
+                                                                ->toArray();
+                                                            if ($tempOrder['fulfilled']) {
+                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                            }
+                                                        @endphp
+                                                        <div class="col-lg-4">
+                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             @endforeach
                                         @endif
                                     </td>
@@ -126,13 +149,21 @@
                                         @if (isset($truckData['Wednesday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Wednesday'] as $route)
-                                            <div class="row">
-                                                @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                    <div class="col-lg-4">
-                                                        <span class="actor-tag">Order {{ $order_id }}</span>
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                                                <div class="row">
+                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                        @php
+                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                                ->find($order_id)
+                                                                ->toArray();
+                                                            if ($tempOrder['fulfilled']) {
+                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                            }
+                                                        @endphp
+                                                        <div class="col-lg-4">
+                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             @endforeach
                                         @endif
                                     </td>
@@ -142,6 +173,14 @@
                                             @foreach ($truckData['Thursday'] as $route)
                                                 <div class="row">
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                        @php
+                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                                ->find($order_id)
+                                                                ->toArray();
+                                                            if ($tempOrder['fulfilled']) {
+                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                            }
+                                                        @endphp
                                                         <div class="col-lg-4">
                                                             <span class="actor-tag">Order {{ $order_id }}</span>
                                                         </div>
@@ -154,16 +193,26 @@
                                         @if (isset($truckData['Friday']))
                                             {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Friday'] as $route)
-                                            <div class="row">
-                                                @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                    <div class="col-lg-4">
-                                                        <span class="actor-tag">Order {{ $order_id }}</span>
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                                                <div class="row">
+                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                        @php
+                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                                ->find($order_id)
+                                                                ->toArray();
+                                                            if ($tempOrder['fulfilled']) {
+                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                            }
+                                                        @endphp
+                                                        <div class="col-lg-4">
+                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                                <span class="actor-tag">Order {{ $order_id }}</span></a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             @endforeach
                                         @endif
                                     </td>
+                                    <td>{{ $totalLeftOver }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
