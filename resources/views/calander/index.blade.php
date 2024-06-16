@@ -113,7 +113,7 @@
                                                 <div class="row">
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
-                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
                                                                 ->find($order_id);
                                                                
                                                             if ($tempOrder['fulfilled']) {
@@ -122,7 +122,7 @@
                                                         @endphp
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
                                                             </a>
                                                         </div>
                                                     @endforeach
@@ -137,7 +137,7 @@
                                                 <div class="row">
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
-                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
                                                                 ->find($order_id);
                                                               
                                                             if ($tempOrder['fulfilled']) {
@@ -146,7 +146,7 @@
                                                         @endphp
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
                                                             </a>
                                                         </div>
                                                     @endforeach
@@ -161,7 +161,7 @@
                                                 <div class="row">
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
-                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
                                                                 ->find($order_id);
                                                                
                                                             if ($tempOrder['fulfilled']) {
@@ -170,7 +170,7 @@
                                                         @endphp
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
                                                             </a>
                                                         </div>
                                                     @endforeach
@@ -185,7 +185,7 @@
                                                 <div class="row">
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
-                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
                                                                 ->find($order_id);
                                                               
                                                             if ($tempOrder['fulfilled']) {
@@ -194,7 +194,7 @@
                                                         @endphp
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
                                                         </a>
                                                         </div>
                                                     @endforeach
@@ -209,7 +209,7 @@
                                                 <div class="row">
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
-                                                            $tempOrder = App\Models\Order::with('fulfilled')
+                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
                                                                 ->find($order_id);
                                                                
                                                             if ($tempOrder['fulfilled']) {
@@ -218,7 +218,7 @@
                                                         @endphp
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                                <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span></a>
+                                                                <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span></a>
                                                         </div>
                                                     @endforeach
                                                 </div>
