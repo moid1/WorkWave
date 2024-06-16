@@ -121,7 +121,9 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
+                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                            </a>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -143,7 +145,9 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
+                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                            </a>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -165,7 +169,9 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
+                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                            </a>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -187,7 +193,9 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
+                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
+                                                        </a>
                                                         </div>
                                                     @endforeach
                                                 </div>
