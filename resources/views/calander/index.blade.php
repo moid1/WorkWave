@@ -114,8 +114,8 @@
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
                                                             $tempOrder = App\Models\Order::with('fulfilled')
-                                                                ->find($order_id)
-                                                                ->toArray();
+                                                                ->find($order_id);
+                                                               
                                                             if ($tempOrder['fulfilled']) {
                                                                 $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                             }
@@ -136,8 +136,8 @@
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
                                                             $tempOrder = App\Models\Order::with('fulfilled')
-                                                                ->find($order_id)
-                                                                ->toArray();
+                                                                ->find($order_id);
+                                                              
                                                             if ($tempOrder['fulfilled']) {
                                                                 $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                             }
@@ -158,8 +158,8 @@
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
                                                             $tempOrder = App\Models\Order::with('fulfilled')
-                                                                ->find($order_id)
-                                                                ->toArray();
+                                                                ->find($order_id);
+                                                               
                                                             if ($tempOrder['fulfilled']) {
                                                                 $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                             }
@@ -180,8 +180,8 @@
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
                                                             $tempOrder = App\Models\Order::with('fulfilled')
-                                                                ->find($order_id)
-                                                                ->toArray();
+                                                                ->find($order_id);
+                                                              
                                                             if ($tempOrder['fulfilled']) {
                                                                 $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                             }
