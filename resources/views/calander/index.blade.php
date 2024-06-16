@@ -121,7 +121,7 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
-                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -143,7 +143,7 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
-                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -165,7 +165,7 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
-                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -187,7 +187,7 @@
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
-                                                            <span class="actor-tag">Order {{ $order_id }}</span>
+                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span>
                                                         </div>
                                                     @endforeach
                                                 </div>
