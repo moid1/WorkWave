@@ -35,20 +35,22 @@
                                     <h6>Status</h6>
                                 </div>
                                 @foreach ($graded as $order)
-                                    <div class="col-lg-3">
-                                        <p>{{ $order->trailerSwapOrder->trailer_pick_up }}</p>
-                                    </div>
+                                    @if (!empty($order->trailerSwapOrder))
+                                        <div class="col-lg-3">
+                                            <p>{{ $order->trailerSwapOrder->trailer_pick_up }}</p>
+                                        </div>
 
-                                    <div class="col-lg-3">
-                                        <p>{{ $order->trailerSwapOrder->location }}</p>
-                                    </div>
+                                        <div class="col-lg-3">
+                                            <p>{{ $order->trailerSwapOrder->location }}</p>
+                                        </div>
 
-                                    <div class="col-lg-3">
-                                        <p>{{ $order->customer->business_name }}</p>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <p>{{ $order->trailerSwapOrder->status }}</p>
-                                    </div>
+                                        <div class="col-lg-3">
+                                            <p>{{ $order->customer->business_name }}</p>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p>{{ $order->trailerSwapOrder->status }}</p>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -75,6 +77,8 @@
                                 </div>
 
                                 @foreach ($notGraded as $order)
+                                @if (!empty($order->trailerSwapOrder))
+
                                     <div class="col-lg-3">
                                         <p>{{ $order->trailerSwapOrder ? $order->trailerSwapOrder->trailer_pick_up : 'N/A' }}
                                         </p>
@@ -91,6 +95,7 @@
                                     <div class="col-lg-3">
                                         <p>{{ $order->trailerSwapOrder ? $order->trailerSwapOrder->status : 'N/A' }}</p>
                                     </div>
+                                    @endif
                                 @endforeach
 
                             </div>
