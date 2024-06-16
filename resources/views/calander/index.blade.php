@@ -25,6 +25,11 @@
     .fc-event {
         background: transparent !important;
     }
+
+    .strike-through {
+    text-decoration: line-through;
+    color: red!important;
+}
 </style>
 <style>
     * {
@@ -197,15 +202,15 @@
                                                     @foreach (explode(',', $route['order_ids']) as $order_id)
                                                         @php
                                                             $tempOrder = App\Models\Order::with('fulfilled')
-                                                                ->find($order_id)
-                                                                ->toArray();
+                                                                ->find($order_id);
+                                                               
                                                             if ($tempOrder['fulfilled']) {
                                                                 $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                             }
                                                         @endphp
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                                <span class="actor-tag">Order {{ $order_id }}</span></a>
+                                                                <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">Order {{ $order_id }}</span></a>
                                                         </div>
                                                     @endforeach
                                                 </div>
