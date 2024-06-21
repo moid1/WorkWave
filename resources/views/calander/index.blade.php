@@ -123,7 +123,9 @@
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
+                                                            
                                                             </a>
+                                                            <span>{{$route->created_at}}</span>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -219,7 +221,11 @@
                                                         <div class="col-lg-4">
                                                             <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                                 <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span></a>
-                                                        </div>
+                                                               / <span>{{ \Carbon\Carbon::parse($route['routing_date'])->format('d M') }}
+                                                                </span>
+                                                            </div>
+                                                        
+
                                                     @endforeach
                                                 </div>
                                             @endforeach

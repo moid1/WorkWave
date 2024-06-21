@@ -99,7 +99,8 @@ class RoutingController extends Controller
             $routing = Routing::create([
                 'order_ids'=>$request->order_ids,
                 'route_name'=>$request->route_name,
-                'driver_id'=>$truckDriver->user_id
+                'driver_id'=>$truckDriver->user_id,
+                'routing_date'=>$request->routing_date
             ]);
 
             // Extract order IDs from comma-separated string

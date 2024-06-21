@@ -1,6 +1,5 @@
 @extends('layouts.app')
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAXsXxGcLCW2GFr9a9rHU0FTo41Q-v-bZE"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXsXxGcLCW2GFr9a9rHU0FTo41Q-v-bZE&libraries=geometry">
 </script>
 
@@ -60,6 +59,10 @@
             <div class="col-6 mt-3">
                 <label for="route_name">Please enter the route name</label>
                 <input type="text" name="route_name" id="routeName" class="form-control">
+            </div>
+            <div class="col-6 mt-3">
+                <label for="route_name">Please enter the date</label>
+                <input type="date" name="routing_date" id="routing_date" class="form-control">
             </div>
             <div class="row mt-5">
                 <h4> Route Details </h4>
@@ -385,6 +388,7 @@
                     data: {
                         driver_id: driverId,
                         order_ids: orderIds,
+                        routing_date: $('#routing_date').val(),
                         route_name: $('#routeName').val()
                     },
                     success: function(response) {
