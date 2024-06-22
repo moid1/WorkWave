@@ -27,9 +27,9 @@
     }
 
     .strike-through {
-    text-decoration: line-through;
-    color: red!important;
-}
+        text-decoration: line-through;
+        color: red !important;
+    }
 </style>
 <style>
     * {
@@ -80,7 +80,7 @@
     }
 </style>
 @section('content')
-    <div class="page-content-wrapper ">
+    <div class="page-content-wrapper">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -93,6 +93,8 @@
                                 <th>Wednesday</th>
                                 <th>Thursday</th>
                                 <th>Friday</th>
+                                <th>Saturday</th>
+                                <th>Sunday</th>
                                 <th>Left Over</th>
                             </tr>
                         </thead>
@@ -103,125 +105,186 @@
                                     $truckInfo = \App\Models\Truck::where('name', $key)->latest()->first();
                                 @endphp
                                 <tr>
-                                    <td> <a href={{ route('change.truck.status', $truckInfo->id) }}
-                                        class="{{ $truckInfo->is_active ? 'text-success' : 'text-primary' }}">
-                                        {{ $key }} </a></td>
                                     <td>
+                                        <a href="{{ route('change.truck.status', $truckInfo->id) }}"
+                                            class="{{ $truckInfo->is_active ? 'text-success' : 'text-primary' }}">
+                                            {{ $key }}
+                                        </a>
+                                    </td>
+                                    <td class="droppable-day" data-day="Monday">
                                         @if (isset($truckData['Monday']))
-                                            {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Monday'] as $route)
-                                                <div class="row">
-                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                        @php
-                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
-                                                                ->find($order_id);
-                                                               
-                                                            if ($tempOrder['fulfilled']) {
-                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
-                                                            }
-                                                        @endphp
-                                                        <div class="col-lg-4">
-                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
-                                                            </a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (isset($truckData['Tuesday']))
-                                            {{-- Iterate over routes if there are any --}}
-                                            @foreach ($truckData['Tuesday'] as $route)
-                                                <div class="row">
-                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                        @php
-                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
-                                                                ->find($order_id);
-                                                              
-                                                            if ($tempOrder['fulfilled']) {
-                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
-                                                            }
-                                                        @endphp
-                                                        <div class="col-lg-4">
-                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
-                                                            </a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (isset($truckData['Wednesday']))
-                                            {{-- Iterate over routes if there are any --}}
-                                            @foreach ($truckData['Wednesday'] as $route)
-                                                <div class="row">
-                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                        @php
-                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
-                                                                ->find($order_id);
-                                                               
-                                                            if ($tempOrder['fulfilled']) {
-                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
-                                                            }
-                                                        @endphp
-                                                        <div class="col-lg-4">
-                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
-                                                            </a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (isset($truckData['Thursday']))
-                                            {{-- Iterate over routes if there are any --}}
-                                            @foreach ($truckData['Thursday'] as $route)
-                                                <div class="row">
-                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                        @php
-                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
-                                                                ->find($order_id);
-                                                              
-                                                            if ($tempOrder['fulfilled']) {
-                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
-                                                            }
-                                                        @endphp
-                                                        <div class="col-lg-4">
-                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span>
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    @php
+                                                        $tempOrder = App\Models\Order::with([
+                                                            'fulfilled',
+                                                            'customer',
+                                                        ])->find($order_id);
+                                                        if ($tempOrder['fulfilled']) {
+                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                        }
+                                                    @endphp
+                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                            <span
+                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                {{ $tempOrder['customer']['business_name'] }}
+                                                            </span>
                                                         </a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                                    </div>
+                                                @endforeach
                                             @endforeach
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="droppable-day" data-day="Tuesday">
+                                        @if (isset($truckData['Tuesday']))
+                                            @foreach ($truckData['Tuesday'] as $route)
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    @php
+                                                        $tempOrder = App\Models\Order::with([
+                                                            'fulfilled',
+                                                            'customer',
+                                                        ])->find($order_id);
+                                                        if ($tempOrder['fulfilled']) {
+                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                        }
+                                                    @endphp
+                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                            <span
+                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                {{ $tempOrder['customer']['business_name'] }}
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
+                                        @endif
+                                    </td>
+                                    <td class="droppable-day" data-day="Wednesday">
+                                        @if (isset($truckData['Wednesday']))
+                                            @foreach ($truckData['Wednesday'] as $route)
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    @php
+                                                        $tempOrder = App\Models\Order::with([
+                                                            'fulfilled',
+                                                            'customer',
+                                                        ])->find($order_id);
+                                                        if ($tempOrder['fulfilled']) {
+                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                        }
+                                                    @endphp
+                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                            <span
+                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                {{ $tempOrder['customer']['business_name'] }}
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
+                                        @endif
+                                    </td>
+                                    <td class="droppable-day" data-day="Thursday">
+                                        @if (isset($truckData['Thursday']))
+                                            @foreach ($truckData['Thursday'] as $route)
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    @php
+                                                        $tempOrder = App\Models\Order::with([
+                                                            'fulfilled',
+                                                            'customer',
+                                                        ])->find($order_id);
+                                                        if ($tempOrder['fulfilled']) {
+                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                        }
+                                                    @endphp
+                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                            <span
+                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                {{ $tempOrder['customer']['business_name'] }}
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
+                                        @endif
+                                    </td>
+                                    <td class="droppable-day" data-day="Friday">
                                         @if (isset($truckData['Friday']))
-                                            {{-- Iterate over routes if there are any --}}
                                             @foreach ($truckData['Friday'] as $route)
-                                                <div class="row">
-                                                    @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                        @php
-                                                            $tempOrder = App\Models\Order::with(['fulfilled','customer'])
-                                                                ->find($order_id);
-                                                               
-                                                            if ($tempOrder['fulfilled']) {
-                                                                $totalLeftOver += $tempOrder['fulfilled']['left_over'];
-                                                            }
-                                                        @endphp
-                                                        <div class="col-lg-4">
-                                                            <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                                <span class="{{$tempOrder->status == 'fulfilled' ? 'strike-through' : ''}}">{{$tempOrder['customer']['business_name']}}</span></a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    @php
+                                                        $tempOrder = App\Models\Order::with([
+                                                            'fulfilled',
+                                                            'customer',
+                                                        ])->find($order_id);
+                                                        if ($tempOrder['fulfilled']) {
+                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                        }
+                                                    @endphp
+                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                            <span
+                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                {{ $tempOrder['customer']['business_name'] }}
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
+                                        @endif
+                                    </td>
+
+                                    <td class="droppable-day" data-day="Saturday">
+                                        @if (isset($truckData['Saturday']))
+                                            @foreach ($truckData['Saturday'] as $route)
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    @php
+                                                        $tempOrder = App\Models\Order::with([
+                                                            'fulfilled',
+                                                            'customer',
+                                                        ])->find($order_id);
+                                                        if ($tempOrder['fulfilled']) {
+                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                        }
+                                                    @endphp
+                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                            <span
+                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                {{ $tempOrder['customer']['business_name'] }}
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
+                                        @endif
+                                    </td>
+
+                                    <td class="droppable-day" data-day="Sunday">
+                                        @if (isset($truckData['Sunday']))
+                                            @foreach ($truckData['Sunday'] as $route)
+                                                @foreach (explode(',', $route['order_ids']) as $order_id)
+                                                    @php
+                                                        $tempOrder = App\Models\Order::with([
+                                                            'fulfilled',
+                                                            'customer',
+                                                        ])->find($order_id);
+                                                        if ($tempOrder['fulfilled']) {
+                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
+                                                        }
+                                                    @endphp
+                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                            <span
+                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                {{ $tempOrder['customer']['business_name'] }}
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
                                             @endforeach
                                         @endif
                                     </td>
@@ -234,19 +297,6 @@
             </div> <!-- end row -->
         </div><!-- container-fluid -->
     </div>
-
-    {{-- DATATABLE --}}
-    {{-- <div class="page-content-wrapper">
-        <button id="fullScreen" class="btn btn-primary float-right">Full Screens</button>
-
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div id='calendar' style="overflow: auto"></div>
-                </div>
-            </div> 
-        </div>
-    </div> --}}
 @endsection
 
 
@@ -389,5 +439,87 @@
         //   // When an event is received, trigger a rerender of the calendar
         //   calendar.fullCalendar('refetchEvents');
         // });
+    </script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    
+
+    <script>
+        // Map days of the week to numbers
+        var dayMap = {
+            'Sunday': 0,
+            'Monday': 1,
+            'Tuesday': 2,
+            'Wednesday': 3,
+            'Thursday': 4,
+            'Friday': 5,
+            'Saturday': 6
+        };
+        $(document).ready(function() {
+            $('.orderdiv').draggable({
+                revert: true,
+                zIndex: 1000,
+                scroll: true,
+                helper: 'clone'
+            });
+
+            $('.droppable-day').droppable({
+                accept: '.orderdiv',
+                drop: function(event, ui) {
+                    
+                    var draggableOrder = ui.draggable;
+                    var droppedDay = $(this).data('day');
+                    var orderId = draggableOrder.data('order-id');
+                    var clonedElement = draggableOrder.clone(); // Pass true to clone with events
+                    var currentDayOfWeek = new Date().getDay();
+
+                    var droppedDayOfWeek = dayMap[droppedDay];
+
+                    if (droppedDayOfWeek < currentDayOfWeek) {
+            // Prevent dropping onto previous days
+           alert('Cannot drop onto previous days.');
+            return; // Exit the function without performing drop action
+        }
+        
+
+                    // Example: Move order to another day (update UI logic)
+                    $(this).append(clonedElement); // Append the cloned element
+                    draggableOrder.remove(); // Remove the original draggable
+
+                    // Here you can implement logic to update backend data or perform other actions
+                    console.log('Order ' + orderId + ' dropped on ' + droppedDay);
+
+                    $.ajax({
+                          url:"/get-order-dragging",
+                          type:"POST",
+                          headers:{
+                              'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                          },
+                          data:{
+                            order_id:orderId,
+                            futureDay:droppedDay
+                          },
+                          success:function(response){
+                            //   calendar.fullCalendar('refetchEvents');
+                            //   alert("Event deleted");
+                          }
+                        })
+
+                    clonedElement.draggable({
+                        revert: true,
+                        zIndex: 1000,
+                        scroll: true,
+                        helper: 'clone',
+                        start: function(event, ui) {
+                            // Add any start event logic if needed
+                        },
+                        stop: function(event, ui) {
+                            // Add any stop event logic if needed
+                        }
+                    });
+
+                }
+            });
+        });
     </script>
 @endsection

@@ -198,4 +198,6 @@ Route::get('/trailer-report', [GeneralController::class, 'trailerSwapReport'])->
 
 Route::get('/get-orders-by-truck_routed', [GeneralController::class, 'getOrdersByTruckRouted']);
 
+Route::post('/get-order-dragging', [RoutingController::class, 'checkOrderDragging']);
+
 

@@ -13,13 +13,17 @@ class CalanderController extends Controller
 {
     public function index()
     {
-        $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $endOfWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
-        $data = Routing::whereBetween('created_at', [$startOfWeek, $endOfWeek])
+        $weekNumber = 1;  // Change this to 2, 3, 4, etc. for different weeks
+
+        // Calculate start and end of the week based on the specified week number
+        $startOfWeek = Carbon::now()->addWeeks($weekNumber - 1)->startOfWeek()->format('Y-m-d');
+        $endOfWeek = Carbon::now()->addWeeks($weekNumber - 1)->endOfWeek()->format('Y-m-d');
+
+        $data = Routing::whereBetween('routing_date', [$startOfWeek, $endOfWeek])
             ->with('driver')->get();
 
         $dataByDay = $data->groupBy(function ($item) {
-            return Carbon::parse($item->created_at)->englishDayOfWeek;
+            return Carbon::parse($item->routing_date)->englishDayOfWeek;
         })->toArray();
 
         $dataGroupedByTruck = [];
