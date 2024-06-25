@@ -1152,7 +1152,8 @@ class FullFillOrderController extends Controller
                 'processor_reg_no' => $request->company_reg ?? null,
                 'customer_signature' => $file ?? null,
                 'driver_signature' => $driverSignFile ?? null,
-                'cheque_no' => $request->cheque_no ?? null
+                'cheque_no' => $request->cheque_no ?? null,
+                'left_over' => $request->tiresLeft ?? null,
             ]);
 
             
