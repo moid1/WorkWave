@@ -263,7 +263,6 @@ class RoutingController extends Controller
         $orderId = $request->order_id;
         $futureDay = $request->futureDay;
         $routing = Routing::whereRaw("FIND_IN_SET(?, order_ids)", [$orderId])->first();
-        $futureDate = $this->getNextWeekdayDate($futureDay);
 
         if ($routing) {
 

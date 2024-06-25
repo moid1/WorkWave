@@ -1,6 +1,9 @@
 @extends('layouts.app')
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <style>
     body:fullscreen {
         overflow: scroll !important;
@@ -82,6 +85,14 @@
 @section('content')
     <div class="page-content-wrapper">
         <div class="container-fluid">
+            <div class="d-flex mt-3 justify-content-between">
+                <div style="">
+                    <strong>Date Filter:</strong>
+                    <input type="text" name="daterange" value="" />
+                </div>
+                <div id="filterBtn" class="btn btn-primary ">Filter</div>
+            </div>
+            <hr>
             <div class="row">
                 <div class="col-12">
                     <table>
@@ -305,6 +316,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/gcal.js"></script>
     <script>
+                $(function() {
+            var startDate = localStorage.getItem('startDate');
+            var endDate = localStorage.getItem('endDate');
+            if (startDate && endDate) {
+                startDate = new Date(startDate);
+                endDate = new Date(endDate);
+
+                $('input[name="daterange"]').daterangepicker({
+                    startDate: startDate,
+                    endDate: endDate
+                });
+            } else {
+                $('input[name="daterange"]').daterangepicker({
+                    startDate: moment().subtract(1, 'M'),
+                    endDate: moment()
+                });
+            }
+
+
+        });
+
+        $('#filterBtn').click(function(){
+
+            localStorage.setItem('startDate', $('input[name="daterange"]').data('daterangepicker')
+                    .startDate);
+
+                localStorage.setItem('endDate', $('input[name="daterange"]').data('daterangepicker')
+                    .endDate);
+
+             startDate = $('input[name="daterange"]').data('daterangepicker').startDate.format('YYYY-MM-DD');
+             endDate = $('input[name="daterange"]').data('daterangepicker').endDate.format('YYYY-MM-DD');
+
+             var url = "{{ route('calander.index') }}" + "?startDate=" + (startDate) + "&endDate=" + (endDate);
+
+             window.location.href = url;
+
+
+        })
+    </script>
+    <script>
         $('#fullScreen').on('click', function() {
             var element = document.getElementById('calendar');
             enterFullScreen(element);
@@ -475,11 +526,11 @@
 
                     var droppedDayOfWeek = dayMap[droppedDay];
 
-                    if (droppedDayOfWeek < currentDayOfWeek) {
-            // Prevent dropping onto previous days
-           alert('Cannot drop onto previous days.');
-            return; // Exit the function without performing drop action
-        }
+        //             if (droppedDayOfWeek < currentDayOfWeek) {
+        //     // Prevent dropping onto previous days
+        //    alert('Cannot drop onto previous days.');
+        //     return; // Exit the function without performing drop action
+        // }
         
 
                     // Example: Move order to another day (update UI logic)

@@ -11,13 +11,23 @@ use Carbon\Carbon;
 
 class CalanderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $startDate = $request->startDate ?? null;
+        $endDate = $request->endDate ?? null;
+
         $weekNumber = 1;  // Change this to 2, 3, 4, etc. for different weeks
 
-        // Calculate start and end of the week based on the specified week number
-        $startOfWeek = Carbon::now()->addWeeks($weekNumber - 1)->startOfWeek()->format('Y-m-d');
-        $endOfWeek = Carbon::now()->addWeeks($weekNumber - 1)->endOfWeek()->format('Y-m-d');
+        if ($startDate && $endDate) {
+            // Use the provided startDate and endDate for the week range
+            $startOfWeek = Carbon::parse($startDate)->startOfWeek()->format('Y-m-d');
+            $endOfWeek = Carbon::parse($endDate)->endOfWeek()->format('Y-m-d');
+        } else {
+            // Use the current week number logic as fallback
+            $weekNumber = 1;  // Change this to 2, 3, 4, etc. for different weeks
+            $startOfWeek = Carbon::now()->addWeeks($weekNumber - 1)->startOfWeek()->format('Y-m-d');
+            $endOfWeek = Carbon::now()->addWeeks($weekNumber - 1)->endOfWeek()->format('Y-m-d');
+        }
 
         $data = Routing::whereBetween('routing_date', [$startOfWeek, $endOfWeek])
             ->with('driver')->get();
