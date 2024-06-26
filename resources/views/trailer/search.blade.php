@@ -44,6 +44,14 @@
                 </div>
             </div>
 
+            <div class="trailer-date">
+                @if ($trailers)
+                    <div>
+                        <h4>Date: {{$trailer->created_at}}</h4>
+                    </div>
+                @endif
+            </div>
+
 
             <div id="map"></div>
         </div>

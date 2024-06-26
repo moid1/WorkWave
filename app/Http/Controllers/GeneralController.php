@@ -55,7 +55,7 @@ class GeneralController extends Controller
 
     public function getSearchTrailerData(Request $request){
         $trailerNo = $request->trailer_no;
-        $trailers = TrailerSwapOrder::where('trailer_pick_up', $trailerNo)->orWhere('trailer_drop_off', $trailerNo)->with('order')->get();
+        $trailers = TrailerSwapOrder::where('trailer_drop_off', $trailerNo)->with('order')->latest()->first();
         return view('trailer.search', compact('trailers'));
 
 
