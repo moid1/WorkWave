@@ -200,4 +200,7 @@ Route::get('/get-orders-by-truck_routed', [GeneralController::class, 'getOrdersB
 
 Route::post('/get-order-dragging', [RoutingController::class, 'checkOrderDragging']);
 
+Route::get('/trailer-search-view', [GeneralController::class, 'getSearachTrailerView'])->name('trailer.search.view');
+Route::post('/getSearchTrailerData', [GeneralController::class, 'getSearchTrailerData'])->name('trailer.search.post');
+
 

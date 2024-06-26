@@ -167,7 +167,8 @@
                             <ul class="list-unstyled">
                                 <li><a href="{{route('truck.index')}}">All Trucks</a></li>
                                 <li><a href="{{route('truck.live')}}">Live Truck</a></li>
-                                
+                                <li><a href="{{route('trailer.search.view')}}">Search Trailer</a></li>
+
                             </ul>
                         </li>
                         

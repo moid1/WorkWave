@@ -105,10 +105,10 @@
                     });
 
                     // Add onclick event listener to the marker
-    marker.addListener('click', function() {
+                    marker.addListener('click', function() {
 
-        window.location.href= `/get-orders-by-truck_routed?driver_id=${location.users_id}`
-    });
+                        window.location.href = `/get-orders-by-truck_routed?driver_id=${location.users_id}`
+                    });
                 });
 
                 var geocoder = new google.maps.Geocoder();

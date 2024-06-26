@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Routing;
+use App\Models\TrailerSwapOrder;
 use Illuminate\Http\Request;
 
 class GeneralController extends Controller
@@ -45,5 +46,18 @@ class GeneralController extends Controller
             return view('truck.orders', compact('orders'));
 
         }
+    }
+
+    public function getSearachTrailerView(){
+        $trailers = [];
+        return view('trailer.search', compact('trailers'));
+    }
+
+    public function getSearchTrailerData(Request $request){
+        $trailerNo = $request->trailer_no;
+        $trailers = TrailerSwapOrder::where('trailer_pick_up', $trailerNo)->orWhere('trailer_drop_off', $trailerNo)->with('order')->get();
+        return view('trailer.search', compact('trailers'));
+
+
     }
 }
