@@ -47,7 +47,7 @@
             <div class="trailer-date">
                 @if ($trailers)
                     <div>
-                        <h4>Date: {{$trailer->created_at}}</h4>
+                        <h4>Date: {{$trailers->created_at}}</h4>
                     </div>
                 @endif
             </div>
