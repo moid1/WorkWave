@@ -63,9 +63,9 @@
 
     <script>
         function initMap() {
-            var trailers = @json($trailers) ?? [];
+            var trailer = @json($trailers) ?? [];
     
-            if (trailers.length) {
+            if (trailer) {
                 var myLatlng = new google.maps.LatLng(40.7128, -74.0060); // Example coordinates for New York City
     
                 var myOptions = {
@@ -88,7 +88,6 @@
                 var geocoder = new google.maps.Geocoder();
                 var bounds = new google.maps.LatLngBounds(); // Initialize bounds to contain all markers
 
-                trailers.forEach(function(trailer) {
                     if (!trailer.order || !trailer.order.customer || !trailer.order.customer.address) {
                         return; // Ensure trailer data is valid before geocoding
                     }
@@ -114,7 +113,6 @@
                             console.error('Geocode was not successful for the following reason: ' + status);
                         }
                     });
-                });
             }
         }
     </script>
