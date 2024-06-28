@@ -93,7 +93,7 @@ class TruckController extends Controller
                  ->update(['driver_id' => $request->user_id]);
         }
         
-        TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
+        TruckDriver::updateOrCreate(['truck_id' => $request->truck_id], $request->all());
         
         return response()->json([
             'success' => true,
