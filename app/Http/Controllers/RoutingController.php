@@ -249,8 +249,6 @@ class RoutingController extends Controller
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
                 $data->whereBetween('delivery_date', [$fromDate, $toDate]);
             }
-            dd($data->get());
-
 
             $dataArray = $data->get();
         } else {
