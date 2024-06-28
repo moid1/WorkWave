@@ -27,14 +27,12 @@ class OrderController extends Controller
 
         if ($request->ajax()) {
             $data = Order::with(['customer', 'user', 'driver'])->get();
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+            }
 
-            $data = $data->where(function($query) use ($request) {
-                if ($request->fromDate && $request->toDate) {
-                    $query->where('delivery_date', '>=', $request->fromDate->toDateString())
-                          ->where('delivery_date', '<=', $request->toDate->toDateString());
-                }
-            });
-            
 
             return Datatables::of($data)
                 ->addIndexColumn()
