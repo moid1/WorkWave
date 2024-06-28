@@ -250,7 +250,9 @@ class RoutingController extends Controller
                 $data->where(function($query) use ($fromDate, $toDate) {
                     $query->whereBetween('delivery_date', [$fromDate, $toDate])
                           ->orWhereBetween('end_date', [$fromDate, $toDate]);
-                });            }
+                });            
+            }
+            $data->limit(20); // Add this line to limit the number of results to 20
 
             $dataArray = $data->get();
         } else {
