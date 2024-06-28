@@ -243,13 +243,14 @@ class RoutingController extends Controller
             $data = Order::where('driver_id', $truckDriver->user_id)
                 ->where('is_routed', false)
                 ->with(['customer', 'user', 'driver']);
-                dd($data->get());
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
                 $data->whereBetween('delivery_date', [$fromDate, $toDate]);
             }
+            dd($data->get());
+
 
             $dataArray = $data->get();
         } else {
