@@ -52,7 +52,7 @@ class OrderController extends Controller
                     return 'N/A';
                 })
                 ->editColumn('created_at', function ($row) {
-                    return $row->created_at->format('M d Y');
+                    return $row->delivery_date
                 })
                 ->editColumn('email', function ($row) {
                     return $row->customer->email;
