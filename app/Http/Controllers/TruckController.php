@@ -86,7 +86,15 @@ class TruckController extends Controller
 
     public function assignTruckToDriver(Request $request)
     {
+        $truckDriver = TruckDriver::where('id', $request->truck_id)->first();
+
+        if ($truckDriver) {
+            Order::where('driver_id', $truckDriver->user_id)
+                 ->update(['driver_id' => $request->user_id]);
+        }
+        
         TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
+        
         return response()->json([
             'success' => true,
             'message' => 'Truck Assigned to the Driver'
