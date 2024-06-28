@@ -203,4 +203,6 @@ Route::post('/get-order-dragging', [RoutingController::class, 'checkOrderDraggin
 Route::get('/trailer-search-view', [GeneralController::class, 'getSearachTrailerView'])->name('trailer.search.view');
 Route::post('/getSearchTrailerData', [GeneralController::class, 'getSearchTrailerData'])->name('trailer.search.post');
 
+Route::post('/update-trailer-status', [GeneralController::class, 'updateTrailerData'])->name('update.trailer.data');
+
 

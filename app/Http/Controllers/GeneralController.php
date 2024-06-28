@@ -60,4 +60,16 @@ class GeneralController extends Controller
 
 
     }
+
+    public function updateTrailerData(Request $request){
+        $trailerId = $request->trailer_id;
+        $trailerData = TrailerSwapOrder::findOrFail($trailerId);
+        if($trailerData){
+            $trailerData->status = $request->statusData;
+            $trailerData->location = $request->location;
+            $trailerData->update();
+        }
+
+        return back()->with('success', 'Data updated successfully' );
+    }
 }
