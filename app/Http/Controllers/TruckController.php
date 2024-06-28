@@ -86,21 +86,28 @@ class TruckController extends Controller
 
     public function assignTruckToDriver(Request $request)
     {
-        $truckDriver = TruckDriver::where('user_id', $request->user_id)
-        ->where('truck_id', $request->truck_id)
-        ->first();
-    
-    if ($truckDriver) {
-        $truckDriver->delete();
-    }
-    
-    // Create new TruckDriver with the provided data
-    $truckDriver = TruckDriver::create($request->all());
-    
-    return response()->json([
-        'success' => true,
-        'message' => 'Truck assigned to the driver'
-    ]);
+        // Find existing TruckDriver record for the specified user and truck
+        $existingTruckDriver = TruckDriver::where('user_id', $request->user_id)
+            ->where('truck_id', $request->truck_id)
+            ->first();
+
+        // If an existing record is found, update related Order and delete the TruckDriver
+        if ($existingTruckDriver) {
+            Order::where('driver_id', $existingTruckDriver->user_id)
+                ->update(['driver_id' => $request->user_id]);
+
+            $existingTruckDriver->delete();
+        }
+
+        // Create a new TruckDriver record with the provided data
+        $newTruckDriver = TruckDriver::create($request->all());
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'success' => true,
+            'message' => 'Truck assigned to the driver'
+        ]);
+
     }
 
     public function updateTruck($id)
