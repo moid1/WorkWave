@@ -29,8 +29,10 @@ class OrderController extends Controller
             $data = Order::with(['customer', 'user', 'driver'])->get();
 
             $data = $data->where(function($query) use ($request) {
-                $query->where('delivery_date', '>=', $request->fromDate->toDateString())
-                      ->where('delivery_date', '<=', $request->toDate->toDateString());
+                if ($request->fromDate && $request->toDate) {
+                    $query->where('delivery_date', '>=', $request->fromDate->toDateString())
+                          ->where('delivery_date', '<=', $request->toDate->toDateString());
+                }
             });
             
 
