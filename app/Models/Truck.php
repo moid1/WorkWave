@@ -12,6 +12,6 @@ class Truck extends Model
     protected $guarded =[];
 
     public function truckDriver(){
-        return $this->belongsTo(TruckDriver::class, 'truck_driver_id', 'id')->with('user');
+        return $this->belongsTo(TruckDriver::class, 'user_id', 'id')->with('user');
     }
 }
