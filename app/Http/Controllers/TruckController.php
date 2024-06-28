@@ -8,6 +8,7 @@ use App\Models\TruckDriver;
 use App\Models\User;
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TruckController extends Controller
 {
@@ -86,11 +87,24 @@ class TruckController extends Controller
 
     public function assignTruckToDriver(Request $request)
     {
-        TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
-        return response()->json([
-            'success' => true,
-            'message' => 'Truck Assigned to the Driver'
-        ]);
+        try {
+            DB::beginTransaction();
+        
+            $truckDriver = TruckDriver::where('truck_id', $request->truck_id)->latest()->first();
+        
+            if ($truckDriver) {
+                Order::where('driver_id', $truckDriver->user_id)
+                     ->where('is_routed', false)
+                     ->update(['driver_id' => $request->user_id]);
+        
+                TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
+            }
+        
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Handle the exception, log it, or return an error response
+        }
     }
 
     public function updateTruck($id)
