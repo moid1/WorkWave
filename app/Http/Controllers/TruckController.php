@@ -100,8 +100,8 @@ class TruckController extends Controller
                     ->update(['driver_id' => $request->user_id]);
         
                 // Update or create the TruckDriver record for the new driver
-                TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
             }
+            TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
         
             // Commit the transaction
             DB::commit();
