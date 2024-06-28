@@ -86,7 +86,7 @@ class TruckController extends Controller
 
     public function assignTruckToDriver(Request $request)
     {
-        $truckDriver = TruckDriver::where('id', $request->truck_id)->first();
+        $truckDriver = TruckDriver::where('truck_id', $request->truck_id)->first();
 
         if ($truckDriver) {
             Order::where('driver_id', $truckDriver->user_id)
