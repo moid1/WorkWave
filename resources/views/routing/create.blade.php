@@ -40,7 +40,7 @@
         <div class="col-lg-7">
             <div class="select-driver">
                 <label for="">Select Truck</label>
-                <select id="driverID" name="" id=""
+                <select id="driverID" name=""
                     class="js-example-basic-multiple form-control form-select  mb-3">
                     @foreach ($trucks as $truck)
                         <option value="{{ $truck->id }}">{{ $truck->name }}</option>
