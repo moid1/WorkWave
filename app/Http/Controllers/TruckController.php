@@ -87,7 +87,7 @@ class TruckController extends Controller
     public function assignTruckToDriver(Request $request)
     {
         // get all orders according to driverid
-        $truckDrivers = TruckDriver::where('driver_id', $request->driver_id)->first();
+        $truckDrivers = TruckDriver::where('user_id', $request->driver_id)->first();
         if($truckDrivers){
             Order::where('driver_id', $truckDrivers->driver_id)->update(['driver_id', $request->user_id]);
         }
