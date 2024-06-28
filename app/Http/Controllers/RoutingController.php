@@ -254,7 +254,7 @@ class RoutingController extends Controller
         } else {
             $dataArray = [];
         }
-dd($dataArray);
+
         return response()->json($dataArray);
     }
 
