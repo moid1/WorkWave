@@ -238,6 +238,7 @@ class RoutingController extends Controller
     public function getDriverOrderRouting(Request $request)
     {
         $truckDriver = TruckDriver::where('truck_id', $request->truck_id)->latest()->first();
+        dd($truckDriver);
 
         if ($truckDriver) {
             $data = Order::where('driver_id', $truckDriver->user_id)
