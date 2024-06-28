@@ -244,11 +244,11 @@ class RoutingController extends Controller
                 ->where('is_routed', false)
                 ->with(['customer', 'user', 'driver']);
 
-            if ($request->filled('from_date') && $request->filled('to_date')) {
-                $fromDate = Carbon::parse($request->from_date);
-                $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data->whereBetween('delivery_date', [$fromDate, $toDate]);
-            }
+            // if ($request->filled('from_date') && $request->filled('to_date')) {
+            //     $fromDate = Carbon::parse($request->from_date);
+            //     $toDate = Carbon::parse($request->to_date)->endOfDay();
+            //     $data->whereBetween('delivery_date', [$fromDate, $toDate]);
+            // }
 
             $dataArray = $data->get();
         } else {
