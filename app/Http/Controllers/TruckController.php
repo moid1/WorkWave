@@ -87,23 +87,39 @@ class TruckController extends Controller
 
     public function assignTruckToDriver(Request $request)
     {
+        DB::beginTransaction();
+
         try {
-            DB::beginTransaction();
-        
+            // Find the latest truck driver record
             $truckDriver = TruckDriver::where('truck_id', $request->truck_id)->latest()->first();
         
             if ($truckDriver) {
+                // Update orders associated with the previous driver (if any)
                 Order::where('driver_id', $truckDriver->user_id)
-                     ->where('is_routed', false)
-                     ->update(['driver_id' => $request->user_id]);
+                    ->where('is_routed', false)
+                    ->update(['driver_id' => $request->user_id]);
         
+                // Update or create the TruckDriver record for the new driver
                 TruckDriver::updateOrCreate(['user_id' => $request->user_id], $request->all());
             }
         
+            // Commit the transaction
             DB::commit();
+        
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Truck Assigned to the Driver'
+            ]);
         } catch (\Exception $e) {
-            DB::rollBack();
-            // Handle the exception, log it, or return an error response
+            // Something went wrong, rollback transaction
+            DB::rollback();
+        
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to assign truck to driver: ' . $e->getMessage()
+            ], 500);
         }
     }
 
