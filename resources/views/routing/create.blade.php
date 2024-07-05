@@ -576,10 +576,7 @@
                         lng: -98.180590
                     }
                 },
-                waypoints: waypoints.map(waypoint => ({
-        location: waypoint.location,
-        stopover: true // Ensure each waypoint is treated as a stop
-    })),
+                waypoints: waypoints,
                 travelMode: 'DRIVING'
             };
 
