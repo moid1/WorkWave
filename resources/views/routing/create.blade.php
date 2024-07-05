@@ -583,8 +583,10 @@ Promise.all(geocodePromises).then(function() {
                 lng: -98.180590
             }
         },
-        waypoints: waypoints,
-        travelMode: 'DRIVING'
+        waypoints: waypoints.slice(1).map(waypoint => ({
+        location: waypoint.location,
+        stopover: true // Ensure each waypoint is treated as a stop
+    }))
     };
 
     // Now you can use the request object as needed
