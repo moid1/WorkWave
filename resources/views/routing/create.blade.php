@@ -526,7 +526,10 @@
 
             var geocoder = new google.maps.Geocoder();
             let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
-
+// Sort filteredOrders based on the order of customOrderIds
+filteredOrders.sort((a, b) => {
+    return customOrderIds.indexOf(a.id) - customOrderIds.indexOf(b.id);
+});
             console.log('qqqqqqq', filteredOrders);
 
 
