@@ -595,7 +595,7 @@
                             map: mymap, // Assuming 'map' is your Google Map instance
                             title: `Order ${order.id}`,
                             label: {
-        text: index+1, // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
+        text: (index+1).toString(), // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
         color: 'white', // Label text color
         fontSize: '12px', // Label font size
         fontWeight: 'bold', // Label font weight
