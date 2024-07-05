@@ -615,6 +615,33 @@
                     console.log('this isss', response);
                     if (status === 'OK') {
                         directionsRenderer.setDirections(response);
+
+                        // Add markers in the order of customerOrderId
+            filteredOrders.forEach(order => {
+                geocoder.geocode({
+                    'address': order.customer.address
+                }, function(results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        var marker = new google.maps.Marker({
+                            position: results[0].geometry.location,
+                            map: map, // Assuming 'map' is your Google Map instance
+                            title: `Order ${order.customerOrderId}`
+                        });
+
+                        // Example of adding an info window to each marker
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: `<h3>Order ${order.customerOrderId}</h3><p>Customer: ${order.customer.name}</p>`
+                        });
+
+                        marker.addListener('click', function() {
+                            infoWindow.open(map, marker);
+                        });
+                    } else {
+                        console.log('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            });
+
                         $('#createRoute').removeClass('d-none');
                     } else {
                         window.alert('Directions request failed due to ' +
