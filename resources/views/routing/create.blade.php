@@ -614,6 +614,8 @@
                 directionsService.route(request, function(response, status) {
                     console.log('this isss', response);
                     if (status === 'OK') {
+                        clearWaypoints(directionsRenderer);
+
                         directionsRenderer.setDirections(response);
 
                         // Add markers in the order of customerOrderId
@@ -634,7 +636,7 @@
                         });
 
                         marker.addListener('click', function() {
-                            infoWindow.open(map, marker);
+                            infoWindow.open(mymap, marker);
                         });
                     } else {
                         console.log('Geocode was not successful for the following reason: ' + status);
