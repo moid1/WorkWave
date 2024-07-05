@@ -624,7 +624,7 @@
                     if (status === google.maps.GeocoderStatus.OK) {
                         var marker = new google.maps.Marker({
                             position: results[0].geometry.location,
-                            map: map, // Assuming 'map' is your Google Map instance
+                            map: mymap, // Assuming 'map' is your Google Map instance
                             title: `Order ${order.customerOrderId}`
                         });
 
