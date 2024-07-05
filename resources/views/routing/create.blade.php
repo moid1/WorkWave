@@ -547,13 +547,8 @@
                     if (status === google.maps.GeocoderStatus.OK) {
                         if (results.length > 0) {
                             var location = results[0].geometry.location;
-                            var tempLatLng = new google.maps.LatLng(location.lat(), location.lng());
 
-                            latlngs.push({
-                                lat: location.lat(),
-                                lng: location.lng()
-                            });
-
+                          
                             waypoints.push({
                                 location: {
                                     lat: location.lat(),
