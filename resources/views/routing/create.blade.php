@@ -497,8 +497,7 @@
                                         lng: location.lng()
                                     }
                                 });
-                                resolve
-                            (); // Resolve the promise once geocoding is successful
+                                resolve(); // Resolve the promise once geocoding is successful
                             } else {
                                 console.log('No results found');
                                 reject('No results found');
