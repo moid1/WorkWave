@@ -612,6 +612,7 @@
 
                 // Request directions
                 directionsService.route(request, function(response, status) {
+                    console.log('this isss', response);
                     if (status === 'OK') {
                         directionsRenderer.setDirections(response);
                         $('#createRoute').removeClass('d-none');
