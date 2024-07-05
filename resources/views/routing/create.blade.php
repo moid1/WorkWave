@@ -539,47 +539,59 @@
                     lng: -98.180590
                 }
             }];
+
+            let geocodePromises = [];
+
             // Geocode request
 
-            // Assuming filteredOrders is already defined and contains the orders to process
             filteredOrders.forEach(function(order, index) {
-                geocoder.geocode({
-                    'address': order.customer.address // Adjust the address property according to your data structure
-                }, function(results, status) {
-                    if (status === google.maps.GeocoderStatus.OK) {
-                        if (results.length > 0) {
-                            var location = results[0].geometry.location;
-                            waypoints.push({
-                                location: {
-                                    lat: location.lat(),
-                                    lng: location.lng()
-                                }
-
-                            });
-
-                        } else {
-                            console.log('No results found');
+    let promise = new Promise(function(resolve, reject) {
+        geocoder.geocode({
+            'address': order.customer.address
+        }, function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                if (results.length > 0) {
+                    var location = results[0].geometry.location;
+                    waypoints.push({
+                        location: {
+                            lat: location.lat(),
+                            lng: location.lng()
                         }
-                    } else {
-                        console.log('Geocode was not successful for the following reason: ' +
-                            status);
-                    }
-                });
-            });
+                    });
+                    resolve(); // Resolve the promise once geocoding is successful
+                } else {
+                    console.log('No results found');
+                    reject('No results found');
+                }
+            } else {
+                console.log('Geocode was not successful for the following reason: ' + status);
+                reject(status);
+            }
+        });
+    });
 
-            // Construct the request object
-            var request = {
-                origin: waypoints[0].location,
-                destination: {
-                    location: {
-                        lat: 30.749760,
-                        lng: -98.180590
-                    }
-                },
-                waypoints: waypoints,
-                travelMode: 'DRIVING'
-            };
+    geocodePromises.push(promise); // Push the promise to the array
+});
+            // Wait for all geocoding promises to resolve
+Promise.all(geocodePromises).then(function() {
+    // Once all promises are resolved (i.e., all geocoding requests are complete), construct the request object
+    var request = {
+        origin: waypoints[0].location,
+        destination: {
+            location: {
+                lat: 30.749760,
+                lng: -98.180590
+            }
+        },
+        waypoints: waypoints,
+        travelMode: 'DRIVING'
+    };
 
+    // Now you can use the request object as needed
+    console.log(request);
+}).catch(function(error) {
+    console.error('Error in geocoding:', error);
+});
             // Clear existing markers and directions
             clearWaypoints(directionsRenderer);
 
