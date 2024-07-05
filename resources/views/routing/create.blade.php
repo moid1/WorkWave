@@ -526,10 +526,10 @@
 
             var geocoder = new google.maps.Geocoder();
             let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
-// Sort filteredOrders based on the order of customOrderIds
-filteredOrders.sort((a, b) => {
-    return customOrderIds.indexOf(a.id) - customOrderIds.indexOf(b.id);
-});
+            // Sort filteredOrders based on the order of customOrderIds
+            filteredOrders.sort((a, b) => {
+                return customOrderIds.indexOf(a.id) - customOrderIds.indexOf(b.id);
+            });
             console.log('qqqqqqq', filteredOrders);
 
 
@@ -544,8 +544,7 @@ filteredOrders.sort((a, b) => {
             // Assuming filteredOrders is already defined and contains the orders to process
             filteredOrders.forEach(function(order, index) {
                 geocoder.geocode({
-                    'address': order.customer
-                        .address // Adjust the address property according to your data structure
+                    'address': order.customer.address // Adjust the address property according to your data structure
                 }, function(results, status) {
                     console.log('mnnnn');
                     if (status === google.maps.GeocoderStatus.OK) {
@@ -577,9 +576,9 @@ filteredOrders.sort((a, b) => {
                                         }
                                     },
                                     waypoints: waypoints.slice(1, -1).map(waypoint => ({
-        location: waypoint.location,
-        stopover: true // Ensure each waypoint is treated as a stop
-    })),
+                                        location: waypoint.location,
+                                        stopover: true // Ensure each waypoint is treated as a stop
+                                    })),
                                     travelMode: 'DRIVING'
                                 };
 
