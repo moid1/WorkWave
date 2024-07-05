@@ -256,7 +256,7 @@
                                 var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
                                 var newData = {
-                                    "id": order.id,
+                                    "id": index,
                                     "name": order.customer.business_name,
                                     "position": order.load_type,
                                     "order_id": order.id
