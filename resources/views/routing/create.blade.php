@@ -589,34 +589,36 @@ Promise.all(geocodePromises).then(function() {
 
     // Now you can use the request object as needed
     console.log(request);
+
+    clearWaypoints(directionsRenderer);
+
+// Empty the order details container
+$('#orderDetailDiv').empty();
+
+
+// Event handler for removeOrder button
+$('.removeOrder').on('click', function() {
+    let removeOrderID = parseInt($(this).attr(
+        'data-orderid'));
+    // Implement your logic to remove order and update map accordingly
+});
+
+
+// Request directions
+directionsService.route(request, function(response, status) {
+    if (status === 'OK') {
+        directionsRenderer.setDirections(response);
+        $('#createRoute').removeClass('d-none');
+    } else {
+        window.alert('Directions request failed due to ' +
+            status);
+    }
+});
 }).catch(function(error) {
     console.error('Error in geocoding:', error);
 });
             // Clear existing markers and directions
-            clearWaypoints(directionsRenderer);
-
-            // Empty the order details container
-            $('#orderDetailDiv').empty();
-
-
-            // Event handler for removeOrder button
-            $('.removeOrder').on('click', function() {
-                let removeOrderID = parseInt($(this).attr(
-                    'data-orderid'));
-                // Implement your logic to remove order and update map accordingly
-            });
-
-
-            // Request directions
-            directionsService.route(request, function(response, status) {
-                if (status === 'OK') {
-                    directionsRenderer.setDirections(response);
-                    $('#createRoute').removeClass('d-none');
-                } else {
-                    window.alert('Directions request failed due to ' +
-                        status);
-                }
-            });
+           
 
         });
     </script>
