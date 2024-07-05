@@ -526,10 +526,7 @@
 
             var geocoder = new google.maps.Geocoder();
             let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
-            // Sort filteredOrders based on the order of customOrderIds
-            filteredOrders.sort((a, b) => {
-                return customOrderIds.indexOf(a.id) - customOrderIds.indexOf(b.id);
-            });
+            
             console.log('qqqqqqq', filteredOrders);
 
 
@@ -632,7 +629,7 @@
 
                         // Example of adding an info window to each marker
                         var infoWindow = new google.maps.InfoWindow({
-                            content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.name}</p>`
+                            content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.business_name}</p>`
                         });
 
                         marker.addListener('click', function() {
