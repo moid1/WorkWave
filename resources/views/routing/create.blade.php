@@ -586,6 +586,7 @@
                             lng: -98.180590
                         }
                     },
+                    travelMode: 'DRIVING'
                     waypoints: waypoints.slice(1).map(waypoint => ({
                         location: waypoint.location,
                         stopover: true // Ensure each waypoint is treated as a stop
