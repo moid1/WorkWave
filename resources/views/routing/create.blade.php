@@ -545,82 +545,85 @@
             // Geocode request
 
             filteredOrders.forEach(function(order, index) {
-    let promise = new Promise(function(resolve, reject) {
-        geocoder.geocode({
-            'address': order.customer.address
-        }, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-                if (results.length > 0) {
-                    var location = results[0].geometry.location;
-                    waypoints.push({
-                        location: {
-                            lat: location.lat(),
-                            lng: location.lng()
+                let promise = new Promise(function(resolve, reject) {
+                    geocoder.geocode({
+                        'address': order.customer.address
+                    }, function(results, status) {
+                        if (status === google.maps.GeocoderStatus.OK) {
+                            if (results.length > 0) {
+                                var location = results[0].geometry.location;
+                                waypoints.push({
+                                    location: {
+                                        lat: location.lat(),
+                                        lng: location.lng()
+                                    }
+                                });
+                                resolve
+                            (); // Resolve the promise once geocoding is successful
+                            } else {
+                                console.log('No results found');
+                                reject('No results found');
+                            }
+                        } else {
+                            console.log(
+                                'Geocode was not successful for the following reason: ' +
+                                status);
+                            reject(status);
                         }
                     });
-                    resolve(); // Resolve the promise once geocoding is successful
-                } else {
-                    console.log('No results found');
-                    reject('No results found');
-                }
-            } else {
-                console.log('Geocode was not successful for the following reason: ' + status);
-                reject(status);
-            }
-        });
-    });
+                });
 
-    geocodePromises.push(promise); // Push the promise to the array
-});
+                geocodePromises.push(promise); // Push the promise to the array
+            });
             // Wait for all geocoding promises to resolve
-Promise.all(geocodePromises).then(function() {
-    // Once all promises are resolved (i.e., all geocoding requests are complete), construct the request object
-    var request = {
-        origin: waypoints[0].location,
-        destination: {
-            location: {
-                lat: 30.749760,
-                lng: -98.180590
-            }
-        },
-        waypoints: waypoints.slice(1).map(waypoint => ({
-        location: waypoint.location,
-        stopover: true // Ensure each waypoint is treated as a stop
-    }))
-    };
+            Promise.all(geocodePromises).then(function() {
+                // Once all promises are resolved (i.e., all geocoding requests are complete), construct the request object
+                var request = {
+                    origin: waypoints[0].location,
+                    destination: {
+                        location: {
+                            lat: 30.749760,
+                            lng: -98.180590
+                        }
+                    },
+                    waypoints: waypoints.slice(1).map(waypoint => ({
+                        location: waypoint.location,
+                        stopover: true // Ensure each waypoint is treated as a stop
+                    }))
+                };
 
-    // Now you can use the request object as needed
-    console.log(request);
+                // Now you can use the request object as needed
+                console.log(request);
 
-    clearWaypoints(directionsRenderer);
+                clearWaypoints(directionsRenderer);
 
-// Empty the order details container
-$('#orderDetailDiv').empty();
-
-
-// Event handler for removeOrder button
-$('.removeOrder').on('click', function() {
-    let removeOrderID = parseInt($(this).attr(
-        'data-orderid'));
-    // Implement your logic to remove order and update map accordingly
-});
+                // Empty the order details container
+                $('#orderDetailDiv').empty();
 
 
-// Request directions
-directionsService.route(request, function(response, status) {
-    if (status === 'OK') {
-        directionsRenderer.setDirections(response);
-        $('#createRoute').removeClass('d-none');
-    } else {
-        window.alert('Directions request failed due to ' +
-            status);
-    }
-});
-}).catch(function(error) {
-    console.error('Error in geocoding:', error);
-});
+                // Event handler for removeOrder button
+                $('.removeOrder').on('click', function() {
+                    let removeOrderID = parseInt($(this).attr(
+                        'data-orderid'));
+                    // Implement your logic to remove order and update map accordingly
+                });
+
+
+                // Request directions
+                directionsService.route(request, function(response, status) {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(response);
+                        $('#createRoute').removeClass('d-none');
+                    } else {
+                        window.alert('Directions request failed due to ' +
+                            status);
+                    }
+                });
+            }).catch(function(error) {
+                console.error('Error in geocoding:', error);
+            });
             // Clear existing markers and directions
-           
+
 
         });
     </script>
