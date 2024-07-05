@@ -541,28 +541,29 @@
             // Assuming filteredOrders is already defined and contains the orders to process
             filteredOrders.forEach(function(order, index) {
                 geocoder.geocode({
-                    'address': order.customer.address // Adjust the address property according to your data structure
+                    'address': order.customer
+                        .address // Adjust the address property according to your data structure
                 }, function(results, status) {
                     console.log('mnnnn');
                     if (status === google.maps.GeocoderStatus.OK) {
                         if (results.length > 0) {
                             var location = results[0].geometry.location;
 
-                          
+
                             waypoints.push({
                                 location: {
                                     lat: location.lat(),
                                     lng: location.lng()
                                 }
-                            
+
                             });
 
                             // Check if all geocoding requests are complete
                             if (waypoints.length >= filteredOrders.length) {
-                             
-                               
-            
-                               
+
+
+
+
                                 // Construct the request object
                                 var request = {
                                     origin: waypoints[0].location,
@@ -572,9 +573,9 @@
                                             lng: -98.180590
                                         }
                                     },
-                                    waypoints: waypoints.map(waypoint => ({
+                                    waypoints: waypoints.slice(1, -1).map(waypoint => ({
         location: waypoint.location,
-        stopover: true // Ensures each waypoint is treated as a stop
+        stopover: true // Ensure each waypoint is treated as a stop
     })),
                                     travelMode: 'DRIVING'
                                 };
@@ -585,7 +586,7 @@
                                 // Empty the order details container
                                 $('#orderDetailDiv').empty();
 
-                        
+
                                 // Event handler for removeOrder button
                                 $('.removeOrder').on('click', function() {
                                     let removeOrderID = parseInt($(this).attr(
@@ -593,7 +594,7 @@
                                     // Implement your logic to remove order and update map accordingly
                                 });
 
-                               
+
                                 // Request directions
                                 directionsService.route(request, function(response, status) {
                                     if (status === 'OK') {
