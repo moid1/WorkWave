@@ -625,12 +625,12 @@
                         var marker = new google.maps.Marker({
                             position: results[0].geometry.location,
                             map: mymap, // Assuming 'map' is your Google Map instance
-                            title: `Order ${order.customerOrderId}`
+                            title: `Order ${order.id}`
                         });
 
                         // Example of adding an info window to each marker
                         var infoWindow = new google.maps.InfoWindow({
-                            content: `<h3>Order ${order.customerOrderId}</h3><p>Customer: ${order.customer.name}</p>`
+                            content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.name}</p>`
                         });
 
                         marker.addListener('click', function() {
