@@ -9,6 +9,9 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.5.0/css/rowReorder.dataTables.css">
+
 <style type="text/css">
     #mymap {
         width: 100%;
@@ -40,8 +43,7 @@
         <div class="col-lg-7">
             <div class="select-driver">
                 <label for="">Select Truck</label>
-                <select id="driverID" name=""
-                    class="js-example-basic-multiple form-control form-select  mb-3">
+                <select id="driverID" name="" class="js-example-basic-multiple form-control form-select  mb-3">
                     @foreach ($trucks as $truck)
                         <option value="{{ $truck->id }}">{{ $truck->name }}</option>
                     @endforeach
@@ -73,6 +75,25 @@
             <div class="row w-100 text-center justify-content-center mt-5">
                 <button id="createRoute" class="btn btn-primary d-none">Create Route</button>
             </div>
+            <div id="result" class="box">
+                Event result:
+            </div>
+
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Order Type</th>
+                        <th>Order ID</th>
+
+                    </tr>
+                </thead>
+            </table>
+            <div class="row w-100 text-center justify-content-center mt-5">
+                <button id="generateSimpleRoutes" class="btn btn-primary">Generate Simple Route</button>
+            </div>
+
 
         </div>
 
@@ -82,15 +103,42 @@
         </div>
     </div>
 @endsection
-
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.5.0/js/dataTables.rowReorder.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.5.0/js/rowReorder.dataTables.js"></script>
 @section('pageSpecificJs')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+
     <script type="text/javascript">
+        let table = new DataTable('#example', {
+            rowReorder: true, // Enable row reordering
+            columns: [{
+                    data: 'id'
+                },
+                {
+                    data: 'name'
+                },
+                {
+                    data: 'position'
+                },
+                {
+                    data: 'order_id'
+                }
+            ],
+            rowReorder: {
+                dataSrc: 'id'
+            }
+        });
+
+
+
         var latlngs = [];
 
         var actualResponse = null;
         $(function() {
+
+
             var startDate = localStorage.getItem('startDate');
             var endDate = localStorage.getItem('endDate');
             if (startDate && endDate) {
@@ -169,7 +217,7 @@
                             // Create an array of indices and sort it based on distances
                             var sortedIndices = Array.from(Array(waypoints.length - 1)
                                 .keys()); // Exclude the first waypoint
-                            
+
                             sortedIndices.sort(function(a, b) {
                                 return distances[b] - distances[
                                     a]; // Sort from longest to shortest distance
@@ -180,7 +228,9 @@
                             // Reorder waypoints based on sorted indices
                             var sortedWaypoints = [waypoints[0]]; // Keep the first waypoint unchanged
                             sortedIndices.forEach(function(index) {
-                                sortedWaypoints.push({'location':waypoints[index + 1].location});
+                                sortedWaypoints.push({
+                                    'location': waypoints[index + 1].location
+                                });
                             });
 
                             console.log('SORTED', sortedWaypoints)
@@ -199,30 +249,43 @@
                             };
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
-                                sortedIndices.forEach(function(key, index) {
+                            table.clear().draw();
+
+                            sortedIndices.forEach(function(key, index) {
                                 var order = response[key];
                                 var alphabet = String.fromCharCode(65 + index); // 'A' has ASCII code 65
 
-                                $('#orderDetailDiv').append(`
-        <div class="row">
-            <div class="col-lg-2">
-                <p class="border p-2">${order.customer.business_name}</p>
-            </div>
-            <div class="col-lg-3">
-                <p class="border p-2 ml-3">000${order.id}</p>
-            </div>
-            <div class="col-lg-3">
-                <p class="border p-2 ml-3">${order.load_type}</p>
-            </div>
-            <div class="col-lg-3">
-                <a target="_blank" href="order/${order.id}"><span><i class="fa fa-eye ml-3"></i></span></a> |
-                <span class="removeOrder mt-2" data-orderid="${order.id}"><span class="text-primary cross"><i class="mdi mdi-delete "></i></span></span>
-            </div>
-            <div class="col-lg-2 d-none">
-                <input type="number" min="1" max="${Object.keys(response).length}" value="${index + 1}" class="form-control changeOrdering" />
-            </div>
-        </div>
-    `);
+                                var newData = {
+                                    "id": order.id,
+                                    "name": order.customer.business_name,
+                                    "position": order.load_type,
+                                    "order_id": order.id
+                                };
+
+                                // Add new data to the DataTable
+                                table.rows.add([newData]).draw();
+
+
+                                //                             $('#orderDetailDiv').append(`
+                            //     <div class="row">
+                            //         <div class="col-lg-2">
+                            //             <p class="border p-2">${order.customer.business_name}</p>
+                            //         </div>
+                            //         <div class="col-lg-3">
+                            //             <p class="border p-2 ml-3">000${order.id}</p>
+                            //         </div>
+                            //         <div class="col-lg-3">
+                            //             <p class="border p-2 ml-3">${order.load_type}</p>
+                            //         </div>
+                            //         <div class="col-lg-3">
+                            //             <a target="_blank" href="order/${order.id}"><span><i class="fa fa-eye ml-3"></i></span></a> |
+                            //             <span class="removeOrder mt-2" data-orderid="${order.id}"><span class="text-primary cross"><i class="mdi mdi-delete "></i></span></span>
+                            //         </div>
+                            //         <div class="col-lg-2 d-none">
+                            //             <input type="number" min="1" max="${Object.keys(response).length}" value="${index + 1}" class="form-control changeOrdering" />
+                            //         </div>
+                            //     </div>
+                            // `);
                             });
 
 
@@ -354,6 +417,19 @@
                             location.reload()
                         }
                         actualResponse = response;
+                        table.on('row-reorder', function(e, diff, edit) {
+
+                            table.draw(); // Redraw the DataTable after reordering
+
+                            // // Clear existing waypoints and directions
+                            clearWaypoints(directionsRenderer);
+
+                            // // Empty the order details container
+                            $('#orderDetailDiv').empty();
+
+                            // // Generate waypoints and directions for the updated response
+                            // generateWayPoints(actualResponse);
+                        });
                         generateWayPoints(response);
 
                     }
@@ -431,8 +507,6 @@
             }];
 
             Object.values(response).forEach(function(order, index) {
-                // Do something with each item in the object
-                console.log('index', index);
                 geocodeAddress(response, order.customer.address, index, waypoints, order);
             });
         }
@@ -443,5 +517,107 @@
             });
 
         }
+        $('#generateSimpleRoutes').on('click', function() {
+            let customOrderIds = [];
+            table.rows().every(function() {
+                let data = this.data();
+                customOrderIds.push(data.order_id)
+            });
+
+            var geocoder = new google.maps.Geocoder();
+            let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
+
+            console.log('qqqqqqq', filteredOrders);
+
+
+            var waypoints = [{
+                location: {
+                    lat: 30.749860,
+                    lng: -98.180590
+                }
+            }];
+            // Geocode request
+
+            // Assuming filteredOrders is already defined and contains the orders to process
+            filteredOrders.forEach(function(order, index) {
+                geocoder.geocode({
+                    'address': order.customer.address // Adjust the address property according to your data structure
+                }, function(results, status) {
+                    console.log('mnnnn');
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        if (results.length > 0) {
+                            var location = results[0].geometry.location;
+                            var tempLatLng = new google.maps.LatLng(location.lat(), location.lng());
+
+                            latlngs.push({
+                                lat: location.lat(),
+                                lng: location.lng()
+                            });
+
+                            waypoints.push({
+                                location: {
+                                    lat: location.lat(),
+                                    lng: location.lng()
+                                }
+                            
+                            });
+
+                            // Check if all geocoding requests are complete
+                            if (waypoints.length >= filteredOrders.length) {
+                             
+                               
+            
+                               
+                                // Construct the request object
+                                var request = {
+                                    origin: waypoints[0].location,
+                                    destination: {
+                                        location: {
+                                            lat: 30.749760,
+                                            lng: -98.180590
+                                        }
+                                    },
+                                    waypoints: waypoints,
+                                    travelMode: 'DRIVING'
+                                };
+
+                                // Clear existing markers and directions
+                                clearWaypoints(directionsRenderer);
+
+                                // Empty the order details container
+                                $('#orderDetailDiv').empty();
+
+                        
+                                // Event handler for removeOrder button
+                                $('.removeOrder').on('click', function() {
+                                    let removeOrderID = parseInt($(this).attr(
+                                        'data-orderid'));
+                                    // Implement your logic to remove order and update map accordingly
+                                });
+
+                               
+                                // Request directions
+                                directionsService.route(request, function(response, status) {
+                                    if (status === 'OK') {
+                                        directionsRenderer.setDirections(response);
+                                        $('#createRoute').removeClass('d-none');
+                                    } else {
+                                        window.alert('Directions request failed due to ' +
+                                            status);
+                                    }
+                                });
+                            }
+
+                        } else {
+                            console.log('No results found');
+                        }
+                    } else {
+                        console.log('Geocode was not successful for the following reason: ' +
+                            status);
+                    }
+                });
+            });
+
+        });
     </script>
 @endsection
