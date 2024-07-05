@@ -321,15 +321,6 @@
                                 generateWayPoints(actualResponse);
                             });
 
-                            $('.changeOrdering').on('change', function() {
-                                clearWaypoints(directionsRenderer);
-
-                                // Empty the order details container
-                                $('#orderDetailDiv').empty();
-
-                                // Generate waypoints and directions for the updated response
-                                generateWayPoints(actualResponse);
-                            })
 
 
                             directionsService.route(request, function(response, status) {
@@ -337,31 +328,9 @@
                                     console.log(response);
                                     directionsRenderer.setDirections(response);
 
-                                    // var route = response.routes[0];
-                                    // var legs = route.legs;
-                                    // for (var i = 0; i < legs.length; i++) {
-                                    //     var markerLabel = (i + 1).toString(); // Using numbers as labels
-                                    //     var markerIcon = {
-                                    //         url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' +
-                                    //             markerLabel + '|FF0000|000000',
-                                    //         labelOrigin: new google.maps.Point(11,
-                                    //             50) // Position of the label
-                                    //     };
-                                    //     var marker = new google.maps.Marker({
-                                    //         position: legs[i].start_location,
-                                    //         map: mymap, // Assuming 'map' is your Google Maps instance
-                                    //         label: {
-                                    //             text: markerLabel,
-                                    //             color: 'white'
-                                    //         },
-                                    //         icon: markerIcon
-                                    //     });
-                                    // }
-
+        
                                     $('#createRoute').removeClass('d-none');
 
-
-                                    $('#createRoute').removeClass('d-none')
                                 } else {
                                     window.alert('Directions request failed due to ' + status);
                                 }
@@ -616,7 +585,7 @@
                         directionsRenderer.setDirections(response);
 
                         // Add markers in the order of customerOrderId
-            filteredOrders.forEach(order => {
+            filteredOrders.forEach((order,index) => {
                 geocoder.geocode({
                     'address': order.customer.address
                 }, function(results, status) {
@@ -624,7 +593,13 @@
                         var marker = new google.maps.Marker({
                             position: results[0].geometry.location,
                             map: mymap, // Assuming 'map' is your Google Map instance
-                            title: `Order ${order.id}`
+                            title: `Order ${order.id}`,
+                            label: {
+        text: index+1, // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
+        color: 'white', // Label text color
+        fontSize: '12px', // Label font size
+        fontWeight: 'bold', // Label font weight
+    },
                         });
 
                         // Example of adding an info window to each marker
