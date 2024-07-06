@@ -452,9 +452,17 @@
         }
 
         function clearWaypoints(directionsRenderer) {
-            directionsRenderer.setOptions({
-                markers: []
-            });
+            var route = directionsRenderer.getDirections();
+  if (route && route.routes && route.routes.length > 0) {
+    var legs = route.routes[0].legs;
+    for (var i = 0; i < legs.length; i++) {
+      var steps = legs[i].steps;
+      for (var j = 0; j < steps.length; j++) {
+        // Clear markers from each step of the route
+        steps[j].marker = null;
+      }
+    }
+  }
 
         }
         $('#generateSimpleRoutes').on('click', function() {
