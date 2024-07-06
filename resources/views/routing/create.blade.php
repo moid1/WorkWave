@@ -255,7 +255,7 @@
                                 var order = response[key];
 
                                 var newData = {
-                                    "id": index+1,
+                                    "id": index + 1,
                                     "name": order.customer.business_name,
                                     "position": order.load_type,
                                     "order_id": order.id
@@ -265,7 +265,7 @@
                                 table.rows.add([newData]).draw();
 
 
-                              
+
                             });
 
 
@@ -308,7 +308,7 @@
                                     console.log(response);
                                     directionsRenderer.setDirections(response);
 
-        
+
                                     $('#createRoute').removeClass('d-none');
 
                                 } else {
@@ -379,45 +379,43 @@
             });
 
             $('#createRoute').on('click', function() {
-    var orderIdsArray = [];
+                var orderIdsArray = [];
 
-    table.rows().every(function() {
-        let data = this.data();
-        orderIdsArray.push(data.order_id); // Push each order_id into the array
-    });
-
-    // Join the array into a comma-separated string
-    var orderIds = orderIdsArray.join(',');
-
-    // Now orderIdsString contains the comma-separated order ids
-    console.log(orderIds); // You can use this string as needed
-});
-
-                
-                let driverId = $('#driverID').val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                table.rows().every(function() {
+                    let data = this.data();
+                    orderIdsArray.push(data.order_id); // Push each order_id into the array
                 });
-                $.ajax({
-                    url: '/create-routing-web',
-                    type: 'POST',
-                    data: {
-                        driver_id: driverId,
-                        order_ids: orderIds,
-                        routing_date: $('#routing_date').val(),
-                        route_name: $('#routeName').val()
-                    },
-                    success: function(response) {
 
-                        location.reload()
+                // Join the array into a comma-separated string
+                var orderIds = orderIdsArray.join(',');
 
-                    }
-                })
+                // Now orderIdsString contains the comma-separated order ids
+                console.log(orderIds); // You can use this string as needed
+            });
 
 
+            let driverId = $('#driverID').val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '/create-routing-web',
+                type: 'POST',
+                data: {
+                    driver_id: driverId,
+                    order_ids: orderIds,
+                    routing_date: $('#routing_date').val(),
+                    route_name: $('#routeName').val()
+                },
+                success: function(response) {
+
+                    location.reload()
+
+                }
             })
+
         });
 
         var myLatlng = new google.maps.LatLng(30.749860, -98.180590);
@@ -468,7 +466,7 @@
 
             var geocoder = new google.maps.Geocoder();
             let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
-            
+
             console.log('qqqqqqq', filteredOrders);
 
 
@@ -497,7 +495,8 @@
                                         lng: location.lng()
                                     }
                                 });
-                                resolve(); // Resolve the promise once geocoding is successful
+                                resolve
+                                    (); // Resolve the promise once geocoding is successful
                             } else {
                                 console.log('No results found');
                                 reject('No results found');
@@ -557,36 +556,40 @@
                         directionsRenderer.setDirections(response);
 
                         // Add markers in the order of customerOrderId
-            filteredOrders.forEach((order,index) => {
-                geocoder.geocode({
-                    'address': order.customer.address
-                }, function(results, status) {
-                    if (status === google.maps.GeocoderStatus.OK) {
-                        var marker = new google.maps.Marker({
-                            position: results[0].geometry.location,
-                            map: mymap, // Assuming 'map' is your Google Map instance
-                            title: `Order ${order.id}`,
-                            label: {
-        text: (index+1).toString(), // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
-        color: 'white', // Label text color
-        fontSize: '12px', // Label font size
-        fontWeight: 'bold', // Label font weight
-    },
-                        });
+                        filteredOrders.forEach((order, index) => {
+                            geocoder.geocode({
+                                'address': order.customer.address
+                            }, function(results, status) {
+                                if (status === google.maps.GeocoderStatus.OK) {
+                                    var marker = new google.maps.Marker({
+                                        position: results[0].geometry
+                                            .location,
+                                        map: mymap, // Assuming 'map' is your Google Map instance
+                                        title: `Order ${order.id}`,
+                                        label: {
+                                            text: (index + 1)
+                                                .toString(), // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
+                                            color: 'white', // Label text color
+                                            fontSize: '12px', // Label font size
+                                            fontWeight: 'bold', // Label font weight
+                                        },
+                                    });
 
-                        // Example of adding an info window to each marker
-                        var infoWindow = new google.maps.InfoWindow({
-                            content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.business_name}</p>`
-                        });
+                                    // Example of adding an info window to each marker
+                                    var infoWindow = new google.maps.InfoWindow({
+                                        content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.business_name}</p>`
+                                    });
 
-                        marker.addListener('click', function() {
-                            infoWindow.open(mymap, marker);
+                                    marker.addListener('click', function() {
+                                        infoWindow.open(mymap, marker);
+                                    });
+                                } else {
+                                    console.log(
+                                        'Geocode was not successful for the following reason: ' +
+                                        status);
+                                }
+                            });
                         });
-                    } else {
-                        console.log('Geocode was not successful for the following reason: ' + status);
-                    }
-                });
-            });
 
                         $('#createRoute').removeClass('d-none');
                     } else {
