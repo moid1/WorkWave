@@ -379,15 +379,21 @@
             });
 
             $('#createRoute').on('click', function() {
-                var orderIds = "";
+    var orderIdsArray = [];
 
-                table.rows().every(function() {
-                let data = this.data();
-                orderIds += data.order_id;
-            });
+    table.rows().every(function() {
+        let data = this.data();
+        orderIdsArray.push(data.order_id); // Push each order_id into the array
+    });
+
+    // Join the array into a comma-separated string
+    var orderIds = orderIdsArray.join(',');
+
+    // Now orderIdsString contains the comma-separated order ids
+    console.log(orderIds); // You can use this string as needed
+});
 
                 
-                console.log(orderIds)
                 let driverId = $('#driverID').val();
                 $.ajaxSetup({
                     headers: {
