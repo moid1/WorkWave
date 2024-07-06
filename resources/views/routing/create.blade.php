@@ -381,18 +381,12 @@
             $('#createRoute').on('click', function() {
                 var orderIds = "";
 
-                $('.removeOrder').each(function(index) {
-                    // Extract the value of the data-orderid attribute
-                    var orderId = $(this).data('orderid');
+                table.rows().every(function() {
+                let data = this.data();
+                orderIds += data.order_id;
+            });
 
-                    // Add the order ID to the string, followed by a comma
-                    orderIds += orderId;
-
-                    // Add a comma if it's not the last element
-                    if (index < $('.removeOrder').length - 1) {
-                        orderIds += ",";
-                    }
-                });
+                
                 console.log(orderIds)
                 let driverId = $('#driverID').val();
                 $.ajaxSetup({
