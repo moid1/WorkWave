@@ -297,6 +297,19 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
+                                                <label>Truck</label>
+                                                <select id="truck" name="truck_id" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                                    <option value=""  selected>Please select Truck</option>
+                                                    @foreach ($trucks as $truck)
+                                                    <option value="{{$truck->id}}">{{($truck->name)}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
                                                 <label>Trailer Duration
                                                 </label>
                                                 <input id="" type="number"

@@ -252,6 +252,7 @@
             $('#email').val($(this).data('email'));
             $('#notes').val($(this).data('lastest-note'));
             $('#loadType').val($(this).data('order-type'));
+            $('#truck').val($(this).data('truck-id'))
             // $('#second_poc').val($(this).data('second-poc'));
             // $('#mail_address').val($(this).data('mail-address'));
             // $('#charge_type').val($(this).data('charge-type'));

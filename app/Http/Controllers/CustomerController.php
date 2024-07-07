@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\ManifestPDF;
 use App\Models\Order;
+use App\Models\Truck;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,8 @@ class CustomerController extends Controller
     public function create()
     {
 
-        return view('customers.create');
+        $trucks = Truck::all(['id', 'name']);
+        return view('customers.create', compact('trucks'));
     }
 
     /**
@@ -45,7 +47,7 @@ class CustomerController extends Controller
         $user = User::where('email', $request->email)->first();
         if ($user) {
         } else {
-            $user =  User::create([
+            $user = User::create([
                 'name' => $request->business_name,
                 'email' => $request->email,
                 'password' => Hash::make('12345678'),
@@ -66,7 +68,8 @@ class CustomerController extends Controller
     public function show($id)
     {
         $customer = Customer::find($id);
-        return view('customers.update', compact('customer'));
+        $trucks = Truck::all(['id', 'name']);
+        return view('customers.update', compact('customer', 'trucks'));
     }
 
     /**
@@ -114,8 +117,8 @@ class CustomerController extends Controller
             if (count($data) > 0) {
                 $output = '<ul class="list-group" style="display: block; position: relative; z-index: 1">';
                 foreach ($data as $row) {
-                    $notes =  count($row->notes) ? $row->notes[0]->note : "";
-                    $output .= '<li class="list-group-item" data-order-type="'.$row->load_type.'" data-lastest-note="' . $notes . '"  data-charge-type="' . $row->charge_type . '" data-mail-phone="' . $row->mail_phone . '" data-mail-address="' . $row->mail_address . '" data-second-mail="' . $row->second_mail . '" data-second-poc="' . $row->second_poc . '"  data-id="' . $row->id . '" data-email="' . $row->email . '" data-poc="' . $row->poc_name . '" data-address="' . $row->address . '" data-phone="' . $row->phone_no . '">' . $row->business_name . '</li>';
+                    $notes = count($row->notes) ? $row->notes[0]->note : "";
+                    $output .= '<li class="list-group-item" data-order-type="' . $row->load_type . '" data-lastest-note="' . $notes . '" data-charge-type="' . $row->charge_type . '" data-mail-phone="' . $row->mail_phone . '" data-mail-address="' . $row->mail_address . '" data-second-mail="' . $row->second_mail . '" data-second-poc="' . $row->second_poc . '" data-id="' . $row->id . '" data-email="' . $row->email . '" data-poc="' . $row->poc_name . '" data-address="' . $row->address . '" data-phone="' . $row->phone_no . '" data-truck-id="' . $row->truck_id . '">' . $row->business_name . '</li>';
                 }
                 $output .= '</ul>';
             } else {
