@@ -466,6 +466,8 @@
 
         }
         $('#generateSimpleRoutes').on('click', function() {
+            clearWaypoints(directionsRenderer);
+
             let customOrderIds = [];
             table.rows().every(function() {
                 let data = this.data();
