@@ -433,7 +433,7 @@
         var mymap = new google.maps.Map(document.getElementById("mymap"), myOptions);
         var directionsService = new google.maps.DirectionsService();
         var directionsRenderer = new google.maps.DirectionsRenderer({
-  suppressMarkers: true // Suppress automatic marker creation
+  suppressMarkers: true, // Suppress automatic marker creation
             map: mymap,
 
         });
