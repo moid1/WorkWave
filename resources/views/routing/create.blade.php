@@ -107,10 +107,12 @@
 <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/dataTables.rowReorder.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/rowReorder.dataTables.js"></script>
 @section('pageSpecificJs')
+
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
     <script type="text/javascript">
+    var markers = [];
         let table = new DataTable('#example', {
             rowReorder: true, // Enable row reordering
             columns: [{
@@ -481,6 +483,16 @@ if (directionsResult && directionsResult.routes && directionsResult.routes.lengt
 }
 
         }
+
+        // Function to clear all markers from the map
+function clearMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = []; // Clear the markers array
+}
+
+
         $('#generateSimpleRoutes').on('click', function() {
             clearWaypoints(directionsRenderer);
 
@@ -572,6 +584,8 @@ if (directionsResult && directionsResult.routes && directionsResult.routes.lengt
                     // Implement your logic to remove order and update map accordingly
                 });
 
+                clearMarkers();
+
 
                 // Request directions
                 directionsService.route(request, function(response, status) {
@@ -600,6 +614,8 @@ if (directionsResult && directionsResult.routes && directionsResult.routes.lengt
                                             fontWeight: 'bold', // Label font weight
                                         },
                                     });
+
+                                    markers.push(marker);
 
                                     // Example of adding an info window to each marker
                                     var infoWindow = new google.maps.InfoWindow({
