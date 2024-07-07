@@ -452,17 +452,32 @@
         }
 
         function clearWaypoints(directionsRenderer) {
-            var route = directionsRenderer.getDirections();
-  if (route && route.routes && route.routes.length > 0) {
-    var legs = route.routes[0].legs;
-    for (var i = 0; i < legs.length; i++) {
-      var steps = legs[i].steps;
-      for (var j = 0; j < steps.length; j++) {
-        // Clear markers from each step of the route
-        steps[j].marker = null;
+       // Get the directions result
+  var directionsResult = directionsRenderer.getDirections();
+
+// Check if there are routes in the directions result
+if (directionsResult && directionsResult.routes && directionsResult.routes.length > 0) {
+  // Iterate through each route
+  for (var i = 0; i < directionsResult.routes.length; i++) {
+    var route = directionsResult.routes[i];
+
+    // Iterate through each leg of the route
+    for (var j = 0; j < route.legs.length; j++) {
+      var leg = route.legs[j];
+
+      // Iterate through each step of the leg
+      for (var k = 0; k < leg.steps.length; k++) {
+        var step = leg.steps[k];
+
+        // Remove marker from each step
+        if (step.marker) {
+          step.marker.setMap(null); // Remove marker from map
+          step.marker = null; // Clear reference to marker
+        }
       }
     }
   }
+}
 
         }
         $('#generateSimpleRoutes').on('click', function() {
