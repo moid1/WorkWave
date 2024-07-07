@@ -393,10 +393,8 @@
 
                 // Now orderIdsString contains the comma-separated order ids
                 console.log(orderIds); // You can use this string as needed
-            });
 
-
-            let driverId = $('#driverID').val();
+                let driverId = $('#driverID').val();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -417,6 +415,10 @@
 
                 }
             })
+            });
+
+
+
 
         });
 
