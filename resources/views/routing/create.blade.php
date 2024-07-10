@@ -287,7 +287,7 @@
                                     "order_id": order.id,
                                     "estimated_tires": order.estimated_tires
                                 };
-                                if (estimatedTires <= 400) {
+                                if (estimatedTires <= 400 || order.estimated_tires === 0) {
                                     table.rows.add([newData]).draw();
                                 } else {
                                     exceedingOrdersTable.rows.add([newData]).draw();
