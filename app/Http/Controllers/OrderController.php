@@ -23,7 +23,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $trucks = Truck::where('is_active', true)->get(); 
+        $trucks = Truck::where('is_active', true)->get();
 
         if ($request->ajax()) {
             $data = Order::with(['customer', 'user', 'driver'])->get();
@@ -71,7 +71,7 @@ class OrderController extends Controller
 
                     if ($row->status == 'created') {
                         $orderShowRoute = route('order.show', $row->id);
-                        $showBtn =  '/<a href="' . $orderShowRoute . '" > <i class="fa fa-edit"  title="update order"></i></a>';
+                        $showBtn = '/<a href="' . $orderShowRoute . '" > <i class="fa fa-edit"  title="update order"></i></a>';
                     }
                     $orderDeleteRoute = route('order.delete', $row->id);
 
@@ -84,7 +84,7 @@ class OrderController extends Controller
 
         $drivers = User::where('type', 2)->get();
         $orders = Order::with(['customer', 'user', 'driver'])->get();
-        return view('orders.index', compact('orders', 'drivers','trucks'));
+        return view('orders.index', compact('orders', 'drivers', 'trucks'));
     }
 
     public function ordersByDriver(Request $request)
@@ -116,8 +116,7 @@ class OrderController extends Controller
                     return 'N/A';
                 })
                 ->editColumn('delivery_date', function ($row) {
-                    if($row->delivery_date)
-                    {
+                    if ($row->delivery_date) {
                         if ($row->delivery_date instanceof \DateTime) {
                             return $row->delivery_date->format('M d Y');
                         } else {
@@ -188,7 +187,7 @@ class OrderController extends Controller
                 })
                 ->editColumn('end_date', function ($row) {
                     if (!empty($row->end_date)) {
-                        return  Carbon::parse($row->end_date)->format('M d Y');
+                        return Carbon::parse($row->end_date)->format('M d Y');
                     } elseif (!empty($row->created_at)) {
                         return Carbon::parse($row->created_at)->format('M d Y');
                     }
@@ -221,7 +220,7 @@ class OrderController extends Controller
     {
         $drivers = User::where('type', 2)->get();
         $customerId = $request->query('customerId');
-        $trucks = Truck::where('is_active', true)->get(); 
+        $trucks = Truck::where('is_active', true)->get();
 
         return view('orders.create', compact('drivers', 'customerId', 'trucks'));
     }
@@ -231,30 +230,36 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $order = null;
-        $truckID =  $request['truck_id'] ?? null;
+        $truckID = $request['truck_id'] ?? null;
         $driverId = null;
-        if(!$truckID){
-            return;
+
+        // Check if truck_id is provided in the request
+        if (!$truckID) {
+            return; // Exit the function if truck_id is not provided
         }
 
+        // Retrieve the latest truck driver associated with the given truck_id
         $truckDriver = TruckDriver::where('truck_id', $truckID)->latest()->first();
-        if($truckDriver){
+        if ($truckDriver) {
             $driverId = $truckDriver->user_id;
         }
-        if ($request->create_order == 'createOrder') {
-            $order = Order::create([
-                'customer_id' => $request['customer_id'],
-                'user_id' => Auth::id(),
-                'notes' => $request['notes'] ?? 'N/A',
-                'load_type' => $request['load_type'],
-                'driver_id' => $driverId,
-                'delivery_date' => $request['date'],
-                'end_date' => $request['end_date'],
-                'is_recurring_order' => $request['is_recurring_order'] == 'on' ? true : false,
-                'estimated_tires' => $request->estimated_tires ?? 0
-            ]);
+
+        // Calculate number of orders needed based on estimated_tires
+        $estimatedTires = $request->estimated_tires;
+        $numOrders = ceil($estimatedTires / 400);
+
+        // Loop to create orders
+        for ($i = 0; $i < $numOrders; $i++) {
+            // Determine the amount of tires for this order
+            $orderTires = min(400, $estimatedTires); // Maximum 400 tires per order
+
+            // Create the order
+            $this->createOrder($request, $driverId, $orderTires);
+
+            // Decrease remaining estimated_tires
+            $estimatedTires -= $orderTires;
         }
+
         Notes::create([
             'customer_id' => $request['customer_id'],
             'user_id' => Auth::id(),
@@ -264,10 +269,24 @@ class OrderController extends Controller
             'title' => 'Order Note'
         ]);
 
-        // OrderCreated::dispatch($order);
-        event(new OrderCreated($order));
+        // Redirect to '/orders' with success message
+        return redirect('/orders')->with('success', 'Order(s) Created Successfully');
+    }
 
-        return redirect('/orders')->with('success', 'Order Created Successfully');
+    private function createOrder($request, $driverId, $estimatedTires)
+    {
+
+        return Order::create([
+            'customer_id' => $request['customer_id'],
+            'user_id' => Auth::id(),
+            'notes' => $request['notes'] ?? 'N/A',
+            'load_type' => $request['load_type'],
+            'driver_id' => $driverId,
+            'delivery_date' => $request['date'],
+            'end_date' => $request['end_date'],
+            'is_recurring_order' => $request['is_recurring_order'] == 'on',
+            'estimated_tires' => $estimatedTires
+        ]);
     }
 
     /**
@@ -322,7 +341,7 @@ class OrderController extends Controller
         // }
 
         $truckDriver = TruckDriver::where('truck_id', $truckId)->latest()->first();
-        if($truckDriver){
+        if ($truckDriver) {
             $driverID = $truckDriver->user_id;
         }
 
@@ -351,9 +370,9 @@ class OrderController extends Controller
                 'status' => true,
                 'message' => 'Driver Registered Successfully',
                 'data' => [
-                    'drivers' => $drivers,
-                    'orders' => $orders
-                ]
+                        'drivers' => $drivers,
+                        'orders' => $orders
+                    ]
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
@@ -648,7 +667,8 @@ class OrderController extends Controller
         return redirect('/orders')->with('success', 'Order Updated Successfully');
     }
 
-    public function deleteOrder($id){
+    public function deleteOrder($id)
+    {
         Order::find($id)->delete();
         return back()->with('success', 'Order is deleted successfully');
     }
