@@ -349,7 +349,7 @@
                     },
                     success: function(response) {
                         if (response.length == 0) {
-                            alert('No Order Found for this driver');
+                            alert('No Order Found for this truck');
                             location.reload()
                         }
                         actualResponse = response;
