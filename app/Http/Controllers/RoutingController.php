@@ -115,6 +115,28 @@ class RoutingController extends Controller
             // Trigger event for route creation
             event(new RouteCreated());
 
+            if(!empty($request->exceeding_order)){
+                $nextRoutingDate = Carbon::parse($request->routing_date)->addDay();
+
+                // Skip weekends (Saturday and Sunday)
+                while ($nextRoutingDate->isWeekend()) {
+                    $nextRoutingDate->addDay();
+                }
+    
+                $nextRouting = Routing::create([
+                    'order_ids' => $request->exceeding_order,
+                    'route_name' => $request->route_name . ' (Exceeding)',
+                    'driver_id' => $truckDriver->user_id,
+                    'routing_date' => $nextRoutingDate->toDateString()
+                ]);
+    
+                // Extract exceeding order IDs from comma-separated string
+                $exceedingOrderIDs = explode(',', $request->exceeding_order);
+    
+                // Update all exceeding orders to mark them as routed
+                Order::whereIn('id', $exceedingOrderIDs)->update(['is_routed' => true]);
+            }
+
             // Return success response
             return response()->json([
                 'success' => true,

@@ -13,7 +13,8 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.5.0/css/rowReorder.dataTables.css">
 
 <style type="text/css">
-    #mymap {
+    #mymap,
+    #exceedingOrderMap {
         width: 100%;
         height: 500px;
     }
@@ -24,6 +25,7 @@
 </style>
 @section('content')
     <div class="row justify-content-center">
+
         <div class="col-md-12">
             @if (Session::has('success'))
                 <div class="alert alert-success alert-dismissible" role="alert">
@@ -75,9 +77,7 @@
             <div class="row w-100 text-center justify-content-center mt-5">
                 <button id="createRoute" class="btn btn-primary d-none">Create Route</button>
             </div>
-            <div id="result" class="box">
-                Event result:
-            </div>
+
 
             <table id="example" class="display" style="width:100%">
                 <thead>
@@ -86,10 +86,12 @@
                         <th>Customer</th>
                         <th>Order Type</th>
                         <th>Order ID</th>
-
+                        <th>Estimated Tires</th>
                     </tr>
                 </thead>
             </table>
+
+
             <div class="row w-100 text-center justify-content-center mt-5">
                 <button id="generateSimpleRoutes" class="btn btn-primary">Generate Simple Route</button>
             </div>
@@ -101,46 +103,40 @@
         <div class="col-lg-5">
             <div id="mymap"></div>
         </div>
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <h4>Exceeding Orders</h4>
+            <table id="exceedingOrders" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Order Type</th>
+                        <th>Order ID</th>
+                        <th>Estimated Tires</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="col-lg-5">
+            <div id="exceedingOrderMap"></div>
+        </div>
     </div>
 @endsection
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/dataTables.rowReorder.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/rowReorder.dataTables.js"></script>
 @section('pageSpecificJs')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-
-    <script type="text/javascript">
-    var markers = [];
-        let table = new DataTable('#example', {
-            rowReorder: true, // Enable row reordering
-            columns: [{
-                    data: 'id'
-                },
-                {
-                    data: 'name'
-                },
-                {
-                    data: 'position'
-                },
-                {
-                    data: 'order_id'
-                }
-            ],
-            rowReorder: {
-                dataSrc: 'id'
-            }
-        });
-
-
-
-        var latlngs = [];
-
-        var actualResponse = null;
+    <script>
         $(function() {
-
-
+            $('.js-example-basic-multiple').select2();
             var startDate = localStorage.getItem('startDate');
             var endDate = localStorage.getItem('endDate');
             if (startDate && endDate) {
@@ -157,9 +153,60 @@
                     endDate: moment()
                 });
             }
-
-
         });
+    </script>
+    <script type="text/javascript">
+        var markers = [];
+        var Exceedingmarkers =[];
+        var estimatedTires = 0;
+        let table = new DataTable('#example', {
+            rowReorder: true,
+            columns: [{
+                    data: 'id'
+                },
+                {
+                    data: 'name'
+                },
+                {
+                    data: 'position'
+                },
+                {
+                    data: 'order_id'
+                },
+                {
+                    data: 'estimated_tires'
+                }
+            ],
+            rowReorder: {
+                dataSrc: 'id'
+            }
+        });
+
+        let exceedingOrdersTable = new DataTable('#exceedingOrders', {
+            rowReorder: true, // Enable row reordering
+            columns: [{
+                    data: 'id'
+                },
+                {
+                    data: 'name'
+                },
+                {
+                    data: 'position'
+                },
+                {
+                    data: 'order_id'
+                },
+                {
+                    data: 'estimated_tires'
+                }
+            ],
+            rowReorder: {
+                dataSrc: 'id'
+            }
+        });
+
+        var latlngs = [];
+        var actualResponse = null;
 
         function getDistance(point1, point2) {
             var lat1 = point1.lat;
@@ -179,25 +226,18 @@
         }
 
         function geocodeAddress(response, address, index, waypoints, order) {
-            // Geocoder object
             var geocoder = new google.maps.Geocoder();
-
-            // Geocode request
             geocoder.geocode({
                 'address': address
             }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results.length > 0) {
-
-
                         var location = results[0].geometry.location;
                         var tempLatLng = new google.maps.LatLng(location.lat(), location.lng());
-
                         latlngs.push({
                             lat: location.lat(),
                             lng: location.lng()
                         })
-
                         waypoints.push({
                             location: {
                                 lat: location.lat(),
@@ -205,39 +245,23 @@
                             },
                             order_id: order.id
                         })
-
                         if (Object.keys(response).length === latlngs.length) {
-
-
-
-
                             // Calculate distances of each waypoint from the origin
                             var distances = waypoints.slice(1).map(function(waypoint) {
                                 return getDistance(waypoints[0].location, waypoint.location);
                             });
-
                             // Create an array of indices and sort it based on distances
                             var sortedIndices = Array.from(Array(waypoints.length - 1)
                                 .keys()); // Exclude the first waypoint
-
                             sortedIndices.sort(function(a, b) {
-                                return distances[b] - distances[
-                                    a]; // Sort from longest to shortest distance
+                                return distances[b] - distances[a];
                             });
-
-                            console.log(sortedIndices);
-
-                            // Reorder waypoints based on sorted indices
-                            var sortedWaypoints = [waypoints[0]]; // Keep the first waypoint unchanged
+                            var sortedWaypoints = [waypoints[0]];
                             sortedIndices.forEach(function(index) {
                                 sortedWaypoints.push({
                                     'location': waypoints[index + 1].location
                                 });
                             });
-
-                            console.log('SORTED', sortedWaypoints)
-                            // 30.749860
-                            // Construct the request object
                             var request = {
                                 origin: sortedWaypoints[0].location,
                                 destination: {
@@ -252,76 +276,48 @@
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
                             table.clear().draw();
-
+                            exceedingOrdersTable.clear().draw();
                             sortedIndices.forEach(function(key, index) {
                                 var order = response[key];
-
+                                estimatedTires += order.estimated_tires;
                                 var newData = {
                                     "id": index + 1,
                                     "name": order.customer.business_name,
                                     "position": order.load_type,
-                                    "order_id": order.id
+                                    "order_id": order.id,
+                                    "estimated_tires": order.estimated_tires
                                 };
-
-                                // Add new data to the DataTable
-                                table.rows.add([newData]).draw();
-
-
-
+                                if (estimatedTires <= 400) {
+                                    table.rows.add([newData]).draw();
+                                } else {
+                                    exceedingOrdersTable.rows.add([newData]).draw();
+                                }
                             });
 
-
                             $('#orderDetailDiv').append(`<div>End Route: Reliable Tire Disposal</div>`)
-
                             $('.removeOrder').on('click', function() {
                                 // Retrieve the removeOrderID
                                 let removeOrderID = parseInt($(this).attr('data-orderid'));
-                                console.log(removeOrderID);
-
-                                // Filter out the object with the specified ID
-                                // Convert the object to an array of its values
                                 const actualResponseArray = Object.values(actualResponse);
-
-                                // Remove the item with the specified id
                                 const filteredArray = actualResponseArray.filter(obj => obj.id !==
                                     removeOrderID);
-
-                                // Convert the filtered array back to an object if necessary
                                 const filteredObject = Object.fromEntries(filteredArray.map(obj => [obj.id,
                                     obj
                                 ]));
-
-                                // Update the actualResponse object
                                 actualResponse = filteredObject;
-                                // Clear existing markers and directions
-                                clearWaypoints(directionsRenderer);
-
-                                // Empty the order details container
                                 $('#orderDetailDiv').empty();
-
-                                // Generate waypoints and directions for the updated response
                                 generateWayPoints(actualResponse);
                             });
 
-
-
                             directionsService.route(request, function(response, status) {
                                 if (status == 'OK') {
-                                    console.log(response);
                                     directionsRenderer.setDirections(response);
-
-
                                     $('#createRoute').removeClass('d-none');
-
                                 } else {
                                     window.alert('Directions request failed due to ' + status);
                                 }
                             });
-
                         }
-
-
-
                     } else {
                         console.log('No results found');
                     }
@@ -333,17 +329,13 @@
 
 
         $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
             let startDate = $('input[name="daterange"]').data('daterangepicker').startDate.format('YYYY-MM-DD');
             let endDate = $('input[name="daterange"]').data('daterangepicker').endDate.format('YYYY-MM-DD');
             $('#generateRoutes').on('click', function() {
-
                 localStorage.setItem('startDate', $('input[name="daterange"]').data('daterangepicker')
                     .startDate);
-
                 localStorage.setItem('endDate', $('input[name="daterange"]').data('daterangepicker')
                     .endDate);
-
 
                 $('#orderDetailDiv').empty()
                 let driverId = $('#driverID').val();
@@ -362,64 +354,51 @@
                         }
                         actualResponse = response;
                         table.on('row-reorder', function(e, diff, edit) {
-
-                            table.draw(); // Redraw the DataTable after reordering
-
-                            // // Clear existing waypoints and directions
-                            clearWaypoints(directionsRenderer);
-
-                            // // Empty the order details container
+                            table.draw();
                             $('#orderDetailDiv').empty();
-
-                            // // Generate waypoints and directions for the updated response
-                            // generateWayPoints(actualResponse);
                         });
                         generateWayPoints(response);
-
                     }
                 })
             });
 
             $('#createRoute').on('click', function() {
                 var orderIdsArray = [];
+                var exceedingOrderIds = [];
 
                 table.rows().every(function() {
                     let data = this.data();
-                    orderIdsArray.push(data.order_id); // Push each order_id into the array
+                    orderIdsArray.push(data.order_id);
                 });
 
-                // Join the array into a comma-separated string
+                exceedingOrdersTable.rows().every(function() {
+                    let data = this.data();
+                    exceedingOrderIds.push(data.order_id);
+                });
+
                 var orderIds = orderIdsArray.join(',');
-
-                // Now orderIdsString contains the comma-separated order ids
-                console.log(orderIds); // You can use this string as needed
-
+                var exceedingOrders = exceedingOrderIds.join(',');
                 let driverId = $('#driverID').val();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/create-routing-web',
+                    type: 'POST',
+                    data: {
+                        driver_id: driverId,
+                        order_ids: orderIds,
+                        exceeding_order:exceedingOrders,
+                        routing_date: $('#routing_date').val(),
+                        route_name: $('#routeName').val()
+                    },
+                    success: function(response) {
+                        location.reload()
+                    }
+                })
             });
-            $.ajax({
-                url: '/create-routing-web',
-                type: 'POST',
-                data: {
-                    driver_id: driverId,
-                    order_ids: orderIds,
-                    routing_date: $('#routing_date').val(),
-                    route_name: $('#routeName').val()
-                },
-                success: function(response) {
-
-                    location.reload()
-
-                }
-            })
-            });
-
-
-
-
         });
 
         var myLatlng = new google.maps.LatLng(30.749860, -98.180590);
@@ -435,10 +414,16 @@
             }
         }
         var mymap = new google.maps.Map(document.getElementById("mymap"), myOptions);
+        var exceedingOrderMap = new google.maps.Map(document.getElementById("exceedingOrderMap"), myOptions);
         var directionsService = new google.maps.DirectionsService();
         var directionsRenderer = new google.maps.DirectionsRenderer({
-  suppressMarkers: true, // Suppress automatic marker creation
+            suppressMarkers: true,
             map: mymap,
+
+        });
+        var directionsRendererExceeding = new google.maps.DirectionsRenderer({
+            suppressMarkers: true,
+            map: exceedingOrderMap,
 
         });
 
@@ -456,59 +441,28 @@
             });
         }
 
-        function clearWaypoints(directionsRenderer) {
-       // Get the directions result
-  var directionsResult = directionsRenderer.getDirections();
-
-// Check if there are routes in the directions result
-if (directionsResult && directionsResult.routes && directionsResult.routes.length > 0) {
-  // Iterate through each route
-  for (var i = 0; i < directionsResult.routes.length; i++) {
-    var route = directionsResult.routes[i];
-
-    // Iterate through each leg of the route
-    for (var j = 0; j < route.legs.length; j++) {
-      var leg = route.legs[j];
-
-      // Iterate through each step of the leg
-      for (var k = 0; k < leg.steps.length; k++) {
-        var step = leg.steps[k];
-
-        // Remove marker from each step
-        if (step.marker) {
-          step.marker.setMap(null); // Remove marker from map
-          step.marker = null; // Clear reference to marker
+        function clearMarkers() {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers = [];
         }
-      }
-    }
-  }
-}
-
-        }
-
-        // Function to clear all markers from the map
-function clearMarkers() {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-    }
-    markers = []; // Clear the markers array
-}
 
 
         $('#generateSimpleRoutes').on('click', function() {
-            clearWaypoints(directionsRenderer);
-
             let customOrderIds = [];
+            let exceedingOrderIds = [];
             table.rows().every(function() {
                 let data = this.data();
                 customOrderIds.push(data.order_id)
             });
-
+            exceedingOrdersTable.rows().every(function() {
+                let data = this.data();
+                exceedingOrderIds.push(data.order_id)
+            });
             var geocoder = new google.maps.Geocoder();
             let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
-
-            console.log('qqqqqqq', filteredOrders);
-
+            let filterExceedingOrders = exceedingOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
 
             var waypoints = [{
                 location: {
@@ -517,9 +471,15 @@ function clearMarkers() {
                 }
             }];
 
-            let geocodePromises = [];
+            var exceedingWaypoints = [{
+                location: {
+                    lat: 30.749860,
+                    lng: -98.180590
+                }
+            }];
 
-            // Geocode request
+            let geocodePromises = [];
+            let exceedingGeoCodePromises = [];
 
             filteredOrders.forEach(function(order, index) {
                 let promise = new Promise(function(resolve, reject) {
@@ -550,11 +510,10 @@ function clearMarkers() {
                     });
                 });
 
-                geocodePromises.push(promise); // Push the promise to the array
+                geocodePromises.push(promise);
             });
             // Wait for all geocoding promises to resolve
             Promise.all(geocodePromises).then(function() {
-                // Once all promises are resolved (i.e., all geocoding requests are complete), construct the request object
                 var request = {
                     origin: waypoints[0].location,
                     destination: {
@@ -570,31 +529,15 @@ function clearMarkers() {
                     }))
                 };
 
-                // Now you can use the request object as needed
-                console.log(request);
-
-                clearWaypoints(directionsRenderer);
-
-                // Empty the order details container
                 $('#orderDetailDiv').empty();
-
-
-                // Event handler for removeOrder button
                 $('.removeOrder').on('click', function() {
                     let removeOrderID = parseInt($(this).attr(
                         'data-orderid'));
-                    // Implement your logic to remove order and update map accordingly
                 });
 
                 clearMarkers();
-
-
-                // Request directions
                 directionsService.route(request, function(response, status) {
-                    console.log('this isss', response);
                     if (status === 'OK') {
-                        clearWaypoints(directionsRenderer);
-
                         directionsRenderer.setDirections(response);
 
                         // Add markers in the order of customerOrderId
@@ -644,7 +587,113 @@ function clearMarkers() {
             }).catch(function(error) {
                 console.error('Error in geocoding:', error);
             });
-            // Clear existing markers and directions
+
+
+            /// this is for exceeding orders
+
+            filterExceedingOrders.forEach(function(order, index) {
+                let promise = new Promise(function(resolve, reject) {
+                    geocoder.geocode({
+                        'address': order.customer.address
+                    }, function(results, status) {
+                        if (status === google.maps.GeocoderStatus.OK) {
+                            if (results.length > 0) {
+                                var location = results[0].geometry.location;
+                                exceedingWaypoints.push({
+                                    location: {
+                                        lat: location.lat(),
+                                        lng: location.lng()
+                                    }
+                                });
+                                resolve
+                                    (); // Resolve the promise once geocoding is successful
+                            } else {
+                                console.log('No results found');
+                                reject('No results found');
+                            }
+                        } else {
+                            console.log(
+                                'Geocode was not successful for the following reason: ' +
+                                status);
+                            reject(status);
+                        }
+                    });
+                });
+
+                exceedingGeoCodePromises.push(promise); // Push the promise to the array
+            });
+
+
+            Promise.all(exceedingGeoCodePromises).then(function() {
+                // Once all promises are resolved (i.e., all geocoding requests are complete), construct the request object
+                var request = {
+                    origin: waypoints[0].location,
+                    destination: {
+                        location: {
+                            lat: 30.749760,
+                            lng: -98.180590
+                        }
+                    },
+                    travelMode: 'DRIVING',
+                    waypoints: exceedingWaypoints.slice(1).map(waypoint => ({
+                        location: waypoint.location,
+                        stopover: true // Ensure each waypoint is treated as a stop
+                    }))
+                };
+
+                $('#orderDetailDiv').empty();
+
+                clearMarkers();
+
+                directionsService.route(request, function(response, status) {
+                    if (status === 'OK') {
+                        directionsRendererExceeding.setDirections(response);
+
+                        // Add markers in the order of customerOrderId
+                        filterExceedingOrders.forEach((order, index) => {
+                            geocoder.geocode({
+                                'address': order.customer.address
+                            }, function(results, status) {
+                                if (status === google.maps.GeocoderStatus.OK) {
+                                    var marker = new google.maps.Marker({
+                                        position: results[0].geometry
+                                            .location,
+                                        map: exceedingOrderMap, // Assuming 'map' is your Google Map instance
+                                        title: `Order ${order.id}`,
+                                        label: {
+                                            text: (index + 1)
+                                                .toString(), // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
+                                            color: 'white', // Label text color
+                                            fontSize: '12px', // Label font size
+                                            fontWeight: 'bold', // Label font weight
+                                        },
+                                    });
+
+                                    Exceedingmarkers.push(marker);
+
+                                    // Example of adding an info window to each marker
+                                    var infoWindow = new google.maps.InfoWindow({
+                                        content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.business_name}</p>`
+                                    });
+
+                                    marker.addListener('click', function() {
+                                        infoWindow.open(exceedingOrderMap, marker);
+                                    });
+                                } else {
+                                    console.log(
+                                        'Geocode was not successful for the following reason: ' +
+                                        status);
+                                }
+                            });
+                        });
+
+                        $('#createRoute').removeClass('d-none');
+                    } else {
+                        window.alert('Directions request failed due to ' +
+                            status);
+                    }
+                });
+            });
 
 
         });
