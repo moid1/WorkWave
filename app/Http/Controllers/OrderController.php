@@ -252,6 +252,7 @@ class OrderController extends Controller
                 'delivery_date' => $request['date'],
                 'end_date' => $request['end_date'],
                 'is_recurring_order' => $request['is_recurring_order'] == 'on' ? true : false,
+                'estimated_tires' => $request->estimated_tires ?? 0
             ]);
         }
         Notes::create([
