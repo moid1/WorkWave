@@ -419,7 +419,6 @@
         var exceedingOrderMap = new google.maps.Map(document.getElementById("exceedingOrderMap"), myOptions);
         var directionsService = new google.maps.DirectionsService();
         var directionsRenderer = new google.maps.DirectionsRenderer({
-            suppressMarkers: true,
             map: mymap,
 
         });
