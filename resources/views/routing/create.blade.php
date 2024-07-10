@@ -293,6 +293,7 @@
                                     exceedingOrdersTable.rows.add([newData]).draw();
                                 }
                             });
+                            estimatedTires=0;
 
                             $('#orderDetailDiv').append(`<div>End Route: Reliable Tire Disposal</div>`)
                             $('.removeOrder').on('click', function() {
@@ -348,6 +349,7 @@
                         to_date: endDate
                     },
                     success: function(response) {
+                    console.log("this is respose",response);
                         if (response.length == 0) {
                             alert('No Order Found for this truck');
                             location.reload()
