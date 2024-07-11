@@ -421,7 +421,7 @@
                     let data = this.data();
                     simpleOrderData.push({
                         orderId: data.order_id,
-                        estimatedTires: data.estimatedTires
+                        estimatedTires: data.estimated_tires
                     });
                     orderIdsArray.push(data.order_id);
                 });
@@ -430,7 +430,7 @@
                     let data = this.data();
                     exceedingOrderData.push({
                         orderId: data.order_id,
-                        estimatedTires: data.estimatedTires
+                        estimatedTires: data.estimated_tires
                     });
                     exceedingOrderIds.push(data.order_id);
                 });
