@@ -264,8 +264,11 @@ class OrderController extends Controller
             'title' => 'Order Note'
         ]);
 
-        // Redirect to '/orders' with success message
-        return redirect('/orders')->with('success', 'Order(s) Created Successfully');
+        if ($request->create_order === 'createOrder') {
+            return redirect('/orders')->with('success', 'Order(s) Created Successfully');
+        } else {
+            return redirect('/orders')->with('success', 'Note Created Successfully');
+        }
     }
 
     private function createOrder($request, $truckId, $estimatedTires)
