@@ -118,7 +118,7 @@ class RoutingController extends Controller
                     'user_id' => Auth::id(),
                     'notes' => 'Left Over Tires Order',
                     'load_type' => $order['load_type'],
-                    'truck_id' => $order['truckId'],
+                    'truck_id' => $order['truck_id'],
                     'delivery_date' => $nextDayDate,
                     'end_date' => $nextDayDate,
                     'estimated_tires' => $exceedingOrderObject['estimatedTires']
