@@ -262,17 +262,17 @@
                                     'location': waypoints[index + 1].location
                                 });
                             });
-                            var request = {
-                                origin: sortedWaypoints[0].location,
-                                destination: {
-                                    location: {
-                                        lat: 30.749760,
-                                        lng: -98.180590
-                                    }
-                                },
-                                waypoints: sortedWaypoints.slice(1),
-                                travelMode: 'DRIVING'
-                            };
+                            // var request = {
+                            //     origin: sortedWaypoints[0].location,
+                            //     destination: {
+                            //         location: {
+                            //             lat: 30.749760,
+                            //             lng: -98.180590
+                            //         }
+                            //     },
+                            //     waypoints: sortedWaypoints.slice(1),
+                            //     travelMode: 'DRIVING'
+                            // };
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
                             table.clear().draw();
@@ -294,6 +294,34 @@
                                 }
                             });
                             estimatedTires=0;
+
+                            var tableOrderIds = new Set();
+table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+    var data = this.data();
+    tableOrderIds.add(data.order_id);
+});
+
+var filteredSortedWaypoints = sortedWaypoints.filter(function(waypoint, index) {
+    // Exclude the first waypoint which is the origin
+    if (index === 0) {
+        return true;
+    }
+    var orderIndex = sortedIndices[index - 1];
+    return tableOrderIds.has(response[orderIndex].id);
+});
+
+var request = {
+    origin: filteredSortedWaypoints[0].location,
+    destination: {
+        location: {
+            lat: 30.749760,
+            lng: -98.180590
+        }
+    },
+    waypoints: filteredSortedWaypoints.slice(1),
+    travelMode: 'DRIVING'
+};
+
 
                             $('#orderDetailDiv').append(`<div>End Route: Reliable Tire Disposal</div>`)
                             $('.removeOrder').on('click', function() {
