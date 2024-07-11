@@ -83,7 +83,7 @@ Route::get('/create-orders',  [OrderController::class, 'create'])->name('order.c
 Route::post('/orders',  [OrderController::class, 'store'])->name('order.store');
 Route::post('/assign-driver', [OrderController::class, 'updateDriver'])->name('order.updateDriver');
 Route::post('update-order', [OrderController::class, 'updateOrder'])->name('order.updateOrder');
-Route::get('/orders-by-truck', [OrderController::class, 'ordersByTruck'])->name('order.trucks');
+Route::get('/orders-by-truck', [OrderController::class, 'ordersByTruck'])->name('order.truck');
 
 //Driver ORders
 Route::get('/driver-orders',  [OrderController::class, 'driverOrders'])->name('order.driver.index');
