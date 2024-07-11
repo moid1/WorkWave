@@ -131,7 +131,7 @@
                             <ul class="list-unstyled">
                                 <li><a href="{{route('order.create')}}">Create Order</a></li>
                                 <li><a href="{{route('order.index')}}">All Orders</a></li>
-                                {{-- <li><a href="{{route('order.drivers')}}">Driver Orders</a></li> --}}
+                                <li><a href="{{route('order.drivers')}}">Truck Orders</a></li>
                                 <li><a href="{{route('orders.late')}}">Late Orders</a></li>
                                 
                             </ul>

@@ -28,6 +28,10 @@ class Order extends Model
         return $this->belongsTo(User::class, 'driver_id');
     }
 
+    public function truck(){
+        return $this->belongsTo(Truck::class, 'truck_id');
+    }
+
     public function fulfilled(){
         return $this->belongsTo(FullFillOrder::class,'id', 'order_id');
     }

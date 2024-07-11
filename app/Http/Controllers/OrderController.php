@@ -87,10 +87,10 @@ class OrderController extends Controller
         return view('orders.index', compact('orders', 'drivers', 'trucks'));
     }
 
-    public function ordersByDriver(Request $request)
+    public function ordersByTruck(Request $request)
     {
         if ($request->ajax()) {
-            $data = Order::with(['customer', 'user', 'driver'])->get();
+            $data = Order::with(['customer', 'user', 'truck'])->get();
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
@@ -135,8 +135,8 @@ class OrderController extends Controller
                     return $row->customer->email;
                 })
                 ->editColumn('driver', function ($row) {
-                    if ($row->driver)
-                        return $row->driver->name;
+                    if ($row->truck)
+                        return $row->truck->name;
                     return 'N/A';
                 })->editColumn('status', function ($row) {
                     if ($row->status)
