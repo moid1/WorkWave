@@ -14,4 +14,8 @@ class Routing extends Model
     public function driver(){
         return $this->belongsTo(User::class, 'driver_id')->with('truckDriver');
     }
+
+    public function truck(){
+return $this->belongsTo(Truck::class, 'truck_id');
+    }
 }

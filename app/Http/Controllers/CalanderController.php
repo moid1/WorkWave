@@ -30,7 +30,7 @@ class CalanderController extends Controller
         }
 
         $data = Routing::whereBetween('routing_date', [$startOfWeek, $endOfWeek])
-            ->with('driver')->get();
+            ->with('truck')->get();
 
         $dataByDay = $data->groupBy(function ($item) {
             return Carbon::parse($item->routing_date)->englishDayOfWeek;
@@ -44,7 +44,7 @@ class CalanderController extends Controller
             foreach ($routes as $route) {
                 dd($route);
                 // Get the truck_id for the current route
-                $truckId = $route['driver']['truck_driver']['truck']['name'];
+                $truckId = $route['truck']['name'];
 
                 // Use Carbon to get the day name in English
                 $dayName = Carbon::parse($day)->isoFormat('dddd');
