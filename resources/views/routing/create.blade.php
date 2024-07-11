@@ -132,7 +132,7 @@
 <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/dataTables.rowReorder.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/rowReorder.dataTables.js"></script>
 @section('pageSpecificJs')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
         $(function() {
@@ -157,7 +157,7 @@
     </script>
     <script type="text/javascript">
         var markers = [];
-        var Exceedingmarkers =[];
+        var Exceedingmarkers = [];
         var estimatedTires = 0;
         let table = new DataTable('#example', {
             rowReorder: true,
@@ -279,7 +279,6 @@
                             exceedingOrdersTable.clear().draw();
                             sortedIndices.forEach(function(key, index) {
                                 var order = response[key];
-                                estimatedTires += order.estimated_tires;
                                 var newData = {
                                     "id": index + 1,
                                     "name": order.customer.business_name,
@@ -287,40 +286,41 @@
                                     "order_id": order.id,
                                     "estimated_tires": order.estimated_tires
                                 };
-                                if (estimatedTires <= 400 || order.estimated_tires === 0) {
+                                if (estimatedTires + order.estimated_tires <= 400 || order.estimated_tires === 0) {
                                     table.rows.add([newData]).draw();
+                                    estimatedTires += order.estimated_tires; // Update estimatedTires only if it is added to the table
+
                                 } else {
                                     exceedingOrdersTable.rows.add([newData]).draw();
                                 }
                             });
-                            estimatedTires=0;
 
                             var tableOrderIds = new Set();
-table.rows().every(function(rowIdx, tableLoop, rowLoop) {
-    var data = this.data();
-    tableOrderIds.add(data.order_id);
-});
+                            table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                                var data = this.data();
+                                tableOrderIds.add(data.order_id);
+                            });
 
-var filteredSortedWaypoints = sortedWaypoints.filter(function(waypoint, index) {
-    // Exclude the first waypoint which is the origin
-    if (index === 0) {
-        return true;
-    }
-    var orderIndex = sortedIndices[index - 1];
-    return tableOrderIds.has(response[orderIndex].id);
-});
+                            var filteredSortedWaypoints = sortedWaypoints.filter(function(waypoint, index) {
+                                // Exclude the first waypoint which is the origin
+                                if (index === 0) {
+                                    return true;
+                                }
+                                var orderIndex = sortedIndices[index - 1];
+                                return tableOrderIds.has(response[orderIndex].id);
+                            });
 
-var request = {
-    origin: filteredSortedWaypoints[0].location,
-    destination: {
-        location: {
-            lat: 30.749760,
-            lng: -98.180590
-        }
-    },
-    waypoints: filteredSortedWaypoints.slice(1),
-    travelMode: 'DRIVING'
-};
+                            var request = {
+                                origin: filteredSortedWaypoints[0].location,
+                                destination: {
+                                    location: {
+                                        lat: 30.749760,
+                                        lng: -98.180590
+                                    }
+                                },
+                                waypoints: filteredSortedWaypoints.slice(1),
+                                travelMode: 'DRIVING'
+                            };
 
 
                             $('#orderDetailDiv').append(`<div>End Route: Reliable Tire Disposal</div>`)
@@ -377,7 +377,7 @@ var request = {
                         to_date: endDate
                     },
                     success: function(response) {
-                    console.log("this is respose",response);
+                        console.log("this is respose", response);
                         if (response.length == 0) {
                             alert('No Order Found for this truck');
                             location.reload()
@@ -420,7 +420,7 @@ var request = {
                     data: {
                         truck_id: truckId,
                         order_ids: orderIds,
-                        exceeding_order:exceedingOrders,
+                        exceeding_order: exceedingOrders,
                         routing_date: $('#routing_date').val(),
                         route_name: $('#routeName').val()
                     },
@@ -491,7 +491,8 @@ var request = {
             });
             var geocoder = new google.maps.Geocoder();
             let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
-            let filterExceedingOrders = exceedingOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
+            let filterExceedingOrders = exceedingOrderIds.map(orderId => actualResponse.find(order => order.id ===
+                orderId));
 
             var waypoints = [{
                 location: {
@@ -706,7 +707,8 @@ var request = {
                                     });
 
                                     marker.addListener('click', function() {
-                                        infoWindow.open(exceedingOrderMap, marker);
+                                        infoWindow.open(exceedingOrderMap,
+                                            marker);
                                     });
                                 } else {
                                     console.log(
