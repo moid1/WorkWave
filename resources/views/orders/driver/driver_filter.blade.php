@@ -35,7 +35,7 @@
                                         <th>Created By</th>
                                         <th>Order Date</th>
                                         <th>Email</th>
-                                        <th>Driver</th>
+                                        <th>Truck</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -162,7 +162,7 @@
                         name: 'truck',
                         render: function(data, type, full, meta) {
                             if (full.truck) {
-                                return full.truck;
+                                return full.truck.name;
                             } else {
                                 return 'N/A';
                             }
