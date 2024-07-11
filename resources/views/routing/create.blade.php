@@ -263,48 +263,55 @@
                                     'location': waypoints[index + 1].location
                                 });
                             });
-                           
+
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
                             table.clear().draw();
                             exceedingOrdersTable.clear().draw();
                             sortedIndices.forEach(function(key, index) {
-    var order = response[key];
-    var newData = {
-        "id": index + 1,
-        "name": order.customer.business_name,
-        "position": order.load_type,
-        "order_id": order.id,
-        "estimated_tires": order.estimated_tires
-    };
+                                var order = response[key];
+                                var newData = {
+                                    "id": index + 1,
+                                    "name": order.customer.business_name,
+                                    "position": order.load_type,
+                                    "order_id": order.id,
+                                    "estimated_tires": order.estimated_tires
+                                };
 
-    if (estimatedTires + order.estimated_tires <= totalTires || order.estimated_tires === 0) {
-        table.rows.add([newData]).draw();
-        estimatedTires += order.estimated_tires; // Update estimatedTires only if it is added to the table
-    } else if (estimatedTires < totalTires) {
-        // Split the order to fit the remaining space
-        var remainingSpace = totalTires - estimatedTires;
-        var partialOrder = Object.assign({}, newData, { "estimated_tires": remainingSpace });
-        var remainingOrder = Object.assign({}, newData, { "estimated_tires": order.estimated_tires - remainingSpace });
+                                if (estimatedTires + order.estimated_tires <= totalTires || order
+                                    .estimated_tires === 0) {
+                                    table.rows.add([newData]).draw();
+                                    estimatedTires += order
+                                    .estimated_tires; // Update estimatedTires only if it is added to the table
+                                } else if (estimatedTires < totalTires) {
+                                    // Split the order to fit the remaining space
+                                    var remainingSpace = totalTires - estimatedTires;
+                                    var partialOrder = Object.assign({}, newData, {
+                                        "estimated_tires": remainingSpace
+                                    });
+                                    var remainingOrder = Object.assign({}, newData, {
+                                        "estimated_tires": order.estimated_tires - remainingSpace
+                                    });
 
-        table.rows.add([partialOrder]).draw();
-        estimatedTires += remainingSpace; // Update estimatedTires with the remaining space
+                                    table.rows.add([partialOrder]).draw();
+                                    estimatedTires +=
+                                    remainingSpace; // Update estimatedTires with the remaining space
 
-        exceedingOrdersTable.rows.add([remainingOrder]).draw();
-    } else {
-        exceedingOrdersTable.rows.add([newData]).draw();
-    }
-});
+                                    exceedingOrdersTable.rows.add([remainingOrder]).draw();
+                                } else {
+                                    exceedingOrdersTable.rows.add([newData]).draw();
+                                }
+                            });
 
                             exceedingOrdersTable.data().each(function(order) {
-    if (estimatedTires + order.estimated_tires <= totalTires) {
-        table.rows.add([order]).draw();
-        estimatedTires += order.estimated_tires;
-        exceedingOrdersTable.row(function(idx, data, node) {
-            return data.id === order.id;
-        }).remove().draw(); // Remove the added order from exceedingOrdersTable
-    }
-});
+                                if (estimatedTires + order.estimated_tires <= totalTires) {
+                                    table.rows.add([order]).draw();
+                                    estimatedTires += order.estimated_tires;
+                                    exceedingOrdersTable.row(function(idx, data, node) {
+                                        return data.id === order.id;
+                                    }).remove().draw(); // Remove the added order from exceedingOrdersTable
+                                }
+                            });
 
                             var tableOrderIds = new Set();
                             table.rows().every(function(rowIdx, tableLoop, rowLoop) {
@@ -407,15 +414,29 @@
                 var orderIdsArray = [];
                 var exceedingOrderIds = [];
 
+                var simpleOrderData = [];
+                var exceedingOrderData = [];
+
                 table.rows().every(function() {
                     let data = this.data();
+                    simpleOrderData.push({
+                        orderId: data.order_id,
+                        estimatedTires: data.estimatedTires
+                    });
                     orderIdsArray.push(data.order_id);
                 });
 
                 exceedingOrdersTable.rows().every(function() {
                     let data = this.data();
+                    exceedingOrderData.push({
+                        orderId: data.order_id,
+                        estimatedTires: data.estimatedTires
+                    });
                     exceedingOrderIds.push(data.order_id);
                 });
+
+                console.log('waow1', simpleOrderData);
+                console.log('waow2', exceedingOrderData);
 
                 var orderIds = orderIdsArray.join(',');
                 var exceedingOrders = exceedingOrderIds.join(',');
