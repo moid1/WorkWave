@@ -82,6 +82,7 @@ class RoutingController extends Controller
     public function createWebRoute(Request $request)
     {
         // Validate the request
+        // dd($request->all);
         $request->validate([
             'order_ids' => ['required', 'string', 'max:255'],
             'route_name' => ['required'],
@@ -90,6 +91,43 @@ class RoutingController extends Controller
 
         try {
 
+            $simpleOrders = $request->order_ids;
+            $exceedingOrders = $request->exceeding_order;
+            $simpleOrderObjects = $request->simpleOrderObjects;
+            $exceedingOrderObjects = $request->exceedingOrderObjects;
+
+            $simpleOrderIds = explode(',', $simpleOrders);
+            $exceedingOrderIds = explode(',', $exceedingOrders);
+            // get same Orders
+            $sameOrderIds = array_intersect($simpleOrderIds, $exceedingOrderIds);
+
+            $today = date('Y-m-d');
+
+            // Calculate next day date
+            $nextDayDate = date('Y-m-d', strtotime($today . ' +1 day'));
+            $newOrderIds = [];
+
+            foreach ($exceedingOrderObjects as $key => $exceedingOrderObject) {
+                if (!in_array($exceedingOrderObject['orderId'], $sameOrderIds)) {
+                    continue;
+                }
+
+                $order = Order::find($exceedingOrderObject['orderId']);
+                $newOrder = Order::create([
+                    'customer_id' => $order['customer_id'],
+                    'user_id' => Auth::id(),
+                    'notes' => 'Left Over Tires Order',
+                    'load_type' => $order['load_type'],
+                    'truck_id' => $order['truckId'],
+                    'delivery_date' => $nextDayDate,
+                    'end_date' => $nextDayDate,
+                    'estimated_tires' => $exceedingOrderObject['estimatedTires']
+                ]);
+
+                $newOrderIds[] = $newOrder->id;
+
+
+            }
 
             // Begin a database transaction
             DB::beginTransaction();
@@ -114,27 +152,6 @@ class RoutingController extends Controller
             // Trigger event for route creation
             event(new RouteCreated());
 
-            if(!empty($request->exceeding_order)){
-                $nextRoutingDate = Carbon::parse($request->routing_date)->addDay();
-
-                // Skip weekends (Saturday and Sunday)
-                while ($nextRoutingDate->isWeekend()) {
-                    $nextRoutingDate->addDay();
-                }
-    
-                $nextRouting = Routing::create([
-                    'order_ids' => $request->exceeding_order,
-                    'route_name' => $request->route_name . ' (Exceeding)',
-                    'truck_id' => $request->truck_id,
-                    'routing_date' => $nextRoutingDate->toDateString()
-                ]);
-    
-                // Extract exceeding order IDs from comma-separated string
-                $exceedingOrderIDs = explode(',', $request->exceeding_order);
-    
-                // Update all exceeding orders to mark them as routed
-                Order::whereIn('id', $exceedingOrderIDs)->update(['is_routed' => true]);
-            }
 
             // Return success response
             return response()->json([
@@ -259,21 +276,21 @@ class RoutingController extends Controller
     public function getDriverOrderRouting(Request $request)
     {
 
-            $data = Order::where('truck_id', $request->truck_id)
-                ->where('is_routed', false)
-                ->with(['customer', 'user', 'driver']);
+        $data = Order::where('truck_id', $request->truck_id)
+            ->where('is_routed', false)
+            ->with(['customer', 'user', 'driver']);
 
-            if ($request->filled('from_date') && $request->filled('to_date')) {
-                $fromDate = Carbon::parse($request->from_date);
-                $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data->where(function($query) use ($fromDate, $toDate) {
-                    $query->whereBetween('delivery_date', [$fromDate, $toDate])
-                          ->orWhereBetween('end_date', [$fromDate, $toDate]);
-                });            
-            }
-            // $data->limit(20); // Add this line to limit the number of results to 20
+        if ($request->filled('from_date') && $request->filled('to_date')) {
+            $fromDate = Carbon::parse($request->from_date);
+            $toDate = Carbon::parse($request->to_date)->endOfDay();
+            $data->where(function ($query) use ($fromDate, $toDate) {
+                $query->whereBetween('delivery_date', [$fromDate, $toDate])
+                    ->orWhereBetween('end_date', [$fromDate, $toDate]);
+            });
+        }
+        // $data->limit(20); // Add this line to limit the number of results to 20
 
-            $dataArray = $data->get();
+        $dataArray = $data->get();
 
         return response()->json($dataArray);
     }
@@ -299,7 +316,7 @@ class RoutingController extends Controller
 
             // Find the date of the specific futureDay within the current week
             $futureDate = $this->getNextWeekdayDate($futureDay);
-           
+
 
             // Save the updated routing
             $routing->save();
@@ -317,7 +334,7 @@ class RoutingController extends Controller
             // Update all orders to mark them as routed
             // Order::whereIn('id', $orderIDs)->update(['is_routed' => true]);
 
-            if(empty($routing->order_ids)){
+            if (empty($routing->order_ids)) {
                 $routing->delete();
             }
             return response()->json();
@@ -346,7 +363,7 @@ class RoutingController extends Controller
 
         // Calculate the difference in days between current day and the target day
         $daysToAdd = array_search(($dayOfWeek), Carbon::getDays());
-       
+
 
         if ($daysToAdd === false) {
             return null; // Invalid day of the week

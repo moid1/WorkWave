@@ -414,12 +414,12 @@
                 var orderIdsArray = [];
                 var exceedingOrderIds = [];
 
-                var simpleOrderData = [];
-                var exceedingOrderData = [];
+                var simpleOrderObjects = [];
+                var exceedingOrderObjects = [];
 
                 table.rows().every(function() {
                     let data = this.data();
-                    simpleOrderData.push({
+                    simpleOrderObjects.push({
                         orderId: data.order_id,
                         estimatedTires: data.estimated_tires
                     });
@@ -428,15 +428,15 @@
 
                 exceedingOrdersTable.rows().every(function() {
                     let data = this.data();
-                    exceedingOrderData.push({
+                    exceedingOrderObjects.push({
                         orderId: data.order_id,
                         estimatedTires: data.estimated_tires
                     });
                     exceedingOrderIds.push(data.order_id);
                 });
 
-                console.log('waow1', simpleOrderData);
-                console.log('waow2', exceedingOrderData);
+                console.log('waow1', simpleOrderObjects);
+                console.log('waow2', exceedingOrderObjects);
 
                 var orderIds = orderIdsArray.join(',');
                 var exceedingOrders = exceedingOrderIds.join(',');
@@ -450,6 +450,8 @@
                     url: '/create-routing-web',
                     type: 'POST',
                     data: {
+                        simpleOrderObjects,
+                        exceedingOrderObjects,
                         truck_id: truckId,
                         order_ids: orderIds,
                         exceeding_order: exceedingOrders,
