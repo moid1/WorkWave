@@ -162,7 +162,7 @@
                         name: 'truck',
                         render: function(data, type, full, meta) {
                             if (full.truck) {
-                                return full.truck.name;
+                                return full.truck;
                             } else {
                                 return 'N/A';
                             }
