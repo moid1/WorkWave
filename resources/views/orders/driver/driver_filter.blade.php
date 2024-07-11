@@ -116,7 +116,7 @@
                 });
             }
 
-            let url = "{{ route('order.drivers') }}";
+            let url = "{{ route('order.truck') }}";
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -158,11 +158,11 @@
                         name: 'customer.email'
                     },
                     {
-                        data: 'driver',
-                        name: 'driver',
+                        data: 'truck',
+                        name: 'truck',
                         render: function(data, type, full, meta) {
-                            if (full.driver) {
-                                return full.driver;
+                            if (full.truck) {
+                                return full.truck;
                             } else {
                                 return 'N/A';
                             }
