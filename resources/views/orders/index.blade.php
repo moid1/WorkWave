@@ -66,7 +66,7 @@
             </div> <!-- end row -->
         </div><!-- container-fluid -->
     </div>
-    <div class="modal fade" id="driversList" tabindex="-1" aria-labelledby="schoolUsersListLabel" aria-hidden="true">
+    <div class="modal fade" id="truckList" tabindex="-1" aria-labelledby="schoolUsersListLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -75,7 +75,7 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <input type="hidden" name="order_id" class="orderID">
-                    <select id="selectDriver" name="select_driver" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                    <select id="selectTruck" name="truck" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                         <option value=""  selected>Please select Truck</option>
                         @foreach ($trucks as $truck)
                         <option value="{{$truck->id}}">{{ucfirst($truck->name)}}</option>
@@ -242,10 +242,10 @@
     </script>
 
     <script>
-        function updateDriver(id) {
+        function updateTruck(id) {
             $('.orderID').val(id)
-            $('#driversList').modal('show');
-            $('#selectDriver').on('change', function() {
+            $('#truckList').modal('show');
+            $('#selectTruck').on('change', function() {
                 let truckID = this.value;
                 $.ajax({
                     url: '{{ route('order.updateDriver') }}',

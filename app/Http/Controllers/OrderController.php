@@ -64,7 +64,7 @@ class OrderController extends Controller
                 })
                 ->editColumn('update_truck', function ($row) {
                     $button = '
-                    <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateDriver(\'' . $row->id . '\')">Update Truck
+                    <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateTruck(\'' . $row->id . '\')">Update Truck
                     </button>
                 ';
                     $showBtn = '';
@@ -231,17 +231,10 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $truckID = $request['truck_id'] ?? null;
-        $driverId = null;
 
         // Check if truck_id is provided in the request
         if (!$truckID) {
             return; // Exit the function if truck_id is not provided
-        }
-
-        // Retrieve the latest truck driver associated with the given truck_id
-        $truckDriver = TruckDriver::where('truck_id', $truckID)->latest()->first();
-        if ($truckDriver) {
-            $driverId = $truckDriver->user_id;
         }
 
         // Calculate number of orders needed based on estimated_tires
@@ -249,15 +242,17 @@ class OrderController extends Controller
         $numOrders = ceil($estimatedTires / 400);
 
         // Loop to create orders
-        for ($i = 0; $i < $numOrders; $i++) {
-            // Determine the amount of tires for this order
-            $orderTires = min(400, $estimatedTires); // Maximum 400 tires per order
+        if ($request->create_order == 'createOrder') {
+            for ($i = 0; $i < $numOrders; $i++) {
+                // Determine the amount of tires for this order
+                $orderTires = min(400, $estimatedTires); // Maximum 400 tires per order
 
-            // Create the order
-            $this->createOrder($request, $driverId, $orderTires);
+                // Create the order
+                $this->createOrder($request, $truckID, $orderTires);
 
-            // Decrease remaining estimated_tires
-            $estimatedTires -= $orderTires;
+                // Decrease remaining estimated_tires
+                $estimatedTires -= $orderTires;
+            }
         }
 
         Notes::create([
@@ -273,7 +268,7 @@ class OrderController extends Controller
         return redirect('/orders')->with('success', 'Order(s) Created Successfully');
     }
 
-    private function createOrder($request, $driverId, $estimatedTires)
+    private function createOrder($request, $truckId, $estimatedTires)
     {
 
         return Order::create([
@@ -281,7 +276,7 @@ class OrderController extends Controller
             'user_id' => Auth::id(),
             'notes' => $request['notes'] ?? 'N/A',
             'load_type' => $request['load_type'],
-            'driver_id' => $driverId,
+            'truck_id' => $truckId,
             'delivery_date' => $request['date'],
             'end_date' => $request['end_date'],
             'is_recurring_order' => $request['is_recurring_order'] == 'on',
@@ -324,8 +319,12 @@ class OrderController extends Controller
 
     public function driverOrders()
     {
-        $orders = Order::where([['driver_id', Auth::id()], ['status', 'created']])->with(['customer', 'user', 'manifest'])->latest()->get();
-        return view('orders.driver.index', compact('orders'));
+        $truckDriver = TruckDriver::where('user_id', Auth::id())->latest()->first();
+        if ($truckDriver) {
+            $orders = Order::where([['truck_id', $truckDriver->truck_id], ['status', 'created']])->with(['customer', 'user', 'manifest'])->latest()->get();
+            return view('orders.driver.index', compact('orders'));
+        }
+        return back()->with('error', 'truck is not assigned to you');
     }
 
     public function updateDriver(Request $request)
@@ -341,12 +340,10 @@ class OrderController extends Controller
         // }
 
         $truckDriver = TruckDriver::where('truck_id', $truckId)->latest()->first();
-        if ($truckDriver) {
-            $driverID = $truckDriver->user_id;
-        }
+
 
         if ($order) {
-            $order->driver_id = $driverID;
+            $order->truck_id = $truckId;
             $order->update();
             return response()->json([
                 'success' => true,
@@ -370,9 +367,9 @@ class OrderController extends Controller
                 'status' => true,
                 'message' => 'Driver Registered Successfully',
                 'data' => [
-                        'drivers' => $drivers,
-                        'orders' => $orders
-                    ]
+                    'drivers' => $drivers,
+                    'orders' => $orders
+                ]
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
@@ -494,8 +491,10 @@ class OrderController extends Controller
     public function getTodaysManifestForDriver()
     {
         $orderStatus = ['compared', 'fulfilled'];
+        $truckDriver = TruckDriver::where('user_id', Auth::id())->latest()->first();
+
         $orders = Order::whereDate('created_at', now()->toDateString())
-            ->where('driver_id', Auth::id())->whereIn('status', $orderStatus)->get();
+            ->where('truck_id', $truckDriver->truck_id)->whereIn('status', $orderStatus)->get();
 
         return view('orders.driver.manifest', compact('orders'));
     }

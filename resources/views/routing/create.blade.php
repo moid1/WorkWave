@@ -45,7 +45,7 @@
         <div class="col-lg-7">
             <div class="select-driver">
                 <label for="">Select Truck</label>
-                <select id="driverID" name="" class="js-example-basic-multiple form-control form-select  mb-3">
+                <select id="truck" name="" class="js-example-basic-multiple form-control form-select  mb-3">
                     @foreach ($trucks as $truck)
                         <option value="{{ $truck->id }}">{{ $truck->name }}</option>
                     @endforeach
@@ -339,12 +339,12 @@
                     .endDate);
 
                 $('#orderDetailDiv').empty()
-                let driverId = $('#driverID').val();
+                let truck_id = $('#truck').val();
                 $.ajax({
                     url: '/get-driver-orders-routing',
                     type: 'GET',
                     data: {
-                        'truck_id': driverId,
+                        'truck_id': truck_id,
                         from_date: startDate,
                         to_date: endDate
                     },
@@ -380,7 +380,7 @@
 
                 var orderIds = orderIdsArray.join(',');
                 var exceedingOrders = exceedingOrderIds.join(',');
-                let driverId = $('#driverID').val();
+                let truckId = $('#truck').val();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -390,7 +390,7 @@
                     url: '/create-routing-web',
                     type: 'POST',
                     data: {
-                        driver_id: driverId,
+                        truck_id: truckId,
                         order_ids: orderIds,
                         exceeding_order:exceedingOrders,
                         routing_date: $('#routing_date').val(),

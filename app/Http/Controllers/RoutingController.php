@@ -85,12 +85,11 @@ class RoutingController extends Controller
         $request->validate([
             'order_ids' => ['required', 'string', 'max:255'],
             'route_name' => ['required'],
-            'driver_id' => ['required']
+            'truck_id' => ['required']
         ]);
 
         try {
 
-            $truckDriver = TruckDriver::where('truck_id', $request->driver_id)->latest()->first();
 
             // Begin a database transaction
             DB::beginTransaction();
@@ -99,7 +98,7 @@ class RoutingController extends Controller
             $routing = Routing::create([
                 'order_ids' => $request->order_ids,
                 'route_name' => $request->route_name,
-                'driver_id' => $truckDriver->user_id,
+                'truck_id' => $request->truck_id,
                 'routing_date' => $request->routing_date
             ]);
 
@@ -126,7 +125,7 @@ class RoutingController extends Controller
                 $nextRouting = Routing::create([
                     'order_ids' => $request->exceeding_order,
                     'route_name' => $request->route_name . ' (Exceeding)',
-                    'driver_id' => $truckDriver->user_id,
+                    'truck_id' => $request->truck_id,
                     'routing_date' => $nextRoutingDate->toDateString()
                 ]);
     
@@ -259,10 +258,8 @@ class RoutingController extends Controller
 
     public function getDriverOrderRouting(Request $request)
     {
-        $truckDriver = TruckDriver::where('truck_id', $request->truck_id)->first();
 
-        if ($truckDriver) {
-            $data = Order::where('driver_id', $truckDriver->user_id)
+            $data = Order::where('truck_id', $request->truck_id)
                 ->where('is_routed', false)
                 ->with(['customer', 'user', 'driver']);
 
@@ -274,12 +271,9 @@ class RoutingController extends Controller
                           ->orWhereBetween('end_date', [$fromDate, $toDate]);
                 });            
             }
-            $data->limit(20); // Add this line to limit the number of results to 20
+            // $data->limit(20); // Add this line to limit the number of results to 20
 
             $dataArray = $data->get();
-        } else {
-            $dataArray = [];
-        }
 
         return response()->json($dataArray);
     }
