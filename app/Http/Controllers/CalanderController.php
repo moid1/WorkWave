@@ -42,6 +42,7 @@ class CalanderController extends Controller
         foreach ($dataByDay as $day => $routes) {
             // Iterate over each route in the day's routes
             foreach ($routes as $route) {
+                dd($route);
                 // Get the truck_id for the current route
                 $truckId = $route['driver']['truck_driver']['truck']['name'];
 
