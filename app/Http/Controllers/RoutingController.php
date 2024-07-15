@@ -183,6 +183,8 @@ class RoutingController extends Controller
                         'truck_id' => $request->truck_id,
                         'routing_date' => $nextBusinessDay
                     ]);
+
+                    Order::whereIn('id', $noNeedNewRouting)->update(['is_routed' => true]);
                 }
             }
 
