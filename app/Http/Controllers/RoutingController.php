@@ -80,141 +80,151 @@ class RoutingController extends Controller
     }
 
     public function createWebRoute(Request $request)
-    {
-        // Validate the request
-        // dd($request->all);
-        $request->validate([
-            'order_ids' => ['required', 'string', 'max:255'],
-            'route_name' => ['required'],
-            'truck_id' => ['required']
+{
+    // Validate the request
+    $request->validate([
+        'order_ids' => ['required', 'string', 'max:255'],
+        'route_name' => ['required', 'string', 'max:255'],
+        'truck_id' => ['required'],
+        'routing_date' => ['required'],
+        'exceeding_order' => ['sometimes', 'string'],
+        'simpleOrderObjects' => ['sometimes', 'array'],
+        'exceedingOrderObjects' => ['sometimes', 'array'],
+    ]);
+
+    try {
+        // Begin a database transaction
+        DB::beginTransaction();
+
+        $simpleOrders = $request->order_ids;
+        $exceedingOrders = $request->exceeding_order ?? '';
+        $simpleOrderObjects = $request->simpleOrderObjects ?? [];
+        $exceedingOrderObjects = $request->exceedingOrderObjects ?? [];
+
+        $simpleOrderIds = explode(',', $simpleOrders);
+        $exceedingOrderIds = explode(',', $exceedingOrders);
+        // Get same Orders
+        $sameOrderIds = array_intersect($simpleOrderIds, $exceedingOrderIds);
+
+        $today = date('Y-m-d');
+        // Calculate next day date
+        $nextDayDate = date('Y-m-d', strtotime($today . ' +1 day'));
+        $newOrderIds = [];
+
+        foreach ($exceedingOrderObjects as $key => $exceedingOrderObject) {
+            if (!in_array($exceedingOrderObject['orderId'], $sameOrderIds)) {
+                continue;
+            }
+
+            $order = Order::find($exceedingOrderObject['orderId']);
+            $newOrder = Order::create([
+                'customer_id' => $order['customer_id'],
+                'user_id' => Auth::id(),
+                'notes' => 'Left Over Tires Order',
+                'load_type' => $order['load_type'],
+                'truck_id' => $order['truck_id'],
+                'delivery_date' => $nextDayDate,
+                'end_date' => $nextDayDate,
+                'estimated_tires' => $exceedingOrderObject['estimatedTires']
+            ]);
+
+            $newOrderIds[] = $newOrder->id;
+        }
+
+        // Create a new routing entry
+        $routing = Routing::create([
+            'order_ids' => $request->order_ids,
+            'route_name' => $request->route_name,
+            'truck_id' => $request->truck_id,
+            'routing_date' => $request->routing_date
         ]);
 
-        try {
+        // Extract order IDs from comma-separated string
+        $orderIDs = explode(',', $request->order_ids);
 
-            $simpleOrders = $request->order_ids;
-            $exceedingOrders = $request->exceeding_order;
-            $simpleOrderObjects = $request->simpleOrderObjects;
-            $exceedingOrderObjects = $request->exceedingOrderObjects;
+        // Update all orders to mark them as routed
+        Order::whereIn('id', $orderIDs)->update(['is_routed' => true]);
 
-            $simpleOrderIds = explode(',', $simpleOrders);
-            $exceedingOrderIds = explode(',', $exceedingOrders);
-            // get same Orders
-            $sameOrderIds = array_intersect($simpleOrderIds, $exceedingOrderIds);
+        if (count($exceedingOrderIds) > 0) {
+            $exceedsOrders = Order::whereIn('id', $exceedingOrderIds)->get();
+            $totalTires = 0;
+            $currentRoute = [];
 
-            $today = date('Y-m-d');
+            foreach ($exceedsOrders as $order) {
+                $orderTires = $order->estimated_tires;
 
-            // Calculate next day date
-            $nextDayDate = date('Y-m-d', strtotime($today . ' +1 day'));
-            $newOrderIds = [];
-
-            foreach ($exceedingOrderObjects as $key => $exceedingOrderObject) {
-                if (!in_array($exceedingOrderObject['orderId'], $sameOrderIds)) {
-                    continue;
+                if ($totalTires + $orderTires <= 400) {
+                    $currentRoute[] = $order;
+                    $totalTires += $orderTires;
+                } else {
+                    $routes[] = $currentRoute; // Save the current route
+                    $currentRoute = [$order]; // Start a new route with the current order
+                    $totalTires = $orderTires;
                 }
+            }
 
-                $order = Order::find($exceedingOrderObject['orderId']);
-                $newOrder = Order::create([
-                    'customer_id' => $order['customer_id'],
-                    'user_id' => Auth::id(),
-                    'notes' => 'Left Over Tires Order',
-                    'load_type' => $order['load_type'],
-                    'truck_id' => $order['truck_id'],
-                    'delivery_date' => $nextDayDate,
-                    'end_date' => $nextDayDate,
-                    'estimated_tires' => $exceedingOrderObject['estimatedTires']
+            // Handle remaining orders in currentRoute
+            if (!empty($currentRoute)) {
+                $routes[] = $currentRoute;
+            }
+
+            $routingDate = Carbon::parse($request->routing_date);
+
+            foreach ($routes as $index => $routeOrders) {
+                $routeOrderIds = array_map(function($order) {
+                    return $order->id;
+                }, $routeOrders);
+
+                $nextBusinessDay = $this->getNextBusinessDay($routingDate);
+
+                $exceedingRouting = Routing::create([
+                    'order_ids' => implode(',', $routeOrderIds),
+                    'route_name' => $request->route_name . ' (Exceeding Date Route ' . ($index + 1) . ')',
+                    'truck_id' => $request->truck_id,
+                    'routing_date' => $nextBusinessDay
                 ]);
 
-                $newOrderIds[] = $newOrder->id;
-
-
+                Order::whereIn('id', $routeOrderIds)->update(['is_routed' => true]);
             }
-
-            // Begin a database transaction
-            DB::beginTransaction();
-
-            // Create a new routing entry
-            $routing = Routing::create([
-                'order_ids' => $request->order_ids,
-                'route_name' => $request->route_name,
-                'truck_id' => $request->truck_id,
-                'routing_date' => $request->routing_date
-            ]);
-
-            // Extract order IDs from comma-separated string
-            $orderIDs = explode(',', $request->order_ids);
-
-            // Update all orders to mark them as routed
-            Order::whereIn('id', $orderIDs)->update(['is_routed' => true]);
-
-            // Commit the transaction
-            DB::commit();
-
-            // Trigger event for route creation
-            event(new RouteCreated());
-
-            if (count($exceedingOrderIds) > 0) {
-                $exceedsOrders = Order::whereIn('id', $exceedingOrderIds)->get();
-                $totalTires = 0;
-                $routes = [];
-                $noNeedNewRouting = [];
-                $currentRoute = [];
-
-                foreach ($exceedsOrders as $order) {
-                    $orderTires = $order->estimated_tires;
-
-                    if ($totalTires + $orderTires <= 400) {
-                        $currentRoute[] = $order;
-                        $noNeedNewRouting[]=$order->id;
-                        $totalTires += $orderTires;
-                    } else {
-                        $routes[] = $currentRoute; // Save the current route
-                        $currentRoute = [$order]; // Start a new route with the current order
-                        $totalTires = $orderTires;
-                    }
-                }
-
-                if (count($noNeedNewRouting) > 0) {
-                    $routingDate = Carbon::parse($request->routing_date);
-                    $nextBusinessDay = $this->getNextBusinessDay($routingDate);
-
-                    $routing = Routing::create([
-                        'order_ids' => implode(',', $noNeedNewRouting),
-                        'route_name' => $request->route_name.' (Exceeding Date Route)',
-                        'truck_id' => $request->truck_id,
-                        'routing_date' => $nextBusinessDay
-                    ]);
-
-                    Order::whereIn('id', $noNeedNewRouting)->update(['is_routed' => true]);
-                }
-            }
-
-
-            // Return success response
-            return response()->json([
-                'success' => true,
-                'data' => $routing,
-                'message' => 'Route has been created successfully'
-            ]);
-        } catch (\Exception $e) {
-            // Roll back the transaction in case of failure
-            DB::rollBack();
-
-            // Return error response
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ], 500);
         }
-    }
 
-    private function getNextBusinessDay($date)
-    {
-        do {
-            $date->addDay();
-        } while ($date->isWeekend());
+        // Commit the transaction
+        DB::commit();
 
-        return $date;
+        // Trigger event for route creation
+        event(new RouteCreated());
+
+        // Return success response
+        return response()->json([
+            'success' => true,
+            'data' => $routing,
+            'message' => 'Route has been created successfully'
+        ]);
+    } catch (\Exception $e) {
+        // Roll back the transaction in case of failure
+        DB::rollBack();
+
+        // Log the exception
+        Log::error('Error creating route: ' . $e->getMessage(), ['exception' => $e]);
+
+        // Return error response
+        return response()->json([
+            'status' => false,
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
+
+private function getNextBusinessDay(Carbon $date)
+{
+    $nextBusinessDay = $date->copy();
+
+    do {
+        $nextBusinessDay->addDay();
+    } while ($nextBusinessDay->isWeekend());
+
+    return $nextBusinessDay->format('Y-m-d');
+}
 
     /**
      * Display the specified resource.
