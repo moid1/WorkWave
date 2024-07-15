@@ -240,6 +240,8 @@ private function createRoutingEntry($orderIds, $routeName, $truckId, $routingDat
 
 private function getNextBusinessDay($date)
 {
+    $date = Carbon::parse($date);
+
     $nextBusinessDay = $date->copy();
 
     do {
