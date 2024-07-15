@@ -85,11 +85,11 @@ class RoutingController extends Controller
     $request->validate([
         'order_ids' => ['required', 'string', 'max:255'],
         'route_name' => ['required', 'string', 'max:255'],
-        'truck_id' => ['required'],
-        'routing_date' => ['required'],
+        'truck_id' => ['required', 'integer'],
+        'routing_date' => ['required', 'date'],
         'exceeding_order' => ['sometimes', 'string'],
-        'simpleOrderObjects' => ['sometimes', 'array'],
-        'exceedingOrderObjects' => ['sometimes', 'array'],
+        'simpleOrderObjects' => ['sometimes'],
+        'exceedingOrderObjects' => ['sometimes'],
     ]);
 
     try {
@@ -147,8 +147,9 @@ class RoutingController extends Controller
 
         if (count($exceedingOrderIds) > 0) {
             $exceedsOrders = Order::whereIn('id', $exceedingOrderIds)->get();
-            $totalTires = 0;
+            $routes = [];
             $currentRoute = [];
+            $totalTires = 0;
 
             foreach ($exceedsOrders as $order) {
                 $orderTires = $order->estimated_tires;
@@ -171,20 +172,30 @@ class RoutingController extends Controller
             $routingDate = Carbon::parse($request->routing_date);
 
             foreach ($routes as $index => $routeOrders) {
-                $routeOrderIds = array_map(function($order) {
-                    return $order->id;
-                }, $routeOrders);
+                $totalTires = 0;
+                $routeOrderIds = [];
 
-                $nextBusinessDay = $this->getNextBusinessDay($routingDate);
+                foreach ($routeOrders as $order) {
+                    $orderTires = $order->estimated_tires;
 
-                $exceedingRouting = Routing::create([
-                    'order_ids' => implode(',', $routeOrderIds),
-                    'route_name' => $request->route_name . ' (Exceeding Date Route ' . ($index + 1) . ')',
-                    'truck_id' => $request->truck_id,
-                    'routing_date' => $nextBusinessDay
-                ]);
+                    if ($totalTires + $orderTires <= 400) {
+                        $routeOrderIds[] = $order->id;
+                        $totalTires += $orderTires;
+                    } else {
+                        // Create a route with current orders
+                        $this->createRoutingEntry($routeOrderIds, $request->route_name, $request->truck_id, $routingDate, $index);
+                        // Start a new route with the current order
+                        $routeOrderIds = [$order->id];
+                        $totalTires = $orderTires;
+                        $index++;
+                    }
+                }
 
-                Order::whereIn('id', $routeOrderIds)->update(['is_routed' => true]);
+                if (!empty($routeOrderIds)) {
+                    $this->createRoutingEntry($routeOrderIds, $request->route_name, $request->truck_id, $routingDate, $index);
+                }
+
+                $routingDate = $this->getNextBusinessDay($routingDate);
             }
         }
 
@@ -215,6 +226,18 @@ class RoutingController extends Controller
     }
 }
 
+private function createRoutingEntry($orderIds, $routeName, $truckId, $routingDate, $index)
+{
+    Routing::create([
+        'order_ids' => implode(',', $orderIds),
+        'route_name' => $routeName . ' (Exceeding Date Route ' . ($index + 1) . ')',
+        'truck_id' => $truckId,
+        'routing_date' => $routingDate
+    ]);
+
+    Order::whereIn('id', $orderIds)->update(['is_routed' => true]);
+}
+
 private function getNextBusinessDay(Carbon $date)
 {
     $nextBusinessDay = $date->copy();
@@ -225,7 +248,6 @@ private function getNextBusinessDay(Carbon $date)
 
     return $nextBusinessDay->format('Y-m-d');
 }
-
     /**
      * Display the specified resource.
      */
