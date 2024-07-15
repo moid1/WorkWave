@@ -152,6 +152,40 @@ class RoutingController extends Controller
             // Trigger event for route creation
             event(new RouteCreated());
 
+            if (count($exceedingOrderIds) > 0) {
+                $exceedsOrders = Order::whereIn('id', $exceedingOrderIds)->get();
+                $totalTires = 0;
+                $routes = [];
+                $noNeedNewRouting = [];
+                $currentRoute = [];
+
+                foreach ($exceedsOrders as $order) {
+                    $orderTires = $order->estimated_tires;
+
+                    if ($totalTires + $orderTires <= 400) {
+                        $currentRoute[] = $order;
+                        $noNeedNewRouting[]=$order->id;
+                        $totalTires += $orderTires;
+                    } else {
+                        $routes[] = $currentRoute; // Save the current route
+                        $currentRoute = [$order]; // Start a new route with the current order
+                        $totalTires = $orderTires;
+                    }
+                }
+
+                if (count($noNeedNewRouting) > 0) {
+                    $routingDate = Carbon::parse($request->routing_date);
+                    $nextBusinessDay = $this->getNextBusinessDay($routingDate);
+
+                    $routing = Routing::create([
+                        'order_ids' => implode(',', $noNeedNewRouting),
+                        'route_name' => $request->route_name.' (Exceeding Date Route)',
+                        'truck_id' => $request->truck_id,
+                        'routing_date' => $nextBusinessDay
+                    ]);
+                }
+            }
+
 
             // Return success response
             return response()->json([
@@ -169,6 +203,15 @@ class RoutingController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    private function getNextBusinessDay($date)
+    {
+        do {
+            $date->addDay();
+        } while ($date->isWeekend());
+
+        return $date;
     }
 
     /**
