@@ -238,7 +238,7 @@ private function createRoutingEntry($orderIds, $routeName, $truckId, $routingDat
     Order::whereIn('id', $orderIds)->update(['is_routed' => true]);
 }
 
-private function getNextBusinessDay(Carbon $date)
+private function getNextBusinessDay($date)
 {
     $nextBusinessDay = $date->copy();
 
