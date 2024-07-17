@@ -42,7 +42,7 @@
 
                                         <th>Name</th>
                                         <th>Order IDS</th>
-                                        <th>Driver</th>
+                                        <th>Truck</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -54,7 +54,7 @@
                                             <td>{{ $route->route_name }}</td>
                                             <td>{{$route->order_ids}}
                                             </td>
-                                            <td>{{ $route->driver->name }}</td>
+                                            <td>{{ $route->truck->name }}</td>
                                             <td>
                                                 <a style="text-decoration: none;color:red"
                                                     href="{{ route('routing.delete', $route->id) }}"> <i

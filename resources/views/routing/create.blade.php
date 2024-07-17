@@ -87,6 +87,7 @@
                         <th>Order Type</th>
                         <th>Order ID</th>
                         <th>Estimated Tires</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
             </table>
@@ -108,7 +109,7 @@
 
     </div>
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-7">
             <h4>Exceeding Orders</h4>
             <table id="exceedingOrders" class="display" style="width:100%">
@@ -123,10 +124,10 @@
                 </thead>
             </table>
         </div>
-        <div class="col-lg-5">
+     <div class="col-lg-5">
             <div id="exceedingOrderMap"></div>
-        </div>
-    </div>
+        </div> 
+    </div> --}}
 @endsection
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/dataTables.rowReorder.js"></script>
@@ -175,6 +176,11 @@
                 },
                 {
                     data: 'estimated_tires'
+                },
+                {
+                    // Define the column for Actions
+                    data: null,
+                    defaultContent: '<button class="delete-btn btn btn-primary">Delete</button>'
                 }
             ],
             rowReorder: {
@@ -182,28 +188,39 @@
             }
         });
 
-        let exceedingOrdersTable = new DataTable('#exceedingOrders', {
-            rowReorder: true, // Enable row reordering
-            columns: [{
-                    data: 'id'
-                },
-                {
-                    data: 'name'
-                },
-                {
-                    data: 'position'
-                },
-                {
-                    data: 'order_id'
-                },
-                {
-                    data: 'estimated_tires'
-                }
-            ],
-            rowReorder: {
-                dataSrc: 'id'
-            }
+
+        $('#example').on('click', '.delete-btn', function() {
+            var data = table.row($(this).parents('tr')).data()
+
+            var rowIndex = table.row($(this).parents('tr')).index();
+
+            // Remove the row from the DataTable
+            table.row(rowIndex).remove().draw();
+
         });
+
+        // let exceedingOrdersTable = new DataTable('#exceedingOrders', {
+        //     rowReorder: true, // Enable row reordering
+        //     columns: [{
+        //             data: 'id'
+        //         },
+        //         {
+        //             data: 'name'
+        //         },
+        //         {
+        //             data: 'position'
+        //         },
+        //         {
+        //             data: 'order_id'
+        //         },
+        //         {
+        //             data: 'estimated_tires'
+        //         }
+        //     ],
+        //     rowReorder: {
+        //         dataSrc: 'id'
+        //     }
+        // });
 
         var latlngs = [];
         var actualResponse = null;
@@ -267,7 +284,7 @@
                             $('#orderDetailDiv').append(
                                 `<div class="mb-3">Starting Route: Reliable Tire Disposal</div>`)
                             table.clear().draw();
-                            exceedingOrdersTable.clear().draw();
+                            // exceedingOrdersTable.clear().draw();
                             sortedIndices.forEach(function(key, index) {
                                 var order = response[key];
                                 var newData = {
@@ -278,40 +295,44 @@
                                     "estimated_tires": order.estimated_tires
                                 };
 
-                                if (estimatedTires + order.estimated_tires <= totalTires || order
-                                    .estimated_tires === 0) {
-                                    table.rows.add([newData]).draw();
-                                    estimatedTires += order
-                                    .estimated_tires; // Update estimatedTires only if it is added to the table
-                                } else if (estimatedTires < totalTires) {
-                                    // Split the order to fit the remaining space
-                                    var remainingSpace = totalTires - estimatedTires;
-                                    var partialOrder = Object.assign({}, newData, {
-                                        "estimated_tires": remainingSpace
-                                    });
-                                    var remainingOrder = Object.assign({}, newData, {
-                                        "estimated_tires": order.estimated_tires - remainingSpace
-                                    });
+                                table.rows.add([newData]).draw();
+                                estimatedTires += order.estimated_tires;
 
-                                    table.rows.add([partialOrder]).draw();
-                                    estimatedTires +=
-                                    remainingSpace; // Update estimatedTires with the remaining space
+                                // if (estimatedTires + order.estimated_tires <= totalTires || order
+                                //     .estimated_tires === 0) {
+                                //     table.rows.add([newData]).draw();
+                                //     estimatedTires += order
+                                //     .estimated_tires; 
+                                // } 
+                                // else if (estimatedTires < totalTires) {
+                                //     // Split the order to fit the remaining space
+                                //     var remainingSpace = totalTires - estimatedTires;
+                                //     var partialOrder = Object.assign({}, newData, {
+                                //         "estimated_tires": remainingSpace
+                                //     });
+                                //     var remainingOrder = Object.assign({}, newData, {
+                                //         "estimated_tires": order.estimated_tires - remainingSpace
+                                //     });
 
-                                    exceedingOrdersTable.rows.add([remainingOrder]).draw();
-                                } else {
-                                    exceedingOrdersTable.rows.add([newData]).draw();
-                                }
+                                //     table.rows.add([partialOrder]).draw();
+                                //     estimatedTires +=
+                                //     remainingSpace; // Update estimatedTires with the remaining space
+
+                                //     exceedingOrdersTable.rows.add([remainingOrder]).draw();
+                                // } else {
+                                //     exceedingOrdersTable.rows.add([newData]).draw();
+                                // }
                             });
 
-                            exceedingOrdersTable.data().each(function(order) {
-                                if (estimatedTires + order.estimated_tires <= totalTires) {
-                                    table.rows.add([order]).draw();
-                                    estimatedTires += order.estimated_tires;
-                                    exceedingOrdersTable.row(function(idx, data, node) {
-                                        return data.id === order.id;
-                                    }).remove().draw(); // Remove the added order from exceedingOrdersTable
-                                }
-                            });
+                            // exceedingOrdersTable.data().each(function(order) {
+                            //     if (estimatedTires + order.estimated_tires <= totalTires) {
+                            //         table.rows.add([order]).draw();
+                            //         estimatedTires += order.estimated_tires;
+                            //         exceedingOrdersTable.row(function(idx, data, node) {
+                            //             return data.id === order.id;
+                            //         }).remove().draw(); // Remove the added order from exceedingOrdersTable
+                            //     }
+                            // });
 
                             var tableOrderIds = new Set();
                             table.rows().every(function(rowIdx, tableLoop, rowLoop) {
@@ -426,20 +447,20 @@
                     orderIdsArray.push(data.order_id);
                 });
 
-                exceedingOrdersTable.rows().every(function() {
-                    let data = this.data();
-                    exceedingOrderObjects.push({
-                        orderId: data.order_id,
-                        estimatedTires: data.estimated_tires
-                    });
-                    exceedingOrderIds.push(data.order_id);
-                });
+                // exceedingOrdersTable.rows().every(function() {
+                //     let data = this.data();
+                //     exceedingOrderObjects.push({
+                //         orderId: data.order_id,
+                //         estimatedTires: data.estimated_tires
+                //     });
+                //     exceedingOrderIds.push(data.order_id);
+                // });
 
-                console.log('waow1', simpleOrderObjects);
-                console.log('waow2', exceedingOrderObjects);
+                // console.log('waow1', simpleOrderObjects);
+                // console.log('waow2', exceedingOrderObjects);
 
                 var orderIds = orderIdsArray.join(',');
-                var exceedingOrders = exceedingOrderIds.join(',');
+                // var exceedingOrders = exceedingOrderIds.join(',');
                 let truckId = $('#truck').val();
                 $.ajaxSetup({
                     headers: {
@@ -451,10 +472,8 @@
                     type: 'POST',
                     data: {
                         simpleOrderObjects,
-                        exceedingOrderObjects,
                         truck_id: truckId,
                         order_ids: orderIds,
-                        exceeding_order: exceedingOrders,
                         routing_date: $('#routing_date').val(),
                         route_name: $('#routeName').val()
                     },
@@ -478,17 +497,17 @@
             }
         }
         var mymap = new google.maps.Map(document.getElementById("mymap"), myOptions);
-        var exceedingOrderMap = new google.maps.Map(document.getElementById("exceedingOrderMap"), myOptions);
+        // var exceedingOrderMap = new google.maps.Map(document.getElementById("exceedingOrderMap"), myOptions);
         var directionsService = new google.maps.DirectionsService();
         var directionsRenderer = new google.maps.DirectionsRenderer({
             map: mymap,
 
         });
-        var directionsRendererExceeding = new google.maps.DirectionsRenderer({
-            suppressMarkers: true,
-            map: exceedingOrderMap,
+        // var directionsRendererExceeding = new google.maps.DirectionsRenderer({
+        //     suppressMarkers: true,
+        //     map: exceedingOrderMap,
 
-        });
+        // });
 
         function generateWayPoints(response) {
             latlngs = [];
@@ -519,14 +538,14 @@
                 let data = this.data();
                 customOrderIds.push(data.order_id)
             });
-            exceedingOrdersTable.rows().every(function() {
-                let data = this.data();
-                exceedingOrderIds.push(data.order_id)
-            });
+            // exceedingOrdersTable.rows().every(function() {
+            //     let data = this.data();
+            //     exceedingOrderIds.push(data.order_id)
+            // });
             var geocoder = new google.maps.Geocoder();
             let filteredOrders = customOrderIds.map(orderId => actualResponse.find(order => order.id === orderId));
-            let filterExceedingOrders = exceedingOrderIds.map(orderId => actualResponse.find(order => order.id ===
-                orderId));
+            // let filterExceedingOrders = exceedingOrderIds.map(orderId => actualResponse.find(order => order.id ===
+            //     orderId));
 
             var waypoints = [{
                 location: {
@@ -655,110 +674,110 @@
 
             /// this is for exceeding orders
 
-            filterExceedingOrders.forEach(function(order, index) {
-                let promise = new Promise(function(resolve, reject) {
-                    geocoder.geocode({
-                        'address': order.customer.address
-                    }, function(results, status) {
-                        if (status === google.maps.GeocoderStatus.OK) {
-                            if (results.length > 0) {
-                                var location = results[0].geometry.location;
-                                exceedingWaypoints.push({
-                                    location: {
-                                        lat: location.lat(),
-                                        lng: location.lng()
-                                    }
-                                });
-                                resolve
-                                    (); // Resolve the promise once geocoding is successful
-                            } else {
-                                console.log('No results found');
-                                reject('No results found');
-                            }
-                        } else {
-                            console.log(
-                                'Geocode was not successful for the following reason: ' +
-                                status);
-                            reject(status);
-                        }
-                    });
-                });
+            // filterExceedingOrders.forEach(function(order, index) {
+            //     let promise = new Promise(function(resolve, reject) {
+            //         geocoder.geocode({
+            //             'address': order.customer.address
+            //         }, function(results, status) {
+            //             if (status === google.maps.GeocoderStatus.OK) {
+            //                 if (results.length > 0) {
+            //                     var location = results[0].geometry.location;
+            //                     exceedingWaypoints.push({
+            //                         location: {
+            //                             lat: location.lat(),
+            //                             lng: location.lng()
+            //                         }
+            //                     });
+            //                     resolve
+            //                         (); // Resolve the promise once geocoding is successful
+            //                 } else {
+            //                     console.log('No results found');
+            //                     reject('No results found');
+            //                 }
+            //             } else {
+            //                 console.log(
+            //                     'Geocode was not successful for the following reason: ' +
+            //                     status);
+            //                 reject(status);
+            //             }
+            //         });
+            //     });
 
-                exceedingGeoCodePromises.push(promise); // Push the promise to the array
-            });
+            //     exceedingGeoCodePromises.push(promise); // Push the promise to the array
+            // });
 
 
-            Promise.all(exceedingGeoCodePromises).then(function() {
-                // Once all promises are resolved (i.e., all geocoding requests are complete), construct the request object
-                var request = {
-                    origin: waypoints[0].location,
-                    destination: {
-                        location: {
-                            lat: 30.749760,
-                            lng: -98.180590
-                        }
-                    },
-                    travelMode: 'DRIVING',
-                    waypoints: exceedingWaypoints.slice(1).map(waypoint => ({
-                        location: waypoint.location,
-                        stopover: true // Ensure each waypoint is treated as a stop
-                    }))
-                };
+            // Promise.all(exceedingGeoCodePromises).then(function() {
+            //     // Once all promises are resolved (i.e., all geocoding requests are complete), construct the request object
+            //     var request = {
+            //         origin: waypoints[0].location,
+            //         destination: {
+            //             location: {
+            //                 lat: 30.749760,
+            //                 lng: -98.180590
+            //             }
+            //         },
+            //         travelMode: 'DRIVING',
+            //         waypoints: exceedingWaypoints.slice(1).map(waypoint => ({
+            //             location: waypoint.location,
+            //             stopover: true // Ensure each waypoint is treated as a stop
+            //         }))
+            //     };
 
-                $('#orderDetailDiv').empty();
+            //     $('#orderDetailDiv').empty();
 
-                clearMarkers();
+            //     clearMarkers();
 
-                directionsService.route(request, function(response, status) {
-                    if (status === 'OK') {
-                        directionsRendererExceeding.setDirections(response);
+            //     directionsService.route(request, function(response, status) {
+            //         if (status === 'OK') {
+            //             directionsRendererExceeding.setDirections(response);
 
-                        // Add markers in the order of customerOrderId
-                        filterExceedingOrders.forEach((order, index) => {
-                            geocoder.geocode({
-                                'address': order.customer.address
-                            }, function(results, status) {
-                                if (status === google.maps.GeocoderStatus.OK) {
-                                    var marker = new google.maps.Marker({
-                                        position: results[0].geometry
-                                            .location,
-                                        map: exceedingOrderMap, // Assuming 'map' is your Google Map instance
-                                        title: `Order ${order.id}`,
-                                        label: {
-                                            text: (index + 1)
-                                                .toString(), // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
-                                            color: 'white', // Label text color
-                                            fontSize: '12px', // Label font size
-                                            fontWeight: 'bold', // Label font weight
-                                        },
-                                    });
+            //             // Add markers in the order of customerOrderId
+            //             filterExceedingOrders.forEach((order, index) => {
+            //                 geocoder.geocode({
+            //                     'address': order.customer.address
+            //                 }, function(results, status) {
+            //                     if (status === google.maps.GeocoderStatus.OK) {
+            //                         var marker = new google.maps.Marker({
+            //                             position: results[0].geometry
+            //                                 .location,
+            //                             map: exceedingOrderMap, // Assuming 'map' is your Google Map instance
+            //                             title: `Order ${order.id}`,
+            //                             label: {
+            //                                 text: (index + 1)
+            //                                     .toString(), // Replace with your desired label text (e.g., 'A', 'B', 'C', ...)
+            //                                 color: 'white', // Label text color
+            //                                 fontSize: '12px', // Label font size
+            //                                 fontWeight: 'bold', // Label font weight
+            //                             },
+            //                         });
 
-                                    Exceedingmarkers.push(marker);
+            //                         Exceedingmarkers.push(marker);
 
-                                    // Example of adding an info window to each marker
-                                    var infoWindow = new google.maps.InfoWindow({
-                                        content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.business_name}</p>`
-                                    });
+            //                         // Example of adding an info window to each marker
+            //                         var infoWindow = new google.maps.InfoWindow({
+            //                             content: `<h3>Order ${order.id}</h3><p>Customer: ${order.customer.business_name}</p>`
+            //                         });
 
-                                    marker.addListener('click', function() {
-                                        infoWindow.open(exceedingOrderMap,
-                                            marker);
-                                    });
-                                } else {
-                                    console.log(
-                                        'Geocode was not successful for the following reason: ' +
-                                        status);
-                                }
-                            });
-                        });
+            //                         marker.addListener('click', function() {
+            //                             infoWindow.open(exceedingOrderMap,
+            //                                 marker);
+            //                         });
+            //                     } else {
+            //                         console.log(
+            //                             'Geocode was not successful for the following reason: ' +
+            //                             status);
+            //                     }
+            //                 });
+            //             });
 
-                        $('#createRoute').removeClass('d-none');
-                    } else {
-                        window.alert('Directions request failed due to ' +
-                            status);
-                    }
-                });
-            });
+            //             $('#createRoute').removeClass('d-none');
+            //         } else {
+            //             window.alert('Directions request failed due to ' +
+            //                 status);
+            //         }
+            //     });
+            // });
 
 
         });
