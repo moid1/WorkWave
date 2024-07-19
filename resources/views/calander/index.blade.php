@@ -150,6 +150,7 @@
                                     <td class="droppable-day" data-day="Tuesday">
                                         @if (isset($truckData['Tuesday']))
                                             @foreach ($truckData['Tuesday'] as $route)
+                                            @if(isset($route['order_ids']))
                                                 @foreach (explode(',', $route['order_ids']) as $order_id)
                                                     @php
                                                         $tempOrder = App\Models\Order::with([
@@ -169,6 +170,7 @@
                                                         </a>
                                                     </div>
                                                 @endforeach
+                                            @endif
                                             @endforeach
                                         @endif
                                     </td>
