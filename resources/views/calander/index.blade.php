@@ -152,15 +152,13 @@
                                             @foreach ($truckData['Tuesday'] as $route)
                                             @if(isset($route['order_ids']))
                                                 @foreach (explode(',', $route['order_ids']) as $order_id)
-                                                    @php
-                                                        $tempOrder = App\Models\Order::with([
-                                                            'fulfilled',
-                                                            'customer',
-                                                        ])->find($order_id);
-                                                        if ($tempOrder['fulfilled']) {
-                                                            $totalLeftOver += $tempOrder['fulfilled']['left_over'];
-                                                        }
-                                                    @endphp
+                                                @php
+                                                $tempOrder = App\Models\Order::with(['fulfilled'])->find($order_id);
+                                            
+                                                if ($tempOrder && $tempOrder->fulfilled) {
+                                                    $totalLeftOver += $tempOrder->fulfilled->left_over;
+                                                }
+                                            @endphp
                                                     <div class="orderdiv" data-order-id="{{ $order_id }}">
                                                         <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span
