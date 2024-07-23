@@ -300,7 +300,7 @@ class RoutingController extends Controller
             $newRouting = Routing::create([
                 'order_ids' => $request->order_id,
                 'route_name' => $request->route_name,
-                'driver_id' => $truckDriver->user_id,
+                'truck_id' => $$routing->truck_id,
                 'routing_date' => $futureDate
             ]);
 
