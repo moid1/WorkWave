@@ -135,14 +135,16 @@
                                                             $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                         }
                                                     @endphp
+                                                    @if(isset($tempOrder))
                                                     <div class="orderdiv" data-order-id="{{ $order_id }}">
                                                         <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span
-                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                class="{{ $tempOrder && $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
                                                                 {{ $tempOrder['customer']['business_name'] }}
                                                             </span>
                                                         </a>
                                                     </div>
+                                                    @endif
                                                 @endforeach
                                             @endforeach
                                         @endif
@@ -187,14 +189,16 @@
                                                             $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                         }
                                                     @endphp
-                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
-                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span
-                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
-                                                                {{ $tempOrder['customer']['business_name'] }}
-                                                            </span>
-                                                        </a>
-                                                    </div>
+                                                     @if(isset($tempOrder))
+                                                     <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                         <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                             <span
+                                                                 class="{{ $tempOrder && $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                 {{ $tempOrder['customer']['business_name'] }}
+                                                             </span>
+                                                         </a>
+                                                     </div>
+                                                     @endif
                                                 @endforeach
                                             @endforeach
                                         @endif
@@ -212,14 +216,16 @@
                                                             $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                         }
                                                     @endphp
-                                                    <div class="orderdiv" data-order-id="{{ $order_id }}">
-                                                        <a target="_blank" href="{{ route('order.show', $order_id) }}">
-                                                            <span
-                                                                class="{{ $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
-                                                                {{ $tempOrder['customer']['business_name'] }}
-                                                            </span>
-                                                        </a>
-                                                    </div>
+                                                     @if(isset($tempOrder))
+                                                     <div class="orderdiv" data-order-id="{{ $order_id }}">
+                                                         <a target="_blank" href="{{ route('order.show', $order_id) }}">
+                                                             <span
+                                                                 class="{{ $tempOrder && $tempOrder->status == 'fulfilled' ? 'strike-through' : '' }}">
+                                                                 {{ $tempOrder['customer']['business_name'] }}
+                                                             </span>
+                                                         </a>
+                                                     </div>
+                                                     @endif
                                                 @endforeach
                                             @endforeach
                                         @endif
