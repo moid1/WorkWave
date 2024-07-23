@@ -91,9 +91,11 @@
                     <input type="text" name="daterange" value="" />
                 </div>
                 <div id="filterBtn" class="btn btn-primary ">Filter</div>
+                <button id="fullScreen" class="btn btn-primary">Full Screens</button>
+
             </div>
             <hr>
-            <div class="row">
+            <div class="row" style="background: white;margin-top:20px" id="calendar">
                 <div class="col-12">
                     <table>
                         <thead>
@@ -347,6 +349,23 @@
 
         });
 
+        $('#fullScreen').on('click', function(){
+        var element = document.getElementById('calendar');
+    enterFullScreen(element);
+      })
+
+        function enterFullScreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen(); // Firefox
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen(); // Safari
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen(); // IE/Edge
+            }
+        }
+
         $('#filterBtn').click(function(){
 
             localStorage.setItem('startDate', $('input[name="daterange"]').data('daterangepicker')
@@ -506,6 +525,9 @@
     
 
     <script>
+        setTimeout(function() {
+    window.location.reload();
+}, 30000);
         // Map days of the week to numbers
         var dayMap = {
             'Sunday': 0,
