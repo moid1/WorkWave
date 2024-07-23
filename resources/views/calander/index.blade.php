@@ -233,7 +233,7 @@
                                                             'fulfilled',
                                                             'customer',
                                                         ])->find($order_id);
-                                                        if ($tempOrder['fulfilled']) {
+                                                        if (isset($tempOrder['fulfilled'])) {
                                                             $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                         }
                                                     @endphp
