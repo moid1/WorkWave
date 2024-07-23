@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use App\Models\Order;
 use App\Models\Routing;
+use App\Models\TruckDriver;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -136,22 +137,31 @@ class DriverController extends Controller
     {
         $existingOrderIds = Routing::pluck('order_ids')->toArray();
 
+
         try {
-            $currentDate = Carbon::now()->toDateString();
-            $orders = Order::where([
-                ['driver_id', Auth::id()],
-                ['status', 'created'],
-            ])
-                ->whereDate('delivery_date', $currentDate)
-               
-                ->with(['customer', 'user', 'manifest'])
-                ->latest()
-                ->get();
-            return response()->json([
-                'status' => true,
-                'message' => 'Driver Orders',
-                'data' => $orders,
-            ], 200);
+            $trucDriver = TruckDriver::where('user_id', Auth::id())->with('truck')->latest()->first();
+            if ($trucDriver && $trucDriver->truck) {
+                $currentDate = Carbon::now()->toDateString();
+                $orders = Order::where([
+                    ['truck_id', $trucDriver->truck->id],
+                    ['status', 'created'],
+                ])
+                    ->whereDate('delivery_date', $currentDate)
+
+                    ->with(['customer', 'user', 'manifest'])
+                    ->latest()
+                    ->get();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Driver Orders',
+                    'data' => $orders,
+                ], 200);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'message' => "No truck is assigned to you"
+                ], 500);
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
