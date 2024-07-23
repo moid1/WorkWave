@@ -237,6 +237,7 @@
                                                             $totalLeftOver += $tempOrder['fulfilled']['left_over'];
                                                         }
                                                     @endphp
+                                                    @if(isset($tempOrder))
                                                     <div class="orderdiv" data-order-id="{{ $order_id }}">
                                                         <a target="_blank" href="{{ route('order.show', $order_id) }}">
                                                             <span
@@ -245,6 +246,7 @@
                                                             </span>
                                                         </a>
                                                     </div>
+                                                    @endif
                                                 @endforeach
                                             @endforeach
                                         @endif
