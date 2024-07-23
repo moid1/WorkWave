@@ -175,12 +175,20 @@ class RoutingController extends Controller
     {
 
         try {
-            $routes = Routing::where('driver_id', Auth::id())->where('is_route_started', false)->get();
+            $trucDriver = TruckDriver::where('user_id', Auth::id())->with('truck')->latest()->first();
+            if ($trucDriver && $trucDriver->truck) {
+            $routes = Routing::where('truck_id', $trucDriver->truck->id)->where('is_route_started', false)->get();
             return response()->json([
                 'success' => true,
                 'data' => $routes,
                 'message' => 'All routes group which not started'
             ]);
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => "No truck is assigned to you"
+            ], 500);
+        }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
