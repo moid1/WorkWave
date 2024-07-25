@@ -146,8 +146,7 @@ class DriverController extends Controller
                     ['truck_id', $trucDriver->truck->id],
                     ['status', 'created'],
                 ])
-                    ->whereDate('delivery_date', $currentDate)
-
+                    ->whereRaw("DATE(delivery_date) = ?", [$currentDate])
                     ->with(['customer', 'user', 'manifest'])
                     ->latest()
                     ->get();
