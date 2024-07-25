@@ -146,9 +146,10 @@ class DriverController extends Controller
                     ['truck_id', $trucDriver->truck->id],
                     ['status', 'created'],
                 ])
-                    ->with(['customer', 'user', 'manifest'])
-                    ->latest()
-                    ->get();
+                ->whereDate('delivery_date', '>=', $currentDate)
+                ->with(['customer', 'user', 'manifest'])
+                ->latest()
+                ->get();
                 return response()->json([
                     'status' => true,
                     'message' => 'Driver Orders',
