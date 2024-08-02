@@ -177,18 +177,18 @@ class RoutingController extends Controller
         try {
             $trucDriver = TruckDriver::where('user_id', Auth::id())->with('truck')->latest()->first();
             if ($trucDriver && $trucDriver->truck) {
-            $routes = Routing::where('truck_id', $trucDriver->truck->id)->where('is_route_started', false)->get();
-            return response()->json([
-                'success' => true,
-                'data' => $routes,
-                'message' => 'All routes group which not started'
-            ]);
-        }else{
-            return response()->json([
-                'status' => false,
-                'message' => "No truck is assigned to you"
-            ], 500);
-        }
+                $routes = Routing::where('truck_id', $trucDriver->truck->id)->where('is_route_started', false)->get();
+                return response()->json([
+                    'success' => true,
+                    'data' => $routes,
+                    'message' => 'All routes group which not started'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => "No truck is assigned to you"
+                ], 500);
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -228,19 +228,19 @@ class RoutingController extends Controller
     {
         try {
             // Find the routing or fail if not found
-        $routing = Routing::findOrFail($id);
-        $orderIds = array_map('trim', explode(',', $routing->order_ids));
+            $routing = Routing::findOrFail($id);
+            $orderIds = array_map('trim', explode(',', $routing->order_ids));
 
 
-        // Perform the update operation
-        Order::whereIn('order_id', $orderIds)
-            ->update(['is_routed' => false]);
+            // Perform the update operation
+            Order::whereIn('order_id', $orderIds)
+                ->update(['is_routed' => false]);
 
-        // Return a successful response
-        return response()->json([
-            'status' => true,
-            'message' => 'Route deleted successfully'
-        ]);
+            // Return a successful response
+            return response()->json([
+                'status' => true,
+                'message' => 'Route deleted successfully'
+            ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -251,8 +251,20 @@ class RoutingController extends Controller
 
     public function deleteRouteWeb($id)
     {
-        Routing::find($id)->delete();
-        return back()->with('success', 'Route is deleted successfully');
+        try {
+            // Find the routing or fail if not found
+            $routing = Routing::findOrFail($id);
+            $orderIds = array_map('trim', explode(',', $routing->order_ids));
+
+
+            // Perform the update operation
+            Order::whereIn('order_id', $orderIds)
+                ->update(['is_routed' => false]);
+
+                return back()->with('success', 'Route is deleted successfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Route not found');
+        }
     }
 
     public function createRouting()
@@ -266,21 +278,21 @@ class RoutingController extends Controller
     {
 
         $data = Order::where('truck_id', $request->truck_id)
-        ->where('is_routed', false)
-        ->with(['customer', 'user', 'driver']);
-    
-    if ($request->filled('from_date') && $request->filled('to_date')) {
-        $fromDate = Carbon::parse($request->from_date)->startOfDay()->format('Y-m-d');
-        $toDate = Carbon::parse($request->to_date)->endOfDay()->format('Y-m-d');
-    
-        $data->where(function ($query) use ($fromDate, $toDate) {
-            $query->whereBetween('delivery_date', [$fromDate, $toDate])
-                  ->orWhereBetween('end_date', [$fromDate, $toDate]);
-        });
-    }
-    
-    // Execute the query (if needed)
-    $results = $data->get();
+            ->where('is_routed', false)
+            ->with(['customer', 'user', 'driver']);
+
+        if ($request->filled('from_date') && $request->filled('to_date')) {
+            $fromDate = Carbon::parse($request->from_date)->startOfDay()->format('Y-m-d');
+            $toDate = Carbon::parse($request->to_date)->endOfDay()->format('Y-m-d');
+
+            $data->where(function ($query) use ($fromDate, $toDate) {
+                $query->whereBetween('delivery_date', [$fromDate, $toDate])
+                    ->orWhereBetween('end_date', [$fromDate, $toDate]);
+            });
+        }
+
+        // Execute the query (if needed)
+        $results = $data->get();
 
         return response()->json($results);
     }
