@@ -171,6 +171,15 @@
                                             <label for="is_recurring_order">Is Recurring Order</label>
                                        
                                         </div>
+
+                                        <div class="col-lg-3">
+                                            <select name="frequency" id="" class="form-control">
+                                                <option value="1">Daily</option>
+                                                <option value="7">Weekly</option>
+                                                <option value="14">Bi Weekly</option>
+                                                <option value="30">Monthly</option>
+                                            </select>
+                                        </div>
                                         
 
 
