@@ -258,8 +258,9 @@ class RoutingController extends Controller
 
 
             // Perform the update operation
-            Order::whereIn('order_id', $orderIds)
+            Order::whereIn('id', $orderIds)
                 ->update(['is_routed' => false]);
+            $routing->delete();
 
                 return back()->with('success', 'Route is deleted successfully');
         } catch (\Throwable $th) {
