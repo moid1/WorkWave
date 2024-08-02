@@ -14,21 +14,23 @@ class Kernel extends ConsoleKernel
         // Register your commands here
         \App\Console\Commands\ProcessRecurringOrders::class,
     ];
-    
+
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
+        // Ensure this line is present and correctly configured
         $schedule->command('orders:process-recurring')->daily();
     }
+
 
     /**
      * Register the commands for the application.
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
