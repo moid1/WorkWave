@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // Ensure this line is present and correctly configured
-        $schedule->command('orders:process-recurring')->everyMinute();
+        $schedule->command('orders:process-recurring')->daily();
     }
 
 
