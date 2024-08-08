@@ -35,7 +35,7 @@
 <body>
     <div class="container">
         <h1>Privacy Policy</h1>
-        <p><strong>Last updated:</strong> August 05, 2024</p>
+        <p><strong>Last updated:</strong> August 08, 2024</p>
 
         <h2>1. Introduction</h2>
         <p>This Privacy Policy outlines how Reliable Tire (referred to as "the Company," "We," "Us," or "Our") collects, uses, and discloses your personal information when you use our Service. It also explains your privacy rights and how the law protects you.</p>
@@ -136,10 +136,12 @@
         <h2>13. Changes to this Policy</h2>
         <p>We may update this Privacy Policy periodically. Changes will be posted on this page with an updated "Last updated" date. We will notify you of significant changes via email or through our Service.</p>
 
-        <h2>14. Contact Us</h2>
+        <h2>14. Data Safety</h2>
+        <p>We are committed to protecting your personal information. The following details how we collect, use, and safeguard your data:</p>
+        <h2>15. Contact Us</h2>
         <p>For questions about this Privacy Policy, please contact us at:</p>
-        <p>Email: <a href="mailto:contact@example.com">contact@example.com</a></p>
-        <p>Address: 123 Privacy St, Suite 456, Austin, TX 78701, United States</p>
+        <p>Email: <a href="mailto:tgary1397@gmail.com">tgary1397@gmail.com        </a></p>
+        <p>Address: 3345 E State Hwy 29, Burnet, TX 78611, United States</p>
     </div>
 </body>
 </html>
