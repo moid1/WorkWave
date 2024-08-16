@@ -38,7 +38,6 @@
         <h3>Reliable Tired Disposal</h3>
         <p><strong>Developer Details</strong> You can contact on moid68580@gmail.com</p>
         <p><strong>Last updated:</strong> August 17, 2024</p>
-        <h5>Developer Details:</h5>
 
         <h2>1. Introduction</h2>
         <p>This Privacy Policy outlines how Reliable Tire (referred to as "the Company," "We," "Us," or "Our") collects, uses, and discloses your personal information when you use our Service. It also explains your privacy rights and how the law protects you.</p>
