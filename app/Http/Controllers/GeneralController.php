@@ -13,12 +13,14 @@ class GeneralController extends Controller
     {
         $graded = [];
         $notGraded = [];
-        if ($request->date) {
-            $orders = Order::whereDate('created_at', $request->date)->where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
-        } else {
-            $orders = Order::where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
+        // if ($request->date) {
+        //     $orders = Order::whereDate('created_at', $request->date)->where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
+        // } else {
+        //     $orders = Order::where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
 
-        }
+        // }
+        $orders = Order::where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
+
         foreach ($orders as $order) {
             if ($order->customer->trailer_grading_type == 'trailers_to_grade') {
                 $graded[] = $order;

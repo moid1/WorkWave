@@ -371,9 +371,10 @@ class RoutingController extends Controller
         if ($daysToAdd === false) {
             return null; // Invalid day of the week
         }
-
-        $futureDate = $now->addDays($daysToAdd);
-        return $futureDate->startOfDay();
+        if ($daysToAdd) {
+            $futureDate = $now->addDays($daysToAdd - 1);
+            return $futureDate->startOfDay();
+        }
     }
 
 }
