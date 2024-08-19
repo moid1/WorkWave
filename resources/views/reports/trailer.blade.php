@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <form action="{{ route('trailer.swap.create') }}">
-                        <input type="date" class="form-control" name="date">
+                        <input type="date" class="form-control d-none" name="date">
                         <button class="btn btn-primary mt-3 mb-3" type="submit">Fetch</button>
                     </form>
                 </div>
