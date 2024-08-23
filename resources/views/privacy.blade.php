@@ -33,7 +33,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    {{-- <div class="container">
         <h1>Privacy Policy</h1>
         <h3>Reliable Tired Disposal</h3>
         <p><strong>Developer Details</strong> You can contact on moid68580@gmail.com</p>
@@ -144,6 +144,74 @@
         <p>For questions about this Privacy Policy, please contact us at:</p>
         <p>Email: <a href="mailto:tgary1397@gmail.com">tgary1397@gmail.com        </a></p>
         <p>Address: 3345 E State Hwy 29, Burnet, TX 78611, United States</p>
-    </div>
+    </div> --}}
+
+    <div class="container">
+        <h3>Reliable Tire Disposal</h3>
+        <p><strong>Developer Details</strong> You can contact on moid68580@gmail.com</p>
+        <p><strong>Last updated:</strong> August 23, 2024</p>
+        <div class="elementor-widget-container">
+            <p>This Application collects Personal Data from its Users. The policy can be printed through the print command in the browser settings.</p>
+            <p>The Owner and Data Controller is located at<br>3345 E State Hwy 29, Burnet, TX 78611, United States, and can be contacted at <a href="mailto:tgary1397@gmail.com">tgary1397@gmail.com</a>.</p>
+            
+            <p><strong>Types of Data Collected</strong></p>
+            <p>This Application collects various types of Personal Data, either directly or through third parties. These include: tracker, unique device identifiers for advertising (e.g. Google Advertiser ID or IDFA), device information, geography/region, number of Users and sessions, session duration, application opens/launches, operating systems, email address, usage data, universally unique identifier (UUID),first and last name, billing address, phone number, password, social media accounts, geographic position, location permissions (continuous/non-continuous and approximate/precise), camera permission (without saving or recording), and shipping address. The details of each type of data collected are provided in the dedicated sections of this privacy policy or in specific explanation texts displayed before the data is collected.</p>
+            
+            <p><strong>Data Collection</strong></p>
+            <p>Personal Data can either be provided by the User or collected automatically when using the Application (e.g. Usage Data). Unless specified otherwise, all Data requested by the Application is mandatory and failure to provide it may result in the inability to use its services. If some Data is not mandatory, the User can choose not to provide it without affecting the availability or functionality of the service. If unsure about mandatory data, the User can contact the Owner. The use of Cookies or other tracking tools by the Application or third-party services used by the Application serves the purpose of providing the required Service and any other purposes outlined in this privacy policy and the Cookie Policy (if available). The User is responsible for obtaining consent from third parties for any Personal Data obtained, published, or shared through the Application.</p>
+            
+            <p><strong>Data Processing</strong></p>
+            <p>The Owner implements appropriate security measures to prevent unauthorized access, modification, disclosure, or destruction of the Data. The processing of Data is carried out using computers and/or IT tools and following organizational procedures strictly related to the intended purposes. The Data may be accessible to certain personnel involved in the operation of the Application (e.g. administration, sales, marketing, legal, system administration) or external parties (e.g. technical service providers, mail carriers, hosting providers, IT companies, communications agencies) appointed as Data Processors by the Owner if necessary. The updated list of these parties can be requested from the Owner at any time.</p>
+            
+            <p><strong>Legal Basis of Processing</strong></p>
+            <p>The Owner can process Personal Data if one of the following applies: (1) User consent for specific purposes, (2) provision of Data is necessary for performance of an agreement with the User, (3) necessary for compliance with a legal obligation, (4) related to a task carried out in the public interest or exercise of official authority, or (5) necessary for the Owner’s or a third party’s legitimate interests. The Owner will clarify the specific legal basis for processing upon request.</p>
+            
+            <p><strong>Place of Processing</strong></p>
+            <p>The Data is processed at the Owner’s operating offices and any other places where the parties involved in the processing are located. Data transfers to a country other than the User’s may occur, and details on the place of processing can be found in the relevant section of this privacy policy. The User has the right to know about the legal basis of data transfers and the security measures taken by the Owner to safeguard their Data. If such a transfer occurs, more information can be obtained by checking the relevant sections of this document or contacting the Owner.</p>
+            
+            <p><strong>Retention Time</strong></p>
+            <p>Personal Data will be processed and stored for as long as required by the purpose they have been collected for.</p>
+            
+            <p><strong>Retention of Personal Data:</strong></p>
+            <p>Personal Data collected for contract performance will be kept until the contract is fulfilled.</p>
+            <p>Personal Data collected for legitimate interests will be kept as long as needed to achieve those interests. Information on the legitimate interests can be found in this document or by contacting the owner.</p>
+            <p>If the user gives consent, the owner may keep Personal Data for a longer period, but only as long as the consent is not withdrawn. Additionally, if required by law or by an authority, the owner may be obliged to keep Personal Data longer.</p>
+            <p>After the retention period, Personal Data will be deleted and the rights of access, erasure, rectification, and data portability cannot be exercised.</p>
+            
+            <p><strong>Processing Purposes:</strong></p>
+            <p>The owner collects User Data to provide its service, meet legal obligations, respond to enforcement requests, protect rights and interests, detect malicious or fraudulent activity, and for: Analytics, User database management, Registration and authentication, Content performance and features testing (A/B testing), Social features, Managing contacts and sending messages, Infrastructure monitoring, Location-based interactions, Device permissions for Personal Data access, Hosting and backend infrastructure, Platform services and hosting, Managing support and contact requests, and Location processing.</p>
+            <p>For information on the Personal Data used for each purpose, see “Detailed information on the processing of Personal Data”.</p>
+            
+            <p><strong>Device Permissions for Personal Data Access:</strong></p>
+            <p>Depending on the device, this application may ask for certain permissions to access device data. The user must grant these permissions but can revoke them at any time through device settings or by contacting the owner. Revoking these permissions may impact the application’s functioning. If the user grants any of the listed permissions, the respective Personal Data may be processed by this application.</p>
+            
+            <p><strong>Location Permissions:</strong></p>
+            <p>Approximate location (continuous): used to access the user’s approximate device location and provide location-based services.</p>
+            <p>Approximate location (non-continuous): used to access the user’s approximate device location and provide location-based services, but the location is not determined continuously.</p>
+            <p>Precise location (continuous): used to access the user’s precise device location and provide location-based services.</p>
+            <p>Precise location (non-continuous): used to access the user’s precise device location and provide location-based services, but the location is not determined continuously.</p>
+            
+            <p><strong>Camera Permission:</strong></p>
+            <p>Camera permission (without saving or recording): used to access the camera or capture images and video from the device, but does not save or record the output.</p>
+            
+            <p><strong>Detailed Information on Personal Data Processing:</strong></p>
+            <p>Personal Data is collected for the following purposes and using the following services:</p>
+            
+            <p><strong>Analytics</strong></p>
+            <p>This section provides services that allow the owner to monitor and analyze web traffic and track user behavior.</p>
+            
+            <p><strong>Google Analytics for Firebase (Google LLC)</strong></p>
+            <p>Google Analytics for Firebase, also known as Firebase Analytics, is an analytics service provided by Google LLC. To understand Google’s use of data, consult Google’s partner policy. Firebase Analytics may share data with other Firebase tools such as Crash Reporting, Authentication, Remote Config, or Notifications. The user can check this privacy policy for details on these tools.</p>
+            <p>The Firebase Analytics service uses mobile device identifiers and technologies similar to cookies. Users can opt-out of certain Firebase features through device settings or by following instructions in other Firebase-related sections of the privacy policy, if available. The following personal data is processed: application opens, device information, geography/region, launches, number of sessions, number of users, operating systems, session duration, tracker, and unique device identifiers for advertising (such as Google Advertiser ID or IDFA). Processing takes place in the United States.</p>
+            
+            <p><strong>Content Performance and Features Testing (A/B Testing)</strong></p>
+            <p>This section provides services that allow the owner to track and analyze the user’s response to changes in the structure, text, or other components of the application.</p>
+            
+            <p><strong>Firebase Remote Config (Google LLC)</strong></p>
+            <p>Firebase Remote Config is an A/B testing and configuration service provided by Google LLC. The personal data processed is specified in the service’s privacy policy. Processing takes place in the United States.</p>
+            
+            <p><strong>Device Permissions for Personal Data Access</strong></p>
+            <p>This application requests certain permissions from users that allow it to access the user’s device data as summarized and described in this document. The personal data processed includes approximate location (continuous and non-continuous), camera permission without saving or recording, and precise location (continuous and non-continuous).</p>
+            
 </body>
 </html>
