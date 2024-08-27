@@ -527,7 +527,7 @@
     <script>
         setTimeout(function() {
     window.location.reload();
-}, 30000);
+}, 300000);
         // Map days of the week to numbers
         var dayMap = {
             'Sunday': 0,
