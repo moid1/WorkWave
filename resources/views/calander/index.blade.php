@@ -160,7 +160,7 @@
                                                 $tempOrder = App\Models\Order::with(['fulfilled'])->find($order_id);
                                             
                                                 if ($tempOrder && $tempOrder->fulfilled) {
-                                                    $totalLeftOver += $tempOrder->fulfilled->left_over;
+                                                    $totalLeftOver += int($tempOrder->fulfilled->left_over);
                                                 }
                                                 @endphp
                                                  @if($tempOrder)
