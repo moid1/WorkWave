@@ -18,9 +18,9 @@ class ManifestPDFController extends Controller
             $data = ManifestPDF::where('customer_id', $id)->get();
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
-                $fromDate = Carbon::parse($request->from_date)->format('YYYY-MM-DD');
-                $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+                // $fromDate = Carbon::parse($request->from_date)->format('YYYY-MM-DD');
+                // $toDate = Carbon::parse($request->to_date)->endOfDay();
+                // $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
             }
 
             return Datatables::of($data)
