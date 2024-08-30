@@ -260,7 +260,7 @@
                                         @endif
                                     </td>
 
-                                    <td class="droppable-day" data-day="Saturday">
+                                    {{-- <td class="droppable-day" data-day="Saturday">
                                         @if (isset($truckData['Saturday']))
                                             @foreach ($truckData['Saturday'] as $route)
                                                 @foreach (explode(',', $route['order_ids']) as $order_id)
@@ -310,7 +310,7 @@
                                                 @endforeach
                                             @endforeach
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td>{{ $totalLeftOver }}</td>
                                 </tr>
                             @endforeach
