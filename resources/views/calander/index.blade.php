@@ -106,8 +106,8 @@
                                 <th>Wednesday</th>
                                 <th>Thursday</th>
                                 <th>Friday</th>
-                                <th>Saturday</th>
-                                <th>Sunday</th>
+                                {{-- <th>Saturday</th>
+                                <th>Sunday</th> --}}
                                 <th>Left Over</th>
                             </tr>
                         </thead>
