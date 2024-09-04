@@ -26,30 +26,29 @@ class OrderController extends Controller
         $trucks = Truck::where('is_active', true)->get();
 
         if ($request->ajax()) {
-            $data = Order::with(['customer', 'user', 'driver'])->get();
+            // Start with the basic query
+            $query = Order::with(['customer', 'user', 'driver']);
+        
+            // Apply date range filter if specified
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+                $query->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
             }
-
-
+        
+            // Paginate the results
+            $data = $query->paginate(20); // You can adjust the number of items per page
+        
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('id', function ($row) {
                     return $row->id;
                 })
                 ->editColumn('business_name', function ($row) {
-                    if ($row->customer->business_name) {
-                        return $row->customer->business_name;
-                    }
-                    return 'N/A';
+                    return $row->customer->business_name ?? 'N/A';
                 })
                 ->editColumn('created_by', function ($row) {
-                    if ($row->user->name) {
-                        return $row->user->name;
-                    }
-                    return 'N/A';
+                    return $row->user->name ?? 'N/A';
                 })
                 ->editColumn('created_at', function ($row) {
                     return $row->delivery_date;
@@ -58,29 +57,28 @@ class OrderController extends Controller
                     return $row->customer->email;
                 })
                 ->editColumn('driver', function ($row) {
-                    if ($row->driver)
-                        return $row->driver->name;
-                    return 'N/A';
+                    return $row->driver->name ?? 'N/A';
                 })
                 ->editColumn('update_truck', function ($row) {
                     $button = '
                     <button type="button" data-order_id="' . $row->id . '" class="btn btn-warning btn-sm" onclick="updateTruck(\'' . $row->id . '\')">Update Truck
                     </button>
-                ';
+                    ';
                     $showBtn = '';
-
+        
                     if ($row->status == 'created') {
                         $orderShowRoute = route('order.show', $row->id);
-                        $showBtn = '/<a href="' . $orderShowRoute . '" > <i class="fa fa-edit"  title="update order"></i></a>';
+                        $showBtn = ' /<a href="' . $orderShowRoute . '" > <i class="fa fa-edit" title="update order"></i></a>';
                     }
                     $orderDeleteRoute = route('order.delete', $row->id);
-
-                    $deleteBtn = ' /<a href="' . $orderDeleteRoute . '" > <i class="fa fa-times text-primary"  title="delete order"></i></a>';
+        
+                    $deleteBtn = ' /<a href="' . $orderDeleteRoute . '" > <i class="fa fa-times text-primary" title="delete order"></i></a>';
                     return $button . $showBtn . $deleteBtn;
                 })
                 ->rawColumns(['update_truck'])
                 ->make(true);
         }
+        
 
         $drivers = User::where('type', 2)->get();
         $orders = Order::with(['customer', 'user', 'driver'])->get();
