@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Routing;
+use App\Models\Trailers;
 use App\Models\TrailerSwapOrder;
 use Illuminate\Http\Request;
 
@@ -28,7 +30,10 @@ class GeneralController extends Controller
                 $notGraded[] = $order;
             }
         }
-        return view('reports.trailer', compact('graded', 'notGraded'));
+
+        $customers = Customer::select('id', 'business_name')->get();
+        $trailers = Trailers::all();
+        return view('reports.trailer', compact('graded', 'notGraded', 'customers','trailers'));
 
     }
 
@@ -74,4 +79,5 @@ class GeneralController extends Controller
 
         return back()->with('success', 'Data updated successfully' );
     }
+
 }
