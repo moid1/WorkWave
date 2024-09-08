@@ -8,6 +8,11 @@
                     <button id="addNewTrailer" class="btn btn-primary mb-5"> Add Trailer</button>
                 </div>
             </div>
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="row">
 
                 <div class="col-12">
@@ -17,38 +22,45 @@
 
                             <h4 class="mt-0 header-title">Report</h4>
                             <div class="row">
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <h6>Trailers to Grade</h6>
                                 </div>
 
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <h6>Location</h6>
                                 </div>
 
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <h6>Customer</h6>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <h6>Status</h6>
                                 </div>
+                                <div class="col-lg-2">
+                                    <h6>Action</h6>
+                                </div>
+                            </div>
+                            <div class="row">
                                 @foreach ($trailers as $trailer)
-                                    <div class="col-lg-3 change-status"
-                                        data-trailer-swap="{{ $trailer->id }}">
+                                    <div class="col-lg-2 change-status" data-trailer-swap="{{ $trailer->id }}">
                                         <p>{{ $trailer->name }}</p>
                                     </div>
 
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-2">
                                         <p>{{ $trailer->location }}</p>
                                     </div>
 
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-2">
                                         @php
                                             $customer = \App\Models\Customer::find($trailer->customer);
                                         @endphp
                                         <p>{{ $customer->business_name }}</p>
                                     </div>
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-2">
                                         <p>{{ $trailer->status }}</p>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <a href="{{ route('trailer.delete', $trailer->id) }}">Delete</a>
                                     </div>
                                 @endforeach
                                 {{-- @foreach ($graded as $order)

@@ -207,5 +207,5 @@ Route::post('/getSearchTrailerData', [GeneralController::class, 'getSearchTraile
 Route::post('/update-trailer-status', [GeneralController::class, 'updateTrailerData'])->name('update.trailer.data');
 
 Route::post('trailer-post', [TrailersController::class, 'store'])->name('trailer.store');
-
+Route::get('/delete-trailer/{id}', [TrailersController::class, 'deleteTrailer'])->name('trailer.delete');
 

@@ -63,4 +63,9 @@ class TrailersController extends Controller
     {
         //
     }
+
+    public function deleteTrailer($id){
+        Trailers::find($id)->delete();
+        return back()->with('success', 'Trailer Deleted Successfully');
+    }
 }
