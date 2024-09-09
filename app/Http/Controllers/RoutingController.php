@@ -262,7 +262,7 @@ class RoutingController extends Controller
                 ->update(['is_routed' => false]);
             $routing->delete();
 
-                return back()->with('success', 'Route is deleted successfully');
+            return back()->with('success', 'Route is deleted successfully');
         } catch (\Throwable $th) {
             return back()->with('error', 'Route not found');
         }
@@ -303,44 +303,78 @@ class RoutingController extends Controller
         $orderId = $request->order_id;
         $futureDay = $request->futureDay;
         $routing = Routing::whereRaw("FIND_IN_SET(?, order_ids)", [$orderId])->first();
-
+        $truckSource = $request->sourceTruck;
+        $truckDestination = $request->destinationTruck;
+        $destinationRouteId = $request->destinationRouteId;
         if ($routing) {
 
-            $truckDriver = TruckDriver::where('user_id', $routing->driver_id)->latest()->first();
+            if (($request->sourceTruck) == $request->destinationTruckId) {
 
-            // Step 3a: Remove orderId from existing routing
-            $orderIds = explode(',', $routing->order_ids);
-            $orderIds = array_diff($orderIds, [$orderId]);
-            $routing->order_ids = implode(',', $orderIds);
+                $truckDriver = TruckDriver::where('user_id', $routing->driver_id)->latest()->first();
 
-            // Step 3b: Check availability on the specific day of the current week
-            $currentWeekStart = Carbon::now()->startOfWeek();
-            $currentWeekEnd = Carbon::now()->endOfWeek();
+                // Step 3a: Remove orderId from existing routing
+                $orderIds = explode(',', $routing->order_ids);
+                $orderIds = array_diff($orderIds, [$orderId]);
+                $routing->order_ids = implode(',', $orderIds);
 
-            // Find the date of the specific futureDay within the current week
-            $futureDate = $this->getNextWeekdayDate($futureDay);
+                // Step 3b: Check availability on the specific day of the current week
+                $currentWeekStart = Carbon::now()->startOfWeek();
+                $currentWeekEnd = Carbon::now()->endOfWeek();
+
+                // Find the date of the specific futureDay within the current week
+                $futureDate = $this->getNextWeekdayDate($futureDay);
 
 
-            // Save the updated routing
-            $routing->save();
+                // Save the updated routing
+                $routing->save();
 
-            $newRouting = Routing::create([
-                'order_ids' => $request->order_id,
-                'route_name' => $routing->route_name,
-                'truck_id' => $routing->truck_id,
-                'routing_date' => $futureDate
-            ]);
+                $newRouting = Routing::create([
+                    'order_ids' => $request->order_id,
+                    'route_name' => $routing->route_name,
+                    'truck_id' => $routing->truck_id,
+                    'routing_date' => $futureDate
+                ]);
 
-            // Extract order IDs from comma-separated string
-            // $orderIDs = explode(',', $request->order_ids);
+                // Extract order IDs from comma-separated string
+                // $orderIDs = explode(',', $request->order_ids);
 
-            // Update all orders to mark them as routed
-            // Order::whereIn('id', $orderIDs)->update(['is_routed' => true]);
+                // Update all orders to mark them as routed
+                // Order::whereIn('id', $orderIDs)->update(['is_routed' => true]);
 
-            if (empty($routing->order_ids)) {
-                $routing->delete();
+                if (empty($routing->order_ids)) {
+                    $routing->delete();
+                }
+                return response()->json();
+            }else{
+
+                 // Step 3a: Remove orderId from existing routing
+                 $orderIds = explode(',', $routing->order_ids);
+                 $orderIds = array_diff($orderIds, [$orderId]);
+                 $routing->order_ids = implode(',', $orderIds);
+                 $routing->save();
+
+                 if (empty($routing->order_ids)) {
+                    $routing->delete();
+                }
+
+                // source and destination trucks are different
+                $destinationRouting = Routing::findOrFail($destinationRouteId);
+
+
+                // Step 3a: Remove orderId from existing routing
+                $orderIds = explode(',', $destinationRouting->order_ids);
+                $orderIds[] = $orderId; // Add the new order ID to the array
+                $orderIds = array_unique($orderIds);
+
+                $destinationRouting->order_ids = implode(',', $orderIds);
+
+
+
+                // Save the updated routing
+                $destinationRouting->save();
+
+
             }
-            return response()->json();
 
         } else {
             // Handle case where no existing routing found (possibly create a new route)
