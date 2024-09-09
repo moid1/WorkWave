@@ -33,7 +33,7 @@ class GeneralController extends Controller
 
         $customers = Customer::select('id', 'business_name')->get();
         $trailers = Trailers::all();
-        return view('reports.trailer', compact('graded', 'notGraded', 'customers','trailers'));
+        return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
 
     }
 
@@ -55,12 +55,14 @@ class GeneralController extends Controller
         }
     }
 
-    public function getSearachTrailerView(){
+    public function getSearachTrailerView()
+    {
         $trailers = [];
         return view('trailer.search', compact('trailers'));
     }
 
-    public function getSearchTrailerData(Request $request){
+    public function getSearchTrailerData(Request $request)
+    {
         $trailerNo = $request->trailer_no;
         $trailers = TrailerSwapOrder::where('trailer_drop_off', $trailerNo)->with('order')->latest()->first();
         return view('trailer.search', compact('trailers'));
@@ -68,7 +70,8 @@ class GeneralController extends Controller
 
     }
 
-    public function updateTrailerData(Request $request){
+    public function updateTrailerData(Request $request)
+    {
         $trailerId = $request->trailer_id;
         // $trailerData = TrailerSwapOrder::findOrFail($trailerId);
         // if($trailerData){
@@ -78,13 +81,19 @@ class GeneralController extends Controller
         // }
 
         $trailer = Trailers::find($trailerId);
-        if($trailer){
-            $trailer->status  = $request->status;
-            $trailer->location = $request->location;
+        if ($trailer) {
+            if ($request->status) {
+                $trailer->status = $request->status;
+            }
+            if ($request->location) {
+                $trailer->location = $request->location;
+            }
+            if ($trailer->trailer_going)
+                $trailer->trailer_going = $request->trailer_going;
             $trailer->save();
         }
 
-        return back()->with('success', 'Data updated successfully' );
+        return back()->with('success', 'Data updated successfully');
     }
 
 }

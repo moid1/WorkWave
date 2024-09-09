@@ -26,6 +26,7 @@
                                         <tr>
                                             <th>Trailer Name</th>
                                             <th>Location</th>
+                                            <th>Trailer Going</th>
                                             <th>Customer</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -36,6 +37,7 @@
                                             <tr data-trailer-id="{{ $trailer->id }}">
                                                 <td>{{ $trailer->name }}</td>
                                                 <td>{{ $trailer->location }}</td>
+                                                <td>{{ $trailer->trailer_going ?? 'N/A' }}</td>
                                                 <td>
                                                     @php
                                                         $customer = \App\Models\Customer::find($trailer->customer);
@@ -44,8 +46,10 @@
                                                 </td>
                                                 <td>{{ $trailer->status }}</td>
                                                 <td>
-                                                    <a href="{{ route('trailer.delete', $trailer->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                                                    <button class="btn btn-info btn-sm change-status" data-trailer-id="{{ $trailer->id }}">Edit</button>
+                                                    <a href="{{ route('trailer.delete', $trailer->id) }}"
+                                                        class="btn btn-danger btn-sm">Delete</a>
+                                                    <button class="btn btn-info btn-sm change-status"
+                                                        data-trailer-id="{{ $trailer->id }}">Edit</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -60,7 +64,8 @@
     </div>
 
     <!-- Update Trailer Modal -->
-    <div class="modal fade" id="updateTrailerModal" tabindex="-1" aria-labelledby="updateTrailerModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateTrailerModal" tabindex="-1" aria-labelledby="updateTrailerModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -81,6 +86,17 @@
                             <label for="location" class="col-form-label">Location:</label>
                             <input type="text" class="form-control" name="location" id="location">
                         </div>
+                        <div class="form-group">
+                            <label for="trailer_going">Trailer Going</label>
+                            <select id="trailer_going" name="trailer_going" class="form-control form-select form-select-lg mb-3"
+                                aria-label=".form-select-lg example">
+                                <option value="" disabled>Please select where the trailer is going</option>
+                                <option value="Burnet" {{ $trailer->trailer_going === 'Burnet' ? 'selected' : '' }}>Burnet</option>
+                                <option value="Victoria" {{ $trailer->trailer_going === 'Victoria' ? 'selected' : '' }}>Victoria</option>
+                                <option value="Robstown" {{ $trailer->trailer_going === 'Robstown' ? 'selected' : '' }}>Robstown</option>
+                                <option value="Cemex" {{ $trailer->trailer_going === 'Cemex' ? 'selected' : '' }}>Cemex</option>
+                            </select>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -92,7 +108,8 @@
     </div>
 
     <!-- Add New Trailer Modal -->
-    <div class="modal fade" id="addNewTrailerModal" tabindex="-1" aria-labelledby="addNewTrailerModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addNewTrailerModal" tabindex="-1" aria-labelledby="addNewTrailerModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -123,6 +140,17 @@
                         <div class="form-group">
                             <label for="location" class="col-form-label">Location:</label>
                             <input type="text" class="form-control" name="location">
+                        </div>
+                        <div class="form-group">
+                            <label>Trailer Going</label>
+                            <select id="" name="trailer_going"
+                                class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                <option value="" disabled>Please select where trailer going</option>
+                                <option value="Burnet">Burnet</option>
+                                <option value="Victoria">Victoria</option>
+                                <option value="Robstown">Robstown</option>
+                                <option value="Cemex">Cemex</option>
+                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
