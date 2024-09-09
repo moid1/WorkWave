@@ -88,8 +88,9 @@ class GeneralController extends Controller
             if ($request->location) {
                 $trailer->location = $request->location;
             }
-            if ($trailer->trailer_going)
+            if ($request->trailer_going) {
                 $trailer->trailer_going = $request->trailer_going;
+            }
             $trailer->save();
         }
 
