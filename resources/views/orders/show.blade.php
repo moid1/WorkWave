@@ -121,6 +121,7 @@
                                                 <select id="loadType" name="load_type"
                                                     class="form-control form-select form-select-lg mb-3"
                                                     aria-label=".form-select-lg example">
+                                                    <option value="" selected></option>
                                                     <option value="box_truck_route"
                                                         {{ $order->load_type == 'box_truck_route' ? 'selected' : '' }}>Box
                                                         Truck Route</option>
