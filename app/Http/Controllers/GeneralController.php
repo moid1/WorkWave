@@ -91,6 +91,9 @@ class GeneralController extends Controller
             if ($request->trailer_going) {
                 $trailer->trailer_going = $request->trailer_going;
             }
+            if($request->customer){
+                $trailer->customer = $request->customer;
+            }
             $trailer->save();
         }
 

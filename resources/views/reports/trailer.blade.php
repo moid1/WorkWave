@@ -87,6 +87,14 @@
                             <input type="text" class="form-control" name="location" id="location">
                         </div>
                         <div class="form-group">
+                            <label for="customer" class="col-form-label">Select Customer</label>
+                            <select name="customer" class="form-control">
+                                @foreach ($customers as $customer)
+                                    <option value="{{ $customer->id }}">{{ $customer->business_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="trailer_going">Trailer Going</label>
                             <select id="trailer_going" name="trailer_going" class="form-control form-select form-select-lg mb-3"
                                 aria-label=".form-select-lg example">

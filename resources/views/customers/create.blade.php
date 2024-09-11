@@ -11,6 +11,8 @@
                         <div class="card-body">
 
                             <h4 class="mt-0 header-title">Add CX Here</h4>
+                            <a href="{{route('customer.pricing.index')}}" class="btn btn-primary" style="float: right">Customer Pricing</a>
+
                             <p class="text-muted m-b-30 font-14">Fill This instructions Carefully.</p>
                             @if (Session::has('success'))
                                 <div class="alert alert-success" role="alert">
