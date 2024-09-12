@@ -11,7 +11,7 @@
                     <div class="card m-b-20">
                         <div class="card-body">
 
-                            <h4 class="mt-0 header-title">Order Details</h4>
+                            <h4 class="mt-0 header-title">Order Details {{$order->id}}</h4>
                             @if (Session::has('success'))
                                 <div class="alert alert-success" role="alert">
                                     {{ Session::get('success') }}
