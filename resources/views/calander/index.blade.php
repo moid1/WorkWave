@@ -133,9 +133,9 @@
                                                 @foreach (explode(',', $route['order_ids']) as $order_id)
                                                     @php
                                                         $tempOrder = App\Models\Order::with(['fulfilled', 'customer'])->find($order_id);
-                                                        if (isset($tempOrder->fulfilled)) {
-                                                            $totalLeftOver += $tempOrder->fulfilled->left_over;
-                                                        }
+                                                        if ($tempOrder && $tempOrder->fulfilled) {
+                                                                $totalLeftOver += intval($tempOrder->fulfilled->left_over);
+                                                            }
                                                     @endphp
                                                     @if (isset($tempOrder))
                                                         <div class="orderdiv" data-order-id="{{ $order_id }}">
