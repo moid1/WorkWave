@@ -306,7 +306,7 @@ class HomeController extends Controller
 
         if ($request->date) {
             $todaysOrders = Order::whereDate('delivery_date', $request->date)->whereNotIn('load_type', $NotIncluded)
-                ->whereNotNull('driver_id')
+                ->whereNotNull('truck_id')
                 ->where('status', 'fulfilled')
                 ->with(['driver', 'customer', 'fulfilled', 'compared'])
                 ->get()
