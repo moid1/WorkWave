@@ -135,36 +135,33 @@ class DriverController extends Controller
 
     public function apiGetLoggedInDriverOrders()
     {
-        $existingOrderIds = Routing::pluck('order_ids')->toArray();
-
-
         try {
-            $trucDriver = TruckDriver::where('user_id', Auth::id())->with('truck')->latest()->first();
-            if ($trucDriver && $trucDriver->truck) {
-                $currentDate = Carbon::now()->toDateString();
-                $orders = Order::where([
-                    ['truck_id', $trucDriver->truck->id],
-                    ['status', 'created'],
-                ])
-                ->whereRaw("STR_TO_DATE(delivery_date, '%Y-%m-%d') >= ?", [$currentDate])
-                ->with(['customer', 'user', 'manifest'])
-                ->latest()
-                ->get();
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Driver Orders',
-                    'data' => $orders,
-                ], 200);
-            }else{
+            $truckDriver = TruckDriver::with('truck')->where('user_id', Auth::id())->latest()->first();
+
+            if (!$truckDriver || !$truckDriver->truck) {
                 return response()->json([
                     'status' => false,
                     'message' => "No truck is assigned to you"
-                ], 500);
+                ], 404); // Use 404 for "not found" scenario
             }
+
+            $currentDate = Carbon::now()->toDateString();
+            $orders = Order::with(['customer', 'user', 'manifest'])
+                ->where('truck_id', $truckDriver->truck->id)
+                ->where('status', 'created')
+                ->whereRaw("delivery_date = ?", [$currentDate]) // Use raw query for string comparison
+                ->latest()
+                ->get();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Driver Orders',
+                'data' => $orders,
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
+                'message' => 'An error occurred: ' . $th->getMessage()
             ], 500);
         }
     }
