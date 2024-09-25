@@ -93,17 +93,17 @@
                     }
     
                     geocoder.geocode({
-                        'address': trailer.order.customer.address
+                        'address': trailer.customer.address
                     }, function(results, status) {
                         console.log(status);
                         if (status === 'OK') {
                             var marker = new google.maps.Marker({
                                 map: map,
                                 position: results[0].geometry.location,
-                                title: trailer ? trailer.trailer_drop_off : 'N/A',
+                                title: trailer ? trailer.name : 'N/A',
                                 icon: blackBoxIcon,
                                 label: {
-                                    text: trailer ? trailer.trailer_drop_off : 'N/A',
+                                    text: trailer ? trailer.name : 'N/A',
                                     color: 'white',
                                     fontWeight: 'normal',
                                 }
