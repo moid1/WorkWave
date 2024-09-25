@@ -15,14 +15,11 @@ class GeneralController extends Controller
     {
         $graded = [];
         $notGraded = [];
-        // if ($request->date) {
-        //     $orders = Order::whereDate('created_at', $request->date)->where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
-        // } else {
-        //     $orders = Order::where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
-
-        // }
+        
+        // Fetch orders with relationships
         $orders = Order::where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
-
+    
+        // Group orders based on the grading type
         foreach ($orders as $order) {
             if ($order->customer->trailer_grading_type == 'trailers_to_grade') {
                 $graded[] = $order;
@@ -30,13 +27,14 @@ class GeneralController extends Controller
                 $notGraded[] = $order;
             }
         }
-
+    
+        // Get all trailers and group them by location
+        $trailers = Trailers::with('customer')->get()->groupBy('location');
         $customers = Customer::select('id', 'business_name')->get();
-        $trailers = Trailers::all();
+    
         return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
-
     }
-
+    
     public function getOrdersByTruckRouted(Request $request)
     {
         $driver_id = $request->driver_id;
