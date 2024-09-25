@@ -88,12 +88,12 @@
                 var geocoder = new google.maps.Geocoder();
                 var bounds = new google.maps.LatLngBounds(); // Initialize bounds to contain all markers
 
-                    if (!trailer || !trailer.customer || !trailer.customer.address) {
+                    if (!trailer || !trailer.customerData || !trailer.customerData.address) {
                         return; // Ensure trailer data is valid before geocoding
                     }
     
                     geocoder.geocode({
-                        'address': trailer.customer.address
+                        'address': trailer.customerData.address
                     }, function(results, status) {
                         console.log(status);
                         if (status === 'OK') {

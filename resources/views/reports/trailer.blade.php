@@ -46,10 +46,11 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($locationTrailers as $trailer)
+                            
                                                 <tr data-trailer-id="{{ $trailer->id }}">
                                                     <td>{{ $trailer->name }}</td>
                                                     <td>{{ $trailer->trailer_going ?? 'N/A' }}</td>
-                                                    <td>{{ $trailer->customer->business_name ?? 'N/A' }}</td>
+                                                    <td>{{ $trailer->customerData->business_name ?? 'N/A' }}</td>
                                                     <td>{{ $trailer->status }}</td>
                                                     <td>
                                                         <a href="{{ route('trailer.delete', $trailer->id) }}" class="btn btn-danger btn-sm">Delete</a>

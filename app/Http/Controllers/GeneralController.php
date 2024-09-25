@@ -29,9 +29,8 @@ class GeneralController extends Controller
         }
     
         // Get all trailers and group them by location
-        $trailers = Trailers::with('customer')->get()->groupBy('location');
+        $trailers = Trailers::with('hello.betterslp@gmail.com')->get()->groupBy('location');
         $customers = Customer::select('id', 'business_name')->get();
-    
         return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
     }
     
@@ -62,7 +61,7 @@ class GeneralController extends Controller
     public function getSearchTrailerData(Request $request)
     {
         $trailerNo = $request->trailer_no;
-        $trailers = Trailers::where('name', $trailerNo)->with('customer')->first();
+        $trailers = Trailers::where('name', $trailerNo)->with('customerData')->first();
         return view('trailer.search', compact('trailers'));
 
 

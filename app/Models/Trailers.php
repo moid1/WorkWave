@@ -11,7 +11,7 @@ class Trailers extends Model
 
     protected $guarded = [];
 
-    public function customer(){
+    public function customerData(){
         return $this->belongsTo(Customer::class, 'customer', 'id');
     }
 }
