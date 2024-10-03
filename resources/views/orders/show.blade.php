@@ -199,9 +199,11 @@
                                                 <button type="reset" class="btn btn-secondary waves-effect m-l-5">
                                                     Cancel
                                                 </button>
+                                                @if($order->status !== 'completed')
                                                 <button type="button" class="btn btn-danger float-right waves-effect m-l-5" data-toggle="modal" data-target="#completeOrderModal">
                                                     Complete Order
                                                 </button>
+                                                @endif
                                                 
                                             </div>
                                         </div>

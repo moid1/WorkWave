@@ -680,6 +680,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($request->order_id);
         if($order){
             $order->notes = $request->complete_order_notes;
+            $order->status = 'completed';
             $order->save();
         };
         return back()->with('success', 'Order completed');
