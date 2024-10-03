@@ -185,7 +185,7 @@
                                         <div class="col-lg-6  ">
                                             <div class="form-group ">
                                                 <label>Notes</label>
-                                                <textarea class="form-control " name="notes" id="notes" cols="30" rows="2"></textarea>
+                                                <textarea class="form-control " name="notes" id="notes" cols="30" rows="2">{{$order->notes}}</textarea>
                                             </div>
                                         </div>
 
@@ -199,6 +199,10 @@
                                                 <button type="reset" class="btn btn-secondary waves-effect m-l-5">
                                                     Cancel
                                                 </button>
+                                                <button type="button" class="btn btn-danger float-right waves-effect m-l-5" data-toggle="modal" data-target="#completeOrderModal">
+                                                    Complete Order
+                                                </button>
+                                                
                                             </div>
                                         </div>
                                 </form>
@@ -213,4 +217,55 @@
 
 
     </div>
+
+    <!-- Complete Order Modal -->
+<div class="modal fade" id="completeOrderModal" tabindex="-1" role="dialog" aria-labelledby="completeOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completeOrderModalLabel">Complete Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="completeOrderForm" action="{{ route('order.completeOrder') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <input type="hidden" value="{{$order->id}}" name="order_id">
+                        <label for="completeOrderNotes">Notes</label>
+                        <textarea class="form-control" id="completeOrderNotes" name="complete_order_notes" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="completeOrderButton">Complete Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
+
+
+<script>
+    $(document).ready(function() {
+        // Show the modal on Complete Order button click
+        $('#completeOrderModal').on('show.bs.modal', function (event) {
+            // Reset textarea when modal opens
+            $('#completeOrderNotes').val('');
+        });
+
+        // Handle the Complete Now button click
+        $('#completeOrderButton').click(function() {
+            // Submit the complete order form
+            $('#completeOrderForm').submit();
+        });
+        
+        // Attach event to the Complete Order button
+        $('.btn-danger').click(function() {
+            $('#completeOrderModal').modal('show');
+        });
+    });
+</script>

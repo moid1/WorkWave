@@ -675,4 +675,13 @@ class OrderController extends Controller
         Order::find($id)->delete();
         return back()->with('success', 'Order is deleted successfully');
     }
+
+    public function completeOrder(Request $request){
+        $order = Order::findOrFail($request->order_id);
+        if($order){
+            $order->notes = $request->complete_order_notes;
+            $order->save();
+        };
+        return back()->with('success', 'Order completed');
+    }
 }
