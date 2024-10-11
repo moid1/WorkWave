@@ -443,9 +443,9 @@
                             futureDay: droppedDay,
                             sourceTruck: sourceTruckId,
                             destinationTruck: destinationTruckId,
-                            destinationRouteId:destinationRouteId
-                            startDate:$('input[name="daterange"]').data('daterangepicker').startDate.format('YYYY-MM-DD');
-                            endDate:$('input[name="daterange"]').data('daterangepicker').endDate.format('YYYY-MM-DD');
+                            destinationRouteId:destinationRouteId,
+                            startDate:$('input[name="daterange"]').data('daterangepicker').startDate.format('YYYY-MM-DD'),
+                            endDate:$('input[name="daterange"]').data('daterangepicker').endDate.format('YYYY-MM-DD')
                         },
                         success: function(response) {
                             //   calendar.fullCalendar('refetchEvents');
