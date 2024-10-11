@@ -366,6 +366,16 @@ class RoutingController extends Controller
                         'truck_id' => $truckDestination,
                         'routing_date' => $this->getWeekdayDate($futureDay, $request->startDate, $request->endDate)
                     ]);
+                }else{
+                     // Append the orderId to the existing routing's order_ids
+                     $existingOrderIds = explode(',', $destinationRouting->order_ids);
+                    
+                     // Avoid adding duplicates
+                     if (!in_array($orderId, $existingOrderIds)) {
+                         $existingOrderIds[] = $orderId;
+                         $destinationRouting->order_ids = implode(',', $existingOrderIds);
+                         $destinationRouting->save();
+                     }
                 }
 
             }
