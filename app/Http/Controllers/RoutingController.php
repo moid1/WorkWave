@@ -322,7 +322,7 @@ class RoutingController extends Controller
                 $currentWeekEnd = Carbon::now()->endOfWeek();
 
                 // Find the date of the specific futureDay within the current week
-                $futureDate = $this->getNextWeekdayDate($futureDay);
+                $futureDate = $this->getNextWeekdayDate(dayOfWeek: $futureDay);
 
 
                 // Save the updated routing
@@ -345,34 +345,28 @@ class RoutingController extends Controller
                     $routing->delete();
                 }
                 return response()->json();
-            }else{
+            } else {
 
-                 // Step 3a: Remove orderId from existing routing
-                 $orderIds = explode(',', $routing->order_ids);
-                 $orderIds = array_diff($orderIds, [$orderId]);
-                 $routing->order_ids = implode(',', $orderIds);
-                 $routing->save();
+                // Step 3a: Remove orderId from existing routing
+                $orderIds = explode(',', $routing->order_ids);
+                $orderIds = array_diff($orderIds, [$orderId]);
+                $routing->order_ids = implode(',', $orderIds);
+                $routing->save();
 
-                 if (empty($routing->order_ids)) {
+                if (empty($routing->order_ids)) {
                     $routing->delete();
                 }
 
                 // source and destination trucks are different
-                $destinationRouting = Routing::findOrFail($destinationRouteId);
-
-
-                // Step 3a: Remove orderId from existing routing
-                $orderIds = explode(',', $destinationRouting->order_ids);
-                $orderIds[] = $orderId; // Add the new order ID to the array
-                $orderIds = array_unique($orderIds);
-
-                $destinationRouting->order_ids = implode(',', $orderIds);
-
-
-
-                // Save the updated routing
-                $destinationRouting->save();
-
+                $destinationRouting = Routing::find($destinationRouteId);
+                if (!$destinationRouting) {
+                    $newRouting = Routing::create([
+                        'order_ids' => $orderId,
+                        'route_name' => 'New Route by Dropping',
+                        'truck_id' => $truckDestination,
+                        'routing_date' => $this->getWeekdayDate($futureDay)
+                    ]);
+                }
 
             }
 
@@ -410,5 +404,41 @@ class RoutingController extends Controller
             return $futureDate->startOfDay();
         }
     }
+
+    public function getWeekdayDate(string $dayName): string
+{
+    // Define an array mapping day names to Carbon day of the week constants
+    $daysOfWeek = [
+        'sunday' => 0,
+        'monday' => 1,
+        'tuesday' => 2,
+        'wednesday' => 3,
+        'thursday' => 4,
+        'friday' => 5,
+        'saturday' => 6,
+    ];
+
+    // Normalize the input to lowercase
+    $dayName = strtolower($dayName);
+
+    // Check if the day name is valid
+    if (!array_key_exists($dayName, $daysOfWeek)) {
+        throw new InvalidArgumentException('Invalid day name. Please use Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, or Saturday.');
+    }
+
+    // Get the current date
+    $currentDate = Carbon::now();
+
+    // Find the current day of the week
+    $currentDayOfWeek = $currentDate->dayOfWeek;
+
+    // Calculate the difference in days
+    $targetDayOfWeek = $daysOfWeek[$dayName];
+    $daysDifference = $targetDayOfWeek - $currentDayOfWeek;
+
+    // Get the date for that day in the current week
+    return $currentDate->copy()->addDays($daysDifference)->startOfDay()->format('Y-m-d');
+}
+
 
 }
