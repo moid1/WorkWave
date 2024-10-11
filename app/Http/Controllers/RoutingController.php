@@ -364,7 +364,7 @@ class RoutingController extends Controller
                         'order_ids' => $orderId,
                         'route_name' => 'New Route by Dropping',
                         'truck_id' => $truckDestination,
-                        'routing_date' => $this->getWeekdayDate($futureDay)
+                        'routing_date' => $this->getWeekdayDate($futureDay, $request->startDate, $request->endDate)
                     ]);
                 }
 
@@ -405,40 +405,48 @@ class RoutingController extends Controller
         }
     }
 
-    public function getWeekdayDate(string $dayName): string
-{
-    // Define an array mapping day names to Carbon day of the week constants
-    $daysOfWeek = [
-        'sunday' => 0,
-        'monday' => 1,
-        'tuesday' => 2,
-        'wednesday' => 3,
-        'thursday' => 4,
-        'friday' => 5,
-        'saturday' => 6,
-    ];
-
-    // Normalize the input to lowercase
-    $dayName = strtolower($dayName);
-
-    // Check if the day name is valid
-    if (!array_key_exists($dayName, $daysOfWeek)) {
-        throw new InvalidArgumentException('Invalid day name. Please use Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, or Saturday.');
+    public function getWeekdayDate(string $dayName, string $startDate, string $endDate): string
+    {
+        // Define an array mapping day names to Carbon day of the week constants
+        $daysOfWeek = [
+            'sunday' => 0,
+            'monday' => 1,
+            'tuesday' => 2,
+            'wednesday' => 3,
+            'thursday' => 4,
+            'friday' => 5,
+            'saturday' => 6,
+        ];
+    
+        // Normalize the input to lowercase
+        $dayName = strtolower($dayName);
+    
+        // Check if the day name is valid
+        if (!array_key_exists($dayName, $daysOfWeek)) {
+            throw new InvalidArgumentException('Invalid day name. Please use Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, or Saturday.');
+        }
+    
+        // Create Carbon instances for start and end dates
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+    
+        // Check if start date is before end date
+        // if ($start->greaterThan($end)) {
+        //     throw new InvalidArgumentException('Start date must be before end date.');
+        // }
+    
+        // Find the target day of the week
+        $targetDayOfWeek = $daysOfWeek[$dayName];
+    
+        // Iterate through the date range to find the next occurrence of the target weekday
+        for ($date = $start->copy(); $date->lessThanOrEqualTo($end); $date->addDay()) {
+            if ($date->dayOfWeek === $targetDayOfWeek) {
+                return $date->format('Y-m-d');
+            }
+        }
+    
+        // If no date is found, you can return a message or throw an exception
+        throw new Exception("No occurrences of {$dayName} found between {$startDate} and {$endDate}.");
     }
-
-    // Get the current date
-    $currentDate = Carbon::now();
-
-    // Find the current day of the week
-    $currentDayOfWeek = $currentDate->dayOfWeek;
-
-    // Calculate the difference in days
-    $targetDayOfWeek = $daysOfWeek[$dayName];
-    $daysDifference = $targetDayOfWeek - $currentDayOfWeek;
-
-    // Get the date for that day in the current week
-    return $currentDate->copy()->addDays($daysDifference)->startOfDay()->format('Y-m-d');
-}
-
 
 }
