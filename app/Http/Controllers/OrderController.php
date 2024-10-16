@@ -682,6 +682,17 @@ class OrderController extends Controller
             $order->notes = $request->complete_order_notes;
             $order->status = 'completed';
             $order->save();
+
+            Notes::create([
+                'customer_id' => $order->customer_id,
+                'user_id' => Auth::id(),
+                'note' => $request['complete_order_notes'] ?? 'N/A',
+                'estimated_tires' => $request->estimated_tires ?? 'N/A',
+                'spoke_with' => $request->spoke_with ?? 'N/A',
+                'title' => 'Order Note'
+            ]);
+
+
         };
         return back()->with('success', 'Order completed');
     }
