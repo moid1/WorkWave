@@ -210,6 +210,22 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="loadType">Load Type</label>
+                                                <select id="loadType" name="load_type" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                                    <option value="box_truck_route" {{ $customer->load_type == 'box_truck_route' ? 'selected' : '' }}>Box Truck Route</option>
+                                                    <option value="trailer_swap" {{ $customer->load_type == 'trailer_swap' ? 'selected' : '' }}>Trailer Swap</option>
+                                                    <option value="state" {{ $customer->load_type == 'state' ? 'selected' : '' }}>State</option>
+                                                    <option value="tdf" {{ $customer->load_type == 'tdf' ? 'selected' : '' }}>TDF</option>
+                                                    <option value="steel" {{ $customer->load_type == 'steel' ? 'selected' : '' }}>Steel</option>
+                                                    <option value="flatbed" {{ $customer->load_type == 'flatbed' ? 'selected' : '' }}>Flatbed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+
+
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
