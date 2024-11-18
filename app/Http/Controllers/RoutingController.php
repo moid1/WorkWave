@@ -335,6 +335,12 @@ class RoutingController extends Controller
                     'routing_date' => $futureDate
                 ]);
 
+                Order::whereIn('id', $request->order_id)->update([
+                    'delivery_date' => $futureDate,
+                    'truck_id' => $routing->truck_id,
+                ]);
+                
+
                 // Extract order IDs from comma-separated string
                 // $orderIDs = explode(',', $request->order_ids);
 
@@ -366,6 +372,11 @@ class RoutingController extends Controller
                         'truck_id' => $truckDestination,
                         'routing_date' => $this->getWeekdayDate($futureDay, $request->startDate, $request->endDate)
                     ]);
+
+                    Order::whereIn('id', $request->order_id)->update([
+                        'delivery_date' => $newRouting->routing_date,
+                        'truck_id' => $truckDestination,
+                    ]);
                 }else{
                      // Append the orderId to the existing routing's order_ids
                      $existingOrderIds = explode(',', $destinationRouting->order_ids);
@@ -376,7 +387,15 @@ class RoutingController extends Controller
                          $destinationRouting->order_ids = implode(',', $existingOrderIds);
                          $destinationRouting->save();
                      }
+
+                     Order::whereIn('id', $request->order_id)->update([
+                        'delivery_date' => $destinationRouting->routing_date,
+                        'truck_id' => $destinationRouting->truck_id,
+                    ]);
+                    
                 }
+
+                
 
             }
 
