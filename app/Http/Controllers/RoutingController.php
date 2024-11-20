@@ -335,7 +335,7 @@ class RoutingController extends Controller
                     'routing_date' => $futureDate
                 ]);
 
-                Order::whereIn('id', $request->order_id)->update([
+                Order::whereIn('id', explode(',',$request->order_id))->update([
                     'delivery_date' => $futureDate,
                     'truck_id' => $routing->truck_id,
                 ]);
@@ -373,7 +373,7 @@ class RoutingController extends Controller
                         'routing_date' => $this->getWeekdayDate($futureDay, $request->startDate, $request->endDate)
                     ]);
 
-                    Order::whereIn('id', $routing->order_ids)->update([
+                    Order::whereIn('id', explode(',',$routing->order_ids))->update([
                         'delivery_date' => $newRouting->routing_date,
                         'truck_id' => $truckDestination,
                     ]);
@@ -388,7 +388,7 @@ class RoutingController extends Controller
                          $destinationRouting->save();
                      }
 
-                     Order::whereIn('id',  $destinationRouting->order_ids)->update([
+                     Order::whereIn('id',  $existingOrderIds)->update([
                         'delivery_date' => $destinationRouting->routing_date,
                         'truck_id' => $destinationRouting->truck_id,
                     ]);
