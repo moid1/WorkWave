@@ -100,7 +100,10 @@ Route::get('fulfilled-orders', [FullFillOrderController::class, 'getFullFilledOr
 
 Route::post('/notes', [NotesController::class, 'store'])->name('notes.store');
 Route::get('/notes',  [NotesController::class, 'index'])->name('notes.index');
+Route::get('/notes/{id}/edit', [NotesController::class,'edit']);
 Route::get('/specifc-notes/{id}',  [NotesController::class, 'getUserNotes'])->name('notes.user');
+Route::delete('/delete-note/{id}', [NotesController::class, 'destroy'])->name('notes.destroy');
+Route::put('/update-notes/{id}', [NotesController::class, 'update'])->name('notes.update');
 
 Route::get('/books', [CustomerController::class, 'getCustomers'])->name('books.customer');
 Route::get('/books-list/{id}', [ManifestPDFController::class, 'index'])->name('books.list');

@@ -55,25 +55,35 @@ class NotesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Notes $notes)
+    public function edit($id)
     {
-        //
+        $note = Notes::find($id);
+        return response()->json($note);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Notes $notes)
+    public function update(Request $request, $id)
     {
-        //
+        $note = Notes::find($id);
+        $note->note = $request->note;
+        $note->estimated_tires = $request->estimated_tires;
+        $note->spoke_with = $request->spoke_with;
+        $note->save();
+
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Notes $notes)
+    public function destroy($id)
     {
-        //
+        $note = Notes::find($id);
+        $note->delete();
+
+        return redirect()->back();
     }
 
     public function getUserNotes($id)
@@ -108,10 +118,11 @@ class NotesController extends Controller
     }
 
 
-    public function getLastNote(Request $request){
+    public function getLastNote(Request $request)
+    {
         try {
             $note = Notes::where('customer_id', $request->id)->latest()->first();
-               
+
             return response()->json([
                 'status' => true,
                 'message' => 'Customer Note',
