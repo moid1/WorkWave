@@ -664,7 +664,7 @@ class OrderController extends Controller
             'note' => $request['notes'] ?? 'N/A',
             'estimated_tires' => $request->estimated_tires ?? 'N/A',
             'spoke_with' => $request->spoke_with ?? 'N/A',
-            'title' => 'Order Note'
+            'title' => 'Updated Order Note'
         ]);
 
         return redirect('/orders')->with('success', 'Order Updated Successfully');
