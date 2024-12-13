@@ -108,7 +108,7 @@ class RoutingController extends Controller
             $orderIDs = explode(',', $request->order_ids);
 
             // Update all orders to mark them as routed
-            Order::whereIn('id', $orderIDs)->update(['is_routed' => true, 'delivery_date' =>$request->routing_date]);
+            Order::whereIn('id', $orderIDs)->update(['is_routed' => true, 'delivery_date' =>$request->routing_date,'truck_id'=>$request->truck_id]);
 
 
 
