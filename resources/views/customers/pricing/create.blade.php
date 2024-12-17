@@ -131,15 +131,16 @@
                                                     value="{{ old('farm_tractor_last_two_digits', optional($customerPricing)->farm_tractor_last_two_digits) }}" autofocus>
                                             </div>
                                         </div>
-
-                                        {{-- End quanittys of typres of agri tires --}}
-
-
-
-                                        {{-- quantitys of types of otr tires --}}
-
-
                                         <div id="col15_5_24" class="col-lg-6 ">
+                                            <div class="form-group">
+                                                <label>No of OTR ($8.50)</label>
+                                                <input id="15_5_24" type="number" step="0.01" class="form-control" name="15_5_24"
+                                                    value="{{ old('15_5_24',  optional($customerPricing)->{'15_5_24'}) }}" autofocus>
+                                            </div>
+                                        </div>
+                                   
+
+                                        {{-- <div id="col15_5_24" class="col-lg-6 ">
                                             <div class="form-group">
                                                 <label>No of 15_5_24</label>
                                                 <input id="15_5_24" type="number" step="0.01" class="form-control" name="15_5_24"
@@ -225,7 +226,7 @@
                                                 <input id="18_4_38" type="number" step="0.01" class="form-control" name="18_4_38"
                                                     value="{{ old('18_4_38', optional(optional($customerPricing))->{'18_4_38'}) }}" autofocus>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
 
 
