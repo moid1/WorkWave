@@ -57,10 +57,8 @@ class OrderController extends Controller
                 ->editColumn('email', function ($row) {
                     return $row->customer->email;
                 })
-                ->editColumn('driver', function ($row) {
-                    if ($row->driver)
-                        return $row->driver->name;
-                    return 'N/A';
+                ->editColumn('truck_no', function ($row) {
+                        return $row->truck_no;
                 })
                 ->editColumn('update_truck', function ($row) {
                     $button = '

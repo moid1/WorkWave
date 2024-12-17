@@ -182,15 +182,15 @@
                         name: 'customer.email'
                     },
                     {
-                        data: 'driver',
-                        name: 'driver',
-                        render: function(data, type, full, meta) {
-                            if (full.driver) {
-                                return full.driver;
-                            } else {
-                                return 'N/A';
-                            }
-                        }
+                        data: 'truck_no',
+                        name: 'truck_no',
+                        // render: function(data, type, full, meta) {
+                        //     if (full.driver) {
+                        //         return full.driver;
+                        //     } else {
+                        //         return 'N/A';
+                        //     }
+                        // }
                     },
                     {
                         data: 'update_truck',
