@@ -26,7 +26,7 @@ class OrderController extends Controller
         $trucks = Truck::where('is_active', true)->get();
 
         if ($request->ajax()) {
-            $data = Order::with(['customer', 'user', 'driver'])->get();
+            $data = Order::with(['customer', 'user', 'driver', 'truck'])->get();
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
@@ -57,8 +57,10 @@ class OrderController extends Controller
                 ->editColumn('email', function ($row) {
                     return $row->customer->email;
                 })
-                ->editColumn('truck_no', function ($row) {
-                        return $row->truck_no;
+                ->editColumn('truck', function ($row) {
+                    if ($row->truck)
+                        return $row->truck->name;
+                    return 'N/A';
                 })
                 ->editColumn('update_truck', function ($row) {
                     $button = '

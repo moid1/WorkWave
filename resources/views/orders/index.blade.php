@@ -35,7 +35,7 @@
                                         <th>Created By</th>
                                         <th>Order Date</th>
                                         <th>Email</th>
-                                        <th>Driver</th>
+                                        <th>Truck</th>
                                         <th>Action </th>
                                     </tr>
                                 </thead>
@@ -49,7 +49,7 @@
                                             <td>{{ $order->user->name }}</td>
                                             <td>{{ $order->created_at }}</td>
                                             <td>{{ $order->customer->email }}</td>
-                                            <td>{{ $order->driver ? $order->driver->name : 'N/A' }}</td>
+                                            <td>{{ $order->truck ? $order->truck->name : 'N/A' }}</td>
                                             <td><a href="" class="update_driver"
                                                     data-order_id="{{ $order->id }}"><i class="mdi mdi-account "
                                                         title="Update Driver"></i></a> </td>
@@ -182,15 +182,15 @@
                         name: 'customer.email'
                     },
                     {
-                        data: 'truck_no',
-                        name: 'truck_no',
-                        // render: function(data, type, full, meta) {
-                        //     if (full.driver) {
-                        //         return full.driver;
-                        //     } else {
-                        //         return 'N/A';
-                        //     }
-                        // }
+                        data: 'truck',
+                        name: 'truck',
+                        render: function(data, type, full, meta) {
+                            if (full.truck) {
+                                return full.truck;
+                            } else {
+                                return 'N/A';
+                            }
+                        }
                     },
                     {
                         data: 'update_truck',
