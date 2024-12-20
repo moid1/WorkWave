@@ -124,6 +124,7 @@ class TruckController extends Controller
         $truck = Truck::find($request->truck_id);
         if ($truck) {
             $truck->name = $request->name;
+            $truck->truck_type = $request->truck_type;
             $truck->update();
             return redirect('/truck');
         }
