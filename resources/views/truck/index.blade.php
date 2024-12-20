@@ -49,7 +49,7 @@
                                 <select name="truck_type" class="form-control" id="">
                                     <option value="box_truck_center"> Box Truck Center</option>
                                     <option value="semi_truck"> Semi Truck</option>
-                                    <option value="box_truck_center">Box Truck Center</option>
+                                    <option value="box_truck_south">Box Truck South</option>
                                 </select>
 
                                 @error('truck_type')
