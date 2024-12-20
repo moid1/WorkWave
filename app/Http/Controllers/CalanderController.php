@@ -16,6 +16,8 @@ class CalanderController extends Controller
         $startDate = $request->startDate ?? null;
         $endDate = $request->endDate ?? null;
 
+        $truckType = $request->truck_type;
+
         $weekNumber = 1;  // Change this to 2, 3, 4, etc. for different weeks
 
         if ($startDate && $endDate) {
@@ -29,8 +31,16 @@ class CalanderController extends Controller
             $endOfWeek = Carbon::now()->addWeeks($weekNumber - 1)->endOfWeek()->format('Y-m-d');
         }
 
-        $data = Routing::whereBetween('routing_date', [$startOfWeek, $endOfWeek])
-            ->with('truck')->get();
+        $query = Routing::whereBetween('routing_date', [$startOfWeek, $endOfWeek])
+            ->with('truck');
+
+        if ($truckType) {
+            $query->whereHas('truck', function ($query) use ($truckType) {
+                $query->where('truck_type', $truckType);
+            });
+        }
+
+        $data = $query->get();
 
         $dataByDay = $data->groupBy(function ($item) {
             return Carbon::parse($item->routing_date)->englishDayOfWeek;
@@ -78,7 +88,7 @@ class CalanderController extends Controller
 
         // dd($dataGroupedByTruck);
 
-// dd($dataGroupedByTruck);
+        // dd($dataGroupedByTruck);
         return view('calander.index', compact('dataGroupedByTruck'));
     }
 
