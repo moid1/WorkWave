@@ -42,6 +42,23 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Truck Label') }}</label>
+                            <div class="col-md-6">
+                                <select name="truck_type" class="form-control" id="">
+                                    <option value="box_truck_center"> Box Truck Center</option>
+                                    <option value="semi_truck"> Semi Truck</option>
+                                    <option value="box_truck_center">Box Truck Center</option>
+                                </select>
+
+                                @error('truck_type')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
 
 
                         <div class="row mb-0">

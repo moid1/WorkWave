@@ -39,8 +39,26 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
 
+
+                        </div>
+                        <div class="row mb-3">
+                            <label for="name"
+                                class="col-md-4 col-form-label text-md-end">{{ __('Truck Label') }}</label>
+                            <div class="col-md-6">
+                                <select name="truck_type" class="form-control" id="">
+                                    <option value="box_truck_center"> Box Truck Center</option>
+                                    <option value="semi_truck"> Semi Truck</option>
+                                    <option value="box_truck_center">Box Truck Center</option>
+                                </select>
+
+                                @error('truck_type')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
 
 
                         <div class="row mb-0">
@@ -78,6 +96,7 @@
                                         <th>Name</th>
                                         <th>Status</th>
                                         <th>Driver</th>
+                                        <th>Truck Type</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -91,8 +110,10 @@
                                                     href="{{ route('change.truck.status', $truck->id) }}">{{ $truck->is_active ? 'Active' : 'InActive' }}</a>
                                             </td>
                                             <td>{{ $truck->truckDriver ? $truck->truckDriver->user->name : 'N/A' }}</td>
-                                            <td><a href="" class="update_driver" data-truck-id="{{ $truck->id }}"> <i class="mdi mdi-account "
-                                                         title="Update Driver"></i></a>
+                                            <td>{{ $truck->truck_type }}</td>
+                                            <td><a href="" class="update_driver"
+                                                    data-truck-id="{{ $truck->id }}"> <i class="mdi mdi-account "
+                                                        title="Update Driver"></i></a>
                                                 /
                                                 <a style="text-decoration: none;color:black"
                                                     href="{{ route('truck.update', $truck->id) }}"> <i
