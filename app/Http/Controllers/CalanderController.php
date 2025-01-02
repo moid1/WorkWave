@@ -74,7 +74,7 @@ class CalanderController extends Controller
                 $dataGroupedByTruck[$truckId][$dayName][] = $route;
             }
         }
-        asort($dataGroupedByTruck);
+        ksort($dataGroupedByTruck);
 
         // Ensure all days have empty arrays for trucks with no data
         foreach ($dataGroupedByTruck as &$truckData) {
