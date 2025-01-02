@@ -75,6 +75,8 @@ class CalanderController extends Controller
             }
         }
         ksort($dataGroupedByTruck);
+        uksort($dataGroupedByTruck, 'strnatcmp');
+
 
         // Ensure all days have empty arrays for trucks with no data
         foreach ($dataGroupedByTruck as &$truckData) {
