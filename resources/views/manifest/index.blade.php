@@ -493,7 +493,7 @@
                                     </div>
                                 </tr>
                                 @if ($data->driver_signature)
-                                <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
+                                <img style="display:inline-block;width:20%;border:none;border-bottom:1px solid #333;"
                                     src="{{ $data->driver_signature }}" class="" alt="">
                                 @endif
 
@@ -569,7 +569,7 @@
                                 </tr>
 
                                 @if ($data->customer_signature)
-                                <img style="display:inline-block;width:70%;border:none;border-bottom:1px solid #333;"
+                                <img style="display:inline-block;width:20%;border:none;border-bottom:1px solid #333;"
                                     src="{{ $data->customer_signature }}" class="" alt="">
                                 @endif
 
@@ -952,9 +952,7 @@
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-    </script>
+
 </body>
 
 </html>
