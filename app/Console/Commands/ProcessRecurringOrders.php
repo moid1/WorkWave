@@ -23,7 +23,7 @@ class ProcessRecurringOrders extends Command
                         ->whereNotNull('next_time_order')
                         ->whereDate('next_time_order', '<=', Carbon::today())
                         ->get();
-
+                        $this->info(count($orders));
         foreach ($orders as $order) {
             $this->createRecurringOrder($order);
         }
