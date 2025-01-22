@@ -20,7 +20,7 @@ class ProcessRecurringOrders extends Command
     {
         // Fetch orders where `is_recurring_order` is true and `next_time_order` is due
         $orders = Order::where('is_recurring_order', true)
-                        ->whereNotNull('next_time_order')
+                        ->whereNull('next_time_order')
                         ->whereDate('next_time_order', '<=', Carbon::today())
                         ->get();
                         $this->info(count($orders));
