@@ -18,14 +18,14 @@ class ProcessRecurringOrders extends Command
 
     public function handle()
     {
-        // Fetch orders where `is_recurring_order` is true and `next_time_order` is due
-        $orders = Order::where('is_recurring_order', true)
-        ->whereDate('next_time_order', '>=', Carbon::today())
-                        ->get();
-                        $this->info(count($orders));
-        foreach ($orders as $order) {
-            $this->createRecurringOrder($order);
-        }
+        // // Fetch orders where `is_recurring_order` is true and `next_time_order` is due
+        // $orders = Order::where('is_recurring_order', true)
+        // ->whereDate('next_time_order', '>=', Carbon::today())
+        //                 ->get();
+        //                 $this->info(count($orders));
+        // foreach ($orders as $order) {
+        //     $this->createRecurringOrder($order);
+        // }
 
         $this->info('Recurring orders processed.');
     }
