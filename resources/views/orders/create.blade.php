@@ -169,7 +169,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>No of Qty</label>
-                                               <input type="number" name="no_of_qty" class="form-control" required>
+                                               <input type="number" name="no_of_qty" class="form-control" >
                                             </div>
                                         </div>
 

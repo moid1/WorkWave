@@ -246,7 +246,7 @@ class OrderController extends Controller
 
         // Loop to create orders
         if ($request->create_order == 'createOrder') {
-            for ($i = 0; $i < $request->no_of_qty; $i++) {
+            for ($i = 0; $i < $request->no_of_qty ?? 1; $i++) {
                 // Determine the amount of tires for this order
                 // $orderTires = min(400, $estimatedTires); // Maximum 400 tires per order
 
