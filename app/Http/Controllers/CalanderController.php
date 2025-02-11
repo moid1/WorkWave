@@ -58,7 +58,7 @@ class CalanderController extends Controller
                 $truckId = $route['truck']['name'];
 
                 // Use Carbon to get the day name in English
-                $dayName = Carbon::parse($day)->isoFormat('dddd');
+                $dayName = Carbon::parse($day)->locale('en')->isoFormat('dddd');
 
                 // Check if the truck_id exists in the grouped array, if not, initialize it
                 if (!isset($dataGroupedByTruck[$truckId])) {
