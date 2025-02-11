@@ -46,6 +46,8 @@ class CalanderController extends Controller
             return Carbon::parse($item->routing_date)->englishDayOfWeek;
         })->toArray();
 
+        dd($dataByDay);
+
         $dataGroupedByTruck = [];
         $englishDaysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         // Iterate over each truck's data
