@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\OrderCreated;
+use App\Events\RouteCreated;
 use App\Models\Notes;
 use App\Models\Order;
+use App\Models\Routing;
 use App\Models\Truck;
 use App\Models\TruckDriver;
 use App\Models\User;
@@ -239,22 +241,49 @@ class OrderController extends Controller
 
         // Calculate number of orders needed based on estimated_tires
         $estimatedTires = $request->estimated_tires;
-        $numOrders = ceil($estimatedTires / 400);
+        // $numOrders = ceil($estimatedTires / 400);
+        $newOrderIds = [];
 
         // Loop to create orders
         if ($request->create_order == 'createOrder') {
-            for ($i = 0; $i < $numOrders; $i++) {
+            for ($i = 0; $i < $request->no_of_qty; $i++) {
                 // Determine the amount of tires for this order
-                $orderTires = min(400, $estimatedTires); // Maximum 400 tires per order
+                // $orderTires = min(400, $estimatedTires); // Maximum 400 tires per order
 
                 // Create the order
-                $this->createOrder($request, $truckID, $orderTires);
+                $newOrder = $this->createOrder($request, $truckID, $estimatedTires);
+                $newOrderIds[] = $newOrder->id;
 
                 // Decrease remaining estimated_tires
-                $estimatedTires -= $orderTires;
+                // $estimatedTires -= $orderTires;
             }
         }
 
+        if (count($newOrderIds) > 1) {
+
+            // Fetch TRUCK
+            $truck = Truck::findOrFail($truckID);
+
+
+            // Create Routes Automatically
+
+            $routing = Routing::create([
+                'order_ids' => implode(',', $newOrderIds), // Add delimiter here, e.g., a comma
+                'route_name' => $truck->name . ' ' . $request->date, // Concatenate properly with a space between name and date
+                'truck_id' => $truckID,
+                'routing_date' => $request->date
+            ]);
+            
+
+            // Extract order IDs from comma-separated string
+            // $orderIDs = explode(',', $request->order_ids);
+
+            // Update all orders to mark them as routed
+            Order::whereIn('id', $newOrderIds)->update(['is_routed' => true, 'delivery_date' => $request->date, 'truck_id' => $truckID]);
+
+            // Trigger event for route creation
+            event(new RouteCreated());
+        }
         Notes::create([
             'customer_id' => $request['customer_id'],
             'user_id' => Auth::id(),
@@ -282,9 +311,9 @@ class OrderController extends Controller
             'truck_id' => $truckId,
             'delivery_date' => $request['date'],
             'end_date' => $request['end_date'],
-            'is_recurring_order' => $request['is_recurring_order'] == 'on',
+            'is_recurring_order' => false,
             'estimated_tires' => $estimatedTires,
-            'frequency'=>$request->frequency
+            'frequency' => $request->frequency
         ]);
     }
 
@@ -676,9 +705,10 @@ class OrderController extends Controller
         return back()->with('success', 'Order is deleted successfully');
     }
 
-    public function completeOrder(Request $request){
+    public function completeOrder(Request $request)
+    {
         $order = Order::findOrFail($request->order_id);
-        if($order){
+        if ($order) {
             $order->notes = $request->complete_order_notes;
             $order->status = 'completed';
             $order->save();
@@ -693,7 +723,8 @@ class OrderController extends Controller
             ]);
 
 
-        };
+        }
+        ;
         return back()->with('success', 'Order completed');
     }
 }

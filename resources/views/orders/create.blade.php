@@ -166,21 +166,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-3">
-                                            <input type="checkbox" id="is_recurring_order" name="is_recurring_order" class="">
-                                            <label for="is_recurring_order">Is Recurring Order</label>
-                                       
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>No of Qty</label>
+                                               <input type="number" name="no_of_qty" class="form-control" required>
+                                            </div>
                                         </div>
 
-                                        <div class="col-lg-3">
-                                            <select name="frequency" id="" class="form-control">
-                                                <option value="1">Daily</option>
-                                                <option value="7">Weekly</option>
-                                                <option value="14">Bi Weekly</option>
-                                                <option value="30">Monthly</option>
-                                            </select>
-                                        </div>
-                                        
 
 
                                      
