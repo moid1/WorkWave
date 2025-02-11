@@ -92,8 +92,6 @@ class CalanderController extends Controller
 
 
         // dd($dataGroupedByTruck);
-
-        dd($dataGroupedByTruck);
         return view('calander.index', compact('dataGroupedByTruck'));
     }
 
