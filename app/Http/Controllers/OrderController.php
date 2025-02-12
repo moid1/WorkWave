@@ -267,22 +267,25 @@ class OrderController extends Controller
 
             // Create Routes Automatically
 
-            $routing = Routing::create([
-                'order_ids' => implode(',', $newOrderIds), // Add delimiter here, e.g., a comma
-                'route_name' => $truck->name . ' ' . $request->date, // Concatenate properly with a space between name and date
-                'truck_id' => $truckID,
-                'routing_date' => $request->date
-            ]);
-            
 
-            // Extract order IDs from comma-separated string
-            // $orderIDs = explode(',', $request->order_ids);
+            if ($truck->truck_type === 'semi_truck') {
+                $routing = Routing::create([
+                    'order_ids' => implode(',', $newOrderIds), // Add delimiter here, e.g., a comma
+                    'route_name' => $truck->name . ' ' . $request->date, // Concatenate properly with a space between name and date
+                    'truck_id' => $truckID,
+                    'routing_date' => $request->date
+                ]);
 
-            // Update all orders to mark them as routed
-            Order::whereIn('id', $newOrderIds)->update(['is_routed' => true, 'delivery_date' => $request->date, 'truck_id' => $truckID]);
 
-            // Trigger event for route creation
-            event(new RouteCreated());
+                // Extract order IDs from comma-separated string
+                // $orderIDs = explode(',', $request->order_ids);
+
+                // Update all orders to mark them as routed
+                Order::whereIn('id', $newOrderIds)->update(['is_routed' => true, 'delivery_date' => $request->date, 'truck_id' => $truckID]);
+
+                // Trigger event for route creation
+                event(new RouteCreated());
+            }
         }
         Notes::create([
             'customer_id' => $request['customer_id'],
