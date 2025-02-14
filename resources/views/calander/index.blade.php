@@ -386,7 +386,8 @@
             endDate = $('input[name="daterange"]').data('daterangepicker').endDate.format('YYYY-MM-DD');
             let truckType = $('#truck_type').val();
 
-            var url = "{{ route('calander.index') }}" + "?startDate=" + (startDate) + "&endDate=" + (endDate) + "&truck_type="+(truckType);
+            var url = "{{ route('calander.index') }}" + "?startDate=" + (startDate) + "&endDate=" + (endDate) +
+                "&truck_type=" + (truckType);
 
             window.location.href = url;
 
@@ -497,10 +498,20 @@
                                 .endDate.format('YYYY-MM-DD')
                         },
                         success: function(response) {
-                            //   calendar.fullCalendar('refetchEvents');
-                            //   alert("Event deleted");
+                            // Your success handling code here
+                            // calendar.fullCalendar('refetchEvents');
+                            // alert("Event deleted");
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 500) {
+                                alert(
+                                    "An error occurred on the server. Please try again later.");
+                            } else {
+                                alert("An unexpected error occurred. Please try again.");
+                            }
                         }
-                    })
+                    });
+
 
                     clonedElement.draggable({
                         revert: true,
