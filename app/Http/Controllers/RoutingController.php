@@ -400,11 +400,7 @@ class RoutingController extends Controller
             }
 
         } else {
-            // Handle case where no existing routing found (possibly create a new route)
-            // Example:
-            // $newRouting = new Routing();
-            // $newRouting->order_ids = $orderId;
-            // $newRouting->save();
+            return response()->json(['message' => 'Something went wrong'], 500);
         }
 
 
