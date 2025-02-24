@@ -226,13 +226,12 @@
                                                         @endphp
                                                         @if ($tempOrder)
                                                             <div class="orderdiv" data-order-id="{{ $order_id }}">
-                                                                <a target="_blank"
-                                                                    href="{{ route('order.show', $order_id) }}">
-                                                                    <span
-                                                                        class="{{ $tempOrder->status === 'created' ? '' : 'strike-through' }}">
+                                                                <a target="_blank" href="{{ route('order.show', ['id' => $order_id]) }}">
+                                                                    <span class="{{ $tempOrder->status === 'created' ? '' : 'strike-through' }}">
                                                                         {{ $tempOrder->customer->business_name }}
                                                                     </span>
                                                                 </a>
+                                                                
                                                             </div>
                                                         @endif
                                                     @endforeach
