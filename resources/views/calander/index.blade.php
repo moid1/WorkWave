@@ -504,7 +504,7 @@
                         error: function(xhr, status, error) {
                             if (xhr.status === 500) {
                                 alert(
-                                    "An error occurred on the server. Please try again later.");
+                                    "There is no route available for this truck on this day that you selected. Please create the route manually");
                             } else {
                                 alert("An unexpected error occurred. Please try again.");
                             }

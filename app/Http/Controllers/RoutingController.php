@@ -400,7 +400,10 @@ class RoutingController extends Controller
             }
 
         } else {
-            return response()->json(['message' => 'Something went wrong'], 500);
+            return response()->json([
+                'error' => 'There is no route available for this truck on this day that you selected. Please create the route manually',
+            ], 500);
+            
         }
 
 
