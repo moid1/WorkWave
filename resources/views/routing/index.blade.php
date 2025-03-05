@@ -52,7 +52,13 @@
                                     @foreach ($allRoutes as $route)
                                         <tr>
                                             <td>{{ $route->route_name }}</td>
-                                            <td>{{$route->order_ids}}
+                                            @php
+                                            $orders = explode(',', $route->order_ids)
+                                            @endphp
+                                            <td>
+                                                @foreach ($orders as $order)
+                                                    <a href="{{route('order.show', $order)}}">$order</a>
+                                                @endforeach
                                             </td>
                                             <td>{{ $route->truck->name }}</td>
                                             <td>
