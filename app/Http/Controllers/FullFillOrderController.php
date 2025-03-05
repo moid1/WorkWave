@@ -6,6 +6,7 @@ use App\Models\CompanyReg;
 use App\Models\CustomerPricing;
 use App\Models\FullFillOrder;
 use App\Models\ManifestPDF;
+use App\Models\Notes;
 use App\Models\Order;
 use App\Models\StateWeight;
 use App\Models\SteelOrder;
@@ -1030,6 +1031,7 @@ class FullFillOrderController extends Controller
 
     public function apiFulFillOrder(Request $request)
     {
+        $totalNoOFTires = 0;
         try {
             
            
@@ -1086,6 +1088,7 @@ class FullFillOrderController extends Controller
                     $availablePassangerTireTypesArr[] = [
                         $value => $sum
                     ];
+                    $totalNoOFTires += $sum;
                 }
             }
 
@@ -1104,6 +1107,7 @@ class FullFillOrderController extends Controller
                     $availableTruckTireTypesArr[] = [
                         $value => $sum
                     ];
+                    $totalNoOFTires += $sum;
                 }
             }
 
@@ -1121,6 +1125,7 @@ class FullFillOrderController extends Controller
                     $availableAgriTireTypesArr[] = [
                         $value => $sum
                     ];
+                    $totalNoOFTires += $sum;
                 }
             }
 
@@ -1137,6 +1142,7 @@ class FullFillOrderController extends Controller
                     $availableOtrTireTypesArr[] = [
                         $value => $sum
                     ];
+                    $totalNoOFTires += $sum;
                 }
             }
 
@@ -1161,28 +1167,38 @@ class FullFillOrderController extends Controller
 
             $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
 
-            if ($request->backUs == true) {
+            if ($request->backUs) {
                 Order::create([
                     'customer_id' => $order->customer->id,
                     'user_id' => Auth::id(),
-                    'notes' =>  $request['tiresLeft'] ? 'No of Tires left over '. $request['tiresLeft'] : 'N/A',
+                    'notes' => $request->tiresLeft ? 'No of Tires left over: ' . $request->tiresLeft : 'N/A',
                     'load_type' => 'box_truck_route',
-                    'driver_id' => Auth::id()
+                    'truck_id' => $order->truck_id,
                 ]);
             }
-
+            
             $customerPricing = CustomerPricing::where('customer_id', $order->customer->id)->first();
-
+            
             $order->status = 'fulfilled';
             $order->payment_type = $request->payment_type ?? null;
-
-            $order->update();
+            
+            $order->save();
+            
             $fullFillOrder['order'] = $order;
             $fullFillOrder['customerPricing'] = $customerPricing;
 
             $manifestPDF = new ManifestPDF();
             $manifestPDF->order_id = $request->order_id;
             $manifestPDF->customer_id = $order->customer_id;
+
+            Notes::create([
+                'customer_id' => $order->customer->id,
+                'user_id' => Auth::id(),
+                'note' => 'Number of tires picked up: ' . $totalNoOFTires . '. Order #' . ($order->id ?? 'N/A'),
+                'estimated_tires' => 'N/A',
+                'spoke_with' => 'N/A',
+                'title' => 'Automatic Complete Order Note',
+            ]);
 
             for ($i = 0; $i < count($pdfTypes); $i++) {
                 $fullFillOrder['pdfType'] = $pdfTypes[$i];
@@ -1198,7 +1214,7 @@ class FullFillOrderController extends Controller
                 // return $pdf->stream();
                 $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
                 $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
-                file_put_contents($pdfPath, $output);
+                file_put_contents($pdfPath, data: $output);
                 switch ($pdfTypes[$i]) {
                     case 'Generator':
                         $manifestPDF->generator = $abPDFPath;
@@ -1222,6 +1238,9 @@ class FullFillOrderController extends Controller
                 //  return view('manifest.index');
             }
             $manifestPDF->save();
+            
+
+            
 
             return response()->json([
                 'status' => true,
