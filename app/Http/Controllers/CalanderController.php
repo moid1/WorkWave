@@ -25,13 +25,6 @@ class CalanderController extends Controller
             $startOfWeek = Carbon::parse($startDate)->startOfWeek()->format('Y-m-d');
             $endOfWeek = Carbon::parse($endDate)->endOfWeek()->format('Y-m-d');
 
-            $start = Carbon::parse($startDate);
-            $end = Carbon::parse($endDate);
-
-            if ($end->diffInDays($start) > 6) {
-                // Throw an error if the difference is greater than 6 days
-             return back()->with('error', 'Max days can be 6 only');
-            }
         } else {
             // Use the current week number logic as fallback
             $weekNumber = 1;  // Change this to 2, 3, 4, etc. for different weeks
