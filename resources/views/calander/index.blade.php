@@ -85,6 +85,12 @@
 @section('content')
     <div class="page-content-wrapper">
         <div class="container-fluid">
+            @if(Session::has('error'))
+            <div class="alert alert-danger alert-dismissible" role="alert">
+            {{Session::get('error')}}
+            </div>
+        @endif
+
             <div class="d-flex mt-3 justify-content-between">
                 <div style="">
                     <strong>Date Filter:</strong>
