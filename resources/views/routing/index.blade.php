@@ -57,7 +57,7 @@
                                             @endphp
                                             <td>
                                                 @foreach ($orders as $order)
-                                                    <a href="{{route('order.show', $order)}}">{{$order}}</a>
+                                                    <a href="{{route('order.show', $order)}}">{{$order}}</a>,
                                                 @endforeach
                                             </td>
                                             <td>{{ $route->truck->name }}</td>
