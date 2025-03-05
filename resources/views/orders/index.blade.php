@@ -42,20 +42,6 @@
 
 
                                 <tbody>
-                                    @foreach ($orders as $order)
-                                        <tr>
-                                            <td>{{ $order->id }}</td>
-                                            <td>{{ $order->customer->business_name }}</td>
-                                            <td>{{ $order->user->name }}</td>
-                                            <td>{{ $order->created_at }}</td>
-                                            <td>{{ $order->customer->email }}</td>
-                                            <td>{{ $order->truck ? $order->truck->name : 'N/A' }}</td>
-                                            <td><a href="" class="update_driver"
-                                                    data-order_id="{{ $order->id }}"><i class="mdi mdi-account "
-                                                        title="Update Driver"></i></a> </td>
-
-                                        </tr>
-                                    @endforeach
 
                                 </tbody>
                             </table>
@@ -68,26 +54,27 @@
     </div>
     <div class="modal fade" id="truckList" tabindex="-1" aria-labelledby="schoolUsersListLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="schoolUsersListLabel">Truck</h5>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <input type="hidden" name="order_id" class="orderID">
-                    <select id="selectTruck" name="truck" class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option value=""  selected>Please select Truck</option>
-                        @foreach ($trucks as $truck)
-                        <option value="{{$truck->id}}">{{ucfirst($truck->name)}}</option>
-                        @endforeach
-                    </select>
-                 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="schoolUsersListLabel">Truck</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="hidden" name="order_id" class="orderID">
+                        <select id="selectTruck" name="truck" class="form-control form-select form-select-lg mb-3"
+                            aria-label=".form-select-lg example">
+                            <option value="" selected>Please select Truck</option>
+                            @foreach ($trucks as $truck)
+                                <option value="{{ $truck->id }}">{{ ucfirst($truck->name) }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
                 </div>
             </div>
-          </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="customerSummary" tabindex="-1" aria-labelledby="schoolUsersListLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -111,7 +98,7 @@
                             <p id="spokeWith"></p>
                         </div>
 
-                        
+
 
                     </div>
                 </div>
@@ -153,10 +140,8 @@
                             'YYYY-MM-DD');
                     }
                 },
-                columns: [{
-                        data: 'id',
-                        name: 'id'
-                    },
+                columns: [
+                    { data: 'id', name: 'id' }, // Make sure this line exists for the 'id' column
                     {
                         data: 'customer.business_name',
                         name: 'customer.business_name',
@@ -214,11 +199,12 @@
                                 id: customerId
                             },
                             success: function(response) {
-                                $('#estimatedTires').text(' '+response.data.estimated_tires)
-                                $('#lastNote').text(' '+response.data.note)
-                                $('#spokeWith').text(' '+response.data.spoke_with)
+                                $('#estimatedTires').text(' ' + response.data
+                                    .estimated_tires)
+                                $('#lastNote').text(' ' + response.data.note)
+                                $('#spokeWith').text(' ' + response.data.spoke_with)
 
-                                
+
                                 $('#customerSummary').modal('show');
                             }
                         });

@@ -37,10 +37,8 @@ class OrderController extends Controller
 
 
             return Datatables::of($data)
-                ->addIndexColumn()
-                ->editColumn('id', function ($row) {
-                    return $row->id;
-                })
+            ->editColumn('id', '{{$id}}')
+              
                 ->editColumn('business_name', function ($row) {
                     if ($row->customer->business_name) {
                         return $row->customer->business_name;
