@@ -191,6 +191,8 @@
                                 <li><a href="{{route('generate.daily.count.sheet')}}">Daily Sheet</a></li>
                                 <li><a href="{{route('calling.table.index')}}">Calling Table</a></li>
                                 <li><a href="{{route('trailer.swap.create')}}">Trailers Report</a></li>
+                                <li><a href="{{route('custom.pricing')}}">Custom Pricing</a></li>
+                                <li><a href="{{route('custom.generate.inhouse.manifest')}}">Custom Manifest</a></li>
 
                             </ul>
                         </li>
@@ -343,7 +345,7 @@
             </div> <!-- content -->
 
             <footer class="footer">
-                © 2023 - By BM SOLUTIONS.
+                © 2025 - By BM SOLUTIONS.
             </footer>
 
         </div>

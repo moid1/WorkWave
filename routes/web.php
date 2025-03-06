@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminSettingsController;
 use App\Http\Controllers\CalanderController;
 use App\Http\Controllers\CallingTableController;
+use App\Http\Controllers\CustomPricingController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\TrailersController;
 use App\Models\CallingTable;
@@ -167,6 +168,11 @@ Route::get('/customer-pricing', [CustomerPricingController::class, 'index'])->na
 Route::get('/customer-pricing/{id}', [CustomerPricingController::class, 'create'])->name('customer.pricing.create');
 Route::post('/customer-pricing', [CustomerPricingController::class, 'store'])->name('customer.pricing.store');
 
+// Custom  Pricing 
+Route::get('/custom-pricing', [CustomPricingController::class, 'index'])->name('custom.pricing');
+Route::post('/custom-pricing', [CustomPricingController::class, 'store'])->name('custom.pricing.store');
+
+
 Route::post('/tdf-order', [FullFillOrderController::class, 'tdfOrderCreate'])->name('order.store.tdf');
 Route::post('/trailer-swap-order', [FullFillOrderController::class, 'trailerSwapCreate'])->name('order.store.trailer.swap');
 Route::post('/state-weight', [FullFillOrderController::class, 'stateByWeight'])->name('order.store.state.weight');
@@ -212,4 +218,11 @@ Route::post('/update-trailer-status', [GeneralController::class, 'updateTrailerD
 
 Route::post('trailer-post', [TrailersController::class, 'store'])->name('trailer.store');
 Route::get('/delete-trailer/{id}', [TrailersController::class, 'deleteTrailer'])->name('trailer.delete');
+
+
+// generaete Inhouse Mnifest
+
+Route::get('generate-in-house-manifest', [GeneralController::class, 'generateInhouseManifest'])->name('custom.generate.inhouse.manifest');
+Route::post('generate-in-house-manifest', [GeneralController::class, 'generateInhouseManifestPost'])->name('custom.generate.inhouse.manifest.store');
+
 
