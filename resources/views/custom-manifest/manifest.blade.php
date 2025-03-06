@@ -262,14 +262,14 @@
 
 
                                                     <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
-                                                        ${{  $data['customerPricing']['$key'] }}
+                                                        ${{  $data['customerPricing'][$key] }}
                                                     </label>
                                                     <span style=""></span>
 
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
-                                                    @php $totalSum += $data['customerPricing']['$key'] * $value; @endphp
+                                                    @php $totalSum += $data['customerPricing'][$key] * $value; @endphp
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing']['$key'] * $value }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing'][$key] * $value }}</span>
                                                 </div>
                                             </tr>
                                             }
