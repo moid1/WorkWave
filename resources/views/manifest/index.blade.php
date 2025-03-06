@@ -382,7 +382,7 @@
                                         $totalSumWithTax = $totalSum * ($customerTax / 100);
                                         $totalSumWithTax += $totalSum;
                                         $totalSumWithTax = number_format($totalSumWithTax, 2);
-                                        $customerSalesTax = $totalSumWithTax;
+                                        $customerSalesTax = $totalSum * ($customerTax/100);
                                     }
                                 } else {
                                     $totalSumWithTax = number_format($totalSum, 2);
@@ -396,7 +396,7 @@
                                                 Tax
                                                 $</label>
                                             <input type="text" name=""
-                                                value="{{ $customerSalesTax ?? 0 }}%"
+                                                value="{{ $customerSalesTax ?? 0 }}"
                                                 style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                         </div>
                                     </tr>
