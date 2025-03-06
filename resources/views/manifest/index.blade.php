@@ -371,6 +371,22 @@
                                         </div>
                                     </tr>
                                 @endif
+                                @php
+                                if ($data->order->load_type !== 'state') {
+                                    $customerTax = $data->order->customer->tax ?? 0;
+                                    $totalSumWithTax = 0;
+                                    if ($customerTax == 0) {
+                                        $totalSumWithTax = number_format($totalSum, 2);
+                                    } else {
+                                        $totalSumWithTax = $totalSum * ($customerTax / 100);
+                                        $totalSumWithTax += $totalSum;
+                                        $totalSumWithTax = number_format($totalSumWithTax, 2);
+                                    }
+                                } else {
+                                    $totalSumWithTax = number_format($totalSum, 2);
+                                }
+                            @endphp
+
                                 @if ($data->order->load_type !== 'state')
                                     <tr style="text-align: right;">
                                         <div class="mt-2 ">
@@ -378,27 +394,13 @@
                                                 Tax
                                                 $</label>
                                             <input type="text" name=""
-                                                value="{{ $data->order->customer->tax ?? 0 }}%"
+                                                value="{{ $totalSumWithTax ?? 0 }}%"
                                                 style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                         </div>
                                     </tr>
                                 @endif
 
-                                @php
-                                    if ($data->order->load_type !== 'state') {
-                                        $customerTax = $data->order->customer->tax ?? 0;
-                                        $totalSumWithTax = 0;
-                                        if ($customerTax == 0) {
-                                            $totalSumWithTax = number_format($totalSum, 2);
-                                        } else {
-                                            $totalSumWithTax = $totalSum * ($customerTax / 100);
-                                            $totalSumWithTax += $totalSum;
-                                            $totalSumWithTax = number_format($totalSumWithTax, 2);
-                                        }
-                                    } else {
-                                        $totalSumWithTax = number_format($totalSum, 2);
-                                    }
-                                @endphp
+                           
 
                                 <tr style="text-align: right;">
                                     <div class="mt-2 ">
