@@ -363,7 +363,7 @@
                                                 Tax
                                                 $</label>
                                             <input type="text" name=""
-                                                value="{{$totalSum * ($customerTax / 100) }}"
+                                                value="{{round($totalSum * ($customerTax / 100), 2)}}"
                                                 style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                         </div>
                                     </tr>
