@@ -343,7 +343,8 @@
                                 </tr>
                                 @php
                                     $customerSalesTax = 0;
-                                    $customerTax =8.25;
+                                    $customerTax = 8.25;
+                                    $ccFee = 4;
                                     $totalSumWithTax = 0;
                                     if ($customerTax == 0) {
                                         $totalSumWithTax = number_format($totalSum, 2);
@@ -352,6 +353,10 @@
                                         $totalSumWithTax += $totalSum;
                                         $totalSumWithTax = number_format($totalSumWithTax, 2);
                                         $customerSalesTax = $totalSum * ($customerTax / 100);
+                                    }
+
+                                    if($data['orderRequest']['payment_type'] === 'credit_card'){
+                                        $totalSumWithTax = $totalSumWithTax+number_format($totalSumWithTax*0.04, 2);
                                     }
 
                                 @endphp
@@ -367,6 +372,19 @@
                                                 style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                         </div>
                                     </tr>
+                                @endif
+
+                                @if($data['orderRequest']['payment_type'] === 'credit_card')
+                                <tr style="text-align: right;">
+                                    <div class="mt-2 ">
+                                        <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Conv
+                                            Fee
+                                            $</label>
+                                        <input type="text" name=""
+                                            value="{{round($totalSumWithTax * 0.04, 2)}}"
+                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
+                                    </div>
+                                </tr>
                                 @endif
 
 

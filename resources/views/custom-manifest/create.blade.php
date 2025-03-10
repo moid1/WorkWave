@@ -356,8 +356,12 @@
                                             <div class="form-group">
                                                 <label> Payment Type</label>
 
-                                                <input id="" type="text" class="form-control"
-                                                    name="payment_type" value="" autofocus>
+                                               
+                                                    <select class="form-control" name="payment_type" id="">
+                                                        <option value="check">Check</option>
+                                                        <option value="check">Cash</option>
+                                                        <option value="credit_card">Credit Cart / Debit Card</option>
+                                                    </select>
                                             </div>
                                         </div>
 
