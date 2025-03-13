@@ -280,7 +280,9 @@ class FullFillOrderController extends Controller
         $fullFilledOrderStatus = ['error-compared', 'fulfilled'];
         $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
         if ($request->ajax()) {
-            $data = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->with(['customer', 'user', 'driver'])->get();
+            $data = Order::whereIn('status', $fullFilledOrderStatus)
+            ->where('load_type', '<>', 'tdf');
+            
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 // Parse the from_date and to_date
                 $fromDate = Carbon::parse($request->from_date)->startOfDay();  // Set time to 00:00:00
@@ -289,6 +291,8 @@ class FullFillOrderController extends Controller
                 // Apply the filter with whereBetween, use Carbon instances directly
                 $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
             }
+            $data = $data->with(['customer', 'user', 'driver'])->get();
+
 
             return Datatables::of($data)
                 ->addIndexColumn()
