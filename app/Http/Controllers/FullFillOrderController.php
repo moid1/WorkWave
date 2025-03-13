@@ -289,8 +289,8 @@ class FullFillOrderController extends Controller
                 $toDate = Carbon::parse($request->to_date)->endOfDay();        // Set time to 23:59:59
                 
                 // Apply the filter with whereBetween, use Carbon instances directly
-                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
-            }
+                $data = $data->where('created_at', '>=', $fromDate)
+                ->where('created_at', '<=', $toDate);            }
             $data = $data->with(['customer', 'user', 'driver'])->get();
 
 
