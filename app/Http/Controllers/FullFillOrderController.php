@@ -72,10 +72,11 @@ class FullFillOrderController extends Controller
         }
         if (!$driver_sign_aux[0] != '') {
             return back()->with('error', 'Driver Signature Required');
-        };
+        }
+        ;
 
         $image_type = $image_type_aux[1];
-        $driver_image_type =  $driver_sign_aux[1];
+        $driver_image_type = $driver_sign_aux[1];
 
 
         $image_base64 = base64_decode($image_parts[1]);
@@ -94,7 +95,7 @@ class FullFillOrderController extends Controller
 
         if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
             foreach ($passangerTireTypes as $key => $value) {
-                $input =  $request[$value];
+                $input = $request[$value];
                 $values = explode(" ", $input);
                 $values = array_map('intval', $values);
                 $sum = array_sum($values);
@@ -113,7 +114,7 @@ class FullFillOrderController extends Controller
 
         if (!empty($truckTireTypes) && count($truckTireTypes)) {
             foreach ($truckTireTypes as $key => $value) {
-                $input =  $request[$value];
+                $input = $request[$value];
                 $values = explode(" ", $input);
                 $values = array_map('intval', $values);
                 $sum = array_sum($values);
@@ -130,7 +131,7 @@ class FullFillOrderController extends Controller
 
         if (!empty($agriTireTypes) && count($agriTireTypes)) {
             foreach ($agriTireTypes as $key => $value) {
-                $input =  $request[$value];
+                $input = $request[$value];
                 $values = explode(" ", $input);
                 $values = array_map('intval', $values);
                 $sum = array_sum($values);
@@ -146,7 +147,7 @@ class FullFillOrderController extends Controller
 
         if (!empty($otrTireTypes) && count($otrTireTypes)) {
             foreach ($otrTireTypes as $key => $value) {
-                $input =  $request[$value];
+                $input = $request[$value];
                 $values = explode(" ", $input);
                 $values = array_map('intval', $values);
                 $sum = array_sum($values);
@@ -159,7 +160,7 @@ class FullFillOrderController extends Controller
 
 
 
-        $fullFillOrder =  FullFillOrder::create([
+        $fullFillOrder = FullFillOrder::create([
             'type_of_passenger' => count($availablePassangerTireTypesArr) ? json_encode($availablePassangerTireTypesArr) : null,
             'type_of_agri_tyre' => count($availableAgriTireTypesArr) ? json_encode($availableAgriTireTypesArr) : null,
             'type_of_truck_tyre' => count($availableTruckTireTypesArr) ? json_encode($availableTruckTireTypesArr) : null,
@@ -167,12 +168,12 @@ class FullFillOrderController extends Controller
             'order_id' => $request->order_id ?? null,
             'processor_reg_no' => $request->company_reg ?? null,
             'customer_signature' => $file ?? null,
-            'driver_signature' => $driverSignFile ?? null,  
+            'driver_signature' => $driverSignFile ?? null,
             'cheque_no' => $request->cheque_no ?? null,
-            'left_over'=>$request->tires_left ?? null
+            'left_over' => $request->tires_left ?? null
         ]);
 
-      
+
 
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
@@ -180,7 +181,7 @@ class FullFillOrderController extends Controller
             Order::create([
                 'customer_id' => $order->customer->id,
                 'user_id' => Auth::id(),
-                'notes' =>  $request['tires_left'] ? 'No of Tires left over '. $request['tires_left'] : 'N/A',
+                'notes' => $request['tires_left'] ? 'No of Tires left over ' . $request['tires_left'] : 'N/A',
                 'load_type' => 'box_truck_route',
                 'driver_id' => Auth::id()
             ]);
@@ -213,7 +214,7 @@ class FullFillOrderController extends Controller
             $test = $pdf;
             // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-            $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+            $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
             switch ($pdfTypes[$i]) {
                 case 'Generator':
@@ -281,16 +282,17 @@ class FullFillOrderController extends Controller
         $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
         if ($request->ajax()) {
             $data = Order::whereIn('status', $fullFilledOrderStatus)
-            ->where('load_type', '<>', 'tdf');
-            
+                ->where('load_type', '<>', 'tdf');
+
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 // Parse the from_date and to_date
                 $fromDate = Carbon::parse($request->from_date)->startOfDay();  // Set time to 00:00:00
                 $toDate = Carbon::parse($request->to_date)->endOfDay();        // Set time to 23:59:59
-                
+
                 // Apply the filter with whereBetween, use Carbon instances directly
-                $data = $data->where('created_at', '>=', $fromDate)
-                ->where('created_at', '<=', $toDate);            }
+                $data = $data->where('created_at', '>=', $fromDate);
+                   
+            }
             $data = $data->with(['customer', 'user', 'driver'])->get();
 
 
@@ -314,7 +316,7 @@ class FullFillOrderController extends Controller
                 ->editColumn('created_at', function ($row) {
                     return $row->created_at->format('M d Y');
                 })
-              
+
                 ->editColumn('driver', function ($row) {
                     if ($row->driver)
                         return $row->driver->name;
@@ -328,7 +330,7 @@ class FullFillOrderController extends Controller
                 })
                 ->editColumn('action', function ($row) {
                     $route = route("compare.order", $row->id);
-                return '<a href=' . $route . ' class="update_driver"> <i class="mdi mdi-compare" ></i></a>';
+                    return '<a href=' . $route . ' class="update_driver"> <i class="mdi mdi-compare" ></i></a>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -475,7 +477,7 @@ class FullFillOrderController extends Controller
         $truckTotal = $semi_truck * 110 + $semi_super_singles * 110 + $semi_truck_with_rim * 125;
         $agriTotal = $farm_tractor_last_two_digits * 5 + $ag_med_truck_19_5_with_rim * 60 + $ag_med_truck_19_5_skid_steer * 60;
         $otherTotal = $driver_19_5L_24 * 192 + $driver_14_00_24 * 293 + $driver_13_00_24 * 158 + $driver_24_00R35 * 1816 + $driver_29_5_25 * 1279 + $driver_26_5_25 * 1000 + $driver_23_5_25 * 551 + $driver_20_5_25 * 330 + $driver_17_5_25 * 300 + $driver_15_5_24 * 158;
-        $allTotal  = $passangerTotal + $truckTotal + $agriTotal + $otherTotal;
+        $allTotal = $passangerTotal + $truckTotal + $agriTotal + $otherTotal;
         return $allTotal;
     }
 
@@ -519,7 +521,7 @@ class FullFillOrderController extends Controller
         // Need to get total Weight for 40K
         foreach ($todayOrders as $key => $todayOrder) {
             if ($todayOrder->load_type == 'box_truck_route' && !empty($todayOrder->fulfilled)) {
-                $lessThenWeight = abs((int) $request->start_weight) - ((int)$request->end_weight);
+                $lessThenWeight = abs((int) $request->start_weight) - ((int) $request->end_weight);
                 if ($totalWeightTillOrder >= $lessThenWeight) {
                     break;
                 }
@@ -533,7 +535,7 @@ class FullFillOrderController extends Controller
         }
 
         $fullFillOrder = TdfOrder::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed']));
-        $fullFillOrder->recyle_order =  implode(',', $tdfAssignedOrder);
+        $fullFillOrder->recyle_order = implode(',', $tdfAssignedOrder);
         $fullFillOrder->update();
 
         $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
@@ -565,7 +567,7 @@ class FullFillOrderController extends Controller
             $test = $pdf;
 
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-            $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+            $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
             switch ($pdfTypes[$i]) {
                 case 'Generator':
@@ -651,7 +653,7 @@ class FullFillOrderController extends Controller
             $output = $pdf->output();
             // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-            $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+            $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
             switch ($pdfTypes[$i]) {
                 case 'Generator':
@@ -738,7 +740,7 @@ class FullFillOrderController extends Controller
             $testPDF = $pdf;
             // return $pdf->stream();
             $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-            $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+            $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
             file_put_contents($pdfPath, $output);
             switch ($pdfTypes[$i]) {
                 case 'Generator':
@@ -851,7 +853,7 @@ class FullFillOrderController extends Controller
             // Need to get total Weight for 40K
             foreach ($todayOrders as $key => $todayOrder) {
                 if ($todayOrder->load_type == 'box_truck_route' && !empty($todayOrder->fulfilled)) {
-                    $lessThenWeight = abs((int) $request->start_weight) - ((int)$request->end_weight);
+                    $lessThenWeight = abs((int) $request->start_weight) - ((int) $request->end_weight);
                     if ($totalWeightTillOrder >= $lessThenWeight) {
                         break;
                     }
@@ -865,7 +867,7 @@ class FullFillOrderController extends Controller
             }
 
             $fullFillOrder = TdfOrder::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed']));
-            $fullFillOrder->recyle_order =  implode(',', $tdfAssignedOrder);
+            $fullFillOrder->recyle_order = implode(',', $tdfAssignedOrder);
             $fullFillOrder->update();
 
             $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
@@ -896,7 +898,7 @@ class FullFillOrderController extends Controller
                 $output = $pdf->output();
 
                 $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-                $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+                $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
                 file_put_contents($pdfPath, $output);
                 switch ($pdfTypes[$i]) {
                     case 'Generator':
@@ -997,7 +999,7 @@ class FullFillOrderController extends Controller
                 $output = $pdf->output();
                 // return $pdf->stream();
                 $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-                $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+                $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
                 file_put_contents($pdfPath, $output);
                 switch ($pdfTypes[$i]) {
                     case 'Generator':
@@ -1040,10 +1042,10 @@ class FullFillOrderController extends Controller
     {
         $totalNoOFTires = 0;
         try {
-            
-           
-    // Log::critical($request->passanger_tyres_type);
-    // return;
+
+
+            // Log::critical($request->passanger_tyres_type);
+            // return;
 
             $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
             $folderPath = 'signatures/';
@@ -1065,10 +1067,11 @@ class FullFillOrderController extends Controller
                     'status' => false,
                     'message' => 'Driver Signatures is required'
                 ], 400);
-            };
+            }
+            ;
 
             $image_type = $image_type_aux[1];
-            $driver_image_type =  $driver_sign_aux[1];
+            $driver_image_type = $driver_sign_aux[1];
 
 
             $image_base64 = base64_decode($image_parts[1]);
@@ -1082,12 +1085,12 @@ class FullFillOrderController extends Controller
 
             //STORING TIRES TYPE IN JSON STRING
 
-            $passangerTireTypes = explode(',',$request->passanger_tyres_type);
+            $passangerTireTypes = explode(',', $request->passanger_tyres_type);
             $availablePassangerTireTypesArr = [];
 
             if (!empty($passangerTireTypes) && count($passangerTireTypes)) {
                 foreach ($passangerTireTypes as $key => $value) {
-                    $input =  $request[$value];
+                    $input = $request[$value];
                     $values = explode(" ", $input);
                     $values = array_map('intval', $values);
                     $sum = array_sum($values);
@@ -1102,12 +1105,12 @@ class FullFillOrderController extends Controller
 
             //TRUCK TIRES TYPE
 
-            $truckTireTypes = explode(',',$request->truck_tyres_type);
+            $truckTireTypes = explode(',', $request->truck_tyres_type);
             $availableTruckTireTypesArr = [];
 
             if (!empty($truckTireTypes) && count($truckTireTypes)) {
                 foreach ($truckTireTypes as $key => $value) {
-                    $input =  $request[$value];
+                    $input = $request[$value];
                     $values = explode(" ", $input);
                     $values = array_map('intval', $values);
                     $sum = array_sum($values);
@@ -1120,12 +1123,12 @@ class FullFillOrderController extends Controller
 
             // dd($availableTruckTireTypesArr);
 
-            $agriTireTypes =  explode(',',$request->agri_tires_type);
+            $agriTireTypes = explode(',', $request->agri_tires_type);
             $availableAgriTireTypesArr = [];
 
             if (!empty($agriTireTypes) && count($agriTireTypes)) {
                 foreach ($agriTireTypes as $key => $value) {
-                    $input =  $request[$value];
+                    $input = $request[$value];
                     $values = explode(" ", $input);
                     $values = array_map('intval', $values);
                     $sum = array_sum($values);
@@ -1142,7 +1145,7 @@ class FullFillOrderController extends Controller
 
             if (!empty($otrTireTypes) && count($otrTireTypes)) {
                 foreach ($otrTireTypes as $key => $value) {
-                    $input =  $request[$value];
+                    $input = $request[$value];
                     $values = explode(" ", $input);
                     $values = array_map('intval', $values);
                     $sum = array_sum($values);
@@ -1156,7 +1159,7 @@ class FullFillOrderController extends Controller
 
 
 
-            $fullFillOrder =  FullFillOrder::create([
+            $fullFillOrder = FullFillOrder::create([
                 'type_of_passenger' => count($availablePassangerTireTypesArr) ? json_encode($availablePassangerTireTypesArr) : null,
                 'type_of_agri_tyre' => count($availableAgriTireTypesArr) ? json_encode($availableAgriTireTypesArr) : null,
                 'type_of_truck_tyre' => count($availableTruckTireTypesArr) ? json_encode($availableTruckTireTypesArr) : null,
@@ -1169,7 +1172,7 @@ class FullFillOrderController extends Controller
                 'left_over' => $request->tiresLeft ?? null,
             ]);
 
-            
+
 
 
             $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
@@ -1183,14 +1186,14 @@ class FullFillOrderController extends Controller
                     'truck_id' => $order->truck_id,
                 ]);
             }
-            
+
             $customerPricing = CustomerPricing::where('customer_id', $order->customer->id)->first();
-            
+
             $order->status = 'fulfilled';
             $order->payment_type = $request->payment_type ?? null;
-            
+
             $order->save();
-            
+
             $fullFillOrder['order'] = $order;
             $fullFillOrder['customerPricing'] = $customerPricing;
 
@@ -1220,7 +1223,7 @@ class FullFillOrderController extends Controller
                 $test = $pdf;
                 // return $pdf->stream();
                 $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-                $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
+                $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
                 file_put_contents($pdfPath, data: $output);
                 switch ($pdfTypes[$i]) {
                     case 'Generator':
@@ -1245,9 +1248,9 @@ class FullFillOrderController extends Controller
                 //  return view('manifest.index');
             }
             $manifestPDF->save();
-            
 
-            
+
+
 
             return response()->json([
                 'status' => true,
@@ -1311,97 +1314,98 @@ class FullFillOrderController extends Controller
         }
     }
 
-    public function apiStateByWeight(Request $request){
+    public function apiStateByWeight(Request $request)
+    {
         try {
             $pdfTypes = ['Generator', 'Transporter', 'Processor', 'Disposal', 'Original Generator'];
-        // $pdfTypes = ['Generator'];
-        $folderPath = 'signatures/';
+            // $pdfTypes = ['Generator'];
+            $folderPath = 'signatures/';
 
-        $image_parts = explode(";base64,", $request->signed);
+            $image_parts = explode(";base64,", $request->signed);
 
-        $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type_aux = explode("image/", $image_parts[0]);
 
-        if (!$image_type_aux[0] != '') {
-            return response()->json([
-                'status' => false,
-                'message' => 'Signatures is required'
-            ], 400);
-        }
-
-
-        $image_type = $image_type_aux[1];
-
-
-        $image_base64 = base64_decode($image_parts[1]);
-
-        $file = $folderPath . uniqid() . '.' . $image_type;
-        file_put_contents($file, $image_base64);
-
-        $request->merge([
-            'cx_signature' => $file
-        ]);
-
-        $fullFillOrder = StateWeight::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed', 'address']));
-
-
-        $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
-        $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
-
-        $order->status = 'compared';
-
-        $order->update();
-        $fullFillOrder['order'] = $order;
-        $fullFillOrder['orderType'] = 'stateWeight';
-        $fullFillOrder['stateOrder'] = $fullFillOrder;
-        $fullFillOrder['customerPricing'] = $customerPricing;
-        $manifestPDF = new ManifestPDF();
-        $manifestPDF->order_id = $request->order_id;
-        $manifestPDF->customer_id = $order->customer_id;
-        $testPDF = null;
-        for ($i = 0; $i < count($pdfTypes); $i++) {
-            $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            $pdf = \App::make('dompdf.wrapper');
-
-            $customPaper = array(0, 0, 900, 1300);
-            $pdf->setPaper($customPaper);
-            $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
-
-            $fullFillOrder['pdfType'] = $pdfTypes[$i];
-            $output = $pdf->output();
-            $testPDF = $pdf;
-            // return $pdf->stream();
-            $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
-            $abPDFPath  = 'manifest/pdfs/' . time() . '.pdf';
-            file_put_contents($pdfPath, $output);
-            switch ($pdfTypes[$i]) {
-                case 'Generator':
-                    $manifestPDF->generator = $abPDFPath;
-                    break;
-                case 'Transporter':
-                    $manifestPDF->transporter = $abPDFPath;
-                    break;
-                case 'Processor':
-                    $manifestPDF->processor = $abPDFPath;
-                    break;
-                case 'Disposal':
-                    $manifestPDF->disposal = $abPDFPath;
-                    break;
-                case 'Original Generator':
-                    $manifestPDF->original_generator = $abPDFPath;
-                    break;
-
-                default:
-                    break;
+            if (!$image_type_aux[0] != '') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Signatures is required'
+                ], 400);
             }
-            //  return view('manifest.index');
-        }
-        $manifestPDF->save();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Order FullFilled Successfully',
-            'manifest_link' => $manifestPDF->transporter
-        ], 200);
+
+            $image_type = $image_type_aux[1];
+
+
+            $image_base64 = base64_decode($image_parts[1]);
+
+            $file = $folderPath . uniqid() . '.' . $image_type;
+            file_put_contents($file, $image_base64);
+
+            $request->merge([
+                'cx_signature' => $file
+            ]);
+
+            $fullFillOrder = StateWeight::updateOrCreate(['order_id' => $request->order_id], $request->except(['customer_id', 'signed', 'address']));
+
+
+            $order = Order::where('id', $request->order_id)->with(['customer', 'user'])->first();
+            $customerPricing = CustomerPricing::where('customer_id', $order->customer_id)->first();
+
+            $order->status = 'compared';
+
+            $order->update();
+            $fullFillOrder['order'] = $order;
+            $fullFillOrder['orderType'] = 'stateWeight';
+            $fullFillOrder['stateOrder'] = $fullFillOrder;
+            $fullFillOrder['customerPricing'] = $customerPricing;
+            $manifestPDF = new ManifestPDF();
+            $manifestPDF->order_id = $request->order_id;
+            $manifestPDF->customer_id = $order->customer_id;
+            $testPDF = null;
+            for ($i = 0; $i < count($pdfTypes); $i++) {
+                $fullFillOrder['pdfType'] = $pdfTypes[$i];
+                $pdf = \App::make('dompdf.wrapper');
+
+                $customPaper = array(0, 0, 900, 1300);
+                $pdf->setPaper($customPaper);
+                $pdf->loadView('manifest.index', ['data' => $fullFillOrder]);
+
+                $fullFillOrder['pdfType'] = $pdfTypes[$i];
+                $output = $pdf->output();
+                $testPDF = $pdf;
+                // return $pdf->stream();
+                $pdfPath = public_path() . '/manifest/pdfs/' . time() . '.pdf';
+                $abPDFPath = 'manifest/pdfs/' . time() . '.pdf';
+                file_put_contents($pdfPath, $output);
+                switch ($pdfTypes[$i]) {
+                    case 'Generator':
+                        $manifestPDF->generator = $abPDFPath;
+                        break;
+                    case 'Transporter':
+                        $manifestPDF->transporter = $abPDFPath;
+                        break;
+                    case 'Processor':
+                        $manifestPDF->processor = $abPDFPath;
+                        break;
+                    case 'Disposal':
+                        $manifestPDF->disposal = $abPDFPath;
+                        break;
+                    case 'Original Generator':
+                        $manifestPDF->original_generator = $abPDFPath;
+                        break;
+
+                    default:
+                        break;
+                }
+                //  return view('manifest.index');
+            }
+            $manifestPDF->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order FullFilled Successfully',
+                'manifest_link' => $manifestPDF->transporter
+            ], 200);
 
         } catch (\Throwable $th) {
             return response()->json([
