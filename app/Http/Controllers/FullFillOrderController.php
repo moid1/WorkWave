@@ -281,7 +281,7 @@ class FullFillOrderController extends Controller
         $fullFilledOrderStatus = ['error-compared', 'fulfilled'];
         $orders = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->get();
         if ($request->ajax()) {
-            $fromDate = Carbon::parse($request->from_date);
+            $fromDate = Carbon::parse($request->from_date)->startOfDay();
             $toDate = Carbon::parse($request->to_date)->endOfDay();
             $fullfillOrders = FullFillOrder::whereBetween('created_at', [$fromDate, $toDate])->pluck('order_id');
             $data = Order::whereIn('id', $fullfillOrders)->whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf');
