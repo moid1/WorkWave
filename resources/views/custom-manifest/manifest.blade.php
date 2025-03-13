@@ -652,7 +652,7 @@
 
                                     <div style="display: inline-flex;max-width:150px;">
                                         <input type="text" name=""
-                                            value="{{ $data->processor_reg_no ?? 'N/A' }}" class="inputField" />
+                                            value="{{ $data->processor_reg_no ?? '' }}" class="inputField" />
                                         <label class="inputLabel">registration number</label>
                                     </div>
 
@@ -694,7 +694,7 @@
                                     <td>
                                         <div style="display: inline-block">
                                             <input type="text" name=""
-                                                value="{{ $data['orderRequest']['telephone_no'] }}"
+                                                value=""
                                                 class="inputField" />
                                             <label class="inputLabel" style="white-space: nowrap">Area Code Telephone
                                                 Number</label>
@@ -763,7 +763,7 @@
 
                                     <div style="display: inline-flex;max-width:150px;">
                                         <input type="text" name=""
-                                            value="{{ $data->processor_reg_no ?? 'N/A' }}" class="inputField" />
+                                            value="{{ $data->processor_reg_no ?? '' }}" class="inputField" />
                                         <label class="inputLabel">registration number</label>
                                     </div>
 
@@ -805,7 +805,7 @@
                                     <td>
                                         <div style="display: inline-block">
                                             <input type="text" name=""
-                                                value="{{ $data['orderRequest']['telephone_no'] }}"
+                                                value=""
                                                 class="inputField" />
                                             <label class="inputLabel" style="white-space: nowrap">Area Code Telephone
                                                 Number</label>
