@@ -282,8 +282,11 @@ class FullFillOrderController extends Controller
         if ($request->ajax()) {
             $data = Order::whereIn('status', $fullFilledOrderStatus)->where('load_type', '<>', 'tdf')->with(['customer', 'user', 'driver'])->get();
             if ($request->filled('from_date') && $request->filled('to_date')) {
-                $fromDate = Carbon::parse($request->from_date);
-                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                // Parse the from_date and to_date
+                $fromDate = Carbon::parse($request->from_date)->startOfDay();  // Set time to 00:00:00
+                $toDate = Carbon::parse($request->to_date)->endOfDay();        // Set time to 23:59:59
+            
+                // Apply the filter with whereBetween
                 $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
             }
 
