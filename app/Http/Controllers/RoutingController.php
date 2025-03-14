@@ -108,7 +108,7 @@ class RoutingController extends Controller
             $orderIDs = explode(',', $request->order_ids);
 
             // Update all orders to mark them as routed
-            Order::whereIn('id', $orderIDs)->update(['is_routed' => true, 'delivery_date' =>$request->routing_date,'truck_id'=>$request->truck_id]);
+            Order::whereIn('id', $orderIDs)->update(['is_routed' => true, 'delivery_date' => $request->routing_date, 'truck_id' => $request->truck_id]);
 
 
 
@@ -335,11 +335,11 @@ class RoutingController extends Controller
                     'routing_date' => $futureDate
                 ]);
 
-                Order::whereIn('id', explode(',',$request->order_id))->update([
+                Order::whereIn('id', explode(',', $request->order_id))->update([
                     'delivery_date' => $futureDate,
                     'truck_id' => $routing->truck_id,
                 ]);
-                
+
 
                 // Extract order IDs from comma-separated string
                 // $orderIDs = explode(',', $request->order_ids);
@@ -373,29 +373,29 @@ class RoutingController extends Controller
                         'routing_date' => $this->getWeekdayDate($futureDay, $request->startDate, $request->endDate)
                     ]);
 
-                    Order::whereIn('id', explode(',',$routing->order_ids))->update([
+                    Order::whereIn('id', explode(',', $routing->order_ids))->update([
                         'delivery_date' => $newRouting->routing_date,
                         'truck_id' => $truckDestination,
                     ]);
-                }else{
-                     // Append the orderId to the existing routing's order_ids
-                     $existingOrderIds = explode(',', $destinationRouting->order_ids);
-                    
-                     // Avoid adding duplicates
-                     if (!in_array($orderId, $existingOrderIds)) {
-                         $existingOrderIds[] = $orderId;
-                         $destinationRouting->order_ids = implode(',', $existingOrderIds);
-                         $destinationRouting->save();
-                     }
+                } else {
+                    // Append the orderId to the existing routing's order_ids
+                    $existingOrderIds = explode(',', $destinationRouting->order_ids);
 
-                     Order::whereIn('id',  $existingOrderIds)->update([
+                    // Avoid adding duplicates
+                    if (!in_array($orderId, $existingOrderIds)) {
+                        $existingOrderIds[] = $orderId;
+                        $destinationRouting->order_ids = implode(',', $existingOrderIds);
+                        $destinationRouting->save();
+                    }
+
+                    Order::whereIn('id', $existingOrderIds)->update([
                         'delivery_date' => $destinationRouting->routing_date,
                         'truck_id' => $destinationRouting->truck_id,
                     ]);
-                    
+
                 }
 
-                
+
 
             }
 
@@ -403,7 +403,7 @@ class RoutingController extends Controller
             return response()->json([
                 'error' => 'There is no route available for this truck on this day that you selected. Please create the route manually',
             ], 500);
-            
+
         }
 
 
@@ -445,34 +445,43 @@ class RoutingController extends Controller
             'friday' => 5,
             'saturday' => 6,
         ];
-    
+
         // Normalize the input to lowercase
         $dayName = strtolower($dayName);
-    
+
         // Check if the day name is valid
         if (!array_key_exists($dayName, $daysOfWeek)) {
             throw new InvalidArgumentException('Invalid day name. Please use Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, or Saturday.');
         }
-    
+
         // Create Carbon instances for start and end dates
         $start = Carbon::parse($startDate);
         $end = Carbon::parse($endDate);
-    
+
         // Check if start date is before end date
         // if ($start->greaterThan($end)) {
         //     throw new InvalidArgumentException('Start date must be before end date.');
         // }
-    
+
         // Find the target day of the week
         $targetDayOfWeek = $daysOfWeek[$dayName];
-    
+
+        $currentDate = Carbon::now();
+
+        // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+        $currentDayOfWeek = $currentDate->dayOfWeek;
+
+        if ($currentDayOfWeek === $targetDayOfWeek) {
+            return $currentDate->format('Y-m-d'); // Return today's date if it matches the target day
+        }
+
         // Iterate through the date range to find the next occurrence of the target weekday
         for ($date = $start->copy(); $date->lessThanOrEqualTo($end); $date->addDay()) {
             if ($date->dayOfWeek === $targetDayOfWeek) {
                 return $date->format('Y-m-d');
             }
         }
-    
+
         // If no date is found, you can return a message or throw an exception
         throw new Exception("No occurrences of {$dayName} found between {$startDate} and {$endDate}.");
     }
