@@ -156,7 +156,7 @@ class DriverController extends Controller
                 $routings = Routing::where('routing_date', $currentDate)
                 ->where('truck_id', $truckDriver->truck->id) // Ensure truck_id is matched
                 ->pluck('order_ids'); // Retrieve order_ids as a collection
-            
+            $orderIDs=[];
             foreach ($routings as $routing) {
                 // Split order_ids by commas and add to the orderIDs array
                 $order_ids = explode(',', $routing); // The raw order_ids string
