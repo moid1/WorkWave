@@ -146,12 +146,25 @@ class DriverController extends Controller
             }
 
             $currentDate = Carbon::now()->toDateString();
-            $orders = Order::with(['customer', 'user', 'manifest'])
-                ->where('truck_id', $truckDriver->truck->id)
-                ->where('status', 'created')
-                ->whereRaw("delivery_date = ?", [$currentDate]) // Use raw query for string comparison
-                ->latest()
-                ->get();
+            // $orders = Order::with(['customer', 'user', 'manifest'])
+            //     ->where('truck_id', $truckDriver->truck->id)
+            //     ->where('status', 'created')
+            //     ->whereRaw("delivery_date = ?", [$currentDate]) // Use raw query for string comparison
+            //     ->latest()
+            //     ->get();
+
+                $routings = Routing::where('routing_date', $currentDate)
+                ->where('truck_id', $truckDriver->truck->id) // Ensure truck_id is matched
+                ->pluck('order_ids'); // Retrieve order_ids as a collection
+            
+            foreach ($routings as $routing) {
+                // Split order_ids by commas and add to the orderIDs array
+                $order_ids = explode(',', $routing); // The raw order_ids string
+                $orderIDs = array_merge($orderIDs, $order_ids); // Merge with existing order IDs
+            }
+            
+            // Now retrieve all orders where the order ID is in the $orderIDs array
+            $orders = Order::whereIn('id', $orderIDs)->get();
 
             return response()->json([
                 'status' => true,
