@@ -164,7 +164,7 @@ class DriverController extends Controller
             }
             
             // Now retrieve all orders where the order ID is in the $orderIDs array
-            $orders = Order::whereIn('id', $orderIDs)->get();
+            $orders = Order::whereIn('id', $orderIDs)->with(['customer', 'user', 'manifest'])->get();
 
             return response()->json([
                 'status' => true,
