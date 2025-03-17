@@ -138,7 +138,7 @@
     name: 'action',
     render: function(data, type, row) {
         // Dynamically generate the route using the 'data' (order.id)
-        var url = "/unfill/manifest/order/" + data;  // Assuming the URL structure is like this
+        var url = "/fill-manifest/" + data;  // Assuming the URL structure is like this
         return '<a href="' + url + '"> <i class="mdi mdi-note"></i></a>';
     },
     orderable: false, // Assuming the 'action' column shouldn't be sorted
