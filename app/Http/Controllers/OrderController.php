@@ -537,12 +537,14 @@ class OrderController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = Order::where('is_filled_by_manager', false)->with(['customer', 'driver', 'user'])->get();
+            $data = Order::where('is_filled_by_manager', false)->get();
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
                 $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
             }
+
+            $data = $data->with(['customer', 'driver', 'user'])->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('id', function ($row) {
