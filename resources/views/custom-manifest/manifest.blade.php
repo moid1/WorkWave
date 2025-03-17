@@ -355,9 +355,9 @@
                                         $customerSalesTax = $totalSum * ($customerTax / 100);
                                     }
 
-                                    if($data['orderRequest']['payment_type'] === 'credit_card'){
-                                        $totalSumWithTax = $totalSumWithTax+number_format($totalSumWithTax*0.04, 2);
-                                    }
+                                    // if($data['orderRequest']['payment_type'] === 'credit_card'){
+                                    //     $totalSumWithTax = $totalSumWithTax+number_format($totalSumWithTax*0.04, 2);
+                                    // }
 
                                 @endphp
 
@@ -388,7 +388,11 @@
                                 @endif
 
 
-
+@php
+   if($data['orderRequest']['payment_type'] === 'credit_card'){
+                                        $totalSumWithTax = $totalSumWithTax+number_format($totalSumWithTax*0.04, 2);
+                                    }
+@endphp
                                 <tr style="text-align: right;">
                                     <div class="mt-2 ">
                                         <label class="inputLabel inputLabelSmall">Total $</label>
