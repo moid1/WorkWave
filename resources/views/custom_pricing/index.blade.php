@@ -138,12 +138,12 @@
                                                     autofocus>
                                             </div>
                                         </div>
-                                        <div id="col15_5_24" class="col-lg-6 ">
+                                        <div id="colodd_tire" class="col-lg-6 ">
                                             <div class="form-group">
                                                 <label>No of OTR ($8.50)</label>
-                                                <input id="15_5_24" type="number" step="0.01" class="form-control"
-                                                    name="15_5_24"
-                                                    value="{{ old('15_5_24', optional($customPricing)->{'15_5_24'}) }}"
+                                                <input id="odd_tire" type="number" step="0.01" class="form-control"
+                                                    name="odd_tire"
+                                                    value="{{ old('odd_tire', optional($customPricing)->{'odd_tire'}) }}"
                                                     autofocus>
                                             </div>
                                         </div>

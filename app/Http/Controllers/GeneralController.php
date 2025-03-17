@@ -181,6 +181,8 @@ class GeneralController extends Controller
             }
         }
 
+        // dd($availableOtrTireTypesArr);
+
 
 
         // Initialize the array with the provided data

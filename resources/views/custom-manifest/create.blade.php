@@ -350,6 +350,14 @@
                                             </div>
                                         </div>
 
+                                        <div id="colodd_tire" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Odd Tire / Inches</label>
+                                                <input id="odd_tire" type="text" class="form-control" name="odd_tire"
+                                                    value="{{ old('odd_tire') }}" autofocus>
+                                            </div>
+                                        </div>
+
                                         {{-- End quanittys of typres of otr tires --}}
 
                                         <div id="" class="col-lg-6 ">
@@ -365,36 +373,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Payment Type</label>
-                                                <select id="payment_type" name="payment_type"
-                                                    class="form-control form-select form-select-lg mb-3"
-                                                    aria-label=".form-select-lg example">
-                                                    <option value="" disabled>Please select payment type</option>
-                                                    <option value="CreditCard">Credit Card</option>
-                                                    <option value="Cheque">Check</option>
-                                                    <option value="Credit Card on File">Credit Card on File</option>
-                                                    <option value="Cash">Cash</option>
-                                                    <option value="Charge">Charge</option>
-
-                                                </select>
-                                            </div>
-                                        </div> --}}
-
-
-
-                                        {{-- <div class="col-lg-6 " id="">
-                                            <div class="form-group">
-                                                <label>Do you want us back?</label>
-                                                <select id="" name="want_back"
-                                                class="form-control form-select form-select-lg mb-3"
-                                                aria-label=".form-select-lg example">
-                                                <option value="no">No</option>
-                                                <option value="yes">yes</option>
-                                            </select>
-                                            </div>
-                                        </div> --}}
+                        
 
 
                                         <div class="col-lg-6 d-none" id="chequeCol">
@@ -603,10 +582,14 @@
                 case '13_00_24':
                     $('#col13_00_24').removeClass('d-none');
                     break;
-
                 case '14_00_24':
                     $('#col14_00_24').removeClass('d-none');
                     break;
+                case 'odd_tire':
+                    $('#colodd_tire').removeClass('d-none');
+                    break;
+
+                    
 
 
             }
@@ -651,6 +634,10 @@
                 case '14_00_24':
                     $('#col14_00_24').addClass('d-none');
                     $('#14_00_24').val();
+                    break;
+                case 'odd_tire':
+                    $('#colodd_tire').addClass('d-none');
+                    $('#odd_tire').val();
                     break;
 
 
