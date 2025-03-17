@@ -138,7 +138,7 @@
                     name: 'action',
                     render:function(data){
                         console.log(data);
-                    }
+                    },
                     orderable: false, // Assuming the 'action' column shouldn't be sorted
                     searchable: false, // Assuming the 'action' column shouldn't be searched
                 }
