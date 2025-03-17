@@ -1133,7 +1133,7 @@ class FullFillOrderController extends Controller
             }
 
 
-            $otrTireTypes = $request->otr_tires_type;
+            $otrTireTypes = explode(',', $request->otr_tires_type);
             $availableOtrTireTypesArr = [];
 
             if (!empty($otrTireTypes) && count($otrTireTypes)) {
