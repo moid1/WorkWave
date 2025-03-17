@@ -534,61 +534,60 @@ class OrderController extends Controller
     }
 
     public function getUnfilledManifest(Request $request)
-    {
+{
+    if ($request->ajax()) {
+        $data = Order::where('is_filled_by_manager', false);
 
-        if ($request->ajax()) {
-            $data = Order::where('is_filled_by_manager', false)->get();
-            if ($request->filled('from_date') && $request->filled('to_date')) {
-                $fromDate = Carbon::parse($request->from_date);
-                $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
-            }
-
-            $data = $data->with(['customer', 'driver', 'user'])->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->editColumn('id', function ($row) {
-                    return $row->id;
-                })
-                ->editColumn('business_name', function ($row) {
-                    if ($row->customer->business_name) {
-                        return $row->customer->business_name;
-                    }
-                    return 'N/A';
-                })
-                ->editColumn('created_by', function ($row) {
-                    if ($row->user->name) {
-                        return $row->user->name;
-                    }
-                    return 'N/A';
-                })
-
-                ->editColumn('email', function ($row) {
-                    return $row->customer->email;
-                    return 'N/A';
-                })
-
-                ->editColumn('driver', function ($row) {
-                    if ($row->driver)
-                        return $row->driver->name;
-                    return 'N/A';
-                })
-                ->editColumn('created_at', function ($row) {
-                    return $row->created_at->format('M d Y');
-                })
-
-                ->editColumn('action', function ($row) {
-                    $route = route('unfill.manifest.order', $row->id);
-                    return '<a href=' . $route . '> <i class="mdi mdi-note " 
-                    ></i></a>';
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+        // Filter by date range if provided
+        if ($request->filled('from_date') && $request->filled('to_date')) {
+            $fromDate = Carbon::parse($request->from_date);
+            $toDate = Carbon::parse($request->to_date)->endOfDay();
+            $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
         }
 
-        $orders = Order::where('is_filled_by_manager', false)->get();
-        return view('orders.unfill.index', compact('orders'));
+        // Eager load relationships and paginate the results
+        $data = $data->with(['customer', 'driver', 'user'])
+                    ->paginate(10);  // You can adjust the number of items per page as needed (e.g., 10)
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('id', function ($row) {
+                return $row->id;
+            })
+            ->editColumn('business_name', function ($row) {
+                if ($row->customer->business_name) {
+                    return $row->customer->business_name;
+                }
+                return 'N/A';
+            })
+            ->editColumn('created_by', function ($row) {
+                if ($row->user->name) {
+                    return $row->user->name;
+                }
+                return 'N/A';
+            })
+            ->editColumn('email', function ($row) {
+                return $row->customer->email ?? 'N/A'; // Use null coalescing operator to handle 'null' values
+            })
+            ->editColumn('driver', function ($row) {
+                return $row->driver ? $row->driver->name : 'N/A';
+            })
+            ->editColumn('created_at', function ($row) {
+                return $row->created_at->format('M d Y');
+            })
+            ->editColumn('action', function ($row) {
+                $route = route('unfill.manifest.order', $row->id);
+                return '<a href="' . $route . '"> <i class="mdi mdi-note"></i></a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
+
+    // Non-ajax request - Show the normal page
+    $orders = Order::where('is_filled_by_manager', false)->paginate(10); // Paginate for normal view
+    return view('orders.unfill.index', compact('orders'));
+}
+
 
     public function getUnfilledManifestOrder($id)
     {
