@@ -80,73 +80,76 @@
 
         let url = "{{ route('fill.manifest.index') }}";
         var table = $('.data-table').DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: {
-        url: url, // The URL endpoint for your AJAX request
-        data: function(d) {
-            // Get the start and end date from the daterangepicker input
-            var daterange = $('input[name="daterange"]').data('daterangepicker');
-            if (daterange) {
-                d.from_date = daterange.startDate.format('YYYY-MM-DD');
-                d.to_date = daterange.endDate.format('YYYY-MM-DD');
-            }
-        }
-    },
-    columns: [
-        {
-            data: 'id',
-            name: 'id',
-        },
-        {
-            data: 'customer.business_name',
-            name: 'customer.business_name',
-            render: function(data) {
-                return data ? data : 'N/A'; // If no business name, return 'N/A'
-            }
-        },
-        {
-            data: 'user.name',
-            name: 'user.name',
-            render: function(data) {
-                return data ? data : 'N/A'; // If no user name, return 'N/A'
-            }
-        },
-        {
-            data: 'email',
-            name: 'email',
-            render: function(data) {
-                return data ? data : 'N/A'; // If no email, return 'N/A'
-            }
-        },
-        {
-            data: 'driver',
-            name: 'driver',
-            render: function(data, type, full) {
-                return data ? data : 'N/A'; // If no driver, return 'N/A'
-            }
-        },
-        {
-            data: 'created_at',
-            name: 'created_at',
-            render: function(data) {
-                return data ? moment(data).format('MMM D, YYYY') : 'N/A'; // Format the date if available
-            }
-        },
-        {
-            data: 'action',
-            name: 'action',
-            orderable: false, // Assuming the 'action' column shouldn't be sorted
-            searchable: false, // Assuming the 'action' column shouldn't be searched
-        }
-    ],
-    drawCallback: function(settings) {
-        window.scrollTo(0, 0); // Scroll to the top of the page after a draw
-    },
-    language: {
-        processing: 'Loading...', // Optionally, add a custom processing message
-    },
-});
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: url, // The URL endpoint for your AJAX request
+                data: function(d) {
+                    // Get the start and end date from the daterangepicker input
+                    var daterange = $('input[name="daterange"]').data('daterangepicker');
+                    if (daterange) {
+                        d.from_date = daterange.startDate.format('YYYY-MM-DD');
+                        d.to_date = daterange.endDate.format('YYYY-MM-DD');
+                    }
+                }
+            },
+            columns: [{
+                    data: 'id',
+                    name: 'id',
+                },
+                {
+                    data: 'customer.business_name',
+                    name: 'customer.business_name',
+                    render: function(data) {
+                        return data ? data : 'N/A'; // If no business name, return 'N/A'
+                    }
+                },
+                {
+                    data: 'user.name',
+                    name: 'user.name',
+                    render: function(data) {
+                        return data ? data : 'N/A'; // If no user name, return 'N/A'
+                    }
+                },
+                {
+                    data: 'email',
+                    name: 'email',
+                    render: function(data) {
+                        return data ? data : 'N/A'; // If no email, return 'N/A'
+                    }
+                },
+                {
+                    data: 'driver',
+                    name: 'driver',
+                    render: function(data, type, full) {
+                        return data ? data : 'N/A'; // If no driver, return 'N/A'
+                    }
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function(data) {
+                        return data ? moment(data).format('MMM D, YYYY') :
+                        'N/A'; // Format the date if available
+                    }
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    render:function(data){
+                        console.log(data);
+                    }
+                    orderable: false, // Assuming the 'action' column shouldn't be sorted
+                    searchable: false, // Assuming the 'action' column shouldn't be searched
+                }
+            ],
+            drawCallback: function(settings) {
+                window.scrollTo(0, 0); // Scroll to the top of the page after a draw
+            },
+            language: {
+                processing: 'Loading...', // Optionally, add a custom processing message
+            },
+        });
 
 
         $(".filter").click(function() {
