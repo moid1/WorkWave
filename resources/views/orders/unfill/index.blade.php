@@ -134,14 +134,17 @@
                     }
                 },
                 {
-                    data: 'action',
-                    name: 'action',
-                    render:function(data){
-                        console.log(data);
-                    },
-                    orderable: false, // Assuming the 'action' column shouldn't be sorted
-                    searchable: false, // Assuming the 'action' column shouldn't be searched
-                }
+    data: 'id',
+    name: 'action',
+    render: function(data, type, row) {
+        // Dynamically generate the route using the 'data' (order.id)
+        var url = "/unfill/manifest/order/" + data;  // Assuming the URL structure is like this
+        return '<a href="' + url + '"> <i class="mdi mdi-note"></i></a>';
+    },
+    orderable: false, // Assuming the 'action' column shouldn't be sorted
+    searchable: false, // Assuming the 'action' column shouldn't be searched
+}
+
             ],
             drawCallback: function(settings) {
                 window.scrollTo(0, 0); // Scroll to the top of the page after a draw
