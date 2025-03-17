@@ -537,32 +537,36 @@ class OrderController extends Controller
     {
         if ($request->ajax()) {
             // Start with your base query
-            $data = Order::where('is_filled_by_manager', false);
-
+            $query = Order::where('is_filled_by_manager', false);
+    
             // Filter by date range if provided
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data = $data->whereBetween('created_at', [$fromDate, $toDate]);
+                $query = $query->whereBetween('created_at', [$fromDate, $toDate]);
             }
-
-            // Get the paginated results
-            $data = $data->with(['customer', 'driver', 'user'])
-                ->paginate(10); // You can adjust the number of items per page
-
-            // Now return the datatable response with pagination
+    
+            // Get the filtered results and apply pagination
+            $filteredData = $query->with(['customer', 'driver', 'user']);
+            $totalRecords = $filteredData->count(); // Get the total count before pagination
+            $data = $filteredData->skip(($request->get('start') ?? 0))
+                                 ->take($request->get('length') ?? 10) // Custom pagination length
+                                 ->get();
+    
+            // Return the DataTable response with the required fields
             return response()->json([
-                'draw' => $request->get('draw'),
-                'recordsTotal' => $data->total(),
-                'recordsFiltered' => $data->total(), // If you want to show the filtered records
-                'data' => $data->items(), // The actual data
+                'draw' => (int) $request->get('draw'),
+                'recordsTotal' => $totalRecords,  // Total number of records (without filters)
+                'recordsFiltered' => $totalRecords,  // Number of filtered records (with applied filters)
+                'data' => $data,  // The actual data to display
             ]);
         }
-
+    
         // Non-ajax request - Show the normal page
         $orders = Order::where('is_filled_by_manager', false)->paginate(10); // Paginate for normal view
         return view('orders.unfill.index', compact('orders'));
     }
+    
 
 
 
