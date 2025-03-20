@@ -36,7 +36,7 @@ class GeneralController extends Controller
         ->map(function ($group) {
             return $group->sortBy('name'); // Sorting alphabetically by 'name'
         });
-            $customers = Customer::select('id', 'business_name')->get();
+        $customers = Customer::select('id', 'business_name')->get()->sortBy('business_name');
         return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
     }
 
