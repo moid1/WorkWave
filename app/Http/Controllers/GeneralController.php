@@ -30,8 +30,13 @@ class GeneralController extends Controller
         }
 
         // Get all trailers and group them by location
-        $trailers = Trailers::with('customerData')->get()->groupBy('trailer_going');
-        $customers = Customer::select('id', 'business_name')->get();
+        $trailers = Trailers::with('customerData')
+        ->get()
+        ->groupBy('trailer_going')
+        ->map(function ($group) {
+            return $group->sortBy('name'); // Sorting alphabetically by 'name'
+        });
+            $customers = Customer::select('id', 'business_name')->get();
         return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
     }
 
@@ -80,8 +85,8 @@ class GeneralController extends Controller
 
         $trailer = Trailers::find($trailerId);
         if ($trailer) {
-            if ($request->status) {
-                $trailer->status = $request->status;
+            if ($request->statusData) {
+                $trailer->status = $request->statusData;
             }
             if ($request->location) {
                 $trailer->location = $request->location;
