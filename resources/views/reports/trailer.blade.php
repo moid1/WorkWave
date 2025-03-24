@@ -47,7 +47,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($locationTrailers as $trailer)
-                                                @if (in_array(strtolower($trailer->trailer_going), ['burnet', 'victoria', 'cemex']))
+                                                @if (in_array(strtolower($trailer->trailer_going), ['burnet', 'victoria', 'cemex','customer']))
                                                     <tr data-trailer-id="{{ $trailer->id }}">
                                                         <td>{{ $trailer->name }}</td>
                                                         <td>{{ $trailer->location }}</td>
