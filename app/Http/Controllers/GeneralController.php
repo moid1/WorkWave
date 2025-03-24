@@ -35,9 +35,11 @@ class GeneralController extends Controller
         ->groupBy('trailer_going')
         ->map(function ($group) {
             return $group->sort(function ($a, $b) {
-                return strcasecmp($a->name, $b->name);  // Case-insensitive comparison
+                return strnatcasecmp($a->name, $b->name);  // Natural case-insensitive sorting
             });
         });
+    
+    
     
     
     
