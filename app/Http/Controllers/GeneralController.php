@@ -34,10 +34,11 @@ class GeneralController extends Controller
         ->get()
         ->groupBy('trailer_going')
         ->map(function ($group) {
-            return $group->sortBy(function ($trailer) {
-                return strtolower($trailer->name); // Ensure case-insensitive sorting
-            }, SORT_NATURAL | SORT_FLAG_CASE); // Ensure natural, case-insensitive sorting
+            return $group->sort(function ($a, $b) {
+                return strcasecmp($a->name, $b->name);  // Case-insensitive comparison
+            });
         });
+    
     
     
         $customers = Customer::select('id', 'business_name')->get()->sortBy('business_name');
