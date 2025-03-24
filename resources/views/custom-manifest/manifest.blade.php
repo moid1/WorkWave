@@ -262,7 +262,7 @@
 
 
                                                     <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
-                                                        ${{  $data['customerPricing'][$key] }}
+                                                        ${{ $data['customerPricing'][$key] }}
                                                     </label>
                                                     <span style=""></span>
 
@@ -294,7 +294,7 @@
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
                                                     @php $totalSum += $data['customerPricing'][$key] * $value; @endphp
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{  $data['customerPricing'][$key] * $value }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing'][$key] * $value }}</span>
                                                 </div>
                                             </tr>
                                             }
@@ -319,7 +319,7 @@
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
                                                     @php $totalSum += $data['customerPricing'][$key] * $value; @endphp
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{$data['customerPricing'][$key] * $value }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing'][$key] * $value }}</span>
                                                 </div>
                                             </tr>
                                             }
@@ -327,7 +327,7 @@
                                     @endforeach
                                 @endif
 
-                             
+
 
 
 
@@ -336,8 +336,7 @@
                                     <div class="mt-2 ">
                                         <label class="inputLabel inputLabelSmall">Total $</label>
 
-                                        <input type="text" name=""
-                                            value="{{ number_format($totalSum, 2) }}"
+                                        <input type="text" name="" value="{{ number_format($totalSum, 2) }}"
                                             style="background:none;border:none;border-bottom: 1px solid #333;max-width:70px;margin-right:5em;" />
                                     </div>
                                 </tr>
@@ -367,33 +366,33 @@
                                                 Tax
                                                 $</label>
                                             <input type="text" name=""
-                                                value="{{round($totalSum * ($customerTax / 100), 2)}}"
+                                                value="{{ round($totalSum * ($customerTax / 100), 2) }}"
                                                 style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                         </div>
                                     </tr>
                                 @endif
 
-                                @if($data['orderRequest']['payment_type'] === 'credit_card')
-                                <tr style="text-align: right;">
-                                    <div class="mt-2 ">
-                                        <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Conv
-                                            Fee
-                                            $</label>
-                                        <input type="text" name=""
-                                            value="{{round($totalSumWithTax * 0.04, 2)}}"
-                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
-                                    </div>
-                                </tr>
+                                @if ($data['orderRequest']['payment_type'] === 'credit_card')
+                                    <tr style="text-align: right;">
+                                        <div class="mt-2 ">
+                                            <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Conv
+                                                Fee
+                                                $</label>
+                                            <input type="text" name=""
+                                                value="{{ round($totalSumWithTax * 0.04, 2) }}"
+                                                style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
+                                        </div>
+                                    </tr>
                                 @endif
 
 
-@php
-   if($data['orderRequest']['payment_type'] === 'credit_card'){
-                                        $totalSumWithTax = $totalSumWithTax+number_format($totalSumWithTax*0.04, 2);
+                                @php
+                                    if ($data['orderRequest']['payment_type'] === 'credit_card') {
+                                        $totalSumWithTax = $totalSumWithTax + number_format($totalSumWithTax * 0.04, 2);
                                     }
                                     $totalSumWithTax = number_format($totalSumWithTax, 2);
 
-@endphp
+                                @endphp
                                 <tr style="text-align: right;">
                                     <div class="mt-2 ">
                                         <label class="inputLabel inputLabelSmall">Total $</label>
@@ -404,7 +403,8 @@
                                 <tr>
                                     <div class="mt-2 ">
                                         <label class="inputLabel inputLabelSmall">Charge Type</label>
-                                        <input type="text" name="" value="{{$data['orderRequest']['payment_type']}}"
+                                        <input type="text" name=""
+                                            value="{{ $data['orderRequest']['payment_type'] }}"
                                             style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
                                     </div>
                                 </tr>
@@ -698,8 +698,7 @@
                                 <tr>
                                     <td>
                                         <div style="display: inline-block">
-                                            <input type="text" name=""
-                                                value=""
+                                            <input type="text" name="" value=""
                                                 class="inputField" />
                                             <label class="inputLabel" style="white-space: nowrap">Area Code Telephone
                                                 Number</label>
@@ -809,8 +808,7 @@
                                 <tr>
                                     <td>
                                         <div style="display: inline-block">
-                                            <input type="text" name=""
-                                                value=""
+                                            <input type="text" name="" value=""
                                                 class="inputField" />
                                             <label class="inputLabel" style="white-space: nowrap">Area Code Telephone
                                                 Number</label>
