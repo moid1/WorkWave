@@ -90,7 +90,7 @@
                                                 <option value="" disabled>Please select where trailer going</option>
                                                 <option value="Burnet">Burnet</option>
                                                 <option value="Victoria">Victoria</option>
-                                                <option value="Robstown">Robstown</option>
+                                                <option value="CUSTOMER">CUSTOMER</option>
                                                 <option value="Cemex">Cemex</option>
                                             </select>
                                         </div>

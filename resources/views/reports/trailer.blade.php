@@ -94,7 +94,22 @@
                         <input type="hidden" name="trailer_id" id="trailer_id">
                         <div class="form-group">
                             <label for="statusData" class="col-form-label">Status</label>
-                            <input type="text" class="form-control" name="statusData" id="statusData">
+                            {{-- <input type="text" class="form-control" name="statusData" id="statusData"> --}}
+                            <select class="form-control" name="statusData" id="statusData">
+                                <option value="FULL">FULL</option>
+                                <option value="FULL/GRADE">FULL/GRADE</option>
+                                <option value="FULL/NO GRADE">FULL/NO GRADE</option>
+                                <option value="FULL/SHIP TO CEMEX">FULL/SHIP TO CEMEX</option>
+                                <option value="FULL/SHIP TO RTDC">FULL/SHIP TO RTDC</option>
+                                <option value="EMPTY">EMPTY</option>
+                                <option value="OOS/FULL">OOS/FULL</option>
+                                <option value="OOS/EMPTY">OOS/EMPTY</option>
+                                <option value="STEEL">STEEL</option>
+                                <option value="TDF">TDF</option>
+                                <option value="ONSITE">ONSITE</option>
+                                <option value="CEMEX/FULL">CEMEX/FULL</option>
+                                <option value="CEMEX/EMPTY">CEMEX/EMPTY</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="location" class="col-form-label">Location:</label>
@@ -117,8 +132,8 @@
                                 </option>
                                 <option value="Victoria" {{ $trailer->trailer_going === 'Victoria' ? 'selected' : '' }}>
                                     Victoria</option>
-                                <option value="Robstown" {{ $trailer->trailer_going === 'Robstown' ? 'selected' : '' }}>
-                                    Robstown</option>
+                                <option value="CUSTOMER" {{ $trailer->trailer_going === 'CUSTOMER' ? 'selected' : '' }}>
+                                    CUSTOMER</option>
                                 <option value="Cemex" {{ $trailer->trailer_going === 'Cemex' ? 'selected' : '' }}>Cemex
                                 </option>
                             </select>
@@ -174,7 +189,7 @@
                                 <option value="" disabled>Please select where trailer going</option>
                                 <option value="Burnet">Burnet</option>
                                 <option value="Victoria">Victoria</option>
-                                <option value="Robstown">Robstown</option>
+                                <option value="CUSTOMER">CUSTOMER</option>
                                 <option value="Cemex">Cemex</option>
                             </select>
                         </div>
