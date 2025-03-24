@@ -176,7 +176,21 @@
                         </div>
                         <div class="form-group">
                             <label for="status" class="col-form-label">Status</label>
-                            <input type="text" class="form-control" name="status">
+                            <select class="form-control" name="status" id="status">
+                                <option value="FULL">FULL</option>
+                                <option value="FULL/GRADE">FULL/GRADE</option>
+                                <option value="FULL/NO GRADE">FULL/NO GRADE</option>
+                                <option value="FULL/SHIP TO CEMEX">FULL/SHIP TO CEMEX</option>
+                                <option value="FULL/SHIP TO RTDC">FULL/SHIP TO RTDC</option>
+                                <option value="EMPTY">EMPTY</option>
+                                <option value="OOS/FULL">OOS/FULL</option>
+                                <option value="OOS/EMPTY">OOS/EMPTY</option>
+                                <option value="STEEL">STEEL</option>
+                                <option value="TDF">TDF</option>
+                                <option value="ONSITE">ONSITE</option>
+                                <option value="CEMEX/FULL">CEMEX/FULL</option>
+                                <option value="CEMEX/EMPTY">CEMEX/EMPTY</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="location" class="col-form-label">Location:</label>
