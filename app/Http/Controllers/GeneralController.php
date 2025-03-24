@@ -34,18 +34,12 @@ class GeneralController extends Controller
         ->get()
         ->groupBy('trailer_going')
         ->map(function ($group) {
-            return $group->sortBy(function ($trailer) {
-                return strtolower($trailer->name); // Sort by the lowercase version of 'name'
-            });
+            return $group->sortBy('name'); // Sorting alphabetically by 'name'
         });
-    
-    
-    
-    
-    
-    
-        $customers = Customer::select('id', 'business_name')->get()->sortBy('business_name');
-        return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
+        $customers = Customer::select('id', 'business_name')->get()->sortBy(function($customer) {
+            return strtolower($customer->business_name); // Sort by lowercase business_name
+        });
+                return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
     }
 
     public function getOrdersByTruckRouted(Request $request)
