@@ -162,21 +162,36 @@
                 <div class="modal-body">
                     <form action="{{ route('trailer.store') }}" method="POST">
                         @csrf
+
+                        <!-- Trailer Name -->
                         <div class="form-group">
                             <label for="name">Trailer Name</label>
-                            <input type="text" class="form-control" name="name">
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
+
+                        <!-- Select Customer -->
                         <div class="form-group">
                             <label for="customer" class="col-form-label">Select Customer</label>
-                            <select name="customer" class="form-control">
+                            <select name="customer" id="customer" class="form-control" required>
                                 @foreach ($customers as $customer)
                                     <option value="{{ $customer->id }}">{{ $customer->business_name }}</option>
                                 @endforeach
                             </select>
                         </div>
+
+
+
+                        <!-- Location -->
                         <div class="form-group">
-                            <label for="status" class="col-form-label">Status</label>
-                            <select class="form-control" name="status" id="status">
+                            <label for="location" class="col-form-label">Location:</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="form-group">
+                            <label for="statusss" class="col-form-label">Status</label>
+                            <select class="form-control" name="status" id="" required>
+                                <option value="">Please select</option>
                                 <option value="FULL">FULL</option>
                                 <option value="FULL/GRADE">FULL/GRADE</option>
                                 <option value="FULL/NO GRADE">FULL/NO GRADE</option>
@@ -192,26 +207,26 @@
                                 <option value="CEMEX/EMPTY">CEMEX/EMPTY</option>
                             </select>
                         </div>
+
+                        <!-- Trailer Going -->
                         <div class="form-group">
-                            <label for="location" class="col-form-label">Location:</label>
-                            <input type="text" class="form-control" name="location">
-                        </div>
-                        <div class="form-group">
-                            <label>Trailer Going</label>
-                            <select id="" name="trailer_going"
-                                class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                                <option value="" disabled>Please select where trailer going</option>
+                            <label for="trailer_going" class="col-form-label">Trailer Going</label>
+                            <select name="trailer_going" id="trailer_going" class="form-control" required>
+                                <option value="" disabled>Please select where trailer is going</option>
                                 <option value="Burnet">Burnet</option>
                                 <option value="Victoria">Victoria</option>
                                 <option value="CUSTOMER">CUSTOMER</option>
                                 <option value="Cemex">Cemex</option>
                             </select>
                         </div>
+
+                        <!-- Modal Footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
