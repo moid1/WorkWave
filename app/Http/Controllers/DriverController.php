@@ -135,7 +135,29 @@ class DriverController extends Controller
 
     public function apiGetLoggedInDriverOrders()
     {
+        $user = \Auth::user();
+        $currentDate = Carbon::now()->toDateString();
+
         try {
+            if ($user->type === 0 || $user->type === 1) {
+                $routings = Routing::where('routing_date', $currentDate)
+                    ->pluck('order_ids'); // Retrieve order_ids as a collection
+                $orderIDs = [];
+                foreach ($routings as $routing) {
+                    // Split order_ids by commas and add to the orderIDs array
+                    $order_ids = explode(',', $routing); // The raw order_ids string
+                    $orderIDs = array_merge($orderIDs, $order_ids); // Merge with existing order IDs
+                }
+
+                // Now retrieve all orders where the order ID is in the $orderIDs array
+                $orders = Order::whereIn('id', $orderIDs)->with(['customer', 'user', 'manifest'])->get();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Driver Orders',
+                    'data' => $orders,
+                ]);
+            }
             $truckDriver = TruckDriver::with('truck')->where('user_id', Auth::id())->latest()->first();
 
             if (!$truckDriver || !$truckDriver->truck) {
@@ -145,24 +167,16 @@ class DriverController extends Controller
                 ], 404); // Use 404 for "not found" scenario
             }
 
-            $currentDate = Carbon::now()->toDateString();
-            // $orders = Order::with(['customer', 'user', 'manifest'])
-            //     ->where('truck_id', $truckDriver->truck->id)
-            //     ->where('status', 'created')
-            //     ->whereRaw("delivery_date = ?", [$currentDate]) // Use raw query for string comparison
-            //     ->latest()
-            //     ->get();
-
-                $routings = Routing::where('routing_date', $currentDate)
+            $routings = Routing::where('routing_date', $currentDate)
                 ->where('truck_id', $truckDriver->truck->id) // Ensure truck_id is matched
                 ->pluck('order_ids'); // Retrieve order_ids as a collection
-            $orderIDs=[];
+            $orderIDs = [];
             foreach ($routings as $routing) {
                 // Split order_ids by commas and add to the orderIDs array
                 $order_ids = explode(',', $routing); // The raw order_ids string
                 $orderIDs = array_merge($orderIDs, $order_ids); // Merge with existing order IDs
             }
-            
+
             // Now retrieve all orders where the order ID is in the $orderIDs array
             $orders = Order::whereIn('id', $orderIDs)->with(['customer', 'user', 'manifest'])->get();
 
