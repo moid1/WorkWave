@@ -295,15 +295,15 @@
                                                     <span style=""></span>
 
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
-                                                    @php 
-                                                    if( $radialStuff[$key] <= 0){
-                                                        $totalSum += $data['customerPricing'][$key] * $value ;
-                                                    }else{
-                                                        $data['customerPricing'][$key] * $radialStuff[$key];
-                                                    }
+                                                    @php
+                                                        if ($radialStuff[$key] <= 0) {
+                                                            $totalSum += $data['customerPricing'][$key] * $value;
+                                                        } else {
+                                                            $totalSum += $data['customerPricing'][$key] * $radialStuff[$key];
+                                                        }
                                                     @endphp
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing'][$key] *  ($radialStuff[$key] == 0 ? $value : $radialStuff[$key] )}}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing'][$key] * ($radialStuff[$key] == 0 ? $value : $radialStuff[$key]) }}</span>
                                                 </div>
                                             </tr>
                                             }
@@ -317,7 +317,7 @@
                                                     <label class="inputLabel"
                                                         style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value  }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value }}</span>
 
 
                                                     <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
