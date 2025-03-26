@@ -31,15 +31,15 @@ class GeneralController extends Controller
 
         // Get all trailers and group them by location
         $trailers = Trailers::with('customerData')
-        ->get()
-        ->groupBy('trailer_going')
-        ->map(function ($group) {
-            return $group->sortBy('name'); // Sorting alphabetically by 'name'
-        });
-        $customers = Customer::select('id', 'business_name')->get()->sortBy(function($customer) {
+            ->get()
+            ->groupBy('trailer_going')
+            ->map(function ($group) {
+                return $group->sortBy('name'); // Sorting alphabetically by 'name'
+            });
+        $customers = Customer::select('id', 'business_name')->get()->sortBy(function ($customer) {
             return strtolower($customer->business_name); // Sort by lowercase business_name
         });
-                return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
+        return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
     }
 
     public function getOrdersByTruckRouted(Request $request)
@@ -159,6 +159,8 @@ class GeneralController extends Controller
 
         $agriTireTypes = $request->agri_tires_type;
         $availableAgriTireTypesArr = [];
+        $radialStuff = [];
+
 
         if (!empty($agriTireTypes) && count($agriTireTypes)) {
             foreach ($agriTireTypes as $key => $value) {
@@ -169,6 +171,7 @@ class GeneralController extends Controller
                 $availableAgriTireTypesArr[] = [
                     $value => $sum
                 ];
+                $radialStuff[$value] = $values[1] ?? 0;
             }
         }
 
@@ -181,15 +184,13 @@ class GeneralController extends Controller
                 $input = $request[$value];
                 $values = explode(" ", $input);
                 $values = array_map('intval', $values);
-                $sum = array_sum($values);
+                // $sum = array_sum($values);
                 $availableOtrTireTypesArr[] = [
-                    $value => $sum
+                    $value => $values[0]
                 ];
+                $radialStuff[$value] = $values[1] ?? 0;
             }
         }
-
-        // dd($availableOtrTireTypesArr);
-
 
 
         // Initialize the array with the provided data
@@ -203,7 +204,8 @@ class GeneralController extends Controller
             'customer_signature' => $file ?? null,
             'driver_signature' => $driverSignFile ?? null,
             'cheque_no' => $request->cheque_no ?? null,
-            'left_over' => $request->tires_left ?? null
+            'left_over' => $request->tires_left ?? null,
+            'radialStuff'=> count($radialStuff) ? json_encode($radialStuff) : null,
         ];
         // dd($fullFillOrder);
 

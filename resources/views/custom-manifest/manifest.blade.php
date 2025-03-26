@@ -203,6 +203,9 @@
                                         $typesOfOtherTires = !empty($data['type_of_other'])
                                             ? json_decode($data['type_of_other'], true)
                                             : [];
+                                        $radialStuff = !empty($data['radialStuff'])
+                                            ? json_decode($data['radialStuff'], true)
+                                            : [];
 
                                         $totalSum = 0;
                                     @endphp
@@ -283,7 +286,7 @@
                                                     <label class="inputLabel"
                                                         style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $radialStuff[$key]  }}</span>
 
 
                                                     <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
@@ -308,7 +311,7 @@
                                                     <label class="inputLabel"
                                                         style="margin-top: 10px;width:190px;font-size:11px ">{{ $key }}</label>
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $value }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:40px">{{ $radialStuff[$key] }}</span>
 
 
                                                     <label class="inputLabel inputLabelExtraSmall" style="width: 55px">@
