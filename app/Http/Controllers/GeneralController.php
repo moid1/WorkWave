@@ -169,7 +169,7 @@ class GeneralController extends Controller
                 $values = array_map('intval', $values);
                 $sum = array_sum($values);
                 $availableAgriTireTypesArr[] = [
-                    $value => $sum
+                    $value => $values[0]
                 ];
                 $radialStuff[$value] = $values[1] ?? 0;
             }
