@@ -295,9 +295,9 @@
                                                     <span style=""></span>
 
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
-                                                    @php $totalSum += $data['customerPricing'][$key] * $radialStuff[$key] ; @endphp
+                                                    @php $totalSum +=  $radialStuff[$key] == 0 ? $data['customerPricing'][$key] * $value : $data['customerPricing'][$key] * $radialStuff[$key] ; @endphp
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing'][$key] *  $radialStuff[$key] }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data['customerPricing'][$key] *  $radialStuff[$key] == 0 ? $value : $radialStuff[$key] }}</span>
                                                 </div>
                                             </tr>
                                             }
