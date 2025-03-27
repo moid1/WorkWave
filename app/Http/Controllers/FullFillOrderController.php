@@ -1209,6 +1209,7 @@ class FullFillOrderController extends Controller
                 'title' => 'Automatic Complete Order Note',
             ]);
 
+            \Log::info('Full Fill Order: ', ['order' => $fullFillOrder]);
             for ($i = 0; $i < count($pdfTypes); $i++) {
                 $fullFillOrder['pdfType'] = $pdfTypes[$i];
                 $pdf = \App::make('dompdf.wrapper');
