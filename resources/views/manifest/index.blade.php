@@ -386,22 +386,30 @@
                                     $customerSalesTax = 0;
                                     $customerTax = $data->order->customer->tax ?? 0;
                                     $totalSumWithTax = 0;
-                                    if($data['payment_type'] === 'cc'){
-                                        $totalSumWithTax = $totalSum + (0.04 * $totalSum);
-                                }
+                                  
 
                                     if ($customerTax == 0) {
                                         $totalSumWithTax = number_format($totalSum, 2);
+                                        if($data['payment_type'] === 'cc'){
+                                        $totalSumWithTax = $totalSum + (0.04 * $totalSum);
+                                    }
                                     } else {
                                         $totalSumWithTax = $totalSum * ($customerTax / 100);
                                         $totalSumWithTax += $totalSum;
-                                        $totalSumWithTax = number_format($totalSumWithTax, 2);
                                         $customerSalesTax = $totalSum * ($customerTax/100);
+                                        if($data['payment_type'] === 'cc'){
+                                        $totalSumWithTax = $totalSum + (0.04 * $totalSum);
+                                        }
+                                        $totalSumWithTax = number_format($totalSumWithTax, 2);
                                     }
                                 } else {
+                                    if($data['payment_type'] === 'cc'){
+                                        $totalSumWithTax = $totalSum + (0.04 * $totalSum);
+                                        }
                                     $totalSumWithTax = number_format($totalSum, 2);
                                 }
 
+                                
                                
                             @endphp
 
