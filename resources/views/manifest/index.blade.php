@@ -384,7 +384,7 @@
                                 @php
                                 if ($data->order->load_type !== 'state') {
                                     $customerSalesTax = 0;
-                                    $customerTax = $data->order->customer->tax ?? 0;
+                                    $customerTax = is_numeric($data->order->customer->tax) ? floatval($data->order->customer->tax) : 0;
                                     $totalSumWithTax = 0;
                                   
 
