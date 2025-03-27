@@ -368,7 +368,7 @@
                                                     <select class="form-control" name="payment_type" id="">
                                                         <option value="check">Check</option>
                                                         <option value="check">Cash</option>
-                                                        <option value="credit_card">Credit Cart / Debit Card</option>
+                                                        <option value="credit_card">Credit Card / Debit Card</option>
                                                     </select>
                                             </div>
                                         </div>

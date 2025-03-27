@@ -1118,6 +1118,7 @@ class FullFillOrderController extends Controller
 
             $agriTireTypes = explode(',', $request->agri_tires_type);
             $availableAgriTireTypesArr = [];
+            $radialStuff = [];
 
             if (!empty($agriTireTypes) && count($agriTireTypes)) {
                 foreach ($agriTireTypes as $key => $value) {
@@ -1126,8 +1127,9 @@ class FullFillOrderController extends Controller
                     $values = array_map('intval', $values);
                     $sum = array_sum($values);
                     $availableAgriTireTypesArr[] = [
-                        $value => $sum
+                        $value => $values[0]
                     ];
+                    $radialStuff[$value] = $values[1] ?? 0;
                     $totalNoOFTires += $sum;
                 }
             }
@@ -1143,9 +1145,10 @@ class FullFillOrderController extends Controller
                     $values = array_map('intval', $values);
                     $sum = array_sum($values);
                     $availableOtrTireTypesArr[] = [
-                        $value => $sum
+                        $value => $values[0]
                     ];
                     $totalNoOFTires += $sum;
+                    $radialStuff[$value] = $values[1] ?? 0;
                 }
             }
 
@@ -1164,6 +1167,9 @@ class FullFillOrderController extends Controller
                 'cheque_no' => $request->cheque_no ?? null,
                 'left_over' => $request->tiresLeft ?? null,
             ]);
+
+            $fullFillOrder['radialStuff']=count($radialStuff) ? json_encode($radialStuff) : null;
+            $fullFillOrder['payment_type'] = $request->payment_type;
 
 
 

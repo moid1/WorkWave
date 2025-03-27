@@ -194,7 +194,9 @@
                                         $typesOfTruckTires = !empty($data->type_of_truck_tyre) ? json_decode($data->type_of_truck_tyre, true) : [];
                                         $typesOfAgriTires = !empty($data->type_of_agri_tyre) ? json_decode($data->type_of_agri_tyre, true) : [];
                                         $typesOfOtherTires = !empty($data->type_of_other) ? json_decode($data->type_of_other, true) : [];
-
+                                        $radialStuff = !empty($data['radialStuff'])
+                                            ? json_decode($data['radialStuff'], true)
+                                            : [];
                                         $totalSum = 0;
                                     @endphp
                                     @foreach ($typesOfPassangerTires as $item)
@@ -282,8 +284,16 @@
 
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
                                                     @php $totalSum += $data->customerPricing->{$key} * $value; @endphp
+
+                                                    @php
+                                                    if ($radialStuff[$key] <= 0) {
+                                                        $totalSum += $data->customerPricing->{$key} * $value;
+                                                    } else {
+                                                        $totalSum += $data->customerPricing->{$key} * $radialStuff[$key];
+                                                    }
+                                                @endphp
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->customerPricing->{$key} * $value }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->customerPricing->{$key} * ($radialStuff[$key] == 0 ? $value : $radialStuff[$key])  }}</span>
                                                 </div>
                                             </tr>
                                             }
@@ -306,9 +316,9 @@
                                                     <span style=""></span>
 
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
-                                                    @php $totalSum += $data->customerPricing->{$key} * $value; @endphp
+                                                    @php $totalSum += $data->customerPricing->{$key} * $radialStuff[$key] ; @endphp
                                                     <span
-                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->customerPricing->{$key} * $value }}</span>
+                                                        style="display:inline-block;background:none;border:none;border-bottom: 1px solid #333;width:50px">{{ $data->customerPricing->{$key} * $radialStuff[$key]}}</span>
                                                 </div>
                                             </tr>
                                             }
@@ -376,6 +386,10 @@
                                     $customerSalesTax = 0;
                                     $customerTax = $data->order->customer->tax ?? 0;
                                     $totalSumWithTax = 0;
+                                    if($data['payment_type'] === 'cc'){
+                                        $totalSumWithTax = $totalSum + (0.04 * $totalSum);
+                                }
+
                                     if ($customerTax == 0) {
                                         $totalSumWithTax = number_format($totalSum, 2);
                                     } else {
@@ -387,6 +401,8 @@
                                 } else {
                                     $totalSumWithTax = number_format($totalSum, 2);
                                 }
+
+                               
                             @endphp
 
                                 @if ($data->order->load_type !== 'state')
@@ -401,6 +417,20 @@
                                         </div>
                                     </tr>
                                 @endif
+
+
+                                @if ($data['payment_type'] === 'cc')
+                                <tr style="text-align: right;">
+                                    <div class="mt-2 ">
+                                        <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Conv
+                                            Fee
+                                            $</label>
+                                        <input type="text" name=""
+                                            value="{{ round($totalSumWithTax * 0.04, 2) }}"
+                                            style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
+                                    </div>
+                                </tr>
+                            @endif
 
                            
 
