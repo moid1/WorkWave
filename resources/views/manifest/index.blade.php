@@ -397,7 +397,7 @@
                                         $totalSumWithTax += $totalSum;
                                         $customerSalesTax = $totalSum * ($customerTax/100);
                                         if($data['payment_type'] === 'cc'){
-                                        $totalSumWithTax = $totalSum + (0.04 * $totalSum);
+                                        $totalSumWithTax = $totalSum + $customerSalesTax + (0.04 * $totalSum);
                                         }
                                         $totalSumWithTax = number_format($totalSumWithTax, 2);
                                     }
