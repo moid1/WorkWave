@@ -411,9 +411,11 @@
                                             <label class="inputLabel" style="margin-top: 10px; min-width: 85px">Sales
                                                 Tax
                                                 $</label>
-                                            <input type="text" name=""
-                                                value="{{ $customerSalesTax ?? 0 }}"
-                                                style="background:none;border:none;border-bottom: 1px solid #333;max-width:55px;margin-right:5em;" />
+                                                <input type="text" 
+                                                name="customerSalesTax" 
+                                                value="{{ number_format($customerSalesTax ?? 0, 2) }}" 
+                                                style="background:none; border:none; border-bottom: 1px solid #333; max-width:55px; margin-right:5em;" />
+                                         
                                         </div>
                                     </tr>
                                 @endif
