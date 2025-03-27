@@ -283,7 +283,6 @@
                                                     <span style=""></span>
 
                                                     <label class="inputLabel inputLabelSmall">Total $</label>
-                                                    @php $totalSum += $data->customerPricing->{$key} * $value; @endphp
 
                                                     @php
                                                     if ($radialStuff[$key] <= 0) {
