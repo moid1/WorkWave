@@ -393,6 +393,15 @@
                                         </div>
 
 
+                                        <div class="col-lg-6" id="">
+                                            <div class="form-group">
+                                                <label>Tax</label>
+                                                <input  id="tax" type="number" step="1" class="form-control" name="tax"
+                                                    value="{{ old('tax') }}" autofocus>
+                                            </div>
+                                        </div>
+
+
                                      
                                        
 

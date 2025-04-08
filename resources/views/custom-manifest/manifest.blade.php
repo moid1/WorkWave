@@ -351,7 +351,7 @@
                                 </tr>
                                 @php
                                     $customerSalesTax = 0;
-                                    $customerTax = 8.25;
+                                    $customerTax = $data['orderRequest']['tax'] ?? 8.25;
                                     $ccFee = 4;
                                     $totalSumWithTax = 0;
                                     if ($customerTax == 0) {
