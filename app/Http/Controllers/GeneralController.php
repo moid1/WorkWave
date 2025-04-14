@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomPricing;
+use App\Models\DesktopManifest;
 use App\Models\Order;
 use App\Models\Routing;
 use App\Models\Trailers;
@@ -207,12 +208,16 @@ class GeneralController extends Controller
             'left_over' => $request->tires_left ?? null,
             'radialStuff'=> count($radialStuff) ? json_encode($radialStuff) : null,
         ];
+
+        $desktopManifest = DesktopManifest::create($fullFillOrder);
         // dd($fullFillOrder);
 
         // Add 'customerPricing' as an array element
         $customerPricing = CustomPricing::first()->toArray();
         $fullFillOrder['customerPricing'] = $customerPricing;  // Store the customerPricing object in the array
+        $manifestId = $desktopManifest->id;
 
+        $fullFillOrder['customManifestId'] = $manifestId;  // Add manifest_id to the array
         // Add 'orderRequest' as an array element
         $fullFillOrder['orderRequest'] = $request->all();  // Store the entire request data in the array
         // Now $fullFillOrder has both object and array elements correctly

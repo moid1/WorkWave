@@ -432,7 +432,7 @@
                                             <div class="d-flex felx-row gap-3">
                                                 <h3 class="text-center text-capiatlize fw-bold">
                                                     Whole Used or Scrap Tire Manifest <span
-                                                        style="color: red">000</span>
+                                                        style="color: red">{{$data['customManifestId']}}</span>
                                                 </h3>
                                             </div>
                                             <p class=" text-uppercase text-center "
