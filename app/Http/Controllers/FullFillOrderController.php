@@ -1137,21 +1137,21 @@ class FullFillOrderController extends Controller
 
             $otrTireTypes = explode(',', $request->otr_tires_type);
             $availableOtrTireTypesArr = [];
-
-            if (!empty($otrTireTypes) && count($otrTireTypes)) {
-                foreach ($otrTireTypes as $key => $value) {
-                    $input = $request[$value];
-                    $values = explode(" ", $input);
-                    $values = array_map('intval', $values);
-                    $sum = array_sum($values);
+            
+            if (!empty($otrTireTypes)) {
+                foreach ($otrTireTypes as $value) {
+                    $input = $request->input($value, '0 0');
+                    $values = explode(' ', trim($input));
+                    $values = array_pad(array_map('intval', $values), 2, 0);
+                    
                     $availableOtrTireTypesArr[] = [
                         $value => $values[0]
                     ];
-                    $totalNoOFTires += $sum;
-                    $radialStuff[$value] = $values[1] ?? 0;
+                    $totalNoOFTires += array_sum($values);
+                    $radialStuff[$value] = $values[1];
                 }
             }
-
+            
 
 
 
