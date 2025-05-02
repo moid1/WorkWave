@@ -194,7 +194,7 @@
                                         $typesOfTruckTires = !empty($data->type_of_truck_tyre) ? json_decode($data->type_of_truck_tyre, true) : [];
                                         $typesOfAgriTires = !empty($data->type_of_agri_tyre) ? json_decode($data->type_of_agri_tyre, true) : [];
                                         $typesOfOtherTires = !empty($data->type_of_other) ? json_decode($data->type_of_other, true) : [];
-                                        $radialStuff = !empty($data->radialStuff)
+                                        $radialStuff = !empty($data->radialStuff) 
                                             ? json_decode($data->radialStuff, true)
                                             : [];
                                         $totalSum = 0;
