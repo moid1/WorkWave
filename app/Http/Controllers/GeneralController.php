@@ -109,6 +109,7 @@ class GeneralController extends Controller
 
     public function generateInhouseManifest(Request $request)
     {
+        $customer = null;
         if($request->has('customer_id')){
             $customerId = $request->customer_id;
             $customer = Customer::find($customerId);
@@ -117,7 +118,7 @@ class GeneralController extends Controller
 
             }
         }
-        return view('custom-manifest.create');
+        return view('custom-manifest.create', compact('customer'));
     }
 
     public function generateInhouseManifestPost(Request $request)
