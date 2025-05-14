@@ -88,7 +88,11 @@
                                             | 
                                             <a href="{{route('customer.show', $customer->id )}}"> <i class="mdi mdi-account"></i> </a>
                                             |<a target="_blank" href="{{route('notes.user', $customer->id )}}"> <i class="mdi mdi-notes">Notes</i> </a>
-
+                                            |
+                                            <a target="_blank" href="{{ route('custom.generate.inhouse.manifest', ['customer_id' => $customer->id]) }}">
+                                                <i class="mdi mdi-pdf">Manifest</i>
+                                            </a>
+                                            
                                         </td>
                                         @else
                                         <td>

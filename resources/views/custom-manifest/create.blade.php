@@ -31,15 +31,16 @@
                                             <div class="form-group">
                                                 <label>Company Registration</label>
                                                 <input id="company_reg" type="text" class="form-control"
-                                                    name="company_reg" value="" autofocus>
+                                                       name="company_reg" value="{{ optional($customer)->company_registration }}" autofocus>
                                             </div>
                                         </div>
+                                        
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Company Name</label>
                                                 <input id="company_name" type="text" class="form-control"
-                                                    name="company_name" value="" autofocus>
+                                                    name="company_name"  value="{{ optional($customer)->business_name }}" autofocus>
                                             </div>
                                         </div>
 
@@ -47,7 +48,7 @@
                                             <div class="form-group">
                                                 <label>Telephone No</label>
                                                 <input id="telephone_no" type="text" class="form-control"
-                                                    name="telephone_no" value="" autofocus>
+                                                    name="telephone_no"  value="{{ optional($customer)->phone_no }}" autofocus>
                                             </div>
                                         </div>
 
@@ -55,14 +56,14 @@
                                             <div class="form-group">
                                                 <label>Contact Name</label>
                                                 <input id="contact_name" type="text" class="form-control"
-                                                    name="contact_name" value="" autofocus>
+                                                    name="contact_name"  value="{{ optional($customer)->poc_name }}"autofocus>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Contact PhoneNo</label>
                                                 <input id="contact_phone_no" type="text" class="form-control"
-                                                    name="contact_phone_no" value="" autofocus>
+                                                    name="contact_phone_no" value="{{ optional($customer)->mail_phone }}" autofocus>
                                             </div>
                                         </div>
 
@@ -70,7 +71,7 @@
                                             <div class="form-group">
                                                 <label>Company Address</label>
                                                 <input id="company_Address" type="text" class="form-control"
-                                                    name="company_Address" value="" autofocus>
+                                                    name="company_Address"  value="{{ optional($customer)->address }}" autofocus>
                                             </div>
                                         </div>
 
@@ -360,16 +361,14 @@
 
                                         {{-- End quanittys of typres of otr tires --}}
 
-                                        <div id="" class="col-lg-6 ">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label> Payment Type</label>
-
-                                               
-                                                    <select class="form-control" name="payment_type" id="">
-                                                        <option value="check">Check</option>
-                                                        <option value="check">Cash</option>
-                                                        <option value="credit_card">Credit Card / Debit Card</option>
-                                                    </select>
+                                                <label for="payment_type">Payment Type</label>
+                                                <select class="form-control" name="payment_type" id="payment_type">
+                                                    <option value="check" {{ (isset($customer) && $customer->charge_type == 'check') ? 'selected' : '' }}>Check</option>
+                                                    <option value="cash" {{ (isset($customer) && $customer->charge_type == 'cash') ? 'selected' : '' }}>Cash</option>
+                                                    <option value="credit_card" {{ (isset($customer) && $customer->charge_type == 'credit_card') ? 'selected' : '' }}>Credit Card / Debit Card</option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -397,7 +396,7 @@
                                             <div class="form-group">
                                                 <label>Tax</label>
                                                 <input  id="tax" type="number" step="1" class="form-control" name="tax"
-                                                    value="{{ old('tax') }}" autofocus>
+                                                value="{{ optional($customer)->tax }}" autofocus>
                                             </div>
                                         </div>
 
