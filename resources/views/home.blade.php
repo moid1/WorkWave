@@ -38,8 +38,8 @@
                                 <div class="box">
                                     <span>BOX Truck With Assigned Routes</span>
                                     <div class=" justify-content-center">
-                                        @foreach ($dataArray['boxTruckassignedTrucks'] as $assignedTruck)
-                                            <span class="{{$assignedTruck['is_overload'] ? 'overloaded' : ''}}">{{ $assignedTruck['truckName'] }}</span> &nbsp;
+                                        @foreach ($dataArray['assignedBoxTruckNames'] as $assignedTruck)
+                                            <span class="">{{ $assignedTruck}}</span> &nbsp;
                                         @endforeach
 
 
@@ -50,8 +50,8 @@
                                 <div class="box">
                                     <span>BOX Truck Without Assigned Routes</span>
                                     <div class=" justify-content-center">
-                                        @foreach ($dataArray['boxNotAssignedTrucks'] as $truck)
-                                            <span>{{ $truck->name }}</span> &nbsp;
+                                        @foreach ($dataArray['unassignedBoxTruckNames'] as $truck)
+                                            <span>{{ $truck }}</span> &nbsp;
                                         @endforeach
 
 

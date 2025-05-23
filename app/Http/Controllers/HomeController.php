@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\FullFillOrder;
 use App\Models\Notes;
 use App\Models\Order;
+use App\Models\Routing;
 use App\Models\Truck;
 use App\Models\TruckDriver;
 use App\Models\User;
@@ -50,6 +51,22 @@ class HomeController extends Controller
                 ->whereDate('created_at', now()->toDateString())
                 ->with(['fulfilled'])
                 ->get();
+            $boxTrucks = Truck::where('truck_type', 'box_truck_center')->get();
+            $today = Carbon::now()->toDateString();
+            $todayRoutings = Routing::where('routing_date', $today)->get();
+
+            // Extract truck IDs that are assigned today
+            $assignedTruckIds = $todayRoutings->pluck('truck_id')->toArray();
+
+            // Filter assigned and unassigned trucks
+            $assignedTrucks = $boxTrucks->whereIn('id', $assignedTruckIds);
+            $unassignedTrucks = $boxTrucks->whereNotIn('id', $assignedTruckIds);
+
+            // Get just the truck names
+            $assignedBoxTruckNames = $assignedTrucks->pluck('name')->toArray();
+            $unassignedBoxTruckNames = $unassignedTrucks->pluck('name')->toArray();
+
+
             $boxTruckOrdersWithDriver = $boxTruckOrders->whereNotNull('driver_id');
             $boxTruckOrdersWithoutDriver = $boxTruckOrders->whereNull('driver_id');
             $assignedTrucksNameArr = [];
@@ -60,8 +77,8 @@ class HomeController extends Controller
                 if ($assignedTruck && $assignedTruck->truck) {
                     $weight = $this->getTotalWeightOfOrder($order);
                     $assignedTrucksNameArr[] = [
-                        'truckName'  => $assignedTruck->truck->name,
-                        'is_overload' => $weight >=  16000 ? true : false
+                        'truckName' => $assignedTruck->truck->name,
+                        'is_overload' => $weight >= 16000 ? true : false
                     ];
                     $assignedTrucksArr[] = $assignedTruck->truck->id;
                 }
@@ -96,6 +113,8 @@ class HomeController extends Controller
             $dataArray['totalTiresCollectedYTD'] = $this->getTotalTiresCollectionYTD();
             $dataArray['boxTruckMissedCX'] = $this->getCXMissedBoxTruck();
             $dataArray['boxTruckCompletedJobs'] = $this->getBoxTruckTotalCompletedJobs();
+            $dataArray['assignedBoxTruckNames'] = $assignedBoxTruckNames;
+            $dataArray['unassignedBoxTruckNames'] = $unassignedBoxTruckNames;
             $adminSettings = AdminSettings::first();
             $tdfData = $this->tdfData();
             $steelData = $this->steelData();
@@ -185,7 +204,7 @@ class HomeController extends Controller
     {
         //getting data for tires today
 
-        $boxTruckFullFilledOrders =  FullFillOrder::whereDate('created_at', now()->toDateString())->get();
+        $boxTruckFullFilledOrders = FullFillOrder::whereDate('created_at', now()->toDateString())->get();
         $totalTiresSum = 0;
         foreach ($boxTruckFullFilledOrders as $key => $fulfillorder) {
             if (!empty($fulfillorder->type_of_passenger)) {
@@ -336,7 +355,7 @@ class HomeController extends Controller
         $currentYear = Carbon::now()->year;
 
         $todaysOrders = Order::whereDate('created_at', now()->toDateString())->where([['load_type', 'tdf']])->with('tdfOrder')->get();
-        $ordersOfCurrentMonth =  Order::whereMonth('created_at', $currentMonth)
+        $ordersOfCurrentMonth = Order::whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)->where([['load_type', 'tdf']])->with('tdfOrder')->get();
         $totalLoadsToday = 0;
         $totalTonsDelivered = 0;
@@ -383,7 +402,7 @@ class HomeController extends Controller
         $currentYear = Carbon::now()->year;
 
         $todaysOrders = Order::whereDate('created_at', now()->toDateString())->where([['load_type', 'steel']])->with('steel')->get();
-        $ordersOfCurrentMonth =  Order::whereMonth('created_at', $currentMonth)
+        $ordersOfCurrentMonth = Order::whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)->where([['load_type', 'steel']])->with('steel')->get();
         $totalLoadsToday = 0;
         $totalTonsDelivered = 0;
@@ -429,7 +448,7 @@ class HomeController extends Controller
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
         $materialOrders = ['tdf', 'steel'];
-        $ordersOfCurrentMonth =  Order::whereMonth('created_at', $currentMonth)
+        $ordersOfCurrentMonth = Order::whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)->whereIn('load_type', $materialOrders)->with(['steel', 'tdfOrder'])->get();
 
         $totalTonsDeliverdMonthly = 0;
@@ -447,7 +466,7 @@ class HomeController extends Controller
     {
         $currentYear = Carbon::now()->year;
         $materialOrders = ['tdf', 'steel'];
-        $ordersOfCurrentYear =  Order::whereYear('created_at', $currentYear)->whereIn('load_type', $materialOrders)->with(['steel', 'tdfOrder'])->get();
+        $ordersOfCurrentYear = Order::whereYear('created_at', $currentYear)->whereIn('load_type', $materialOrders)->with(['steel', 'tdfOrder'])->get();
 
         $totalTonsDeliverd = 1;
         foreach ($ordersOfCurrentYear as $key => $order) {
@@ -577,8 +596,8 @@ class HomeController extends Controller
         $truckTotal = $semi_truck * 110 + $semi_super_singles * 110 + $semi_truck_with_rim * 125;
         $agriTotal = $farm_tractor_last_two_digits * 5 + $ag_med_truck_19_5_with_rim * 60 + $ag_med_truck_19_5_skid_steer * 60;
         $otherTotal = $driver_19_5L_24 * 192 + $driver_14_00_24 * 293 + $driver_13_00_24 * 158 + $driver_24_00R35 * 1816 + $driver_29_5_25 * 1279 + $driver_26_5_25 * 1000 + $driver_23_5_25 * 551 + $driver_20_5_25 * 330 + $driver_17_5_25 * 300 + $driver_15_5_24 * 158;
-        $allTotal  = $passangerTotal + $truckTotal + $agriTotal + $otherTotal;
-        
+        $allTotal = $passangerTotal + $truckTotal + $agriTotal + $otherTotal;
+
         return $allTotal;
     }
 }
