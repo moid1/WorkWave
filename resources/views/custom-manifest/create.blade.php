@@ -90,6 +90,7 @@
                                                     <option value="passanger_lighttruck">Passanger/Light truck</option>
                                                     <option value="passanger_lighttruckwithrim">Passanger/Light truck with
                                                         Rim</option>
+                                                         <option value="tubes">Tubes</option>
                                                 </select>
                                             </div>
                                         </div>

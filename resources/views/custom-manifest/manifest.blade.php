@@ -224,6 +224,8 @@
                                                 } elseif ($key == 'passanger_lighttruckwithrim') {
                                                     $eachCharge =
                                                         $data['customerPricing']['passanger_lighttruckwithrim'];
+                                                } elseif ($key == 'tubes') {
+                                                    $eachCharge = 1;
                                                 }
                                             @endphp
                                             <tr>
