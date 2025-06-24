@@ -22,7 +22,8 @@
                             @endif
                             <div class="p-20">
 
-                                <form action="{{ route('custom.generate.inhouse.manifest.store') }}" method="POST" id="fulFilledForm">
+                                <form action="{{ route('custom.generate.inhouse.manifest.store') }}" method="POST"
+                                    id="fulFilledForm">
                                     @csrf
 
                                     <div class="row">
@@ -30,17 +31,18 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Company Registration</label>
-                                                <input id="company_reg" type="text" class="form-control"
-                                                       name="company_reg" value="{{ optional($customer)->company_registration }}" autofocus>
+                                                <input id="company_reg" type="text" class="form-control" name="company_reg"
+                                                    value="{{ optional($customer)->company_registration }}" autofocus>
                                             </div>
                                         </div>
-                                        
+
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Company Name</label>
                                                 <input id="company_name" type="text" class="form-control"
-                                                    name="company_name"  value="{{ optional($customer)->business_name }}" autofocus>
+                                                    name="company_name" value="{{ optional($customer)->business_name }}"
+                                                    autofocus>
                                             </div>
                                         </div>
 
@@ -48,7 +50,8 @@
                                             <div class="form-group">
                                                 <label>Telephone No</label>
                                                 <input id="telephone_no" type="text" class="form-control"
-                                                    name="telephone_no"  value="{{ optional($customer)->phone_no }}" autofocus>
+                                                    name="telephone_no" value="{{ optional($customer)->phone_no }}"
+                                                    autofocus>
                                             </div>
                                         </div>
 
@@ -56,14 +59,16 @@
                                             <div class="form-group">
                                                 <label>Contact Name</label>
                                                 <input id="contact_name" type="text" class="form-control"
-                                                    name="contact_name"  value="{{ optional($customer)->poc_name }}"autofocus>
+                                                    name="contact_name" value="{{ optional($customer)->poc_name }}"
+                                                    autofocus>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Contact PhoneNo</label>
                                                 <input id="contact_phone_no" type="text" class="form-control"
-                                                    name="contact_phone_no" value="{{ optional($customer)->mail_phone }}" autofocus>
+                                                    name="contact_phone_no" value="{{ optional($customer)->mail_phone }}"
+                                                    autofocus>
                                             </div>
                                         </div>
 
@@ -71,7 +76,8 @@
                                             <div class="form-group">
                                                 <label>Company Address</label>
                                                 <input id="company_Address" type="text" class="form-control"
-                                                    name="company_Address"  value="{{ optional($customer)->address }}" autofocus>
+                                                    name="company_Address" value="{{ optional($customer)->address }}"
+                                                    autofocus>
                                             </div>
                                         </div>
 
@@ -90,7 +96,7 @@
                                                     <option value="passanger_lighttruck">Passanger/Light truck</option>
                                                     <option value="passanger_lighttruckwithrim">Passanger/Light truck with
                                                         Rim</option>
-                                                         <option value="tubes">Tubes</option>
+                                                    <option value="tubes">Tubes</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -109,8 +115,8 @@
                                         <div id="collawnmowers_atvmotorcyclewithrim" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of Lawnmowers/ATVMotorcycle With Rim</label>
-                                                <input id="lawnmowers_atvmotorcyclewithrim" type="text"
-                                                    class="form-control" name="lawnmowers_atvmotorcyclewithrim"
+                                                <input id="lawnmowers_atvmotorcyclewithrim" type="text" class="form-control"
+                                                    name="lawnmowers_atvmotorcyclewithrim"
                                                     value="{{ old('lawnmowers_atvmotorcyclewithrim') }}" autofocus>
                                             </div>
                                         </div>
@@ -127,9 +133,18 @@
                                         <div id="colpassanger_lighttruckwithrim" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of Passanger/Light truck with Rim</label>
-                                                <input id="passanger_lighttruckwithrim" type="text"
-                                                    class="form-control" name="passanger_lighttruckwithrim"
+                                                <input id="passanger_lighttruckwithrim" type="text" class="form-control"
+                                                    name="passanger_lighttruckwithrim"
                                                     value="{{ old('passanger_lighttruckwithrim') }}" autofocus>
+                                            </div>
+                                        </div>
+
+                                         <div id="coltubes" class="col-lg-6 d-none">
+                                            <div class="form-group">
+                                                <label>No of Tubes</label>
+                                                <input id="tubes" type="text" class="form-control"
+                                                    name="tubes"
+                                                    value="{{ old('tubes') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -140,8 +155,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Types of Truck Tires</label>
-                                                <select multiple="multiple" id="truck_tyres_type"
-                                                    name="truck_tyres_type[]"
+                                                <select multiple="multiple" id="truck_tyres_type" name="truck_tyres_type[]"
                                                     class="js-example-basic-multiple form-control form-select form-select-lg mb-3"
                                                     aria-label=".form-select-lg example">
                                                     <option value="semi_truck">Semi Truck
@@ -158,8 +172,8 @@
                                         <div id="colsemitruck" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of Semi Truck</label>
-                                                <input id="semi_truck" type="text" class="form-control"
-                                                    name="semi_truck" value="{{ old('semi_truck') }}" autofocus>
+                                                <input id="semi_truck" type="text" class="form-control" name="semi_truck"
+                                                    value="{{ old('semi_truck') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -206,8 +220,8 @@
                                         <div id="colag_med_truck_19_5_skid_steer" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of AG Med Truck 19.5/ Skid Steer</label>
-                                                <input id="ag_med_truck_19_5_skid_steer" type="text"
-                                                    class="form-control" name="ag_med_truck_19_5_skid_steer"
+                                                <input id="ag_med_truck_19_5_skid_steer" type="text" class="form-control"
+                                                    name="ag_med_truck_19_5_skid_steer"
                                                     value="{{ old('ag_med_truck_19_5_skid_steer') }}" autofocus>
                                             </div>
                                         </div>
@@ -215,8 +229,8 @@
                                         <div id="colag_med_truck_19_5_with_rim" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of AG Med Truck 19.5/ with Rim</label>
-                                                <input id="ag_med_truck_19_5_with_rim" type="text"
-                                                    class="form-control" name="ag_med_truck_19_5_with_rim"
+                                                <input id="ag_med_truck_19_5_with_rim" type="text" class="form-control"
+                                                    name="ag_med_truck_19_5_with_rim"
                                                     value="{{ old('ag_med_truck_19_5_with_rim') }}" autofocus>
                                             </div>
                                         </div>
@@ -224,8 +238,8 @@
                                         <div id="colfarm_tractor_last_two_digits" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of Farm Tractor $1.25 per, Last two digits</label>
-                                                <input id="farm_tractor_last_two_digits" type="text"
-                                                    class="form-control" name="farm_tractor_last_two_digits"
+                                                <input id="farm_tractor_last_two_digits" type="text" class="form-control"
+                                                    name="farm_tractor_last_two_digits"
                                                     value="{{ old('farm_tractor_last_two_digits') }}" autofocus>
                                             </div>
                                         </div>
@@ -307,32 +321,32 @@
                                         <div id="col24_00R35" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of 24.00R35</label>
-                                                <input id="24_00R35" type="text" class="form-control"
-                                                    name="24_00R35" value="{{ old('24_00R35') }}" autofocus>
+                                                <input id="24_00R35" type="text" class="form-control" name="24_00R35"
+                                                    value="{{ old('24_00R35') }}" autofocus>
                                             </div>
                                         </div>
 
                                         <div id="col13_00_24" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of 13.00-24</label>
-                                                <input id="13_00_24" type="text" class="form-control"
-                                                    name="13_00_24" value="{{ old('13_00_24') }}" autofocus>
+                                                <input id="13_00_24" type="text" class="form-control" name="13_00_24"
+                                                    value="{{ old('13_00_24') }}" autofocus>
                                             </div>
                                         </div>
 
                                         <div id="col14_00_24" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of 14.00-24 (Radial)</label>
-                                                <input id="14_00_24" type="text" class="form-control"
-                                                    name="14_00_24" value="{{ old('14_00_24') }}" autofocus>
+                                                <input id="14_00_24" type="text" class="form-control" name="14_00_24"
+                                                    value="{{ old('14_00_24') }}" autofocus>
                                             </div>
                                         </div>
 
                                         <div id="col19_5L_24" class="col-lg-6 d-none">
                                             <div class="form-group">
                                                 <label>No of 19.5L-24</label>
-                                                <input id="19_5L_24" type="text" class="form-control"
-                                                    name="19_5L_24" value="{{ old('19_5L_24') }}" autofocus>
+                                                <input id="19_5L_24" type="text" class="form-control" name="19_5L_24"
+                                                    value="{{ old('19_5L_24') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -368,19 +382,20 @@
                                                 <select class="form-control" name="payment_type" id="payment_type">
                                                     <option value="check" {{ (isset($customer) && $customer->charge_type == 'check') ? 'selected' : '' }}>Check</option>
                                                     <option value="cash" {{ (isset($customer) && $customer->charge_type == 'cash') ? 'selected' : '' }}>Cash</option>
-                                                    <option value="credit_card" {{ (isset($customer) && $customer->charge_type == 'credit_card') ? 'selected' : '' }}>Credit Card / Debit Card</option>
+                                                    <option value="credit_card" {{ (isset($customer) && $customer->charge_type == 'credit_card') ? 'selected' : '' }}>Credit
+                                                        Card / Debit Card</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                        
+
 
 
                                         <div class="col-lg-6 d-none" id="chequeCol">
                                             <div class="form-group">
                                                 <label>Cheque No (If any)</label>
-                                                <input id="cheque_no" type="text" class="form-control"
-                                                    name="cheque_no" value="{{ old('cheque_no') }}" autofocus>
+                                                <input id="cheque_no" type="text" class="form-control" name="cheque_no"
+                                                    value="{{ old('cheque_no') }}" autofocus>
                                             </div>
                                         </div>
 
@@ -396,14 +411,14 @@
                                         <div class="col-lg-6" id="">
                                             <div class="form-group">
                                                 <label>Tax</label>
-                                                <input  id="tax" type="number" step="1" class="form-control" name="tax"
-                                                value="{{ optional($customer)->tax }}" autofocus>
+                                                <input id="tax" type="number"  step="0.01" class="form-control" name="tax"
+                                                    value="{{ optional($customer)->tax }}" autofocus>
                                             </div>
                                         </div>
 
 
-                                     
-                                       
+
+
 
 
 
@@ -433,7 +448,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         let firstTimeSubmitted = false;
-        $('#payment_type').on('change', function() {
+        $('#payment_type').on('change', function () {
             const selectedPaymentType = $(this).val();
             if (selectedPaymentType == 'Cheque') {
                 $('#chequeCol').removeClass('d-none');
@@ -447,11 +462,11 @@
 
             }
         });
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js-example-basic-multiple').select2();
         });
 
-        $('#passanger_tyres_type').on('select2:select', function(e) {
+        $('#passanger_tyres_type').on('select2:select', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case 'lawnmowers_atvmotorcycle':
@@ -466,10 +481,15 @@
                 case 'passanger_lighttruckwithrim':
                     $('#colpassanger_lighttruckwithrim').removeClass('d-none');
                     break;
+                case 'tubes':
+                    $('#coltubes').removeClass('d-none');
+                    break;
+
+                    
             }
         });
 
-        $('#passanger_tyres_type').on('select2:unselect', function(e) {
+        $('#passanger_tyres_type').on('select2:unselect', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case 'lawnmowers_atvmotorcycle':
@@ -488,11 +508,15 @@
                     $('#colpassanger_lighttruckwithrim').addClass('d-none');
                     $('#passanger_lighttruckwithrim').val();
                     break;
+                case 'tubes':
+                     $('#coltubes').addClass('d-none');
+                    $('#tubes').val();
+                    break;
             }
         });
 
 
-        $('#truck_tyres_type').on('select2:select', function(e) {
+        $('#truck_tyres_type').on('select2:select', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case 'semi_truck':
@@ -508,7 +532,7 @@
             }
         });
 
-        $('#truck_tyres_type').on('select2:unselect', function(e) {
+        $('#truck_tyres_type').on('select2:unselect', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case 'semi_truck':
@@ -526,7 +550,7 @@
             }
         });
 
-        $('#agri_tires_type').on('select2:select', function(e) {
+        $('#agri_tires_type').on('select2:select', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case 'ag_med_truck_19_5_skid_steer':
@@ -542,7 +566,7 @@
             }
         });
 
-        $('#agri_tires_type').on('select2:unselect', function(e) {
+        $('#agri_tires_type').on('select2:unselect', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case 'ag_med_truck_19_5_skid_steer':
@@ -560,7 +584,7 @@
             }
         });
 
-        $('#otr_tires_type').on('select2:select', function(e) {
+        $('#otr_tires_type').on('select2:select', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case '15_5_24':
@@ -598,13 +622,13 @@
                     $('#colodd_tire').removeClass('d-none');
                     break;
 
-                    
+
 
 
             }
         });
 
-        $('#otr_tires_type').on('select2:unselect', function(e) {
+        $('#otr_tires_type').on('select2:unselect', function (e) {
             var data = e.params.data;
             switch (data.id) {
                 case '15_5_24':
