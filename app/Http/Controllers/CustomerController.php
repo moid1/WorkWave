@@ -72,6 +72,22 @@ class CustomerController extends Controller
         return view('customers.update', compact('customer', 'trucks'));
     }
 
+    public function deleteCustomer($id)
+    {
+        $customer = Customer::find($id);
+
+        if (!$customer) {
+            // Handle the case when customer not found
+            // For example, throw an exception or return an error response
+         return back()->with('error', 'Customer is not found');
+        }
+
+        $customer->delete();
+
+       return back()->with('Customer Deleted Succesfully');
+    }
+
+
     /**
      * Show the form for editing the specified resource.
      */

@@ -96,6 +96,12 @@
                                                         href="{{ route('custom.generate.inhouse.manifest', ['customer_id' => $customer->id]) }}">
                                                         <i class="mdi mdi-pdf">Manifest</i>
                                                     </a>
+                                                    |
+                                                    <a target="_blank" style="color: red"
+                                                        href="{{ route('customer.delete', ['id' => $customer->id]) }}">
+                                                        <i class="mdi mdi-pdf">Delete</i>
+                                                    </a>
+
 
                                                 </td>
                                             @else
