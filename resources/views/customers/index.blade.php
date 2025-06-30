@@ -190,9 +190,13 @@
 
         $('#customSearch').on('keyup change', function() {
             var searchValue = this.value;
-            console.log('Search value', searchValue);
-            // Use regex for exact match, ^...$
-            table.column(0).search('^' + $.fn.dataTable.util.escapeRegex(searchValue) + '$', true, false).draw();
+            if (searchValue === '') {
+                // Clear search and show all records
+                table.column(0).search('').draw();
+            } else {
+                // Use regex for exact match, ^...$
+                table.column(0).search('^' + $.fn.dataTable.util.escapeRegex(searchValue) + '$', true, false).draw();
+            }
         });
     });
 
