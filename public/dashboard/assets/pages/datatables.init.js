@@ -16,13 +16,4 @@ $(document).ready(function() {
 
     table.buttons().container()
         .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
-
-        $('#datatable').on('init.dt', function () {
-        // Attach event to the default search box
-        $('#datatable_wrapper input[type="search"]').off().on('keyup', function () {
-            var searchTerm = this.value.trim();
-            // Use exact match with regex
-            table.search('^' + searchTerm + '$', true, false).draw();
-        });
-    });
 } );
