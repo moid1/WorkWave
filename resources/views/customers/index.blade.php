@@ -178,7 +178,23 @@
         $("#exampleModal").modal()
 
     }
+    $(document).ready(function() {
+        var table = $('#datatable').DataTable();
 
+        // Remove default search box
+        $('#datatable_filter').remove();
+
+        // Custom search input
+        $('<input type="text" id="customSearch" class="form-control mb-2" placeholder="Search Business Name (exact match)">')
+            .insertBefore('#datatable');
+
+        $('#customSearch').on('keyup change', function() {
+            var searchValue = this.value;
+            console.log('Search value', searchValue);
+            // Use regex for exact match, ^...$
+            table.column(0).search('^' + $.fn.dataTable.util.escapeRegex(searchValue) + '$', true, false).draw();
+        });
+    });
 
 
 </script>
