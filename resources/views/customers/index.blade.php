@@ -178,11 +178,41 @@
         $("#exampleModal").modal()
 
     }
-    $(document).ready(function() {
-        var table = $('#datatable').DataTable();
+ $(document).ready(function () {
+    var table = $('#datatable').DataTable();
 
+    // Remove default DataTables search behavior
+    $('#datatable_filter input')
+        .off()
+        .on('input', debounce(function () {
+            let input = this.value.trim();
 
-    });
+            // If input is empty, reset the filter
+            if (input === '') {
+                table.search('').draw();
+            } else {
+                // Exact match search using regex
+table.search('^' + escapeRegex(input), true, false).draw();
+
+            }
+        }, 2000)); // 3 seconds debounce
+
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function () {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
+    // Escape regex characters in the user input
+    function escapeRegex(text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+    }
+});
+
 
 
 </script>
