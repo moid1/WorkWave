@@ -14,34 +14,51 @@ use Illuminate\Http\Request;
 class GeneralController extends Controller
 {
     public function trailerSwapReport(Request $request)
-    {
-        $graded = [];
-        $notGraded = [];
+{
+    $graded = [];
+    $notGraded = [];
 
-        // Fetch orders with relationships
-        $orders = Order::where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
+    // Fetch orders with relationships
+    $orders = Order::where('load_type', 'trailer_swap')->with(['trailerSwapOrder', 'customer'])->get();
 
-        // Group orders based on the grading type
-        foreach ($orders as $order) {
-            if ($order->customer->trailer_grading_type == 'trailers_to_grade') {
-                $graded[] = $order;
-            } else if ($order->customer->trailer_grading_type == 'trailers_green_light') {
-                $notGraded[] = $order;
-            }
+    // Group orders based on the grading type
+    foreach ($orders as $order) {
+        if ($order->customer->trailer_grading_type == 'trailers_to_grade') {
+            $graded[] = $order;
+        } else if ($order->customer->trailer_grading_type == 'trailers_green_light') {
+            $notGraded[] = $order;
         }
-
-        // Get all trailers and group them by location
-        $trailers = Trailers::with('customerData')
-            ->get()
-            ->groupBy('trailer_going')
-            ->map(function ($group) {
-                return $group->sortBy('name'); // Sorting alphabetically by 'name'
-            });
-        $customers = Customer::select('id', 'business_name')->get()->sortBy(function ($customer) {
-            return strtolower($customer->business_name); // Sort by lowercase business_name
-        });
-        return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
     }
+
+    // Get all trailers and group them by 'trailer_going'
+    $trailers = Trailers::with('customerData')->get()
+        ->groupBy('trailer_going')
+        ->map(function ($trailersGroup, $trailerGoing) use ($orders) {
+            // Sort trailers alphabetically by 'name'
+            $sortedTrailers = $trailersGroup->sortBy('name');
+
+            // Attach related orders to each trailer
+            return $sortedTrailers->map(function ($trailer) use ($orders, $trailerGoing) {
+                // Filter orders that have trailerSwapOrder with trailer_drop_off equal to this trailer_going
+                $trailerOrders = $orders->filter(function ($order) use ($trailerGoing) {
+                    return $order->trailerSwapOrder && $order->trailerSwapOrder->trailer_drop_off === $trailerGoing;
+                })->values();
+
+                // Attach orders collection to trailer object (for view use)
+                $trailer->orders = $trailerOrders;
+
+                return $trailer;
+            });
+        });
+
+    // Get sorted customers
+    $customers = Customer::select('id', 'business_name')
+        ->orderByRaw('LOWER(business_name)')
+        ->get();
+
+    return view('reports.trailer', compact('graded', 'notGraded', 'customers', 'trailers'));
+}
+
 
     public function getOrdersByTruckRouted(Request $request)
     {
