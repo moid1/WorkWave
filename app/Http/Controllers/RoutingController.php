@@ -279,6 +279,7 @@ class RoutingController extends Controller
     {
 
         $data = Order::where('truck_id', $request->truck_id)
+            ->whereNot('status', 'completed')
             ->where('is_routed', false)
             ->with(['customer', 'user', 'driver']);
 
