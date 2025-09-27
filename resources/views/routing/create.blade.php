@@ -291,7 +291,7 @@
                                     "id": index + 1,
                                     "name": order.customer.business_name,
                                     "position": order.load_type,
-                                    "order_id": order.id,
+                                    "order_id": `<a href="/order/${order.id}" target="_blank">${order.id}</a>`,
                                     "estimated_tires": order.estimated_tires
                                 };
 
