@@ -288,10 +288,10 @@
                             sortedIndices.forEach(function(key, index) {
                                 var order = response[key];
                                 var newData = {
-                                    "id": index + 1,
+                                    "id": `<a href="/order/${order.id}" target="_blank">${index+ 1}</a>`,
                                     "name": order.customer.business_name,
                                     "position": order.load_type,
-                                    "order_id": `<a href="/order/${order.id}" target="_blank">${order.id}</a>`,
+                                    "order_id": order.id,
                                     "estimated_tires": order.estimated_tires
                                 };
 
