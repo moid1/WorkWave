@@ -199,7 +199,7 @@
                                                 <button type="reset" class="btn btn-secondary waves-effect m-l-5">
                                                     Cancel
                                                 </button>
-                                                <a href="{{ route('order.delete', $order->id) }}" class="btn btn-danger float-right waves-effect m-l-5">Delete Order</a>
+                                                <a href="{{ route('order.delete', $order->id) }}" class="btn btn-primary  waves-effect m-l-5">Delete Order</a>
                                                 @if($order->status !== 'completed')
                                                 <button type="button" class="btn btn-danger float-right waves-effect m-l-5" data-toggle="modal" data-target="#completeOrderModal">
                                                     Complete Order
