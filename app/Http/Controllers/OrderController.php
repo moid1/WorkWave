@@ -28,12 +28,34 @@ class OrderController extends Controller
         $trucks = Truck::where('is_active', true)->get();
 
         if ($request->ajax()) {
-            $data = Order::with(['customer', 'user', 'driver', 'truck'])->get();
+            $query = Order::with(['customer', 'user', 'driver', 'truck']);
+
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $data = $data->whereBetween('delivery_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+                $query->whereBetween('delivery_date', [$fromDate, $toDate]);
             }
+            // ✅ Handle search manually (case-insensitive, safe for &, %, _)
+            if ($search = $request->input('search.value')) {
+                // Escape LIKE wildcards
+                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $search);
+
+                $query->where(function ($q) use ($escaped) {
+                    $q->whereHas('customer', function ($sub) use ($escaped) {
+                        $sub->where('business_name', 'LIKE', "%{$escaped}%")
+                            ->orWhere('email', 'LIKE', "%{$escaped}%");
+                    })
+                        ->orWhere('id', 'LIKE', "%{$escaped}%")
+                        ->orWhereHas('user', function ($sub) use ($escaped) {
+                            $sub->where('name', 'LIKE', "%{$escaped}%");
+                        })
+                        ->orWhereHas('truck', function ($sub) use ($escaped) {
+                            $sub->where('name', 'LIKE', "%{$escaped}%");
+                        });
+                });
+            }
+
+            $data = $query->get();
 
 
             return Datatables::of($data)
@@ -538,21 +560,21 @@ class OrderController extends Controller
         if ($request->ajax()) {
             // Start with your base query
             $query = Order::where('is_filled_by_manager', false);
-    
+
             // Filter by date range if provided
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
                 $query = $query->whereBetween('created_at', [$fromDate, $toDate]);
             }
-    
+
             // Get the filtered results and apply pagination
             $filteredData = $query->with(['customer', 'driver', 'user']);
             $totalRecords = $filteredData->count(); // Get the total count before pagination
             $data = $filteredData->skip(($request->get('start') ?? 0))
-                                 ->take($request->get('length') ?? 10) // Custom pagination length
-                                 ->get();
-    
+                ->take($request->get('length') ?? 10) // Custom pagination length
+                ->get();
+
             // Return the DataTable response with the required fields
             return response()->json([
                 'draw' => (int) $request->get('draw'),
@@ -561,12 +583,12 @@ class OrderController extends Controller
                 'data' => $data,  // The actual data to display
             ]);
         }
-    
+
         // Non-ajax request - Show the normal page
         $orders = Order::where('is_filled_by_manager', false)->paginate(10); // Paginate for normal view
         return view('orders.unfill.index', compact('orders'));
     }
-    
+
 
 
 
