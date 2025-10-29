@@ -131,6 +131,11 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
+                search: {
+    smart: false,
+    regex: false,
+    caseInsensitive: true
+},
                 ajax: {
                     url: url,
                     data: function(d) {
