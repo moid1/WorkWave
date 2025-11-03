@@ -44,24 +44,24 @@ class OrderController extends Controller
 
             }
             // ✅ Handle search manually (case-insensitive, safe for &, %, _)
-            if ($search = $request->input('search.value')) {
-                // Escape LIKE wildcards
-                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $search);
+            // if ($search = $request->input('search.value')) {
+            //     // Escape LIKE wildcards
+            //     $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $search);
 
-                $query->where(function ($q) use ($escaped) {
-                    $q->whereHas('customer', function ($sub) use ($escaped) {
-                        $sub->where('business_name', 'LIKE', "%{$escaped}%")
-                            ->orWhere('email', 'LIKE', "%{$escaped}%");
-                    })
-                        ->orWhere('id', 'LIKE', "%{$escaped}%")
-                        ->orWhereHas('user', function ($sub) use ($escaped) {
-                            $sub->where('name', 'LIKE', "%{$escaped}%");
-                        })
-                        ->orWhereHas('truck', function ($sub) use ($escaped) {
-                            $sub->where('name', 'LIKE', "%{$escaped}%");
-                        });
-                });
-            }
+            //     $query->where(function ($q) use ($escaped) {
+            //         $q->whereHas('customer', function ($sub) use ($escaped) {
+            //             $sub->where('business_name', 'LIKE', "%{$escaped}%")
+            //                 ->orWhere('email', 'LIKE', "%{$escaped}%");
+            //         })
+            //             ->orWhere('id', 'LIKE', "%{$escaped}%")
+            //             ->orWhereHas('user', function ($sub) use ($escaped) {
+            //                 $sub->where('name', 'LIKE', "%{$escaped}%");
+            //             })
+            //             ->orWhereHas('truck', function ($sub) use ($escaped) {
+            //                 $sub->where('name', 'LIKE', "%{$escaped}%");
+            //             });
+            //     });
+            // }
 
             $data = $query->get();
 
