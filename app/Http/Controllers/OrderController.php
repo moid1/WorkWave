@@ -30,38 +30,38 @@ class OrderController extends Controller
         if ($request->ajax()) {
             $query = Order::with(['customer', 'user', 'driver', 'truck']);
 
-            if ($request->filled('from_date') && $request->filled('to_date')) {
-                $fromDate = Carbon::createFromFormat('Y-m-d', $request->from_date)->startOfDay();
-                $toDate = Carbon::createFromFormat('Y-m-d', $request->to_date)->endOfDay();
+            // if ($request->filled('from_date') && $request->filled('to_date')) {
+            //     $fromDate = Carbon::createFromFormat('Y-m-d', $request->from_date)->startOfDay();
+            //     $toDate = Carbon::createFromFormat('Y-m-d', $request->to_date)->endOfDay();
 
-                if ($request->filled('from_date')) {
-                    $query->whereDate('created_at', '>=', $request->from_date);
-                }
+            //     if ($request->filled('from_date')) {
+            //         $query->whereDate('created_at', '>=', $request->from_date);
+            //     }
 
-                if ($request->filled('to_date')) {
-                    $query->whereDate('created_at', '<=', $request->to_date);
-                }
+            //     if ($request->filled('to_date')) {
+            //         $query->whereDate('created_at', '<=', $request->to_date);
+            //     }
 
-            }
-            // ✅ Handle search manually (case-insensitive, safe for &, %, _)
-            // if ($search = $request->input('search.value')) {
-            //     // Escape LIKE wildcards
-            //     $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $search);
-
-            //     $query->where(function ($q) use ($escaped) {
-            //         $q->whereHas('customer', function ($sub) use ($escaped) {
-            //             $sub->where('business_name', 'LIKE', "%{$escaped}%")
-            //                 ->orWhere('email', 'LIKE', "%{$escaped}%");
-            //         })
-            //             ->orWhere('id', 'LIKE', "%{$escaped}%")
-            //             ->orWhereHas('user', function ($sub) use ($escaped) {
-            //                 $sub->where('name', 'LIKE', "%{$escaped}%");
-            //             })
-            //             ->orWhereHas('truck', function ($sub) use ($escaped) {
-            //                 $sub->where('name', 'LIKE', "%{$escaped}%");
-            //             });
-            //     });
             // }
+            // ✅ Handle search manually (case-insensitive, safe for &, %, _)
+            if ($search = $request->input('search.value')) {
+                // Escape LIKE wildcards
+                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $search);
+
+                $query->where(function ($q) use ($escaped) {
+                    $q->whereHas('customer', function ($sub) use ($escaped) {
+                        $sub->where('business_name', 'LIKE', "%{$escaped}%")
+                            ->orWhere('email', 'LIKE', "%{$escaped}%");
+                    })
+                        ->orWhere('id', 'LIKE', "%{$escaped}%")
+                        ->orWhereHas('user', function ($sub) use ($escaped) {
+                            $sub->where('name', 'LIKE', "%{$escaped}%");
+                        })
+                        ->orWhereHas('truck', function ($sub) use ($escaped) {
+                            $sub->where('name', 'LIKE', "%{$escaped}%");
+                        });
+                });
+            }
 
             $data = $query->get();
 
