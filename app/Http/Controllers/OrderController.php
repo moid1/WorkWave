@@ -33,7 +33,7 @@ class OrderController extends Controller
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $fromDate = Carbon::parse($request->from_date);
                 $toDate = Carbon::parse($request->to_date)->endOfDay();
-                $query->whereBetween('delivery_date', [$fromDate, $toDate]);
+                $query->whereBetween('created_at', [$fromDate, $toDate]);
             }
             // ✅ Handle search manually (case-insensitive, safe for &, %, _)
             if ($search = $request->input('search.value')) {
