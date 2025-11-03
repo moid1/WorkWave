@@ -30,19 +30,11 @@ class OrderController extends Controller
         if ($request->ajax()) {
             $query = Order::with(['customer', 'user', 'driver', 'truck']);
 
-            // if ($request->filled('from_date') && $request->filled('to_date')) {
-            //     $fromDate = Carbon::createFromFormat('Y-m-d', $request->from_date)->startOfDay();
-            //     $toDate = Carbon::createFromFormat('Y-m-d', $request->to_date)->endOfDay();
-
-            //     if ($request->filled('from_date')) {
-            //         $query->whereDate('created_at', '>=', $request->from_date);
-            //     }
-
-            //     if ($request->filled('to_date')) {
-            //         $query->whereDate('created_at', '<=', $request->to_date);
-            //     }
-
-            // }
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $fromDate = Carbon::parse($request->from_date);
+                $toDate = Carbon::parse($request->to_date)->endOfDay();
+                $query->whereBetween('delivery_date', [$fromDate, $toDate]);
+            }
             // ✅ Handle search manually (case-insensitive, safe for &, %, _)
             if ($search = $request->input('search.value')) {
                 // Escape LIKE wildcards
