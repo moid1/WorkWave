@@ -711,7 +711,7 @@ class OrderController extends Controller
     public function deleteOrder($id)
     {
         Order::find($id)->delete();
-        return back()->with('success', 'Order is deleted successfully');
+        return redirect()->route('orders.index')->with('success', 'Order Deleted Successfully');
     }
 
     public function completeOrder(Request $request)
