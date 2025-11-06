@@ -718,7 +718,7 @@ class OrderController extends Controller
 
         $order->delete();
 
-        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+        return redirect()->route('order.index')->with('success', 'Order deleted successfully.');
     }
 
 
