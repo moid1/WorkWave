@@ -352,17 +352,29 @@
                                     </div>
                                 </tr>
                                 @php
-                                    $customerSalesTax = 0;
-                                    $customerTax = $data['orderRequest']['tax'] ?? 8.25;
-                                    $ccFee = 4;
-                                    $totalSumWithTax = 0;
-                                    if ($customerTax == 0) {
-                                        $totalSumWithTax = number_format($totalSum, 2);
-                                    } else {
-                                        $totalSumWithTax = $totalSum * ($customerTax / 100);
-                                        $totalSumWithTax += $totalSum;
-                                        $customerSalesTax = $totalSum * ($customerTax / 100);
-                                    }
+                                    // $customerSalesTax = 0;
+                                    // $customerTax = $data['orderRequest']['tax'] ?? 8.25;
+                                    // $ccFee = 4;
+                                    // $totalSumWithTax = 0;
+                                    // if ($customerTax == 0) {
+                                    //     $totalSumWithTax = number_format($totalSum, 2);
+                                    // } else {
+                                    //     $totalSumWithTax = $totalSum * ($customerTax / 100);
+                                    //     $totalSumWithTax += $totalSum;
+                                    //     $customerSalesTax = $totalSum * ($customerTax / 100);
+                                    // }
+
+                                    $customerSalesTax = 0.0;
+$customerTax = (float) ($data['orderRequest']['tax'] ?? 8.25);
+$ccFee = 4.0;
+
+$totalSumWithTax = (float) $totalSum;
+
+if ($customerTax > 0) {
+    $customerSalesTax = $totalSum * ($customerTax / 100);
+    $totalSumWithTax += $customerSalesTax;
+}
+
 
                                     // if($data['orderRequest']['payment_type'] === 'credit_card'){
                                     //     $totalSumWithTax = $totalSumWithTax+number_format($totalSumWithTax*0.04, 2);
