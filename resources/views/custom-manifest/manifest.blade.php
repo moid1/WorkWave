@@ -398,10 +398,13 @@
 
 
                                 @php
-                                    if ($data['orderRequest']['payment_type'] === 'credit_card') {
-                                        $totalSumWithTax = $totalSumWithTax + number_format($totalSumWithTax * 0.04, 2);
-                                    }
-                                    $totalSumWithTax = number_format($totalSumWithTax, 2);
+if ($data['orderRequest']['payment_type'] === 'credit_card') {
+    $totalSumWithTax += ($totalSumWithTax * 0.04);
+}
+
+// format ONLY at the end
+$totalSumWithTax = number_format((float) $totalSumWithTax, 2);
+
 
                                 @endphp
                                 <tr style="text-align: right;">
